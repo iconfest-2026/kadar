@@ -1,13 +1,13 @@
-# PRONOIA — Security & Privacy Architecture
+# AEVYRA — Security & Privacy Architecture
 
-> Dokumen spesifikasi arsitektur komprehensif untuk **Keamanan Sistem (*Security*)** dan **Privasi Data (*Privacy*)** platform PRONOIA. Dokumen ini mendefinisikan prinsip rekayasa *Secure by Design* dan *Privacy by Default*, pemodelan ancaman (*Threat Modeling*), batas kedaulatan kepercayaan (*Trust Boundaries*), klasifikasi kerahasiaan data (Publik, Internal, Privat, Sangat Sensitif), manajemen identitas dan kredensial tahan manipulasi, kebijakan kata sandi dan mitigasi enumerasi, pengamanan siklus sesi berbasis cookie terproteksi (*Sanctum*), model otorisasi granular berbasis peran (*RBAC*) dan relasi bimbingan aktif (*ReBAC*), pencegahan eksploitasi OWASP Top 10 (IDOR/BOLA, Mass Assignment, SQL Injection, XSS, CSRF), pembatasan laju panggilan adaptif (*Rate Limiting*), pertahanan rekayasa prompt AI (*Prompt Injection Defense*) dan *Tool Sandboxing*, minimisasi konteks interaksi LLM, keamanan pengunggahan citra pemindai nutrisi (*Magic Bytes Validation*), enkripsi dalam transit (TLS 1.3) dan penyimpanan (*AES-256 at-rest*), isolasi lingkungan produksi dan tata kelola rahasia Git, keamanan aplikasi klien PWA dan memori cache peramban, hak subjek data pengguna (Portabilitas, Ekspor Mandiri, Persetujuan Sadar, dan Hak Penghapusan Akun / UU PDP), sistem pencatatan log jejak audit forensik imutabel (*Append-Only*), pemantauan peristiwa keamanan dan prosedur tanggap darurat insiden (*Incident Response Runbooks*), matriks pengujian otorisasi otomatis, pipeline CI keamanan (*SAST, DAST, Secret Scanning, Dependency Audit*), serta piagam prinsip pamungkas kedaulatan informasi pengguna.
+> Dokumen spesifikasi arsitektur komprehensif untuk **Keamanan Sistem (*Security*)** dan **Privasi Data (*Privacy*)** platform AEVYRA. Dokumen ini mendefinisikan prinsip rekayasa *Secure by Design* dan *Privacy by Default*, pemodelan ancaman (*Threat Modeling*), batas kedaulatan kepercayaan (*Trust Boundaries*), klasifikasi kerahasiaan data (Publik, Internal, Privat, Sangat Sensitif), manajemen identitas dan kredensial tahan manipulasi, kebijakan kata sandi dan mitigasi enumerasi, pengamanan siklus sesi berbasis cookie terproteksi (*Sanctum*), model otorisasi granular berbasis peran (*RBAC*) dan relasi bimbingan aktif (*ReBAC*), pencegahan eksploitasi OWASP Top 10 (IDOR/BOLA, Mass Assignment, SQL Injection, XSS, CSRF), pembatasan laju panggilan adaptif (*Rate Limiting*), pertahanan rekayasa prompt AI (*Prompt Injection Defense*) dan *Tool Sandboxing*, minimisasi konteks interaksi LLM, keamanan pengunggahan citra pemindai nutrisi (*Magic Bytes Validation*), enkripsi dalam transit (TLS 1.3) dan penyimpanan (*AES-256 at-rest*), isolasi lingkungan produksi dan tata kelola rahasia Git, keamanan aplikasi klien PWA dan memori cache peramban, hak subjek data pengguna (Portabilitas, Ekspor Mandiri, Persetujuan Sadar, dan Hak Penghapusan Akun / UU PDP), sistem pencatatan log jejak audit forensik imutabel (*Append-Only*), pemantauan peristiwa keamanan dan prosedur tanggap darurat insiden (*Incident Response Runbooks*), matriks pengujian otorisasi otomatis, pipeline CI keamanan (*SAST, DAST, Secret Scanning, Dependency Audit*), serta piagam prinsip pamungkas kedaulatan informasi pengguna.
 
 ---
 
 ### Informasi Dokumen Kontrak Teknis
 | Atribut Spesifikasi | Detail Konfigurasi Arsitektur |
 | :--- | :--- |
-| **Identitas Dokumen** | `PRONOIA-DOC-010` |
+| **Identitas Dokumen** | `AEVYRA-DOC-010` |
 | **Klasifikasi Dokumen** | Dokumen Arsitektur Inti (*Restricted / Security & Privacy Specification*) |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Pondasi Kanonikal Produksi) |
 | **Standar Kepatuhan Regulasi** | UU No. 27 Tahun 2022 (UU PDP) & General Data Protection Regulation (GDPR) |
@@ -42,13 +42,13 @@ Spesifikasi keamanan dan privasi ini disusun dalam 10 klaster arsitektur utama y
 9. **Klaster 9 (Bagian 171 – 192): Tinjauan Pra-Rilis, Pipeline CI Keamanan, SAST/DAST, & Pemetaan Aliran Data**
    - Daftar periksa peninjauan keamanan pra-rilis, audit aliran data sensitif, pipeline otomatisasi CI/CD keamanan (Lint, Unit/Feature Tests, Security Tests, Dependency Audit, Secret Scan), pengujian kode statis (SAST) dan dinamis (DAST), uji penetrasi berkala, klasifikasi tingkat keparahan bug (Critical, High, Medium, Low), kebijakan pemblokiran rilis, pemetaan aliran data sistem, tinjauan kepatuhan vendor eksternal, serta prinsip penanganan kegagalan anggun (*Fail Closed, Fail Safe, Fail Gracefully*).
 10. **Klaster 10 (Bagian 193 – 209): Integritas Lingkaran Tertutup, Daftar Periksa Kepatuhan, DoD, & Piagam Pamungkas**
-    - Perlindungan keamanan sistem pencegahan lingkaran tertutup (*Closed-Loop Wellness*), penjaminan integritas mesin perilaku dan asisten AI, ringkasan topologi keamanan terpadu, 6 daftar periksa kepatuhan khusus (Autentikasi, Otorisasi, Data Medis, AI, PWA, Operasional), Definisi Standar Selesai Keamanan dan Privasi (*DoD*), model arsitektur keamanan dan privasi terpadu, serta piagam prinsip pamungkas kedaulatan informasi pengguna PRONOIA.
+    - Perlindungan keamanan sistem pencegahan lingkaran tertutup (*Closed-Loop Wellness*), penjaminan integritas mesin perilaku dan asisten AI, ringkasan topologi keamanan terpadu, 6 daftar periksa kepatuhan khusus (Autentikasi, Otorisasi, Data Medis, AI, PWA, Operasional), Definisi Standar Selesai Keamanan dan Privasi (*DoD*), model arsitektur keamanan dan privasi terpadu, serta piagam prinsip pamungkas kedaulatan informasi pengguna AEVYRA.
 
 ---
 
 ## 1. Tujuan & Ruang Lingkup Keamanan (Purpose & Scope)
 
-Dokumen ini mendefinisikan prinsip fundamental, arsitektur kendali, dan standar kepatuhan teknis untuk **Keamanan Sistem (*Security*)** dan **Privasi Data Pengguna (*Privacy*)** dalam platform **PRONOIA**.
+Dokumen ini mendefinisikan prinsip fundamental, arsitektur kendali, dan standar kepatuhan teknis untuk **Keamanan Sistem (*Security*)** dan **Privasi Data Pengguna (*Privacy*)** dalam platform **AEVYRA**.
 
 Standar ini mencakup 20 pilar perlindungan menyeluruh:
 - **Keamanan Aplikasi (*Application Security*):** Perlindungan menyeluruh dari kerentanan OWASP Top 10 dan eksploitasi antarmuka.
@@ -74,17 +74,17 @@ Standar ini mencakup 20 pilar perlindungan menyeluruh:
 
 > [!IMPORTANT]
 > **Prinsip Kedaulatan Data:**  
-> PRONOIA mengelola data biologis dan kebiasaan hidup yang bersifat sangat pribadi dan sensitif. Oleh karena itu, keamanan dan privasi **bukanlah fitur tambahan yang dipasang belakangan**, melainkan fondasi arsitektur mutlak yang terintegrasi sejak baris kode pertama (*Security & Privacy by Design*).
+> AEVYRA mengelola data biologis dan kebiasaan hidup yang bersifat sangat pribadi dan sensitif. Oleh karena itu, keamanan dan privasi **bukanlah fitur tambahan yang dipasang belakangan**, melainkan fondasi arsitektur mutlak yang terintegrasi sejak baris kode pertama (*Security & Privacy by Design*).
 
 ---
 
 ## 2. Filosofi Keamanan & Rekayasa Sistem (Security Philosophy)
 
-Arsitektur keamanan PRONOIA ditegakkan di atas 8 pilar filosofi rekayasa perangkat lunak:
+Arsitektur keamanan AEVYRA ditegakkan di atas 8 pilar filosofi rekayasa perangkat lunak:
 
 ```text
        ┌─────────────────────────────────────────────────────────┐
-       │             FILOSOFI KEAMANAN PRONOIA                   │
+       │             FILOSOFI KEAMANAN AEVYRA                   │
        ├─────────────────────────────────────────────────────────┤
        │  1. Secure by Design        → Keamanan sejak rancangan  │
        │  2. Privacy by Default      → Privasi setelan awal      │
@@ -135,7 +135,7 @@ Pencatatan Jejak Audit Forensik (Immutable Audit)
 
 ## 4. Batas Keamanan Arsitektur (Security Boundaries)
 
-Arsitektur PRONOIA membagi sistem ke dalam batas-batas kepercayaan (*Trust Boundaries*) yang terisolasi:
+Arsitektur AEVYRA membagi sistem ke dalam batas-batas kepercayaan (*Trust Boundaries*) yang terisolasi:
 
 ```text
 [ Area Klien Publik - Tidak Terpercaya ]
@@ -175,7 +175,7 @@ Setiap persilangan batas (*boundary crossing*) wajib memvalidasi ulang keabsahan
 
 ## 5. Pemodelan Ancaman (Threat Model)
 
-Pemodelan ancaman (*Threat Model*) PRONOIA mengidentifikasi 12 vektor risiko potensial yang wajib dimitigasi:
+Pemodelan ancaman (*Threat Model*) AEVYRA mengidentifikasi 12 vektor risiko potensial yang wajib dimitigasi:
 
 | Vektor Ancaman | Profil Penyerang | Dampak Potensial | Strategi Mitigasi Utama |
 | :--- | :--- | :--- | :--- |
@@ -243,7 +243,7 @@ Mekanisme keamanan tidak boleh melumpuhkan ketersediaan fungsi utama platform (*
 
 ## 10. Prinsip Privasi Pengguna (Privacy)
 
-Pengumpulan dan pemrosesan data pribadi dalam platform PRONOIA wajib berlandaskan pada 6 pilar privasi:
+Pengumpulan dan pemrosesan data pribadi dalam platform AEVYRA wajib berlandaskan pada 6 pilar privasi:
 1. **Tujuan Spesifik (*Purpose Limitation*):** Data hanya dikumpulkan untuk tujuan peningkatan kesehatan dan kebugaran yang jelas.
 2. **Kebutuhan Nyata (*Necessity*):** Hanya memproses atribut yang benar-benar esensial untuk mengoperasikan fitur bersangkutan.
 3. **Dasar Hukum & Persetujuan (*Consent / Legal Basis*):** Memperoleh persetujuan eksplisit pengguna sebelum memproses data medis sensitif.
@@ -255,7 +255,7 @@ Pengumpulan dan pemrosesan data pribadi dalam platform PRONOIA wajib berlandaska
 
 ## 11. Privasi Sejak Awal Desain (Privacy by Default)
 
-PRONOIA menerapkan kebijakan privasi sebagai setelan bawaan (*Privacy by Default*):
+AEVYRA menerapkan kebijakan privasi sebagai setelan bawaan (*Privacy by Default*):
 
 ```text
 Status Bawaan Sumber Daya Baru:
@@ -275,7 +275,7 @@ Data pengguna tidak pernah dipublikasikan ke forum komunitas atau dibagikan ke p
 
 Prinsip minimisasi data (*Data Minimization*) melarang pengumpulan informasi tanpa tujuan fungsional yang konkret:
 
-> **Pedoman Rekayasa PRONOIA:**  
+> **Pedoman Rekayasa AEVYRA:**  
 > Dilarang keras mengumpulkan data pengguna dengan alasan *"mungkin suatu hari nanti data ini akan berguna"*.
 
 Pengumpulan atribut data hanya dibenarkan apabila memenuhi salah satu dari 5 kriteria:
@@ -289,7 +289,7 @@ Pengumpulan atribut data hanya dibenarkan apabila memenuhi salah satu dari 5 kri
 
 ## 13. Klasifikasi Tingkat Kerahasiaan Data (Data Classification)
 
-Klasifikasi 4 tingkat kerahasiaan data dalam arsitektur PRONOIA:
+Klasifikasi 4 tingkat kerahasiaan data dalam arsitektur AEVYRA:
 
 | Tingkat Klasifikasi | Definisi & Karakteristik Data | Contoh Entitas Data | Kebijakan Perlindungan |
 | :--- | :--- | :--- | :--- |
@@ -448,7 +448,7 @@ Deteksi dan penanganan aktivitas masuk yang mencurigakan (*Suspicious Login Dete
 
 ## 27. Model Otorisasi Akses (Authorization Model)
 
-Model otorisasi komprehensif platform PRONOIA menggabungkan 5 dimensi evaluasi:
+Model otorisasi komprehensif platform AEVYRA menggabungkan 5 dimensi evaluasi:
 
 ```text
              ┌──────────────────────────────────────────────┐
@@ -752,7 +752,7 @@ Perlindungan terhadap pemalsuan permintaan lintas situs (*CSRF Protection*):
 ## 49. Pembatasan Lintas Asal (Cross-Origin Resource Sharing / CORS)
 
 Pembatasan kebijakan berbagi sumber daya lintas asal (*CORS Policy*):
-- Konfigurasi CORS pada rute API terproteksi wajib secara spesifik mendaftarkan domain resmi klien aplikasi web dan PWA PRONOIA.
+- Konfigurasi CORS pada rute API terproteksi wajib secara spesifik mendaftarkan domain resmi klien aplikasi web dan PWA AEVYRA.
 - Dilarang keras menggunakan tanda bintang bebas (`Access-Control-Allow-Origin: *`) pada rute terproteksi yang mendukung pengiriman kredensial sesi.
 
 ---
@@ -894,7 +894,7 @@ Dilarang mencatat seluruh transkrip prompt pertanyaan pengguna dan balasan panja
 ## 62. Kepatuhan Keamanan Penyedia AI Eksternal (External AI Provider Security)
 
 Kepatuhan privasi penyedia model AI eksternal (*External AI Provider Governance*):
-- Memastikan vendor penyedia API LLM terikat kontrak kepatuhan yang melarang penggunaan data pengguna PRONOIA untuk pelatihan ulang model publik (*Zero Data Retention / No Model Training Agreement*).
+- Memastikan vendor penyedia API LLM terikat kontrak kepatuhan yang melarang penggunaan data pengguna AEVYRA untuk pelatihan ulang model publik (*Zero Data Retention / No Model Training Agreement*).
 - Konfigurasi kunci API dan rute penyedia dikelola secara terpusat di sisi peladen.
 
 ---
@@ -984,7 +984,7 @@ Larangan pelacakan lokasi di latar belakang (*Background Location Prohibition*):
 
 > [!CAUTION]
 > **Larangan Pelacakan Terselubung:**  
-> PRONOIA melarang keras implementasi fitur pelacakan lokasi latar belakang secara terus menerus (*Continuous Background Tracking*) yang memantau pergerakan fisik pengguna tanpa izin dan pembenaran fungsional yang sah.
+> AEVYRA melarang keras implementasi fitur pelacakan lokasi latar belakang secara terus menerus (*Continuous Background Tracking*) yang memantau pergerakan fisik pengguna tanpa izin dan pembenaran fungsional yang sah.
 
 ---
 
@@ -1002,9 +1002,9 @@ Keamanan lapisan basis data (*Database Security Architecture*):
 
 Pemisahan akun pengguna basis data (*Database User Separation*):
 Lingkungan produksi menerapkan akun terpisah sesuai kebutuhan beban kerja:
-- `pronoia_app`: Akun operasional harian aplikasi web (CRUD standar).
-- `pronoia_migration`: Akun khusus proses migrasi skema tabel (*CI/CD deployment pipeline*).
-- `pronoia_readonly`: Akun baca-saja untuk pemrosesan laporan analitis dan replikasi cadangan.
+- `aevyra_app`: Akun operasional harian aplikasi web (CRUD standar).
+- `aevyra_migration`: Akun khusus proses migrasi skema tabel (*CI/CD deployment pipeline*).
+- `aevyra_readonly`: Akun baca-saja untuk pemrosesan laporan analitis dan replikasi cadangan.
 
 ---
 
@@ -1213,7 +1213,7 @@ Tindakan yang melibatkan transaksi keuangan, perubahan kata sandi, dan pemesanan
 
 Privasi saluran notifikasi pengguna (*Notification Privacy*):
 - Notifikasi push yang dikirimkan ke perangkat pengguna dilarang menampilkan detail angka metrik medis sensitif atau vonis klinis pada layar kunci (*lockscreen*).
-- Pesan notifikasi menggunakan kalimat indikatif yang santun: *"PRONOIA memiliki pembaruan wawasan baru untuk pola kebiasaan Anda. Buka aplikasi untuk membaca."*
+- Pesan notifikasi menggunakan kalimat indikatif yang santun: *"AEVYRA memiliki pembaruan wawasan baru untuk pola kebiasaan Anda. Buka aplikasi untuk membaca."*
 
 ---
 
@@ -1731,7 +1731,7 @@ Keamanan penyajian pesan galat (*Error Message Sanitization*):
 
 > [!CAUTION]
 > **Pencegahan Kebocoran Struktur Internal:**  
-> Dilarang keras menampilkan galat basis data mentah (`SQLSTATE[HY000]`), nomor baris kode, atau jalur berkas peladen (`/var/www/pronoia/app/Services/...`) pada lingkungan produksi!
+> Dilarang keras menampilkan galat basis data mentah (`SQLSTATE[HY000]`), nomor baris kode, atau jalur berkas peladen (`/var/www/aevyra/app/Services/...`) pada lingkungan produksi!
 
 Seluruh galat yang tidak tertangani ditransformasikan ke dalam pesan kesalahan netral yang ramah pengguna dengan menyertakan kode pelacakan korelasi unik (`request_id`).
 
@@ -1778,7 +1778,7 @@ Mengonfigurasi header `Content-Security-Policy` ketat untuk memitigasi XSS dan p
 ## 145. Kebijakan Izin Fitur Peramban (Browser Permissions Policy)
 
 Kebijakan izin fitur perangkat peramban (*Browser Permissions Policy*):
-Menonaktifkan akses perangkat keras yang tidak relevan bagi platform PRONOIA:
+Menonaktifkan akses perangkat keras yang tidak relevan bagi platform AEVYRA:
 ```http
 Permissions-Policy: camera=(self), geolocation=(self), microphone=(), payment=(), usb=()
 ```
@@ -1885,7 +1885,7 @@ Model AI diperlakukan sebagai komponen komputasi yang berpotensi bias atau diman
 
 Perlindungan hak privasi dalam komputasi AI (*AI + Privacy Governance*):
 - Menerapkan prinsip minimisasi konteks: hanya data yang relevan dengan pertanyaan yang disuntikkan ke prompt.
-- Memastikan vendor model AI eksternal tidak merekam atau melatih model publik menggunakan data pribadi pengguna PRONOIA.
+- Memastikan vendor model AI eksternal tidak merekam atau melatih model publik menggunakan data pribadi pengguna AEVYRA.
 
 ---
 
@@ -1922,7 +1922,7 @@ Sanitasi penanganan tautan eksternal komunitas (*External Link Sanitization*):
 Tautan luar yang dibagikan pengguna diperiksa keamanannya:
 - Membatasi protokol hanya pada `http://` dan `https://`.
 - Menambahkan atribut relasi aman `rel="noopener noreferrer nofollow"`.
-- Menampilkan jendela peringatan sebelum mengalihkan pengguna ke situs di luar ekosistem PRONOIA.
+- Menampilkan jendela peringatan sebelum mengalihkan pengguna ke situs di luar ekosistem AEVYRA.
 
 ---
 
@@ -1985,7 +1985,7 @@ Aplikasi PWA menyediakan tautan yang mudah dijangkau menuju dokumen Kebijakan Pr
 
 Keterbukaan peran agen kecerdasan buatan (*AI Assistant Transparency Disclosure*):
 Pengguna wajib diberi tahu secara transparan saat berinteraksi dengan asisten cerdas:
-> *"Anda sedang berinteraksi dengan Asisten AI PRONOIA. Asisten ini memberikan panduan gaya hidup preventif dan bukan pengganti diagnosis medis profesional."*
+> *"Anda sedang berinteraksi dengan Asisten AI AEVYRA. Asisten ini memberikan panduan gaya hidup preventif dan bukan pengganti diagnosis medis profesional."*
 
 Asisten AI dilarang keras berpura-pura menjadi dokter atau instruktur manusia berlisensi.
 
@@ -1994,7 +1994,7 @@ Asisten AI dilarang keras berpura-pura menjadi dokter atau instruktur manusia be
 ## 168. Keterbukaan Akses Medis oleh Instruktur (Instructor Medical Disclosure)
 
 Keterbukaan profil bimbingan instruktur (*Instructor Profile Disclosure*):
-Profil instruktur mencantumkan peran, program bimbingan yang diampu, dan status sertifikasi yang telah diverifikasi secara resmi oleh tim operasional PRONOIA.
+Profil instruktur mencantumkan peran, program bimbingan yang diampu, dan status sertifikasi yang telah diverifikasi secara resmi oleh tim operasional AEVYRA.
 
 ---
 
@@ -2205,7 +2205,7 @@ Pemetaan aliran data arsitektur sistem (*Architecture Data Flow Mapping*):
 
 Pengawasan aliran data ke penyedia eksternal (*Third-Party Data Flow Governance*):
 Untuk setiap layanan pihak ketiga yang terintegrasi, tim arsitektur wajib mendokumentasikan:
-- Data spesifik apa saja yang meninggalkan batas jaringan PRONOIA.
+- Data spesifik apa saja yang meninggalkan batas jaringan AEVYRA.
 - Apa alasan bisnis dan pembenaran fungsional pengiriman data tersebut.
 - Di mana data diproses secara geografis dan bagaimana enkripsi diterapkan.
 - Berapa lama data disimpan oleh penyedia dan siapa pemegang kendalinya.
@@ -2321,7 +2321,7 @@ Administrator hanya dapat mengeksekusi tindakan yang memiliki pembenaran operasi
 
 ## 198. Ringkasan Topologi Arsitektur Keamanan (Security Architecture Topology Summary)
 
-Ringkasan topologi arsitektur keamanan terpadu PRONOIA:
+Ringkasan topologi arsitektur keamanan terpadu AEVYRA:
 
 ```text
                            PENGGUNA & KLIEN PWA
@@ -2471,7 +2471,7 @@ Sebuah modul data dinyatakan memenuhi standar privasi hanya jika:
 
 ## 207. Model Arsitektur Keamanan Terpadu (Final Integrated Security Model)
 
-Model arsitektur keamanan terpadu platform PRONOIA (*Integrated Security Model*):
+Model arsitektur keamanan terpadu platform AEVYRA (*Integrated Security Model*):
 
 ```text
                         PENGGUNA AKTIF
@@ -2533,9 +2533,9 @@ Model tata kelola privasi siklus hidup terpadu (*Integrated Privacy Model*):
 
 ## 209. Piagam Prinsip Pamungkas Keamanan & Privasi (Final Sovereign Principle)
 
-> **"PRONOIA wajib mengetahui cukup informasi untuk memberikan panduan preventif yang bermanfaat, namun tidak boleh mengumpulkan lebih dari yang diperlukan untuk tujuan tersebut."**
+> **"AEVYRA wajib mengetahui cukup informasi untuk memberikan panduan preventif yang bermanfaat, namun tidak boleh mengumpulkan lebih dari yang diperlukan untuk tujuan tersebut."**
 >
-> — *Prinsip Inti Kedaulatan Privasi PRONOIA*
+> — *Prinsip Inti Kedaulatan Privasi AEVYRA*
 
 Piagam prinsip keamanan mutlak:
 ```text
@@ -2578,6 +2578,6 @@ Dan kaidah pamungkas kedaulatan informasi:
 
 > [!IMPORTANT]
 > **Piagam Integritas Sistem & Kemanusiaan:**  
-> **Keamanan (*Security*) bertugas melindungi sistem dari ancaman luar. Privasi (*Privacy*) bertugas melindungi kendali dan kedaulatan manusia atas informasinya sendiri. Platform PRONOIA mewajibkan penegakan kedua pilar ini secara utuh dan tanpa kompromi.**
+> **Keamanan (*Security*) bertugas melindungi sistem dari ancaman luar. Privasi (*Privacy*) bertugas melindungi kendali dan kedaulatan manusia atas informasinya sendiri. Platform AEVYRA mewajibkan penegakan kedua pilar ini secara utuh dan tanpa kompromi.**
 
 ---

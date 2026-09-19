@@ -1,12 +1,12 @@
-# PRONOIA — Kaidah Antarmuka Pengguna & Pengalaman Pengguna (Frontend Rules)
+# AEVYRA — Kaidah Antarmuka Pengguna & Pengalaman Pengguna (Frontend Rules)
 
 > [!IMPORTANT]
 > **STANDAR REKAYASA ANTARMUKA PRODUKSI (PRODUCTION UI/UX STANDARD)**
-> Dokumen ini menetapkan kaidah, filosofi perancangan, standar estetika visual, batasan arsitektural, dan kriteria aksesibilitas wajib (*mandatory frontend requirements*) untuk seluruh komponen antarmuka platform PRONOIA. Antarmuka PRONOIA dirancang khusus untuk memandu pengguna dalam perjalanan kesehatan preventif yang menenangkan, berdaya guna, dan berbasis bukti data biologis yang mudah dipahami (*human-centered preventive health*).
+> Dokumen ini menetapkan kaidah, filosofi perancangan, standar estetika visual, batasan arsitektural, dan kriteria aksesibilitas wajib (*mandatory frontend requirements*) untuk seluruh komponen antarmuka platform AEVYRA. Antarmuka AEVYRA dirancang khusus untuk memandu pengguna dalam perjalanan kesehatan preventif yang menenangkan, berdaya guna, dan berbasis bukti data biologis yang mudah dipahami (*human-centered preventive health*).
 
 ### Ringkasan Eksekutif Arsitektur Antarmuka
 
-Antarmuka pengguna PRONOIA dibangun di atas 4 pilar filosofis utama: **Sederhana (*Simple*)**, **Jelas (*Clear*)**, **Menenangkan (*Calm*)**, dan **Dapat Ditindaklanjuti (*Actionable*)**. Platform kesehatan preventif dilarang keras membanjiri pengguna dengan visual peringatan medis yang menakut-nakuti (*alarmist design*), angka presisi semu (*false precision*), atau grafik data yang rumit tanpa rekomendasi langkah konkret.
+Antarmuka pengguna AEVYRA dibangun di atas 4 pilar filosofis utama: **Sederhana (*Simple*)**, **Jelas (*Clear*)**, **Menenangkan (*Calm*)**, dan **Dapat Ditindaklanjuti (*Actionable*)**. Platform kesehatan preventif dilarang keras membanjiri pengguna dengan visual peringatan medis yang menakut-nakuti (*alarmist design*), angka presisi semu (*false precision*), atau grafik data yang rumit tanpa rekomendasi langkah konkret.
 
 Seluruh pengalaman pengguna beroperasi mengikuti siklus tertutup 4 tahap: **Amati (*Observe*) ──► Pahami (*Understand*) ──► Bertindak (*Act*) ──► Pantau (*Monitor*)**. Pendekatan desain mengutamakan layar ponsel pintar terlebih dahulu (*Mobile-First Paradigm*), memanfaatkan sistem desain terpadu berbasis Tailwind CSS, mematuhi standar aksesibilitas universal WCAG 2.1 Level AA, serta memosisikan backend sisi server sebagai pemegang otoritas kebenaran tunggal (*Single Source of Truth*).
 
@@ -16,7 +16,7 @@ Seluruh pengalaman pengguna beroperasi mengikuti siklus tertutup 4 tahap: **Amat
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-004` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-004` |
 | **Versi Arsitektur Antarmuka** | `v1.0.0-PROD` (Edisi Standar Produksi & Kompetisi ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory Architecture Standard*) |
@@ -31,7 +31,7 @@ Seluruh pengalaman pengguna beroperasi mengikuti siklus tertutup 4 tahap: **Amat
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                    TOPOLOGI SISTEM DESAIN & PENGALAMAN PENGGUNA PRONOIA                   │
+│                    TOPOLOGI SISTEM DESAIN & PENGALAMAN PENGGUNA AEVYRA                   │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Filosofi Antarmuka, Responsivitas Mobile-First, & Dasbor Peran (Bagian 1 – 10)
@@ -72,9 +72,9 @@ Seluruh pengalaman pengguna beroperasi mengikuti siklus tertutup 4 tahap: **Amat
 
 ## 1. Tujuan & Ruang Lingkup Antarmuka Pengguna (Frontend Purpose & Scope)
 
-Dokumen ini menetapkan standar wajib rekayasa antarmuka pengguna (*frontend engineering*) dan pengalaman pengguna (*UI/UX design requirements*) untuk seluruh aplikasi web dan modul Progressive Web App (PWA) PRONOIA.
+Dokumen ini menetapkan standar wajib rekayasa antarmuka pengguna (*frontend engineering*) dan pengalaman pengguna (*UI/UX design requirements*) untuk seluruh aplikasi web dan modul Progressive Web App (PWA) AEVYRA.
 
-Karena PRONOIA beroperasi sebagai platform kesehatan preventif berbasis bukti (*evidence-based preventive health*), antarmuka pengguna memikul tanggung jawab etis dan klinis yang tinggi. Frontend wajib memprioritaskan:
+Karena AEVYRA beroperasi sebagai platform kesehatan preventif berbasis bukti (*evidence-based preventive health*), antarmuka pengguna memikul tanggung jawab etis dan klinis yang tinggi. Frontend wajib memprioritaskan:
 
 - **Kepercayaan & Keamanan Psikologis (*Trust & Psychological Safety*):** Antarmuka harus memberikan rasa aman, menenangkan, dan bebas dari taktik intimidasi medis (*health anxiety triggers*).
 - **Kejelasan Penyajian Bukti Data (*Clarity & Data Grounding*):** Setiap visualisasi metrik biologis, grafik tren, dan wawasan perilaku wajib menyajikan konteks yang jernih, satuan yang baku, dan tautan bukti pendukung yang transparan.
@@ -86,7 +86,7 @@ Karena PRONOIA beroperasi sebagai platform kesehatan preventif berbasis bukti (*
 
 ## 2. Filosofi Desain Antarmuka Pengguna (Frontend Design Philosophy)
 
-Desain antarmuka PRONOIA wajib mewujudkan 5 nilai filosofis utama dalam setiap interaksi layar:
+Desain antarmuka AEVYRA wajib mewujudkan 5 nilai filosofis utama dalam setiap interaksi layar:
 
 1. **Dapat Dipercaya (*Trustworthy*):** Desain visual tampak profesional, stabil, dan berwibawa tanpa unsur sensasionalisme atau klaim muluk-muluk.
 2. **Menenangkan (*Calm*):** Palet warna, tipografi, dan ritme ruang dirancang untuk menurunkan kecemasan pengguna, bukan memicu kepanikan saat terjadi fluktuasi metrik harian.
@@ -95,13 +95,13 @@ Desain antarmuka PRONOIA wajib mewujudkan 5 nilai filosofis utama dalam setiap i
 5. **Dapat Ditindaklanjuti (*Actionable*):** Setiap informasi perubahan status kesehatan selalu dibarengi dengan rekomendasi tindakan mikro harian yang realistis untuk dijalankan.
 
 > [!NOTE]
-> Antarmuka PRONOIA bukan dasbor pemantau kegawatdaruratan rumah sakit (*ICU monitor*). Desain harus mengalir tenang, memberikan kejernihan pikiran, dan memicu motivasi berkelanjutan (*long-term preventive adherence*).
+> Antarmuka AEVYRA bukan dasbor pemantau kegawatdaruratan rumah sakit (*ICU monitor*). Desain harus mengalir tenang, memberikan kejernihan pikiran, dan memicu motivasi berkelanjutan (*long-term preventive adherence*).
 
 ---
 
 ## 3. Paradigma Ponsel Pintar Pertama (Mobile-First Paradigm)
 
-Sebagai Progressive Web App (PWA) yang ditujukan untuk mendampingi gaya hidup harian pengguna, PRONOIA **wajib dirancang dengan paradigma Ponsel Pintar Pertama (*Mobile-First Design*)**.
+Sebagai Progressive Web App (PWA) yang ditujukan untuk mendampingi gaya hidup harian pengguna, AEVYRA **wajib dirancang dengan paradigma Ponsel Pintar Pertama (*Mobile-First Design*)**.
 
 Hierarki Prioritas Perancangan Layar:
 ```text
@@ -151,7 +151,7 @@ Dilarang keras menciptakan nilai titik henti ad-hoc atau kueri media CSS kustom 
 
 ## 6. Hierarki Visual & Skala Spasi (Visual Hierarchy & Spacing Scale)
 
-Setiap layar antarmuka PRONOIA wajib memiliki hierarki informasi visual (*visual hierarchy*) yang terstruktur secara intuitif sehingga pengguna dalam 3 detik pertama dapat memahami:
+Setiap layar antarmuka AEVYRA wajib memiliki hierarki informasi visual (*visual hierarchy*) yang terstruktur secara intuitif sehingga pengguna dalam 3 detik pertama dapat memahami:
 
 1. **Di mana posisi saya saat ini? (*Context & Identity*):** Ditandai oleh judul tajuk halaman yang jelas dan lencana peran aktif (*Workspace Badge*).
 2. **Bagaimana status kebiasaan saya saat ini? (*Current State*):** Disajikan melalui kartu ringkasan biomarker utama dan perbandingannya terhadap garis acuan personal (*Personal Baseline*).
@@ -162,7 +162,7 @@ Dilarang menempatkan lebih dari satu tombol tindakan utama berkontras tinggi dal
 
 ---
 
-## 7. Prinsip Dasbor Anggota PRONOIA (Member Dashboard Principle)
+## 7. Prinsip Dasbor Anggota AEVYRA (Member Dashboard Principle)
 
 Dasbor Anggota (*Member Dashboard*) adalah ruang kendali personal harian yang wajib dirancang untuk menjawab 4 pertanyaan fundamental anggota:
 
@@ -212,7 +212,7 @@ Dasbor administrator dilarang menampilkan daftar rekam medis privat anggota pero
 
 ## 10. Fondasi Sistem Desain Terpadu (Unified Design System Foundation)
 
-Seluruh komponen visual PRONOIA wajib berakar pada **Sistem Desain Terpadu (*Unified Design System*)** yang konsisten dan dapat diprediksi.
+Seluruh komponen visual AEVYRA wajib berakar pada **Sistem Desain Terpadu (*Unified Design System*)** yang konsisten dan dapat diprediksi.
 
 Fondasi Sistem Desain Mencakup Token Baku:
 - **Palet Warna Semantik:** Emerald/Teal (Kesehatan preventif & optimal), Slate/Neutral (Struktur antarmuka & teks netral), Amber/Orange (Atensi & deviasi kebiasaan), Rose/Red (Peringatan keselamatan klinis & bahaya), Indigo/Blue (Fitur asisten AI & wawasan).
@@ -320,7 +320,7 @@ Kaidah Penyajian Data Kesehatan:
 
 Setiap metrik biologis, ukuran antropometri, kuantitas nutrisi, dan durasi kebiasaan **wajib selalu menampilkan satuan pengukuran resmi (*Canonical Unit Display*)**.
 
-Standar Satuan Baku PRONOIA:
+Standar Satuan Baku AEVYRA:
 - Glukosa Darah: `mg/dL` (atau `mmol/L` sesuai preferensi regional terdaftar)
 - Tekanan Darah: `mmHg` (contoh: `120/80 mmHg`)
 - Denyut Jantung: `bpm` (denyut per menit)
@@ -357,14 +357,14 @@ Apabila data kesehatan yang ditampilkan sudah lama tidak diperbarui oleh penggun
 
 Standar Komunikasi Data Usang:
 - Tampilkan stempel waktu relatif yang jelas: *"Terakhir dicatat 5 hari yang lalu"* atau *"Data per 12 September 2026"*.
-- Jika metrik vital belum diperbarui lebih dari 7 hari, tampilkan kartu pengingat lembut (*gentle nudge card*): *"Pembaruan metrik berkala membantu PRONOIA mendeteksi perubahan pola tubuh Anda secara lebih akurat"*.
+- Jika metrik vital belum diperbarui lebih dari 7 hari, tampilkan kartu pengingat lembut (*gentle nudge card*): *"Pembaruan metrik berkala membantu AEVYRA mendeteksi perubahan pola tubuh Anda secara lebih akurat"*.
 - Jangan menyajikan data usang seolah-olah data tersebut mencerminkan kondisi fisiologis tubuh pengguna pada detik ini.
 
 ---
 
 ## 20. Antarmuka Garis Acuan Personal (Personal Baseline UI)
 
-Garis Acuan Personal (*Personal Baseline*) adalah pilar pembeda utama PRONOIA dari aplikasi kesehatan generik. Antarmuka wajib memvisualisasikan perbandingan metrik terhadap garis acuan personal secara eksplisit.
+Garis Acuan Personal (*Personal Baseline*) adalah pilar pembeda utama AEVYRA dari aplikasi kesehatan generik. Antarmuka wajib memvisualisasikan perbandingan metrik terhadap garis acuan personal secara eksplisit.
 
 Struktur Komponen Garis Acuan Personal:
 ```text
@@ -384,7 +384,7 @@ Penjelasan visual ini menyadarkan anggota bahwa tubuh setiap manusia unik dan de
 
 ## 21. Kartu Wawasan Deviasi Perilaku (Behavioral Insight Card)
 
-Kartu Wawasan Deviasi Perilaku (*Behavioral Insight Card*) adalah komponen antarmuka paling bernilai dalam ekosistem PRONOIA.
+Kartu Wawasan Deviasi Perilaku (*Behavioral Insight Card*) adalah komponen antarmuka paling bernilai dalam ekosistem AEVYRA.
 
 Kartu Wawasan wajib memuat 4 Elemen Pokok yang utuh:
 1. **Pernyataan Observasi Fakta (*Headline Observation*):** Judul ringkas berbasis data objektif (contoh: *"Ritme tidur bergeser 1,5 jam lebih larut dalam 3 malam terakhir"*).
@@ -437,7 +437,7 @@ Kaidah Visualisasi Tren:
 
 ## 25. Status Risiko & Perhatian Tanpa Panik (Calm Risk & Attention States)
 
-Status risiko dan perhatian perilaku pada antarmuka PRONOIA wajib menggunakan sistem label yang tenang, empatis, dan bebas dari kepanikan visual (*Calm Risk & Attention States*).
+Status risiko dan perhatian perilaku pada antarmuka AEVYRA wajib menggunakan sistem label yang tenang, empatis, dan bebas dari kepanikan visual (*Calm Risk & Attention States*).
 
 | Tingkat Status | Label Antarmuka Resmi | Warna Visual & Ikonografi | Diksi Penjelas |
 | :--- | :--- | :--- | :--- |
@@ -468,7 +468,7 @@ Seluruh lencana status dan kartu metrik wajib menyertakan teks keterangan ekspli
 
 ## 27. Aksesibilitas Universal Terpadu (Universal Accessibility - WCAG 2.1 AA)
 
-Seluruh komponen interaktif PRONOIA wajib memenuhi kriteria aksesibilitas universal **WCAG 2.1 Level AA**.
+Seluruh komponen interaktif AEVYRA wajib memenuhi kriteria aksesibilitas universal **WCAG 2.1 Level AA**.
 
 Kriteria Aksesibilitas Wajib:
 1. **Dukungan Navigasi Papan Ketik Penuh (*Keyboard Navigation*):** Seluruh elemen yang dapat diklik (tombol, tautan, input formulir, tab navigasi, dan kontrol modal) wajib dapat dijangkau dan dioperasikan menggunakan tombol `Tab`, `Enter`, `Space`, dan `Escape`.
@@ -521,10 +521,10 @@ Ketika seorang pengguna baru membuka aplikasi atau belum memiliki data rekaman p
 ❌ STATUS KOSONG BURUK:
 "Tidak ada data." (Layar abu-abu kosong membingungkan pengguna)
 
-✅ STATUS KOSONG EDUKATIF & MENGUNDANG (PRONOIA STANDARD):
+✅ STATUS KOSONG EDUKATIF & MENGUNDANG (AEVYRA STANDARD):
 [ Ilustrasi Pemindai Makanan Ramah ]
 Judul    : "Jurnal Makanan Anda Masih Kosong"
-Deskripsi: "Mencatat santapan pertama Anda membantu PRONOIA memetakan respon glukosa harian Anda secara akurat."
+Deskripsi: "Mencatat santapan pertama Anda membantu AEVYRA memetakan respon glukosa harian Anda secara akurat."
 Tombol   : [ Pindai Makanan Pertama Saya ]
 ```
 
@@ -643,7 +643,7 @@ Pengguna tidak boleh dibiarkan buntu; selalu sediakan alternatif pencatatan nutr
 Antarmuka obrolan asisten AI (*AI Assistant Chat UI*) wajib secara tegas menampilkan identitas bahwa pengguna sedang **berinteraksi dengan kecerdasan buatan, bukan dokter manusia**.
 
 Kaidah Antarmuka Obrolan AI:
-1. **Lencana Identitas AI Permanen:** Header sesi obrolan wajib menampilkan lencana `Asisten AI PRONOIA` dengan ikon robot/bintang cerdas, bukan foto profil dokter manusia berjas putih.
+1. **Lencana Identitas AI Permanen:** Header sesi obrolan wajib menampilkan lencana `Asisten AI AEVYRA` dengan ikon robot/bintang cerdas, bukan foto profil dokter manusia berjas putih.
 2. **Chip Rekomendasi Pertanyaan Awal (*Prompt Chips*):** Sediakan 3–4 tombol pertanyaan pemantik di awal obrolan (contoh: *"Mengapa glukosa saya melonjak kemarin?"*, *"Saran camilan ramah metabolik"*).
 3. **Penafian Batas Keselamatan Terlihat:** Tampilkan teks penafian permanen di bagian bawah: *"Asisten AI memberikan edukasi gaya hidup preventif berbasis data Anda, bukan diagnosis medis resmi."*
 
@@ -778,7 +778,7 @@ Pusat Notifikasi (*Notification Center UI*) bertindak sebagai ruang pengingat te
 Kaidah Antarmuka Notifikasi:
 - **Pengelompokan Berdasarkan Domain:** Pisahkan notifikasi ke dalam tab logis: *Wawasan Kesehatan*, *Konsultasi*, *Tantangan*, dan *Sistem*.
 - **Penanda Belum Dibaca yang Halus:** Titik bulat kecil berwarna teal tanpa angka merah berkedip yang memicu stres.
-- **Pemberitahuan Jam Hening (*Quiet Hours Indicator*):** Tampilkan pesan ramah jika pengguna membuka notifikasi di larut malam: *"PRONOIA tidak mengirimkan notifikasi pengingat antara jam 22.00–06.00 agar tidur Anda tidak terganggu"*.
+- **Pemberitahuan Jam Hening (*Quiet Hours Indicator*):** Tampilkan pesan ramah jika pengguna membuka notifikasi di larut malam: *"AEVYRA tidak mengirimkan notifikasi pengingat antara jam 22.00–06.00 agar tidur Anda tidak terganggu"*.
 
 ---
 
@@ -879,7 +879,7 @@ Elemen Wajib pada Setiap Grafik Kesehatan:
 
 ## 57. Keselamatan Interpretasi Grafik Medis (Health Chart Interpretation Safety)
 
-Gaya visual grafik kesehatan pada platform PRONOIA dilarang keras menyerupai tampilan instrumen diagnostik medis gawat darurat (*Health Chart Interpretation Safety*).
+Gaya visual grafik kesehatan pada platform AEVYRA dilarang keras menyerupai tampilan instrumen diagnostik medis gawat darurat (*Health Chart Interpretation Safety*).
 
 Larangan Visualisasi Grafik Medis:
 - Dilarang membuat grafik denyut jantung yang menyerupai monitor elektrokardiogram (EKG) rumah sakit dengan latar belakang hitam dan garis hijau neon bergerigi tajam.
@@ -973,7 +973,7 @@ Perbandingan Teks Notifikasi:
 Judul jendela peramban (`<title>`) dan metadata media sosial (OpenGraph / Twitter Card) dilarang keras memuat informasi klinis atau identitas data pribadi pengguna (*Browser Title & Page Metadata*).
 
 Kaidah Judul Peramban:
-- Gunakan format umum yang bersih: `PRONOIA — Dasbor Kesehatan Preventif`, `PRONOIA — Jurnal Harian`, atau `PRONOIA — Konsultasi`.
+- Gunakan format umum yang bersih: `AEVYRA — Dasbor Kesehatan Preventif`, `AEVYRA — Jurnal Harian`, atau `AEVYRA — Konsultasi`.
 - Dilarang memuat nama penyakit, diagnosa, atau nilai biomarker ke dalam elemen `<title>` (contoh terlarang: `<title>Pasien Diabetes Budi Santoso - Glukosa 240</title>`) karena riwayat judul peramban dapat tersimpan di cache komputer bersama dan terbaca oleh pihak ketiga.
 
 ---
@@ -982,7 +982,7 @@ Kaidah Judul Peramban:
 
 Struktur URL rute antarmuka pengguna wajib dirancang secara semantik, bersih, dan konsisten (*Semantic URL Design*).
 
-Standar Struktur URL PRONOIA:
+Standar Struktur URL AEVYRA:
 ```text
 /dashboard                        ──► Dasbor utama anggota
 /health-metrics                   ──► Halaman ikhtisar metrik biometrik
@@ -999,7 +999,7 @@ Dilarang menyertakan parameter data biologis sensitif ke dalam string kueri URL 
 
 ## 66. Antarmuka Pencarian & Filter Cepat (Search & Filter UI)
 
-Antarmuka pencarian (*Search & Filter UI*) pada platform PRONOIA wajib tunduk pada batasan otorisasi pengguna secara ketat.
+Antarmuka pencarian (*Search & Filter UI*) pada platform AEVYRA wajib tunduk pada batasan otorisasi pengguna secara ketat.
 
 Kaidah Antarmuka Pencarian:
 - **Pencarian Terisolasi untuk Anggota:** Anggota hanya dapat mencari data di dalam ruang rekaman miliknya sendiri (misal: mencari nama makanan di riwayat jurnal makanannya) atau artikel edukasi kesehatan publik.
@@ -1064,7 +1064,7 @@ Pengguna Membuka Fitur Pemindai Makanan
                          │
                          ▼
 Layar Edukasi Ramah (Menjelaskan Mengapa Izin Dibutuhkan)
-"PRONOIA membutuhkan akses kamera untuk memindai piring makanan Anda
+"AEVYRA membutuhkan akses kamera untuk memindai piring makanan Anda
 dan memperkirakan kandungan gizinya secara otomatis."
                          │
                          ▼
@@ -1152,9 +1152,9 @@ Standar Kepatuhan Kontras & Warna:
 
 ## 78. Skala Tipografi & Keterbacaan Huruf (Typography Scale & Readability)
 
-Tipografi antarmuka PRONOIA dirancang dengan hierarki visual yang tegas dan keterbacaan tinggi (*Typography Scale & Readability*).
+Tipografi antarmuka AEVYRA dirancang dengan hierarki visual yang tegas dan keterbacaan tinggi (*Typography Scale & Readability*).
 
-Skala Tipografi Resmi PRONOIA:
+Skala Tipografi Resmi AEVYRA:
 - **Display / Hero (28–32px, Bold):** Digunakan untuk sapaan berwaktu dan angka skor utama dasbor.
 - **Heading 1 (22–24px, Semibold):** Digunakan untuk judul halaman dan modul utama.
 - **Heading 2 (18–20px, Semibold):** Digunakan untuk tajuk kontainer kartu metrik dan wawasan.
@@ -1197,7 +1197,7 @@ Pendekatan ini menjamin bahwa pengguna yang hanya ingin mengetahui tindakan cepa
 
 ## 81. Pilar Penulisan Teks Antarmuka Empatis (UX Copywriting Principles)
 
-Penulisan teks antarmuka (*UX Copywriting*) pada seluruh platform PRONOIA wajib berpegang pada 5 pilar bahasa empatis:
+Penulisan teks antarmuka (*UX Copywriting*) pada seluruh platform AEVYRA wajib berpegang pada 5 pilar bahasa empatis:
 
 1. **Jelas (*Clear*):** Menggunakan kata-kata sederhana, lugas, dan bebas dari jargon teknis atau terminologi medis yang mengintimidasi.
 2. **Menenangkan (*Calm*):** Nada suara santun dan menenangkan, tidak menggunakan tanda seru berlebihan (!!!) atau kata-kata bernada darurat untuk fluktuasi normal.
@@ -1234,12 +1234,12 @@ Kaidah Diksi Peringatan Kesehatan:
 
 ## 84. Antarmuka Progressive Web App (PWA Experience & Shell)
 
-Sebagai Progressive Web App (PWA), antarmuka PRONOIA wajib mengomunikasikan status aplikasi PWA secara tepat waktu dan elegan.
+Sebagai Progressive Web App (PWA), antarmuka AEVYRA wajib mengomunikasikan status aplikasi PWA secara tepat waktu dan elegan.
 
 Fitur Antarmuka PWA:
 - **Spanduk Instalasi Aplikasi Tepat Waktu (*Smart Install Banner*):** Dilarang memunculkan pop-up instalasi aplikasi pada detik pertama pengguna membuka web. Tampilkan ajakan instalasi hanya setelah pengguna merasakan manfaat produk (misal: setelah berhasil mencatat jurnal pertama kali atau menyelesaikan sesi pemindaian).
 - **Indikator Kesiapan Mode Luring (*Offline Ready Badge*):** Berikan notifikasi halus saat PWA telah selesai mengunduh cangkang aplikasi: *"Aplikasi siap digunakan secara luring"*.
-- **Pemberitahuan Pembaruan Versi Halus (*App Update Toast*):** Saat versi baru PWA dirilis oleh tim pengembang, tampilkan pesan melayang: *"Versi terbaru PRONOIA tersedia. [Perbarui Sekarang]"*.
+- **Pemberitahuan Pembaruan Versi Halus (*App Update Toast*):** Saat versi baru PWA dirilis oleh tim pengembang, tampilkan pesan melayang: *"Versi terbaru AEVYRA tersedia. [Perbarui Sekarang]"*.
 
 ---
 
@@ -1279,7 +1279,7 @@ Batas Keamanan Frontend:
 
 Antarmuka pengguna wajib dioptimalkan untuk mencapai standar performa web modern (*Core Web Vitals*):
 
-Target Performa Frontend PRONOIA:
+Target Performa Frontend AEVYRA:
 - **Largest Contentful Paint (LCP):** Di bawah **2.5 detik** pada koneksi seluler 4G standar.
 - **Interaction to Next Paint (INP):** Di bawah **200 milidetik** untuk seluruh interaksi tombol dan input.
 - **Cumulative Layout Shift (CLS):** Di bawah **0.1** dengan menetapkan dimensi lebar dan tinggi eksplisit pada seluruh gambar dan kontainer grafik.
@@ -1289,7 +1289,7 @@ Target Performa Frontend PRONOIA:
 
 ## 89. Pencegahan Rekayasa Frontend Berlebih (Avoid Frontend Overengineering)
 
-Arsitektur frontend PRONOIA melarang keras penerapan rekayasa teknologi yang berlebihan (*Avoid Frontend Overengineering*).
+Arsitektur frontend AEVYRA melarang keras penerapan rekayasa teknologi yang berlebihan (*Avoid Frontend Overengineering*).
 
 Kaidah Kesederhanaan Rekayasa:
 - Dilarang memperkenalkan pustaka manajemen status global raksasa yang rumit jika status aplikasi dapat dikelola secara andal menggunakan komponen reaktif sederhana atau sistem bawaan framework.
@@ -1401,7 +1401,7 @@ Kaidah Integritas Visual Grafik:
 
 ## 96. Kepercayaan & Keamanan Antarmuka (UI Trust & Safety Architecture)
 
-Antarmuka pengguna PRONOIA dilarang keras memberikan kesan kepastian diagnosis medis yang melampaui kemampuan data biologis yang tersedia (*UI Safety & Psychological Trust*).
+Antarmuka pengguna AEVYRA dilarang keras memberikan kesan kepastian diagnosis medis yang melampaui kemampuan data biologis yang tersedia (*UI Safety & Psychological Trust*).
 
 Larangan Klaim Visual Antarmuka:
 - Dilarang menampilkan angka presisi desimal semu yang berlebihan (contoh: menampilkan *"Tingkat kepatuhan metabolik Anda: 94.7821%"*). Gunakan angka bulat yang ramah (contoh: *"95%"*).
@@ -1459,15 +1459,15 @@ Kedaulatan Pengguna Diwujudkan Melalui:
 
 ---
 
-## 100. Prinsip Pamungkas Antarmuka PRONOIA (Final Frontend Sovereign Principle)
+## 100. Prinsip Pamungkas Antarmuka AEVYRA (Final Frontend Sovereign Principle)
 
-Seluruh perancangan, pengembangan, dan evaluasi antarmuka pengguna PRONOIA wajib bermuara pada satu Prinsip Pamungkas Kedaulatan Antarmuka:
+Seluruh perancangan, pengembangan, dan evaluasi antarmuka pengguna AEVYRA wajib bermuara pada satu Prinsip Pamungkas Kedaulatan Antarmuka:
 
 > [!IMPORTANT]
-> **PRINSIP PAMUNGKAS ANTARMUKA PENGGUNA PRONOIA**
-> Antarmuka PRONOIA hadir bukan untuk membanjiri pengguna dengan angka yang membingungkan, bukan untuk memicu kepanikan medis yang menakutkan, dan bukan untuk mendominasi layar dengan animasi yang adiktif.
+> **PRINSIP PAMUNGKAS ANTARMUKA PENGGUNA AEVYRA**
+> Antarmuka AEVYRA hadir bukan untuk membanjiri pengguna dengan angka yang membingungkan, bukan untuk memicu kepanikan medis yang menakutkan, dan bukan untuk mendominasi layar dengan animasi yang adiktif.
 >
-> Antarmuka PRONOIA hadir untuk mendampingi manusia dengan tenang:
+> Antarmuka AEVYRA hadir untuk mendampingi manusia dengan tenang:
 > **Mengamati pola tubuh dengan jernih (*Observe*),**
 > **Memahami makna di balik data secara berbasis bukti (*Understand*),**
 > **Mengambil satu tindakan mikro nyata hari ini (*Act*), dan**

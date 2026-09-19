@@ -1,4 +1,4 @@
-# PRONOIA — Peta Jalan & Rencana Pengiriman MVP (MVP Roadmap & Delivery Plan)
+# AEVYRA — Peta Jalan & Rencana Pengiriman MVP (MVP Roadmap & Delivery Plan)
 
 > **Spesifikasi Lengkap Strategi Rilis Minimum Viable Product (MVP), Fondasi Rekayasa Perangkat Lunak Bertahap (Fase 0 s.d. Fase 7), Arsitektur Irisan Vertikal (Vertical Slices), Skenario Demonstrasi Kompetisi Kanonikal, Matriks Ketergantungan Modul, Tata Kelola Utang Teknis, Kriteria Kelayakan Rilis (Definition of Done), serta Validasi Lingkaran Preventif Tertutup (Closed-Loop Preventive Health).**
 
@@ -8,11 +8,11 @@
 
 | Atribut Metadata | Rincian Dokumen Teknis |
 | :--- | :--- |
-| **Kode Dokumen** | `PRONOIA-DOC-014` |
+| **Kode Dokumen** | `AEVYRA-DOC-014` |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Release Ready & Competition Optimized) |
 | **Domain Arsitektur** | Delivery Planning, Sprint Cadence, Engineering Milestones, Vertical Slicing, Competition Demo |
 | **Tingkat Kerahasiaan** | **Internal Confidential & Audit-Ready** (Departemen Produk, Engineering, & Medis) |
-| **Target Ekosistem** | PRONOIA Full-Stack (Laravel Backend, PostgreSQL, Redis, Vue/React/Tailwind Frontend, AI Pipeline) |
+| **Target Ekosistem** | AEVYRA Full-Stack (Laravel Backend, PostgreSQL, Redis, Vue/React/Tailwind Frontend, AI Pipeline) |
 | **Penyelarasan Kompetisi** | ICONFEST 2026 / Hackathon / National Healthtech Exhibition Stage |
 | **Prinsip Utama** | **"Build the foundation before the intelligence. The MVP is the working preventive health loop."** |
 | **Status Validasi** | **61 Seksi Terstruktur Lengkap** (0 Seksi Dihilangkan / 100% Invarian Terpenuhi) |
@@ -21,14 +21,14 @@
 
 ### Ringkasan Eksekutif & Peta Klaster Arsitektur (Architecture Clusters)
 
-Peta jalan (*Roadmap*) PRONOIA bukanlah sekadar daftar fitur yang terisolasi, melainkan sebuah rencana rekayasa terstruktur untuk membuktikan berfungsinya **lingkaran kesehatan preventif tertutup (*Closed-Loop Preventive Health Engine*)**. Pendekatan pengiriman berfokus pada pembangunan fondasi data dan keamanan yang kokoh sebelum menambahkan kecerdasan buatan (*build the foundation before the intelligence*). 
+Peta jalan (*Roadmap*) AEVYRA bukanlah sekadar daftar fitur yang terisolasi, melainkan sebuah rencana rekayasa terstruktur untuk membuktikan berfungsinya **lingkaran kesehatan preventif tertutup (*Closed-Loop Preventive Health Engine*)**. Pendekatan pengiriman berfokus pada pembangunan fondasi data dan keamanan yang kokoh sebelum menambahkan kecerdasan buatan (*build the foundation before the intelligence*). 
 
 Setiap fase rilis, irisan vertikal (*vertical slice*), dan tonggak pencapaian (*milestone*) dirancang untuk memvalidasi satu rantai nilai klinis utama: **Pengamatan (*Observe*) ──► Pemahaman (*Understand*) ──► Deteksi Perubahan (*Detect Change*) ──► Penjelasan Berbasis Bukti (*Explain*) ──► Intervensi Terarah (*Intervene*) ──► Pemantauan Kemajuan (*Monitor*) ──► Eskalasi Manusiawi (*Escalate*) ──► Perbaikan Gaya Hidup (*Improve*)**.
 
 Seluruh 61 seksi dalam spesifikasi ini dipetakan ke dalam **6 Klaster Strategis**:
 
 ```
-                                  PETA JALAN & RENCANA PENGIRIMAN MVP PRONOIA
+                                  PETA JALAN & RENCANA PENGIRIMAN MVP AEVYRA
                                   ═══════════════════════════════════════════
   ┌───────────────────────────────────────────────────────┬───────────────────────────────────────────────────────┐
   │ [Klaster 1] Filosofi & Cakupan MVP (Seksi 1 - 12)     │ [Klaster 2] UX, AI, & Fondasi Teknis (Seksi 13 - 22)  │
@@ -56,7 +56,7 @@ Seluruh 61 seksi dalam spesifikasi ini dipetakan ke dalam **6 Klaster Strategis*
 
 ## 1. Tujuan Dokumen & Ruang Lingkup (Document Purpose & Scope)
 
-Dokumen spesifikasi ini mendefinisikan secara menyeluruh peta jalan (*roadmap*) rekayasa perangkat lunak platform PRONOIA, mulai dari pembangunan fondasi arsitektur dasar hingga terwujudnya versi *Minimum Viable Product* (MVP) yang siap diuji, didemonstrasikan di panggung kompetisi (ICONFEST 2026), dan dikembangkan lebih lanjut menuju skala produksi.
+Dokumen spesifikasi ini mendefinisikan secara menyeluruh peta jalan (*roadmap*) rekayasa perangkat lunak platform AEVYRA, mulai dari pembangunan fondasi arsitektur dasar hingga terwujudnya versi *Minimum Viable Product* (MVP) yang siap diuji, didemonstrasikan di panggung kompetisi (ICONFEST 2026), dan dikembangkan lebih lanjut menuju skala produksi.
 
 Peta jalan ini berfungsi sebagai panduan strategis bagi tim rekayasa untuk:
 
@@ -75,7 +75,7 @@ Peta jalan ini berfungsi sebagai panduan strategis bagi tim rekayasa untuk:
 
 ## 2. Prinsip Utama Roadmap (Core Roadmap Principles)
 
-Pengembangan platform PRONOIA berakar pada filosofi rekayasa perangkat lunak yang kokoh:
+Pengembangan platform AEVYRA berakar pada filosofi rekayasa perangkat lunak yang kokoh:
 
 > **"Bangun Fondasinya Terlebih Dahulu Sebelum Menambahkan Kecerdasan Buatan."**
 > *(Build the foundation before the intelligence.)*
@@ -117,13 +117,13 @@ Fitur kecerdasan buatan (*AI*), pemindai visual (*scanner*), gamifikasi (*gamifi
   [11] Keterlibatan & Retensi (Gamification & Community)
 ```
 
-Dengan hierarki ini, PRONOIA terhindar dari jebakan *"kumpulan gimmick fitur terpisah"* dan tampil sebagai **Platform Kesehatan Preventif Berdaulat (*Sovereign Preventive Health Platform*)**.
+Dengan hierarki ini, AEVYRA terhindar dari jebakan *"kumpulan gimmick fitur terpisah"* dan tampil sebagai **Platform Kesehatan Preventif Berdaulat (*Sovereign Preventive Health Platform*)**.
 
 ---
 
 ## 3. Strategi Pengiriman Produk (Product Delivery Strategy)
 
-Pengembangan dan rilis perangkat lunak PRONOIA diatur melalui strategi pengiriman 9 fase terstruktur:
+Pengembangan dan rilis perangkat lunak AEVYRA diatur melalui strategi pengiriman 9 fase terstruktur:
 
 | Kode Fase | Nama Fase Pengiriman | Fokus Utama Rilis |
 | :--- | :--- | :--- |
@@ -144,7 +144,7 @@ Pengembangan dan rilis perangkat lunak PRONOIA diatur melalui strategi pengirima
 
 ## 4. Definisi Minimum Viable Product (Definition of MVP)
 
-Sebuah rilis resmi diakui sebagai **MVP PRONOIA yang Sah** apabila dan hanya apabila seorang Anggota (*Member*) dapat menjalani alur pengalaman preventif tertutup berikut:
+Sebuah rilis resmi diakui sebagai **MVP AEVYRA yang Sah** apabila dan hanya apabila seorang Anggota (*Member*) dapat menjalani alur pengalaman preventif tertutup berikut:
 
 ```
   Registrasi Akun Baru
@@ -240,7 +240,7 @@ Sistem wajib memiliki modul pembentukan **Garis Acuan Riwayat Pribadi (*Personal
 
 ## 7. Mesin Perilaku Kesehatan MVP (MVP Health Behavior Engine)
 
-Mesin Perilaku Kesehatan (*Health Behavior Engine*) adalah jantung analitik preventif platform PRONOIA. 
+Mesin Perilaku Kesehatan (*Health Behavior Engine*) adalah jantung analitik preventif platform AEVYRA. 
 
 ### Alur Kerja Pemrosesan (*Engine Processing Pipeline*):
 ```
@@ -279,7 +279,7 @@ Pada fase MVP, mesin ini mengutamakan **aturan deterministik transparan (*determ
 
 Setiap wawasan kesehatan (*Insight*) yang diterbitkan oleh sistem wajib memenuhi formula komunikasi 5 pilar:
 
-| Elemen Wawasan | Pertanyaan Kunci | Contoh Rumusan Wawasan Sistem PRONOIA |
+| Elemen Wawasan | Pertanyaan Kunci | Contoh Rumusan Wawasan Sistem AEVYRA |
 | :--- | :--- | :--- |
 | **Apa yang Berubah?** | *What changed?* | *"Rata-rata durasi tidur malam Anda mengalami penurunan dibandingkan garis acuan rutin Anda."* |
 | **Mengapa Penting?** | *Why it matters?* | *"Penurunan durasi tidur yang berulang dapat memengaruhi stabilitas energi dan fokus kerja siang hari."* |
@@ -366,7 +366,7 @@ Garis Waktu Terpadu (*Longitudinal Health Timeline*) adalah komponen kunci pada 
   HARI KE-21  : Garis acuan baru dievaluasi ulang, kestabilan ritme tidur pulih.
 ```
 
-Garis waktu ini membuktikan kepada juri dan pengguna bahwa PRONOIA adalah sistem kesehatan preventif berbasis bukti jangka panjang (*longitudinal evidence-based platform*).
+Garis waktu ini membuktikan kepada juri dan pengguna bahwa AEVYRA adalah sistem kesehatan preventif berbasis bukti jangka panjang (*longitudinal evidence-based platform*).
 
 ---
 
@@ -415,7 +415,7 @@ Dasbor Anggota (*Member Dashboard*) dirancang untuk menjawab empat pertanyaan ek
 
 ## 14. Portal Instruktur & Ahli MVP (MVP Instructor Portal)
 
-Portal Instruktur (*Instructor Portal*) adalah bukti nyata implementasi prinsip pendampingan manusiawi (*Human-in-the-Loop*) pada PRONOIA:
+Portal Instruktur (*Instructor Portal*) adalah bukti nyata implementasi prinsip pendampingan manusiawi (*Human-in-the-Loop*) pada AEVYRA:
 
 | Fitur Portal Instruktur | Fungsi Spesifik Pada Fase MVP |
 | :--- | :--- |
@@ -670,7 +670,7 @@ Seorang anggota terdaftar dapat menyelesaikan perjalanan mandiri:
 ## 25. Fase 2 — Mesin Perilaku Kesehatan (Phase 2 — Health Behavior Engine)
 
 ### 25.1 Sasaran Utama (*Objective*)
-Mengaktifkan teknologi pembeda utama PRONOIA: **Mesin Analisis Perilaku Kesehatan (*Health Behavior Engine*)** berbasis aturan deterministik transparan.
+Mengaktifkan teknologi pembeda utama AEVYRA: **Mesin Analisis Perilaku Kesehatan (*Health Behavior Engine*)** berbasis aturan deterministik transparan.
 
 ### 25.2 Ruang Lingkup Pengerjaan (*Scope*)
 - **Normalisasi & Kualitas Data**: Filter data anomali, penanganan entri bolong (*missing data imputation*), dan pengecekan konsistensi.
@@ -815,7 +815,7 @@ Bukan menambah daftar fitur baru, melainkan **menjamin keandalan performa, kesem
 
 ## 31. Dataset Demonstrasi Kompetisi (Competition Demo Dataset)
 
-Untuk menjamin keberhasilan presentasi panggung tanpa risiko kegagalan koneksi atau data kosong, PRONOIA menggunakan dataset benih uji coba (*Canonical Seeded Dataset*) yang memperlihatkan pergeseran kebiasaan secara gamblang:
+Untuk menjamin keberhasilan presentasi panggung tanpa risiko kegagalan koneksi atau data kosong, AEVYRA menggunakan dataset benih uji coba (*Canonical Seeded Dataset*) yang memperlihatkan pergeseran kebiasaan secara gamblang:
 
 ```
   PROFIL PENGGUNA DEMO (DEMO USER PROFILE)
@@ -870,7 +870,7 @@ Demonstrasi utama di hadapan dewan juri wajib mengikuti **satu narasi cerita tun
 ```
 
 > [!TIP]
-> Skenario kanonikal ini membuktikan bekerjanya seluruh rantai nilai preventif PRONOIA dalam waktu presentasi 5 hingga 7 menit tanpa terputus.
+> Skenario kanonikal ini membuktikan bekerjanya seluruh rantai nilai preventif AEVYRA dalam waktu presentasi 5 hingga 7 menit tanpa terputus.
 
 ---
 
@@ -878,7 +878,7 @@ Demonstrasi utama di hadapan dewan juri wajib mengikuti **satu narasi cerita tun
 
 Untuk menegaskan keunggulan inovasi platform kepada juri, sesi demo menyajikan komparasi paradigma:
 
-| Aspek Pengalaman | Aplikasi Kesehatan Konvensional | Platform Preventif Cerdas PRONOIA |
+| Aspek Pengalaman | Aplikasi Kesehatan Konvensional | Platform Preventif Cerdas AEVYRA |
 | :--- | :--- | :--- |
 | **Pencatatan Data** | Sekadar buku catatan pasif (*passive log book*). | Data dianalisis secara aktif terhadap garis acuan pribadi. |
 | **Penyajian Masalah** | Memberikan grafik rumit tanpa kesimpulan. | Menghasilkan sinyal deviasi berbasis bukti nyata. |
@@ -890,7 +890,7 @@ Untuk menegaskan keunggulan inovasi platform kepada juri, sesi demo menyajikan k
 
 ## 34. Graf Ketergantungan Modul MVP (MVP Dependency Graph)
 
-Struktur ketergantungan teknis (*Technical Dependency Graph*) antar-layanan pada PRONOIA:
+Struktur ketergantungan teknis (*Technical Dependency Graph*) antar-layanan pada AEVYRA:
 
 ```
   AUTENTIKASI (Sanctum)
@@ -1010,13 +1010,13 @@ Struktur 8 tonggak rilis utama (*Engineering Milestones M0 – M7*):
 | **M7** | *Competition Ready* | Seluruh skenario demo panggung berjalan sempurna tanpa intervensi developer. |
 
 > [!IMPORTANT]
-> **Milestone M2 dan M3 adalah tonggak paling krusial**, karena pada tahap inilah proposisi nilai unik (*unique value proposition*) PRONOIA terbukti secara teknis.
+> **Milestone M2 dan M3 adalah tonggak paling krusial**, karena pada tahap inilah proposisi nilai unik (*unique value proposition*) AEVYRA terbukti secara teknis.
 
 ---
 
 ## 38. Matriks Fitur MVP (MVP Feature Matrix)
 
-Matriks penentuan prioritas fitur platform PRONOIA:
+Matriks penentuan prioritas fitur platform AEVYRA:
 
 | Nama Fitur / Modul | Skala Prioritas | Status MVP | Modul Ketergantungan | Relevansi Panggung Demo |
 | :--- | :---: | :---: | :--- | :---: |
@@ -1059,7 +1059,7 @@ Fitur dan kompleksitas arsitektur berikut **secara tegas DILARANG menunda jadwal
   ⛔ Arsitektur Multi-Tenancy institusi rumah sakit yang rumit.
 ```
 
-PRONOIA harus membuktikan rantai nilai preventif terlebih dahulu sebelum menambah kompleksitas infrastruktur.
+AEVYRA harus membuktikan rantai nilai preventif terlebih dahulu sebelum menambah kompleksitas infrastruktur.
 
 ---
 
@@ -1092,7 +1092,7 @@ Kebijakan toleransi utang teknis (*Technical Debt Policy*) selama masa sprint ko
 
 ## 41. Strategi Rilis Perangkat Lunak (Release Strategy)
 
-Strategi penerapan dan rilis perangkat lunak PRONOIA mengelola 3 tingkatan lingkungan terisolasi:
+Strategi penerapan dan rilis perangkat lunak AEVYRA mengelola 3 tingkatan lingkungan terisolasi:
 
 ```
   LINGKUNGAN PENGEMBANGAN LOKAL (LOCAL / DOCKER)
@@ -1158,7 +1158,7 @@ Sistem mengeksekusi kalkulasi ulang status perilaku (*recalculate behavioral sta
 
 ## 44. Skenario Benih Data Demo (Demo Seed Scenarios: A – E)
 
-Untuk mengantisipasi berbagai pertanyaan pengujian dewan juri, PRONOIA menyiapkan 5 skenario benih data demo (*5 Canonical Seed Scenarios*):
+Untuk mengantisipasi berbagai pertanyaan pengujian dewan juri, AEVYRA menyiapkan 5 skenario benih data demo (*5 Canonical Seed Scenarios*):
 
 | Skenario Benih | Karakteristik Pola Data | Respons Sistem yang Ditampilkan |
 | :--- | :--- | :--- |
@@ -1218,7 +1218,7 @@ Dilarang keras memperkenalkan modul baru (seperti modul e-commerce atau dompet d
 
 ## 47. Kepemilikan Peran Tim Rekayasa (Recommended Team Ownership)
 
-Struktur pembagian tanggung jawab (*Role Ownership*) pada tim rekayasa PRONOIA:
+Struktur pembagian tanggung jawab (*Role Ownership*) pada tim rekayasa AEVYRA:
 
 | Peran Rekayasa | Fokus Tanggung Jawab Modul Sistem |
 | :--- | :--- |
@@ -1234,7 +1234,7 @@ Untuk tim berukuran kecil, satu personil dapat merangkap beberapa peran, namun p
 
 ## 48. Struktur Siklus Sprint (Suggested Sprint Structure)
 
-Pengembangan PRONOIA mengadopsi struktur pengiriman berbasis irisan vertikal (*Vertical Slice Sprints*):
+Pengembangan AEVYRA mengadopsi struktur pengiriman berbasis irisan vertikal (*Vertical Slice Sprints*):
 
 ```
   PENDEKATAN SALAH (HORIZONTAL SILO - DILARANG):
@@ -1242,7 +1242,7 @@ Pengembangan PRONOIA mengadopsi struktur pengiriman berbasis irisan vertikal (*V
   ❌ Sprint 2 : Mendesain 40 halaman antarmuka statis tanpa integrasi API.
   ❌ Sprint 3 : Mencoba menghubungkan semuanya di akhir secara terburu-buru (Integrasi Meledak).
 
-  PENDEKATAN BENAR PRONOIA (VERTICAL SLICE SPRINT):
+  PENDEKATAN BENAR AEVYRA (VERTICAL SLICE SPRINT):
   ✅ Setiap Sprint menghasilkan SATU ALUR PENGGUNA LENGKAP ujung-ke-ujung:
      Database Model + Logika Domain Service + REST API Controller + Validasi + UI Dashboard + Unit Test.
 ```
@@ -1346,7 +1346,7 @@ Irisan Vertikal Keempat (*Vertical Slice #4*) berfokus pada pembuktian pendampin
 Irisan Vertikal Kelima (*Vertical Slice #5*) berfokus pada pembuktian kecerdasan buatan sebagai lapisan interaksi cerdas (*AI as Interaction Layer*):
 
 ```
-  Anggota Membuka Ruang Chat Asisten AI PRONOIA
+  Anggota Membuka Ruang Chat Asisten AI AEVYRA
                 │
                 ▼
   Sistem Menyuntikkan Konteks Bukti Terstruktur (Structured Context)
@@ -1361,7 +1361,7 @@ Irisan Vertikal Kelima (*Vertical Slice #5*) berfokus pada pembuktian kecerdasan
   Filter Keselamatan AI Aktif ──► Tawarkan Handoff ke Instruktur
 ```
 
-**Tujuan Pengujian (*Milestone Goal*)**: Membuktikan bahwa Asisten AI PRONOIA beroperasi dengan etika ketat, bebas halusinasi diagnosis, dan patuh terhadap protokol eskalasi manusia.
+**Tujuan Pengujian (*Milestone Goal*)**: Membuktikan bahwa Asisten AI AEVYRA beroperasi dengan etika ketat, bebas halusinasi diagnosis, dan patuh terhadap protokol eskalasi manusia.
 
 ---
 
@@ -1432,7 +1432,7 @@ Metrik kuantitatif yang dipantau secara berkala selama fase rekayasa MVP:
 
 ## 57. Validasi Bintang Panduan (North Star Validation Loop)
 
-Peta jalan pengembangan PRONOIA diarahkan pada satu metrik utama: **Jumlah Lingkaran Preventif Tertutup yang Sukses Diselesaikan (*Completed Preventive Health Loops*)**.
+Peta jalan pengembangan AEVYRA diarahkan pada satu metrik utama: **Jumlah Lingkaran Preventif Tertutup yang Sukses Diselesaikan (*Completed Preventive Health Loops*)**.
 
 Satu siklus lingkaran preventif diakui lengkap apabila seluruh rantai pembuktian (*Audit Traceability Chain*) dapat ditelusuri dengan utuh:
 
@@ -1461,13 +1461,13 @@ Satu siklus lingkaran preventif diakui lengkap apabila seluruh rantai pembuktian
   ID: OUT-004 (Durasi tidur rata-rata pulih menjadi 7j 10m mendekati baseline)
 ```
 
-Keterlacakan rantai ID (*ID Traceability Chain*) ini adalah bukti ilmiah terkuat bahwa PRONOIA beroperasi sebagai platform kesehatan preventif berbasis bukti nyata.
+Keterlacakan rantai ID (*ID Traceability Chain*) ini adalah bukti ilmiah terkuat bahwa AEVYRA beroperasi sebagai platform kesehatan preventif berbasis bukti nyata.
 
 ---
 
 ## 58. Kriteria Keberhasilan MVP (MVP Success Criteria)
 
-Rilis MVP PRONOIA dinyatakan **Sukses Sempurna secara Produk dan Teknis** apabila:
+Rilis MVP AEVYRA dinyatakan **Sukses Sempurna secara Produk dan Teknis** apabila:
 
 ### 1. Kapabilitas Pengguna Terpenuhi Penuh:
 - Anggota dapat membuat profil, menentukan sasaran hidup sehat, dan mencatat data vital harian.
@@ -1498,7 +1498,7 @@ Setelah rilis MVP stabil dan sukses dipresentasikan pada kompetisi, pengembangan
 - *Instructor Copilot*: Asisten AI terdedikasi untuk membantu instruktur merangkum tren rekam medis klien secara otomatis.
 
 ### Fase 8C — Integrasi Perangkat Luar (*Wearables & Device Integrations*)
-- Integrasi otomatis dengan Apple HealthKit, Google Health Connect, Garmin, dan Fitbit melalui model data kanonikal PRONOIA.
+- Integrasi otomatis dengan Apple HealthKit, Google Health Connect, Garmin, dan Fitbit melalui model data kanonikal AEVYRA.
 
 ### Fase 8D — Analitik & Riset Populasi (*Population Analytics*)
 - Analitik agregat anonim untuk mengukur efektivitas program intervensi gaya hidup pada populasi perkotaan.
@@ -1510,7 +1510,7 @@ Setelah rilis MVP stabil dan sukses dipresentasikan pada kompetisi, pengembangan
 
 ## 60. Arah Arsitektur Jangka Panjang (Long-Term Architecture Direction)
 
-Arsitektur target jangka panjang platform PRONOIA (*Target Enterprise Topology*):
+Arsitektur target jangka panjang platform AEVYRA (*Target Enterprise Topology*):
 
 ```
                                ┌─────────────────────────┐
@@ -1518,7 +1518,7 @@ Arsitektur target jangka panjang platform PRONOIA (*Target Enterprise Topology*)
                                └────────────┬────────────┘
                                             │
                                ┌────────────▼────────────┐
-                               │   APLIKASI PRONOIA WEB  │
+                               │   APLIKASI AEVYRA WEB  │
                                │     (Responsive PWA)    │
                                └────────────┬────────────┘
                                             │
@@ -1556,8 +1556,8 @@ Arsitektur target jangka panjang platform PRONOIA (*Target Enterprise Topology*)
 ## 61. Prinsip Pamungkas Pengembangan Produk (Final Product Development Principle)
 
 > [!IMPORTANT]
-> **Prinsip Pamungkas Rekayasa PRONOIA:**
-> **"PRONOIA tidak perlu memenangkan kompetisi dengan memiliki fitur terbanyak. Keunggulan mutlak PRONOIA dibuktikan dengan menghadirkan satu sistem yang dapat bekerja secara nyata dari hulu ke hilir: Mengamati (Observe) ──► Memahami (Understand) ──► Mendeteksi Perubahan (Detect Change) ──► Menjelaskan Sebab (Explain) ──► Mengintervensi (Intervene) ──► Memantau (Monitor) ──► Mengeskalasi ke Ahli (Escalate) ──► Memperbaiki Kualitas Hidup (Improve)."**
+> **Prinsip Pamungkas Rekayasa AEVYRA:**
+> **"AEVYRA tidak perlu memenangkan kompetisi dengan memiliki fitur terbanyak. Keunggulan mutlak AEVYRA dibuktikan dengan menghadirkan satu sistem yang dapat bekerja secara nyata dari hulu ke hilir: Mengamati (Observe) ──► Memahami (Understand) ──► Mendeteksi Perubahan (Detect Change) ──► Menjelaskan Sebab (Explain) ──► Mengintervensi (Intervene) ──► Memantau (Monitor) ──► Mengeskalasi ke Ahli (Escalate) ──► Memperbaiki Kualitas Hidup (Improve)."**
 
 ### Pernyataan Kunci Produk:
 > **"The MVP is not the collection of features. The MVP is the working preventive health loop."**

@@ -1,8 +1,8 @@
-# PRONOIA — Kaidah Arsitektur Backend & Rekayasa Layanan Terdistribusi (Backend Architecture & Service Engineering Rules)
+# AEVYRA — Kaidah Arsitektur Backend & Rekayasa Layanan Terdistribusi (Backend Architecture & Service Engineering Rules)
 
-Dokumen spesifikasi teknis ini mendefinisikan standar rekayasa backend, arsitektur layanan aplikasi, tata kelola logika domain bisnis, serta protokol integrasi eksternal untuk platform **PRONOIA**. Lapisan backend berkedudukan sebagai pusat otoritas pengendali yang memikul tanggung jawab penuh terhadap penegakan logika bisnis, otorisasi peran pengguna (*role-based access control*), validasi masukan berlapis, orkestrasi pemrosesan deret waktu biometrik, eksekusi mesin perilaku preventif (*behavioral health engine*), integrasi model kecerdasan buatan (*AI & Computer Vision*), penanganan transaksi reservasi konsultasi, pengiriman notifikasi, serta pemrosesan antrean latar belakang (*asynchronous worker jobs*).
+Dokumen spesifikasi teknis ini mendefinisikan standar rekayasa backend, arsitektur layanan aplikasi, tata kelola logika domain bisnis, serta protokol integrasi eksternal untuk platform **AEVYRA**. Lapisan backend berkedudukan sebagai pusat otoritas pengendali yang memikul tanggung jawab penuh terhadap penegakan logika bisnis, otorisasi peran pengguna (*role-based access control*), validasi masukan berlapis, orkestrasi pemrosesan deret waktu biometrik, eksekusi mesin perilaku preventif (*behavioral health engine*), integrasi model kecerdasan buatan (*AI & Computer Vision*), penanganan transaksi reservasi konsultasi, pengiriman notifikasi, serta pemrosesan antrean latar belakang (*asynchronous worker jobs*).
 
-Arsitektur backend PRONOIA dibangun dengan pola **Monolit Modular (*Modular Monolith*)** berbasis **Laravel 11+** dan **PHP 8.3+** dengan pengetikan ketat (*strict typing*). Pendekatan ini memisahkan secara jernih antara kontroler ramping (*Thin Controllers*), lapisan layanan murni (*Service & Action Layer*), objek transfer data (*DTO*), serta transformasi kontrak API yang terprediksi (*API Resources*). Seluruh kalkulasi klinis dan status perilaku dijamin deterministik, bebas dari efek samping spekulatif AI, serta terisolasi secara kokoh demi menjamin keselamatan pengguna dan kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022).
+Arsitektur backend AEVYRA dibangun dengan pola **Monolit Modular (*Modular Monolith*)** berbasis **Laravel 11+** dan **PHP 8.3+** dengan pengetikan ketat (*strict typing*). Pendekatan ini memisahkan secara jernih antara kontroler ramping (*Thin Controllers*), lapisan layanan murni (*Service & Action Layer*), objek transfer data (*DTO*), serta transformasi kontrak API yang terprediksi (*API Resources*). Seluruh kalkulasi klinis dan status perilaku dijamin deterministik, bebas dari efek samping spekulatif AI, serta terisolasi secara kokoh demi menjamin keselamatan pengguna dan kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022).
 
 ---
 
@@ -10,7 +10,7 @@ Arsitektur backend PRONOIA dibangun dengan pola **Monolit Modular (*Modular Mono
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-005` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-005` |
 | **Versi Standar Backend** | `v1.0.0-PROD` (Edisi Kepatuhan Rekayasa Layanan & ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory Backend Engineering Standard*) |
@@ -23,11 +23,11 @@ Arsitektur backend PRONOIA dibangun dengan pola **Monolit Modular (*Modular Mono
 
 ---
 
-### Matriks 10 Klaster Arsitektur Backend PRONOIA
+### Matriks 10 Klaster Arsitektur Backend AEVYRA
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                    TOPOLOGI REKAYASA BACKEND & LOGIKA DOMAIN PLATFORM PRONOIA             │
+│                    TOPOLOGI REKAYASA BACKEND & LOGIKA DOMAIN PLATFORM AEVYRA             │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Fondasi Arsitektur Backend, Kontroler Ramping, & Layanan (Bagian 1 – 10)
@@ -65,7 +65,7 @@ Arsitektur backend PRONOIA dibangun dengan pola **Monolit Modular (*Modular Mono
 
 ## 1. Tujuan & Ruang Lingkup Rekayasa Backend (Purpose & Backend Scope)
 
-Kaidah rekayasa backend ini menetapkan standar arsitektur layanan, tata kelola logika domain, serta protokol keamanan komputasi untuk platform **PRONOIA**. Lapisan backend bertindak sebagai pusat kedaulatan operasional sistem yang memikul tanggung jawab atas:
+Kaidah rekayasa backend ini menetapkan standar arsitektur layanan, tata kelola logika domain, serta protokol keamanan komputasi untuk platform **AEVYRA**. Lapisan backend bertindak sebagai pusat kedaulatan operasional sistem yang memikul tanggung jawab atas:
 
 * **Penegakan Logika Bisnis & Domain:** Eksekusi aturan alur kerja, validasi status, dan pemeliharaan invarian domain.
 * **Otorisasi & Keamanan Akses:** Penegakan kebijakan hak akses tingkat baris (*Row-Level Policies*) dan otentikasi identitas.
@@ -80,7 +80,7 @@ Kaidah rekayasa backend ini menetapkan standar arsitektur layanan, tata kelola l
 
 ## 2. Pilihan Teknologi & Ekosistem Backend (Backend Technology Stack)
 
-Ekosistem teknologi backend PRONOIA distandarisasi menggunakan teknologi modern berkinerja tinggi yang teruji dalam skala produksi:
+Ekosistem teknologi backend AEVYRA distandarisasi menggunakan teknologi modern berkinerja tinggi yang teruji dalam skala produksi:
 
 | Komponen Teknologi | Pilihan Standar Platform | Karakteristik & Peran Arsitektural |
 | :--- | :--- | :--- |
@@ -94,11 +94,11 @@ Ekosistem teknologi backend PRONOIA distandarisasi menggunakan teknologi modern 
 
 ## 3. Pola Arsitektur Monolit Modular (Modular Monolith Architecture)
 
-Platform PRONOIA menerapkan pola arsitektur **Monolit Modular (*Modular Monolith Architecture*)** yang mengelompokkan kode sumber ke dalam modul-modul fungsional independen di dalam satu repositori terpadu:
+Platform AEVYRA menerapkan pola arsitektur **Monolit Modular (*Modular Monolith Architecture*)** yang mengelompokkan kode sumber ke dalam modul-modul fungsional independen di dalam satu repositori terpadu:
 
 ```text
 +-------------------------------------------------------------------------+
-|                ARSITEKTUR MONOLIT MODULAR PLATFORM PRONOIA              |
+|                ARSITEKTUR MONOLIT MODULAR PLATFORM AEVYRA              |
 +-------------------------------------------------------------------------+
 |  [Modul Identity]    : Pengguna, Peran, Izin, Sesi Otentikasi           |
 |  [Modul Biometrics]  : Profil Kesehatan, Metrik Deret Waktu, Satuan     |
@@ -227,7 +227,7 @@ Seluruh alur kerja bisnis bermakna wajib dimodelkan ke dalam kelas layanan berfo
 
 ```text
 +-------------------------------------------------------------------------+
-|                  CONTOH STRUKTUR AKSI DOMAIN PRONOIA                    |
+|                  CONTOH STRUKTUR AKSI DOMAIN AEVYRA                    |
 +-------------------------------------------------------------------------+
 |  App\Actions\Behavioral\CalculatePersonalBaselineAction.php             |
 |  App\Actions\Behavioral\DetectBehavioralDeviationAction.php             |
@@ -280,7 +280,7 @@ Arsitektur backend **Mesin Kesehatan Perilaku (*Behavioral Health Engine*)** men
 
 ```text
 +-------------------------------------------------------------------------+
-|             PIPELINE ANALITIK MESIN KESEHATAN PERILAKU PRONOIA          |
+|             PIPELINE ANALITIK MESIN KESEHATAN PERILAKU AEVYRA          |
 +-------------------------------------------------------------------------+
 |  1. Data Mentah Masuk (Raw Biometric & Habit Logs)                      |
 |                         ↓                                               |
@@ -392,7 +392,7 @@ Seluruh integrasi dengan penyedia model kecerdasan buatan (*AI Providers* sepert
 
 ```text
 +-------------------------------------------------------------------------+
-|                  ARSITEKTUR ABSTRAKSI PENYEDIA AI PRONOIA               |
+|                  ARSITEKTUR ABSTRAKSI PENYEDIA AI AEVYRA               |
 +-------------------------------------------------------------------------+
 |  Lapisan Domain Aplikasi (Actions & Services)                           |
 |                         ↓                                               |
@@ -437,7 +437,7 @@ Struktur respons dari vendor eksternal dinormalisasi seketika menjadi `AIRespons
 
 ## 18. Mitigasi Kegagalan Penyedia AI (AI Provider Failure Mitigation)
 
-Kegagalan koneksi atau pemadaman total penyedia AI eksternal (*AI Outage*) sama sekali tidak boleh melumpuhkan operasional sistem utama PRONOIA:
+Kegagalan koneksi atau pemadaman total penyedia AI eksternal (*AI Outage*) sama sekali tidak boleh melumpuhkan operasional sistem utama AEVYRA:
 
 * Menerapkan pola pemutus sirkuit (*Circuit Breaker Pattern*) jika tingkat kegagalan API mencapai ambang batas tertentu.
 * Menyiapkan mekanisme cadangan (*Deterministic Fallback*): jika layanan AI gagal, antarmuka menyajikan teks wawasan berbasis aturan (*rule-based fallback*) yang telah terverifikasi secara klinis.
@@ -775,7 +775,7 @@ Muatan pesan notifikasi (*Notification Payload*) wajib menjunjung privasi medis 
 * Dilarang mencantumkan nilai numerik glukosa darah, tekanan darah kritis, atau hasil pemindaian makanan spesifik pada teks notifikasi push publik.
 * Teks notifikasi push hanya memuat informasi umum yang tenang:
   * ❌ *"Gula darah Anda 195 mg/dL. Bahaya diabetes!"*
-  * ✅ *"PRONOIA: Catatan wawasan kebiasaan baru tersedia untuk ditinjau."*
+  * ✅ *"AEVYRA: Catatan wawasan kebiasaan baru tersedia untuk ditinjau."*
 
 ---
 
@@ -1311,7 +1311,7 @@ Ketika layanan eksternal sekunder mengalami gangguan (seperti pemadaman API AI g
 +-------------------------------------------------------------------------+
 ```
 
-Platform PRONOIA tidak boleh lumpuh total hanya karena satu penyedia layanan kecerdasan buatan pihak ketiga mengalami gangguan jaringan.
+Platform AEVYRA tidak boleh lumpuh total hanya karena satu penyedia layanan kecerdasan buatan pihak ketiga mengalami gangguan jaringan.
 
 ---
 
@@ -1333,7 +1333,7 @@ Kinerja yang cepat tidak ada artinya jika sistem salah menghitung dosis kalori a
 
 Arsitektur sistem menolak dekomposisi layanan mikro prematur (*Premature Microservices*):
 
-* PRONOIA mempertahankan pola **Monolit Modular** terpadu selama batas operasional masih dapat ditangani secara efisien dalam satu basis kode Laravel.
+* AEVYRA mempertahankan pola **Monolit Modular** terpadu selama batas operasional masih dapat ditangani secara efisien dalam satu basis kode Laravel.
 * Pemisahan layanan fisik independen hanya dipertimbangkan di masa depan untuk modul dengan beban komputasi khusus (seperti klaster inferensi model visi komputer lokal), bukan memecah domain bisnis relasional menjadi puluhan layanan mikro rapuh.
 
 ---
@@ -1454,7 +1454,7 @@ Hindari pembuatan fungsi pembantu statis (*Static Helper Methods*) untuk logika 
 
 ## 87. Piramida & Strategi Pengujian Backend (Backend Testing Strategy)
 
-Strategi pengujian otomatis (*Automated Testing Strategy*) backend PRONOIA wajib mematuhi piramida pengujian terstruktur:
+Strategi pengujian otomatis (*Automated Testing Strategy*) backend AEVYRA wajib mematuhi piramida pengujian terstruktur:
 
 ```text
 +-------------------------------------------------------------------------+
@@ -1562,11 +1562,11 @@ Sebelum mengajukan permohonan peninjauan kode (*Pull Request*), perekayasa wajib
 
 ## 94. Topologi Arsitektur Backend Terpadu (Unified Backend Architecture)
 
-Topologi arsitektur backend terpadu platform PRONOIA menghubungkan seluruh aliran data secara aman, deterministik, dan teratur:
+Topologi arsitektur backend terpadu platform AEVYRA menghubungkan seluruh aliran data secara aman, deterministik, dan teratur:
 
 ```text
 +-------------------------------------------------------------------------+
-|                  ALUR PERMINTAAN KLIEN STANDAR PRONOIA                  |
+|                  ALUR PERMINTAAN KLIEN STANDAR AEVYRA                  |
 +-------------------------------------------------------------------------+
 |  Permintaan Klien Masuk (Client HTTP Request)                           |
 |                         ↓                                               |
@@ -1596,14 +1596,14 @@ Topologi arsitektur backend terpadu platform PRONOIA menghubungkan seluruh alira
 
 ---
 
-## 95. Kaidah Pamungkas Rekayasa Backend PRONOIA (Final Sovereign Backend Rule)
+## 95. Kaidah Pamungkas Rekayasa Backend AEVYRA (Final Sovereign Backend Rule)
 
-Lapisan backend adalah pusat kedaulatan dan benteng integritas tertinggi bagi seluruh ekosistem PRONOIA. Backend wajib selalu mempertahankan sifat:
+Lapisan backend adalah pusat kedaulatan dan benteng integritas tertinggi bagi seluruh ekosistem AEVYRA. Backend wajib selalu mempertahankan sifat:
 * **Aman (*Secure*):** Kebijakan otorisasi ditegakkan tanpa kompromi pada setiap baris data.
 * **Deterministik (*Deterministic*):** Perhitungan tren kebiasaan dan skor kesehatan dapat direkonstruksi secara eksak.
 * **Tergantung Bukti (*Grounded in Evidence*):** Setiap wawasan kesehatan berpijak pada sinyal perilaku nyata.
 * **Teruji Penuh (*Fully Testable*):** Seluruh logika domain dilindungi piramida pengujian otomatis.
 * **Patuh Privasi (*Privacy-First*):** Menjaga kedaulatan data pribadi pengguna di bawah naungan regulasi hukum.
 
-> **Kaidah Pamungkas Rekayasa Backend PRONOIA:**
-> *"Klien diizinkan meminta sebuah tindakan. Model AI diizinkan menyarankan sebuah rekomendasi. Namun hanya lapisan backend yang memiliki wewenang untuk memvalidasi, mengotorisasi, dan mengeksekusi tindakan tersebut sesuai dengan kaidah keselamatan dan kedaulatan data PRONOIA."*
+> **Kaidah Pamungkas Rekayasa Backend AEVYRA:**
+> *"Klien diizinkan meminta sebuah tindakan. Model AI diizinkan menyarankan sebuah rekomendasi. Namun hanya lapisan backend yang memiliki wewenang untuk memvalidasi, mengotorisasi, dan mengeksekusi tindakan tersebut sesuai dengan kaidah keselamatan dan kedaulatan data AEVYRA."*

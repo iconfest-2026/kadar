@@ -1,6 +1,6 @@
-# PRONOIA — Kaidah Rekayasa Basis Data & Tata Kelola Skema Relasional (Database Architecture & Schema Governance Rules)
+# AEVYRA — Kaidah Rekayasa Basis Data & Tata Kelola Skema Relasional (Database Architecture & Schema Governance Rules)
 
-Dokumen spesifikasi teknis ini mendefinisikan standar rekayasa basis data, perancangan skema relasional, tata kelola migrasi, jaminan integritas data ACID, serta protokol keamanan penyimpanan data klinis dan perilaku untuk seluruh ekosistem **PRONOIA**. Basis data berkedudukan sebagai **Sumber Kebenaran Tunggal (*Single Source of Truth*)** bagi seluruh status operasional sistem—mencakup akun pengguna, profil kesehatan, log asupan nutrisi, hasil pemindaian kamera, garis acuan kebiasaan personal, sinyal perilaku, wawasan pencegahan penyakit, rencana intervensi mikro, tantangan gamifikasi, reservasi konsultasi, notifikasi, hingga jejak audit keamanan forensik.
+Dokumen spesifikasi teknis ini mendefinisikan standar rekayasa basis data, perancangan skema relasional, tata kelola migrasi, jaminan integritas data ACID, serta protokol keamanan penyimpanan data klinis dan perilaku untuk seluruh ekosistem **AEVYRA**. Basis data berkedudukan sebagai **Sumber Kebenaran Tunggal (*Single Source of Truth*)** bagi seluruh status operasional sistem—mencakup akun pengguna, profil kesehatan, log asupan nutrisi, hasil pemindaian kamera, garis acuan kebiasaan personal, sinyal perilaku, wawasan pencegahan penyakit, rencana intervensi mikro, tantangan gamifikasi, reservasi konsultasi, notifikasi, hingga jejak audit keamanan forensik.
 
 Platform mewajibkan penerapan disiplin normalisasi bentuk normal ketiga (*Third Normal Form - 3NF*), penegakan kunci asing (*foreign keys*) di lapisan mesin basis data, pengindeksan berbasis kueri yang terukur, pemisahan mutlak antara nilai kosong (*missing/null*) dan nilai nol (*zero*), penggunaan waktu terstandar UTC ISO-8601, enkripsi tingkat kolom untuk data biometrik sensitif, serta pendekatan *append-only* untuk rekam jejak historis pasien guna menjamin kedaulatan data dan kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022).
 
@@ -10,7 +10,7 @@ Platform mewajibkan penerapan disiplin normalisasi bentuk normal ketiga (*Third 
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-006` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-006` |
 | **Versi Standar Basis Data** | `v1.0.0-PROD` (Edisi Kepatuhan Skema Produksi & ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory Database Architecture Standard*) |
@@ -23,11 +23,11 @@ Platform mewajibkan penerapan disiplin normalisasi bentuk normal ketiga (*Third 
 
 ---
 
-### Matriks 12 Klaster Arsitektur Basis Data PRONOIA
+### Matriks 12 Klaster Arsitektur Basis Data AEVYRA
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                   TOPOLOGI REKAYASA BASIS DATA RELASIONAL EKOSISTEM PRONOIA               │
+│                   TOPOLOGI REKAYASA BASIS DATA RELASIONAL EKOSISTEM AEVYRA               │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Fondasi Relasional, Normalisasi 3NF, & Integritas Kunci (Bagian 1 – 14)
@@ -71,7 +71,7 @@ Platform mewajibkan penerapan disiplin normalisasi bentuk normal ketiga (*Third 
 
 ## 1. Tujuan & Ruang Lingkup Rekayasa Basis Data (Purpose & Database Scope)
 
-Kaidah rekayasa basis data ini menetapkan standar arsitektur data, perancangan skema relasional, tata kelola integritas referensial, serta prosedur operasional penyimpanan data untuk platform **PRONOIA**. Basis data bertindak sebagai fondasi utama penampung seluruh status operasional sistem, yang meliputi:
+Kaidah rekayasa basis data ini menetapkan standar arsitektur data, perancangan skema relasional, tata kelola integritas referensial, serta prosedur operasional penyimpanan data untuk platform **AEVYRA**. Basis data bertindak sebagai fondasi utama penampung seluruh status operasional sistem, yang meliputi:
 
 * **Manajemen Identitas & Akses:** Akun pengguna, peran sistem (*roles*), perizinan (*permissions*), dan sesi otentikasi.
 * **Informasi Profil & Konteks Pengguna:** Profil kesehatan, preferensi diet, riwayat alergi, dan sasaran gaya hidup (*health goals*).
@@ -85,7 +85,7 @@ Kaidah rekayasa basis data ini menetapkan standar arsitektur data, perancangan s
 
 ## 2. Pilihan Teknologi Basis Data Relasional (Relational Database Technology)
 
-Platform PRONOIA menetapkan sistem manajemen basis data relasional (**RDBMS - Relational Database Management System**) sebagai teknologi penyimpanan utama dengan dukungan **PostgreSQL 16+** untuk lingkungan pementasan (*staging*) dan produksi (*production*), serta **SQLite In-Memory** untuk lingkungan pengujian otomatis (*automated test suites*).
+Platform AEVYRA menetapkan sistem manajemen basis data relasional (**RDBMS - Relational Database Management System**) sebagai teknologi penyimpanan utama dengan dukungan **PostgreSQL 16+** untuk lingkungan pementasan (*staging*) dan produksi (*production*), serta **SQLite In-Memory** untuk lingkungan pengujian otomatis (*automated test suites*).
 
 ### Justifikasi Pemilihan Mesin Basis Data Relasional
 
@@ -139,7 +139,7 @@ Perancangan skema tabel wajib mematuhi kaidah desain relasional terstruktur (*st
 
 ## 5. Kaidah Normalisasi Bentuk Normal Ketiga (Third Normal Form Normalization)
 
-Seluruh tabel transaksional (*OLTP - Online Transaction Processing*) dalam PRONOIA wajib dirancang minimal memenuhi kaidah **Bentuk Normal Ketiga (*Third Normal Form - 3NF*)**:
+Seluruh tabel transaksional (*OLTP - Online Transaction Processing*) dalam AEVYRA wajib dirancang minimal memenuhi kaidah **Bentuk Normal Ketiga (*Third Normal Form - 3NF*)**:
 
 * **Bentuk Normal Pertama (1NF):** Setiap kolom hanya memuat nilai atomik tunggal (*atomic values*), dan tidak ada grup kolom yang berulang (*repeating groups*).
 * **Bentuk Normal Kedua (2NF):** Memenuhi 1NF dan seluruh atribut non-kunci bergantung secara fungsional penuh (*fully functionally dependent*) pada kunci primer, bukan pada bagian dari kunci primer komposit.
@@ -172,7 +172,7 @@ Kolom bertipe data semi-terstruktur (`JSON` / `JSONB`) hanya boleh digunakan unt
 
 ## 7. Standarisasi Kunci Primer Tak Bernilai Bisnis (Surrogate Primary Keys)
 
-Seluruh tabel entitas dalam PRONOIA wajib menggunakan **Kunci Primer Pengganti (*Surrogate Primary Key*)** buatan sistem yang independen dari atribut data bisnis:
+Seluruh tabel entitas dalam AEVYRA wajib menggunakan **Kunci Primer Pengganti (*Surrogate Primary Key*)** buatan sistem yang independen dari atribut data bisnis:
 
 * **Standar Tipe Kunci:** `BIGINT UNSIGNED AUTO_INCREMENT` (MySQL) atau `BIGSERIAL / IDENTITY` (PostgreSQL), atau `UUIDv7` untuk entitas yang memerlukan pembuatan ID terdistribusi di sisi klien dengan urutan waktu yang dapat diindeks (*time-ordered indexing*).
 * **Larangan Kunci Primer Alami (*Natural Business Keys*):** Dilarang menjadikan Nomor Induk Kependudukan (NIK), alamat email, nomor telepon, atau nama pengguna sebagai *Primary Key* tabel. Atribut bisnis dapat berubah di kemudian hari dan dapat mengekspos data pribadi di URL atau log kueri.
@@ -457,7 +457,7 @@ Seluruh kueri analitik kebiasaan wajib digerakkan oleh `recorded_at`, bukan `cre
 
 ## 22. Pengelolaan Zona Waktu UTC (Strict UTC Timezone Handling)
 
-Seluruh kolom waktu dalam basis data PRONOIA wajib disimpan menggunakan zona waktu standar terpadu **UTC (*Coordinated Universal Time*)** dengan tipe data `TIMESTAMP WITH TIME ZONE` (`TIMESTAMPTZ`).
+Seluruh kolom waktu dalam basis data AEVYRA wajib disimpan menggunakan zona waktu standar terpadu **UTC (*Coordinated Universal Time*)** dengan tipe data `TIMESTAMP WITH TIME ZONE` (`TIMESTAMPTZ`).
 
 ```text
 +-------------------------------------------------------------------------+
@@ -938,7 +938,7 @@ Contoh Kebijakan Redaksi Notifikasi:
 "Perhatian! Gula darah puasa Anda tercatat 185 mg/dL. Risiko komplikasi diabetes Anda meningkat!"
 
 ✅ Aman & Menjaga Privasi:
-"PRONOIA: Catatan wawasan gaya hidup baru tersedia. Buka aplikasi untuk meninjau pola kebiasaan Anda."
+"AEVYRA: Catatan wawasan gaya hidup baru tersedia. Buka aplikasi untuk meninjau pola kebiasaan Anda."
 ```
 
 ---
@@ -1110,7 +1110,7 @@ Kunci rahasia infrastruktur sistem dilarang keras disimpan di dalam tabel bisnis
 
 Setiap indeks dalam basis data wajib dibuat berdasarkan pola kueri aktual (*query-driven indexing*), bukan berdasarkan dugaan spekulatif semata.
 
-### Kandidat Indeks Utama Ekosistem PRONOIA
+### Kandidat Indeks Utama Ekosistem AEVYRA
 
 ```sql
 -- Indeks Relasional Pengguna & Waktu (Kueri Deret Waktu Utama)
@@ -1302,7 +1302,7 @@ Perancangan skema wajib menerapkan disiplin kebolehan nilai kosong (*nullability
 
 ## 63. Mandat Pelacakan Waktu Penciptaan & Pembaruan (Mandatory Creation & Update Timestamps)
 
-Seluruh tabel entitas bisnis dalam PRONOIA wajib menyertakan kolom pelacak waktu standar:
+Seluruh tabel entitas bisnis dalam AEVYRA wajib menyertakan kolom pelacak waktu standar:
 
 ```sql
 created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1317,7 +1317,7 @@ updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 ## 64. Pemisahan Catatan Historis dari Status Aktif (Historical Records Architecture)
 
-Sistem PRONOIA memisahkan secara tegas antara status operasional aktif (*current state*) dan rekaman peristiwa historis (*historical event records*):
+Sistem AEVYRA memisahkan secara tegas antara status operasional aktif (*current state*) dan rekaman peristiwa historis (*historical event records*):
 
 * Entitas yang mencatat kejadian (seperti pengukuran glukosa, pencatatan tidur, log asupan makanan, pesan sesi konsultasi, dan sinyal perilaku) diperlakukan sebagai **Catatan Historis Append-Only**.
 * Setiap observasi baru dicatat sebagai baris baru (*new row insert*), bukan dengan menimpa nilai baris sebelumnya.
@@ -1510,7 +1510,7 @@ Ketika akun pengguna dihapus secara permanen, prosedur anonimisasi mengeksekusi 
 -- Prosedur Anonimisasi Akun Terhapus
 UPDATE users 
 SET name = 'Anonim (Akun Terhapus)',
-    email = CONCAT('anonymized_', id, '@deleted.pronoia.id'),
+    email = CONCAT('anonymized_', id, '@deleted.aevyra.id'),
     password = 'DELETED_ACCOUNT_UNUSABLE_HASH',
     phone_number = NULL,
     emergency_contact = NULL,
@@ -1830,7 +1830,7 @@ Meskipun demikian, komentar skema bersifat pelengkap; dokumentasi repositori tek
 
 ## 100. Prinsip Integritas Data Tanpa Kompromi (Zero Compromise Data Integrity Principle)
 
-Sistem PRONOIA menganut prinsip integritas data tanpa kompromi (*Zero-Compromise Data Integrity Principle*):
+Sistem AEVYRA menganut prinsip integritas data tanpa kompromi (*Zero-Compromise Data Integrity Principle*):
 
 > [!IMPORTANT]
 > **Empat Pilar Integritas Skema Relasional:**
@@ -2110,13 +2110,13 @@ Skema dan indeks basis data dirancang untuk mendukung tiga pola akses utama plat
 
 ---
 
-## 120. Kaidah Pamungkas Rekayasa Basis Data PRONOIA (Final Sovereign Database Principle)
+## 120. Kaidah Pamungkas Rekayasa Basis Data AEVYRA (Final Sovereign Database Principle)
 
-Rekayasa basis data platform PRONOIA dibangun di atas fondasi integritas, keterlacakan, dan kedaulatan privasi yang kokoh:
+Rekayasa basis data platform AEVYRA dibangun di atas fondasi integritas, keterlacakan, dan kedaulatan privasi yang kokoh:
 
 ```text
 +-------------------------------------------------------------------------+
-|             PIRAMIDA ARSITEKTUR BASIS DATA BERDAULAT PRONOIA            |
+|             PIRAMIDA ARSITEKTUR BASIS DATA BERDAULAT AEVYRA            |
 +-------------------------------------------------------------------------+
 |                  DINORMALISASI SECARA TEPAT (3NF)                       |
 |                                 ↓                                       |
@@ -2144,5 +2144,5 @@ DATA MENTAH PENGGUNA ──► RIWAYAT LINIMASA ──► GARIS ACUAN PERSONAL
 OUTCOME SEHAT ◄── KEMAJUAN AKSI ◄── INTERVENSI MIKRO ◄── SINYAL DEVIAZI
 ```
 
-> **Kaidah Pamungkas Rekayasa Basis Data PRONOIA:**
+> **Kaidah Pamungkas Rekayasa Basis Data AEVYRA:**
 > *"Basis data adalah benteng kedaulatan data pengguna. Bangun relasi yang kokoh, tegakkan integritas tanpa kompromi, lindungi privasi di setiap baris data, dan jadikan basis data sebagai cermin kebenaran yang tepercaya bagi seluruh ekosistem."*

@@ -1,8 +1,8 @@
-# PRONOIA — Kaidah Rekayasa Aplikasi Web Progresif & Ketahanan Klien (Progressive Web App Engineering Rules & Client Resilience Standards)
+# AEVYRA — Kaidah Rekayasa Aplikasi Web Progresif & Ketahanan Klien (Progressive Web App Engineering Rules & Client Resilience Standards)
 
-Dokumen spesifikasi teknis ini menetapkan standar rekayasa Aplikasi Web Progresif (*Progressive Web App* / PWA), protokol ketahanan mode luring (*offline resilience*), manajemen daur hidup *Service Worker*, integrasi perangkat keras peramban, serta tata kelola privasi penyimpanan sisi klien untuk seluruh antarmuka pengguna pada platform **PRONOIA**. Sebagai gerbang interaksi utama bagi para anggota pengguna, klien PWA PRONOIA dirancang untuk menghadirkan pengalaman aplikasi seluler kelas satu (*first-class app-like experience*) langsung melalui peramban web modern tanpa kewajiban pemasangan dari toko aplikasi pihak ketiga (*app stores*).
+Dokumen spesifikasi teknis ini menetapkan standar rekayasa Aplikasi Web Progresif (*Progressive Web App* / PWA), protokol ketahanan mode luring (*offline resilience*), manajemen daur hidup *Service Worker*, integrasi perangkat keras peramban, serta tata kelola privasi penyimpanan sisi klien untuk seluruh antarmuka pengguna pada platform **AEVYRA**. Sebagai gerbang interaksi utama bagi para anggota pengguna, klien PWA AEVYRA dirancang untuk menghadirkan pengalaman aplikasi seluler kelas satu (*first-class app-like experience*) langsung melalui peramban web modern tanpa kewajiban pemasangan dari toko aplikasi pihak ketiga (*app stores*).
 
-Platform PWA PRONOIA mengadopsi arsitektur **Shell Aplikasi (*App Shell Architecture*)**, penyimpanan *cache* bertingkat (*Tiered Caching Strategy*), antrean mutasi data lokal terenkripsi (*Encrypted Offline Mutation Queue via IndexedDB*), serta sinkronisasi pasca-luring idempoten yang aman dari konflik. Setiap interaksi hardware peramban (kamera pemindai nutrisi, notifikasi web push, dan rujukan lokasi darurat) dikendalikan secara transparan berlandaskan prinsip privasi tertinggi sesuai amanat **Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022)** dan pedoman aksesibilitas global **WCAG 2.1 Level AA**.
+Platform PWA AEVYRA mengadopsi arsitektur **Shell Aplikasi (*App Shell Architecture*)**, penyimpanan *cache* bertingkat (*Tiered Caching Strategy*), antrean mutasi data lokal terenkripsi (*Encrypted Offline Mutation Queue via IndexedDB*), serta sinkronisasi pasca-luring idempoten yang aman dari konflik. Setiap interaksi hardware peramban (kamera pemindai nutrisi, notifikasi web push, dan rujukan lokasi darurat) dikendalikan secara transparan berlandaskan prinsip privasi tertinggi sesuai amanat **Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022)** dan pedoman aksesibilitas global **WCAG 2.1 Level AA**.
 
 ---
 
@@ -10,7 +10,7 @@ Platform PWA PRONOIA mengadopsi arsitektur **Shell Aplikasi (*App Shell Architec
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-009` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-009` |
 | **Versi Standar PWA** | `v1.0.0-PROD` (Edisi Ketahanan Klien & Kepatuhan ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory PWA Engineering Standard*) |
@@ -23,11 +23,11 @@ Platform PWA PRONOIA mengadopsi arsitektur **Shell Aplikasi (*App Shell Architec
 
 ---
 
-### Matriks 10 Klaster Rekayasa PWA PRONOIA
+### Matriks 10 Klaster Rekayasa PWA AEVYRA
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                 TOPOLOGI APLIKASI WEB PROGRESIF & KETAHANAN KLIEN PRONOIA                 │
+│                 TOPOLOGI APLIKASI WEB PROGRESIF & KETAHANAN KLIEN AEVYRA                 │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Filosofi PWA, Arsitektur, & Manifest Web (Bagian 1 – 10)
@@ -65,9 +65,9 @@ Platform PWA PRONOIA mengadopsi arsitektur **Shell Aplikasi (*App Shell Architec
 
 ## 1. Tujuan & Ruang Lingkup Standar PWA (PWA Purpose & Scope)
 
-Kaidah ini menetapkan standar arsitektur teknis, rekayasa antarmuka, dan protokol keandalan untuk **Aplikasi Web Progresif (*Progressive Web App* / PWA)** pada platform **PRONOIA**. Klien PWA PRONOIA bertindak sebagai saluran interaksi terdepan yang menghubungkan anggota pengguna dengan layanan kesehatan preventif, pemantauan biometrik, asisten AI, dan konsultasi profesional.
+Kaidah ini menetapkan standar arsitektur teknis, rekayasa antarmuka, dan protokol keandalan untuk **Aplikasi Web Progresif (*Progressive Web App* / PWA)** pada platform **AEVYRA**. Klien PWA AEVYRA bertindak sebagai saluran interaksi terdepan yang menghubungkan anggota pengguna dengan layanan kesehatan preventif, pemantauan biometrik, asisten AI, dan konsultasi profesional.
 
-Klien PWA PRONOIA dirancang mengutamakan pendekatan berorientasi perangkat seluler (*mobile-first approach*) dengan kapabilitas standar modern:
+Klien PWA AEVYRA dirancang mengutamakan pendekatan berorientasi perangkat seluler (*mobile-first approach*) dengan kapabilitas standar modern:
 1. **Dapat Dipasang (*Installable*):** Mampu dipasang langsung ke layar beranda (*Home Screen*) perangkat Android, iOS, Windows, dan macOS tanpa melalui toko aplikasi pihak ketiga (*app stores*).
 2. **Kinerja Cepat & Responsif (*Instant App Shell*):** Memuat kerangka antarmuka dalam waktu kurang dari 1 detik melalui penyimpanan *cache* cerdas.
 3. **Ketahanan Mode Luring (*Offline Resilient*):** Tetap dapat dibuka dan digunakan untuk mencatat data kesehatan darurat saat koneksi internet terputus atau tidak stabil.
@@ -78,10 +78,10 @@ Klien PWA PRONOIA dirancang mengutamakan pendekatan berorientasi perangkat selul
 
 ## 2. Prinsip Fundamental Aplikasi Web Progresif (Progressive Web App Principles)
 
-Aplikasi PWA PRONOIA wajib berperilaku seandal dan senyaman aplikasi ponsel asli (*native application experience*), namun tetap mempertahankan keunggulan keterbukaan web:
+Aplikasi PWA AEVYRA wajib berperilaku seandal dan senyaman aplikasi ponsel asli (*native application experience*), namun tetap mempertahankan keunggulan keterbukaan web:
 
 ```text
-PRINSIP FUNDAMENTAL REKAYASA PWA PRONOIA:
+PRINSIP FUNDAMENTAL REKAYASA PWA AEVYRA:
 ├── 1. CEPAT (FAST) ───────────> Pemuatan instan melalui App Shell ter-cache (< 1 detik FCP)
 ├── 2. DAPAT DIANDALKAN (RELIABLE) -> Tidak pernah menampilkan dinosaurus layar mati saat luring
 ├── 3. MENARIK (ENGAGING) ──────> Tampilan layar penuh mandiri (Standalone) tanpa baris URL
@@ -92,13 +92,13 @@ Setiap elemen interaksi visual (animasi transisi halaman, getaran umpan balik ha
 
 ---
 
-## 3. Arsitektur Klien PWA PRONOIA (PRONOIA PWA Client Architecture)
+## 3. Arsitektur Klien PWA AEVYRA (AEVYRA PWA Client Architecture)
 
-Arsitektur antarmuka klien PWA PRONOIA dibangun dengan memisahkan secara tegas antara **Cangkang Aplikasi (*App Shell*)** dengan **Data Dinamis Domain (*Dynamic Data Streams*)**:
+Arsitektur antarmuka klien PWA AEVYRA dibangun dengan memisahkan secara tegas antara **Cangkang Aplikasi (*App Shell*)** dengan **Data Dinamis Domain (*Dynamic Data Streams*)**:
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                     ARSITEKTUR KLIEN PWA PLATFORM PRONOIA                │
+│                     ARSITEKTUR KLIEN PWA PLATFORM AEVYRA                │
 ├──────────────────────────────────────────────────────────────────────────┤
 │ [1. App Shell: UI Statis Ter-Cache]                                      │
 │  - Header Aplikasi, Navigasi Bawah, Modul Desain CSS, Komponen Inti      │
@@ -120,13 +120,13 @@ Pemisahan ini menjamin bahwa saat pengguna membuka aplikasi dalam kondisi tanpa 
 
 ## 4. Batasan Lingkup & Peran Klien PWA (PWA Scope & Role Boundaries)
 
-Klien PWA PRONOIA difokuskan secara khusus untuk peran **Member (Pengguna Mandiri)** yang membutuhkan akses cepat pada perangkat ponsel pintar sehari-hari:
+Klien PWA AEVYRA difokuskan secara khusus untuk peran **Member (Pengguna Mandiri)** yang membutuhkan akses cepat pada perangkat ponsel pintar sehari-hari:
 
 | Peran Pengguna | Jalur Akses Aplikasi | Optimasi PWA |
 | :--- | :--- | :--- |
-| **Member (Anggota)** | `https://app.pronoia.id/` | **PWA Penuh (Installable, Offline Sync, Camera Scanner, Push Notifications)** |
-| **Instructor (Instruktur)** | `https://instructor.pronoia.id/` | Web Dashboard Desktop (Dukungan Responsif Layar Lebar, Audit Kohor) |
-| **Administrator** | `https://admin.pronoia.id/` | Web Dashboard Desktop (Manajemen Sistem, Keamanan, & Katalog) |
+| **Member (Anggota)** | `https://app.aevyra.id/` | **PWA Penuh (Installable, Offline Sync, Camera Scanner, Push Notifications)** |
+| **Instructor (Instruktur)** | `https://instructor.aevyra.id/` | Web Dashboard Desktop (Dukungan Responsif Layar Lebar, Audit Kohor) |
+| **Administrator** | `https://admin.aevyra.id/` | Web Dashboard Desktop (Manajemen Sistem, Keamanan, & Katalog) |
 
 PWA tidak dirancang untuk menggantikan kebutuhan dasbor analitik instruktur yang membutuhkan multi-jendela dan perbandingan tabel kohor masif di layar monitor komputer meja.
 
@@ -138,8 +138,8 @@ Aplikasi wajib menyertakan dokumen manifest web standar (*Web App Manifest*) pad
 
 ```json
 {
-  "name": "PRONOIA — Health Companion",
-  "short_name": "PRONOIA",
+  "name": "AEVYRA — Health Companion",
+  "short_name": "AEVYRA",
   "description": "Pendamping gaya hidup preventif dan pemantau kesehatan biometrik cerdas",
   "start_url": "/dashboard?source=pwa",
   "display": "standalone",
@@ -178,9 +178,9 @@ Aplikasi wajib menyertakan dokumen manifest web standar (*Web App Manifest*) pad
 
 Penetapan identitas nama aplikasi pada manifest web wajib konsisten di seluruh lingkungan produksi:
 
-* **Nama Lengkap (*name*):** `"PRONOIA — Health Companion"` (Ditampilkan saat proses konfirmasi instalasi peramban).
-* **Nama Pendek (*short_name*):** `"PRONOIA"` (Maksimal 12 karakter; ditampilkan di bawah ikon layar beranda ponsel pengguna).
-* **Larangan Identitas Non-Produksi:** Dilarang keras membiarkan nama lingkungan pengembangan (seperti `"PRONOIA Dev"`, `"PRONOIA Staging"`, atau `"Test App"`) bocor ke manifest produksi.
+* **Nama Lengkap (*name*):** `"AEVYRA — Health Companion"` (Ditampilkan saat proses konfirmasi instalasi peramban).
+* **Nama Pendek (*short_name*):** `"AEVYRA"` (Maksimal 12 karakter; ditampilkan di bawah ikon layar beranda ponsel pengguna).
+* **Larangan Identitas Non-Produksi:** Dilarang keras membiarkan nama lingkungan pengembangan (seperti `"AEVYRA Dev"`, `"AEVYRA Staging"`, atau `"Test App"`) bocor ke manifest produksi.
 
 ---
 
@@ -193,7 +193,7 @@ Klien PWA wajib menyediakan rangkaian berkas ikon aplikasi dalam format PNG deng
   - `icon-512x512.png`: Digunakan untuk layar resolusi tinggi (Retina/AMOLED) dan layar pembuka (*splash screen*).
 * **Ikon Maskable (*Maskable Purpose*):**
   - Menyediakan berkas `maskable-icon-512x512.png` dengan zona aman (*safe zone*) 80% di tengah kanvas.
-  - Memastikan ikon PRONOIA tidak terpotong saat sistem operasi ponsel (khususnya Android Adaptive Icons) menerapkan pemotongan bentuk lingkaran, persegi tumpul, atau tetesan air.
+  - Memastikan ikon AEVYRA tidak terpotong saat sistem operasi ponsel (khususnya Android Adaptive Icons) menerapkan pemotongan bentuk lingkaran, persegi tumpul, atau tetesan air.
 
 ---
 
@@ -213,7 +213,7 @@ Pewarnaan tema PWA wajib memancarkan estetika medis modern bernuansa premium (*s
 
 ## 9. Mode Tampilan Mandiri Antarmuka (Standalone Display Mode)
 
-Mode tampilan PWA PRONOIA ditetapkan secara mutlak ke **Mode Mandiri (*Standalone Display Mode*)**:
+Mode tampilan PWA AEVYRA ditetapkan secara mutlak ke **Mode Mandiri (*Standalone Display Mode*)**:
 
 ```json
 "display": "standalone"
@@ -222,7 +222,7 @@ Mode tampilan PWA PRONOIA ditetapkan secara mutlak ke **Mode Mandiri (*Standalon
 Karakteristik Mode Standalone:
 - Menyembunyikan seluruh kontrol antarmuka peramban standar (bilah alamat URL, tombol navigasi maju/mundur bawaan peramban, dan menu tab).
 - Aplikasi berjalan dalam jendela terdedikasi yang setara dengan aplikasi asli (*native application look and feel*).
-- Memberikan kontrol navigasi penuh kepada desainer antarmuka PRONOIA melalui komponen *AppBar* dan *Bottom Navigation*.
+- Memberikan kontrol navigasi penuh kepada desainer antarmuka AEVYRA melalui komponen *AppBar* dan *Bottom Navigation*.
 
 ---
 
@@ -246,7 +246,7 @@ Perilaku Titik Masuk:
 *Service Worker* berkedudukan sebagai tulang punggung arsitektur PWA yang mengendalikan intersepsi jaringan, manajemen cache, dan sinkronisasi latar belakang:
 
 ```text
-Daur Hidup Service Worker PRONOIA:
+Daur Hidup Service Worker AEVYRA:
 [1. Pendaftaran (Registration via navigator.serviceWorker.register('/sw.js'))]
                │
                ▼
@@ -274,7 +274,7 @@ navigator.serviceWorker.register('/sw.js', {
 ```
 
 Batasan Lingkup Operasi:
-- Hanya boleh mengintersepsi permintaan aset dan rute yang berada di bawah domain `app.pronoia.id`.
+- Hanya boleh mengintersepsi permintaan aset dan rute yang berada di bawah domain `app.aevyra.id`.
 - Dilarang keras mengintersepsi atau mencoba menyimpan cache rute dasbor instruktur (`/instructor/*`) atau portal administrator (`/admin/*`).
 - Mengabaikan intersepsi terhadap pemanggilan pustaka analitik eksternal atau berkas CDN pihak ketiga yang tidak terdaftar dalam daftar putih domain terpercaya.
 
@@ -412,10 +412,10 @@ Klien PWA wajib tunduk pada arsitektur otentikasi terpusat platform:
 
 ## 22. Desain Pengalaman Pengguna Mode Luring (Offline Mode User Experience)
 
-Dukungan mode luring pada PWA PRONOIA dirancang secara spesifik per kemampuan fitur (*Capability-Specific Offline Support*):
+Dukungan mode luring pada PWA AEVYRA dirancang secara spesifik per kemampuan fitur (*Capability-Specific Offline Support*):
 
 ```text
-Matriks Kapabilitas Mode Luring PWA PRONOIA:
+Matriks Kapabilitas Mode Luring PWA AEVYRA:
 ├── 1. Navigasi Antarmuka (App Shell) ──> DIDUKUNG PENUH (Buka aplikasi lancar tanpa sinyal)
 ├── 2. Pencatatan Metrik Mandiri ───────> DIDUKUNG (Disimpan ke draf lokal antrean sync)
 ├── 3. Pustaka Intervensi & Edukasi ────> DIDUKUNG TERBATAS (Membaca modul yang telah ter-cache)
@@ -557,7 +557,7 @@ Antarmuka klien wajib mengomunikasikan siklus status sinkronisasi secara transpa
 ```text
 Indikator Siklus Status Sinkronisasi:
 [DRAFT]      -> Data tersimpan aman di memori perangkat lokal Anda.
-[SYNCING]    -> Mengirimkan data ke peladen PRONOIA (Animasi putaran halus)...
+[SYNCING]    -> Mengirimkan data ke peladen AEVYRA (Animasi putaran halus)...
 [SYNCED]     -> Seluruh data berhasil tersinkronisasi dan diverifikasi aman.
 [SYNC_ERROR] -> Gagal sinkronisasi. Sentuh untuk mencoba mengirimkan ulang.
 ```
@@ -574,7 +574,7 @@ Pembaruan versi aset PWA (*PWA Update Strategy*) wajib dikelola agar pengguna ti
   - Peramban otomatis memeriksa perubahan pada berkas `/sw.js` setiap kali pengguna membuka aplikasi.
   - Jika terdeteksi *byte difference* pada Service Worker baru, fase instalasi latar belakang segera berjalan.
 * **Pemberitahuan Pembaruan Ramah Pengguna (*Soft Update Banner*):**
-  - Ketika Service Worker baru telah siap (*waiting state*), aplikasi memunculkan snackbar di bagian bawah layar: *"Versi baru PRONOIA telah tersedia. [Perbarui Sekarang]"*.
+  - Ketika Service Worker baru telah siap (*waiting state*), aplikasi memunculkan snackbar di bagian bawah layar: *"Versi baru AEVYRA telah tersedia. [Perbarui Sekarang]"*.
   - Menekan tombol perbarui memicu pengiriman pesan `postMessage({ type: 'SKIP_WAITING' })` dan memuat ulang halaman secara mulus.
 
 ---
@@ -586,8 +586,8 @@ Penamaan keranjang penyimpanan cache (*Cache Storage Names*) wajib menyertakan p
 ```javascript
 // sw.js: Penamaan Cache Terversi Baku
 const APP_VERSION = 'v1.4.2';
-const STATIC_CACHE_NAME = `pronoia-shell-${APP_VERSION}`;
-const PUBLIC_CONTENT_CACHE = `pronoia-content-${APP_VERSION}`;
+const STATIC_CACHE_NAME = `aevyra-shell-${APP_VERSION}`;
+const PUBLIC_CONTENT_CACHE = `aevyra-content-${APP_VERSION}`;
 
 // Pembersihan Cache Versi Lama pada Fase Aktivasi
 self.addEventListener('activate', (event) => {
@@ -595,7 +595,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName.startsWith('pronoia-') && !cacheName.endsWith(APP_VERSION)) {
+                    if (cacheName.startsWith('aevyra-') && !cacheName.endsWith(APP_VERSION)) {
                         return caches.delete(cacheName); // Hapus cache versi lama
                     }
                 })
@@ -644,7 +644,7 @@ Saat aplikasi diluncurkan dalam kondisi tanpa jaringan internet, App Shell wajib
 ```text
 Tampilan App Shell Saat Mode Luring:
 ┌────────────────────────────────────────────────────────┐
-│ PRONOIA                         [Indikator Mode Luring]│
+│ AEVYRA                         [Indikator Mode Luring]│
 ├────────────────────────────────────────────────────────┤
 │                                                        │
 │ [Skeleton Meter Skor Kesiapan...]                      │
@@ -671,7 +671,7 @@ Jika registrasi Service Worker gagal (karena mode penyamaran/incognito tertentu,
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
-            console.info('Service Worker PRONOIA aktif pada cakupan:', registration.scope);
+            console.info('Service Worker AEVYRA aktif pada cakupan:', registration.scope);
         })
         .catch((error) => {
             console.warn('Peringatan: PWA berjalan dalam mode Web Standar tanpa cache luring:', error);
@@ -686,7 +686,7 @@ Kegagalan PWA tidak boleh melumpuhkan fungsi dasar platform.
 
 ## 37. Dukungan Kompatibilitas Lintas Peramban (Cross-Browser Compatibility Standards)
 
-Klien PWA PRONOIA menjamin pengalaman pengguna yang konsisten di berbagai peramban modern:
+Klien PWA AEVYRA menjamin pengalaman pengguna yang konsisten di berbagai peramban modern:
 
 * **Google Chrome & Edge (Chromium):** Mendukung penuh instalasi standalone otomatis, background sync, web push, dan maskable icons.
 * **Apple Safari (iOS & iPadOS):** Mendukung instalasi melalui menu *"Add to Home Screen"*, pengenalan ikon Apple Touch Icon (`apple-touch-icon.png`), dan integrasi Web Push (iOS 16.4+).
@@ -706,7 +706,7 @@ Ajakan pemasangan aplikasi (*Install Prompt UX*) wajib disajikan secara etis dan
 Waktu yang Tepat untuk Menampilkan Ajakan Instalasi:
 - Setelah anggota berhasil mencatat metrik kesehatan pertamanya dengan sukses.
 - Setelah anggota menyelesaikan tur pengenalan aplikasi (*Onboarding Tour*).
-- Disediakan tombol permanen yang tidak mencolok pada menu Pengaturan Profil: *"Pasang Aplikasi PRONOIA ke Layar Utama"*.
+- Disediakan tombol permanen yang tidak mencolok pada menu Pengaturan Profil: *"Pasang Aplikasi AEVYRA ke Layar Utama"*.
 
 ---
 
@@ -736,7 +736,7 @@ Menghindari redundansi tampilan yang mengganggu kenyamanan anggota setia yang te
 Arsitektur Notifikasi Dorong (*Web Push Notifications*) mengalirkan pembaruan penting secara asinkron dari backend ke perangkat anggota:
 
 ```text
-Backend PRONOIA (Pemicu Event Jadwal Konsultasi)
+Backend AEVYRA (Pemicu Event Jadwal Konsultasi)
                │
                ▼
 [Web Push Service (Enkripsi Payload via Kunci Publik VAPID)]
@@ -775,9 +775,9 @@ Perlindungan privasi konten notifikasi (*Notification Content Privacy Shield*) m
   "Gula darah Anda naik tajam menjadi 220 mg/dL setelah sarapan!"
   (Bisa terbaca oleh rekan kerja di sebelah pengguna pada layar terkunci)
   ```
-* ✅ **Contoh Notifikasi Aman (Standar PRONOIA):**
+* ✅ **Contoh Notifikasi Aman (Standar AEVYRA):**
   ```text
-  Judul: "Pengingat Metrik Kesehatan PRONOIA"
+  Judul: "Pengingat Metrik Kesehatan AEVYRA"
   Isi:   "Ada evaluasi baru pada tren harian Anda. Buka aplikasi untuk meninjau."
   ```
 
@@ -827,8 +827,8 @@ Alur perizinan kamera (*Camera Permission Flow*) wajib didahului oleh panduan an
 
 ```text
 [Dialog Persiapan Izin Kamera]
-📷 PRONOIA Memerlukan Akses Kamera Anda
-Akses kamera digunakan secara eksklusif untuk memotret tabel informasi nilai gizi pada kemasan makanan yang ingin Anda evaluasi. PRONOIA tidak pernah merekam video latar belakang atau mengakses galeri tanpa persetujuan Anda.
+📷 AEVYRA Memerlukan Akses Kamera Anda
+Akses kamera digunakan secara eksklusif untuk memotret tabel informasi nilai gizi pada kemasan makanan yang ingin Anda evaluasi. AEVYRA tidak pernah merekam video latar belakang atau mengakses galeri tanpa persetujuan Anda.
 
 [Izinkan Kamera Sekarang]   [Nanti Saja]
 ```
@@ -857,7 +857,7 @@ Kegagalan akses kamera peramban tidak boleh menghentikan anggota dalam mencatat 
 
 ## 48. Integrasi Layanan Lokasi Geografis (Geolocation Service Integration)
 
-Integrasi layanan geolokasi (*Geolocation API*) pada PWA PRONOIA tunduk pada batasan etika ketat:
+Integrasi layanan geolokasi (*Geolocation API*) pada PWA AEVYRA tunduk pada batasan etika ketat:
 
 - **Penggunaan Tunggal yang Sah:** Hanya diaktifkan saat terjadi **Eskalasi Kedaruratan Medis (*Emergency Escalation*)** untuk menampilkan daftar rumah sakit, klinik IGD, dan puskesmas rujukan terdekat.
 - **Larangan Pelacakan Latar Belakang:** Dilarang keras melacak atau merekam koordinat lokasi pengguna secara terus-menerus di latar belakang (*no background location tracking*).
@@ -872,7 +872,7 @@ Permintaan izin lokasi wajib menjelaskan secara eksplisit apa yang diproses dan 
 ```text
 [Dialog Izin Lokasi Kedaruratan]
 📍 Cari Fasilitas Gawat Darurat Terdekat?
-PRONOIA memerlukan perkiraan lokasi Anda untuk menemukan rute tercepat ke Instalasi Gawat Darurat (IGD) rumah sakit terdekat. Lokasi Anda tidak akan disimpan di profil atau dibagikan ke pihak ketiga.
+AEVYRA memerlukan perkiraan lokasi Anda untuk menemukan rute tercepat ke Instalasi Gawat Darurat (IGD) rumah sakit terdekat. Lokasi Anda tidak akan disimpan di profil atau dibagikan ke pihak ketiga.
 
 [Bagikan Lokasi Sekali Ini Saja]   [Pilih Kota Manual]
 ```
@@ -934,7 +934,7 @@ Integrasi percakapan asisten cerdas AI pada klien PWA mewajibkan koneksi jaringa
 - **Tampilan Ramah Mode Luring:**
   ```text
   [Layar Chat AI Saat Luring]
-  🌐 Asisten Cerdas PRONOIA Membutuhkan Koneksi Internet
+  🌐 Asisten Cerdas AEVYRA Membutuhkan Koneksi Internet
   Untuk memberikan penjelasan kesehatan berbasis data terkini, asisten AI memerlukan sambungan internet.
   (Riwayat percakapan sebelumnya tetap dapat Anda baca).
   ```
@@ -1036,8 +1036,8 @@ async function purgeSensitiveClientData() {
     sessionStorage.clear();
 
     // 3. Bersihkan preferensi akun spesifik di localStorage
-    localStorage.removeItem('pronoia_active_user_id');
-    localStorage.removeItem('pronoia_user_display_name');
+    localStorage.removeItem('aevyra_active_user_id');
+    localStorage.removeItem('aevyra_user_display_name');
 
     // 4. Kirim sinyal ke Service Worker untuk membuang cache dinamis pengguna
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
@@ -1076,7 +1076,7 @@ Langkah ini menjamin tidak ada riwayat data medis yang tertinggal pada peramban 
 
 Jika beberapa pengguna berbagi peramban yang sama (*Account Switching Shield*):
 
-- Aplikasi mengisolasi repositori IndexedDB berdasarkan pengenal unik pengguna (`pronoia_db_user_{id}`).
+- Aplikasi mengisolasi repositori IndexedDB berdasarkan pengenal unik pengguna (`aevyra_db_user_{id}`).
 - Saat pengguna B masuk, aplikasi sama sekali tidak membuka atau membaca basis data milik pengguna A.
 - Jika pengguna memilih opsi *"Hapus jejak di perangkat ini"*, seluruh pangkalan data lokal akun bersangkutan dihapus permanen dari memori peramban.
 
@@ -1306,14 +1306,14 @@ registerRoute(
 // 2. Gambar Sampul Artikel Edukasi -> Stale-While-Revalidate
 registerRoute(
     ({ url }) => url.pathname.startsWith('/storage/education/'),
-    new StaleWhileRevalidate({ cacheName: 'pronoia-education-images' })
+    new StaleWhileRevalidate({ cacheName: 'aevyra-education-images' })
 );
 
 // 3. Titik Akhir Metrik Kesehatan & Profil -> Network-First dengan Timeout 3 Detik
 registerRoute(
     ({ url }) => url.pathname.startsWith('/api/v1/'),
     new NetworkFirst({
-        cacheName: 'pronoia-dynamic-api-cache',
+        cacheName: 'aevyra-dynamic-api-cache',
         networkTimeoutSeconds: 3
     })
 );
@@ -1387,7 +1387,7 @@ test('keluar dari akun membersihkan seluruh data pribadi dari IndexedDB dan loca
     await expect(page).toHaveURL('/login');
 
     // Periksa bahwa localStorage tidak memuat ID pengguna atau token
-    const userId = await page.evaluate(() => localStorage.getItem('pronoia_active_user_id'));
+    const userId = await page.evaluate(() => localStorage.getItem('aevyra_active_user_id'));
     expect(userId).toBeNull();
 
     // Periksa bahwa pangkalan data lokal telah dikosongkan
@@ -1415,7 +1415,7 @@ Pengujian transisi pembaruan versi PWA (*PWA Update Transition Tests*) memvalida
 
 ```text
 Skenario Pengujian Pembaruan:
-1. Pasang PWA Versi 1.0 (Cache: pronoia-shell-v1.0 aktif)
+1. Pasang PWA Versi 1.0 (Cache: aevyra-shell-v1.0 aktif)
 2. Deploy Versi 2.0 ke Peladen Uji
 3. Buka Kembali PWA -> Verifikasi Banner "Versi Baru Tersedia" Muncul
 4. Pengguna Menekan "Perbarui Sekarang"
@@ -1439,7 +1439,7 @@ Pengujian kompatibilitas versi klien dan backend API (*PWA & Backend API Compati
 Sebelum suatu versi klien PWA dirilis ke lingkungan produksi (*Production Release*), seluruh daftar periksa kesiapan wajib terverifikasi secara tuntas:
 
 ```text
-DAFTAR PERIKSA KESIAPAN RILIS PRODUKSI PWA PRONOIA:
+DAFTAR PERIKSA KESIAPAN RILIS PRODUKSI PWA AEVYRA:
 [ ] Dokumen Web App Manifest valid & terindeks pada <head> HTML
 [ ] Ikon aplikasi lengkap (192x192, 512x512, dan Maskable 512x512)
 [ ] Service Worker terdaftar sukses pada cakupan rute akar ('/')
@@ -1460,11 +1460,11 @@ DAFTAR PERIKSA KESIAPAN RILIS PRODUKSI PWA PRONOIA:
 
 ## 86. Topologi Arsitektur Utuh Ekosistem PWA (Comprehensive PWA Ecosystem Architecture)
 
-Platform PRONOIA menerapkan topologi arsitektur utuh ekosistem PWA yang menyeimbangkan keandalan klien dengan kedaulatan otoritas backend:
+Platform AEVYRA menerapkan topologi arsitektur utuh ekosistem PWA yang menyeimbangkan keandalan klien dengan kedaulatan otoritas backend:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                 TOPOLOGI UTUH EKOSISTEM PWA PLATFORM PRONOIA                │
+│                 TOPOLOGI UTUH EKOSISTEM PWA PLATFORM AEVYRA                │
 └─────────────────────────────────────────────────────────────────────────────┘
                                  │
                                  ▼
@@ -1481,7 +1481,7 @@ Platform PRONOIA menerapkan topologi arsitektur utuh ekosistem PWA yang menyeimb
                      (UI Framework & Komponen)
                                  │
                                  ▼
-                     [SERVICE WORKER PRONOIA]
+                     [SERVICE WORKER AEVYRA]
                                  │
        ┌─────────────────────────┴─────────────────────────┐
        ▼                                                   ▼
@@ -1507,12 +1507,12 @@ Alur kedaulatan data sistem tetap berakar pada otoritas peladen (*Server-Authori
 
 ## 87. Prinsip Pamungkas Kedaulatan Klien PWA (Final Sovereign PWA Principle)
 
-Sebagai doktrin puncak rekayasa Aplikasi Web Progresif (PWA) platform PRONOIA:
+Sebagai doktrin puncak rekayasa Aplikasi Web Progresif (PWA) platform AEVYRA:
 
-Aplikasi PWA dirancang untuk menjadikan PRONOIA:
+Aplikasi PWA dirancang untuk menjadikan AEVYRA:
 > **Lebih Cepat (*Faster*), Lebih Mudah Diakses (*More Accessible*), Mudah Dipasang (*More Installable*), dan Lebih Tangguh (*More Resilient*).**
 
-Aplikasi PWA **SAMA SEKALI TIDAK BOLEH** menjadikan PRONOIA:
+Aplikasi PWA **SAMA SEKALI TIDAK BOLEH** menjadikan AEVYRA:
 - Kurang aman dari serangan siber (*less secure*),
 - Kurang terlindungi privasinya (*less private*),
 - Kurang akurat secara matematis dan klinis (*less accurate*),

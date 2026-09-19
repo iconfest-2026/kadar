@@ -1,12 +1,12 @@
-# PRONOIA — User Journeys
+# AEVYRA — User Journeys
 
-> Definisi komprehensif seluruh alur perjalanan pengguna (*user journeys*) dalam ekosistem PRONOIA dari titik masuk awal (*acquisition*) hingga capaian luaran kesehatan preventif jangka panjang (*health outcomes*). Dokumen ini memetakan alur pengguna utama, peran instruktur dan administrator, siklus perilaku tertutup (*closed-loop behavioral engine*), interaksi asisten AI kontekstual, pemindai cerdas multimodal, konsultasi terarah, tantangan kebiasaan, manajemen krisis darurat, mitigasi kegagalan sistem, hingga telemetri analitik retensi.
+> Definisi komprehensif seluruh alur perjalanan pengguna (*user journeys*) dalam ekosistem AEVYRA dari titik masuk awal (*acquisition*) hingga capaian luaran kesehatan preventif jangka panjang (*health outcomes*). Dokumen ini memetakan alur pengguna utama, peran instruktur dan administrator, siklus perilaku tertutup (*closed-loop behavioral engine*), interaksi asisten AI kontekstual, pemindai cerdas multimodal, konsultasi terarah, tantangan kebiasaan, manajemen krisis darurat, mitigasi kegagalan sistem, hingga telemetri analitik retensi.
 
 ---
 
 ## 1. Purpose
 
-Dokumen ini mendefinisikan arsitektur lengkap interaksi pengguna dalam ekosistem **PRONOIA**, memetakan bagaimana *Member*, *Instructor*, dan *Admin* beraktivitas dari titik awal hingga tercapainya perbaikan gaya hidup preventif yang terukur.
+Dokumen ini mendefinisikan arsitektur lengkap interaksi pengguna dalam ekosistem **AEVYRA**, memetakan bagaimana *Member*, *Instructor*, dan *Admin* beraktivitas dari titik awal hingga tercapainya perbaikan gaya hidup preventif yang terukur.
 
 Dokumen ini memetakan:
 - **Alur Pengguna Menyeluruh (*End-to-End User Journeys*):** Rangkaian tahapan lengkap mulai dari pengenalan awal, pendaftaran, orientasi personal, pencatatan rutin, hingga transformasi kebiasaan jangka panjang.
@@ -25,7 +25,7 @@ Dokumen ini menjadi rujukan utama (*single source of truth*) untuk:
 
 ## 2. Journey Philosophy
 
-PRONOIA tidak dirancang sekadar sebagai katalog halaman atau penampung data statis. Setiap alur interaksi dibangun untuk mengubah kesadaran (*awareness*) menjadi tindakan pencegahan nyata (*preventive action*) dengan meminimalkan beban kognitif pengguna.
+AEVYRA tidak dirancang sekadar sebagai katalog halaman atau penampung data statis. Setiap alur interaksi dibangun untuk mengubah kesadaran (*awareness*) menjadi tindakan pencegahan nyata (*preventive action*) dengan meminimalkan beban kognitif pengguna.
 
 Setiap interaksi bermakna mengalir melalui siklus terpadu berikut:
 
@@ -61,7 +61,7 @@ Konteks Pengguna (User Context)
 
 ## 3. Core Journey
 
-Perjalanan inti (*Core Journey*) PRONOIA merupakan siklus perilaku hidup sehat yang berulang secara adaptif. Alur ini menghubungkan pencatatan data harian dengan intervensi berbasis bukti:
+Perjalanan inti (*Core Journey*) AEVYRA merupakan siklus perilaku hidup sehat yang berulang secara adaptif. Alur ini menghubungkan pencatatan data harian dengan intervensi berbasis bukti:
 
 ```text
 Temukan (Discover)
@@ -98,7 +98,7 @@ Siklus ini berulang tanpa henti sebagai putaran perbaikan berkelanjutan (*contin
 
 ## 4. Journey Actors
 
-Interaksi dalam ekosistem PRONOIA digerakkan oleh kolaborasi harmonis antara aktor manusia dan layanan sistem otonom.
+Interaksi dalam ekosistem AEVYRA digerakkan oleh kolaborasi harmonis antara aktor manusia dan layanan sistem otonom.
 
 | Kategori | Aktor / Layanan | Peran & Tanggung Jawab Utama |
 | :--- | :--- | :--- |
@@ -115,7 +115,7 @@ Interaksi dalam ekosistem PRONOIA digerakkan oleh kolaborasi harmonis antara akt
 
 ## 5. Journey Categories
 
-Seluruh alur perjalanan dalam ekosistem PRONOIA dikelompokkan ke dalam 16 kategori fungsional yang saling terintegrasi:
+Seluruh alur perjalanan dalam ekosistem AEVYRA dikelompokkan ke dalam 16 kategori fungsional yang saling terintegrasi:
 
 | No | Kategori Alur (*Journey Category*) | Fokus Interaksi & Pengalaman Pengguna | Capaian Luaran (*Expected Outcome*) |
 | :---: | :--- | :--- | :--- |
@@ -140,7 +140,7 @@ Seluruh alur perjalanan dalam ekosistem PRONOIA dikelompokkan ke dalam 16 katego
 
 ## 6. User Journey Principles
 
-Setiap alur dalam PRONOIA wajib mematuhi 7 prinsip perancangan pengalaman pengguna berikut:
+Setiap alur dalam AEVYRA wajib mematuhi 7 prinsip perancangan pengalaman pengguna berikut:
 
 - **Berorientasi Sasaran Jelas (*Goal-Oriented*):** Setiap alur dirancang untuk membantu pengguna mencapai sasaran kesehatan spesifik, bukan sekadar menghabiskan waktu di aplikasi.
 - **Titik Masuk Jelas (*Clear Entry Point*):** Pengguna selalu mengetahui dari mana alur dimulai dan konteks apa yang melatarbelakanginya.
@@ -177,7 +177,7 @@ Untuk operasi asinkron yang membutuhkan kalkulasi analitik kompleks (seperti kal
 
 ## 8. Journey 01 — Acquisition
 
-Alur akuisisi memperkenalkan PRONOIA kepada calon pengguna melalui berbagai saluran resmi, membangun rasa percaya awal, dan mengedukasi nilai penting pencegahan kesehatan dini.
+Alur akuisisi memperkenalkan AEVYRA kepada calon pengguna melalui berbagai saluran resmi, membangun rasa percaya awal, dan mengedukasi nilai penting pencegahan kesehatan dini.
 
 | Titik Masuk (*Entry Point*) | Saluran Akuisisi | Pesan Kunci / Proposisi Nilai |
 | :--- | :--- | :--- |
@@ -194,12 +194,12 @@ Eksplorasi Landing Page ──▶ Pahami Proposisi Nilai ──▶ Tinjau Jamina
 
 ## 9. Acquisition UX Goals
 
-Sebelum calon pengguna menekan tombol registrasi, antarmuka akuisisi harus memastikan pengguna memahami 6 pilar fundamental PRONOIA:
+Sebelum calon pengguna menekan tombol registrasi, antarmuka akuisisi harus memastikan pengguna memahami 6 pilar fundamental AEVYRA:
 
-1. **Tujuan Platform:** PRONOIA adalah sistem kesehatan preventif untuk mendeteksi deviasi gaya hidup sebelum menjadi masalah klinis.
+1. **Tujuan Platform:** AEVYRA adalah sistem kesehatan preventif untuk mendeteksi deviasi gaya hidup sebelum menjadi masalah klinis.
 2. **Kapabilitas Utama:** Membantu pencatatan kebiasaan, membangun baseline personal, dan memberikan intervensi mikro berbasis bukti.
 3. **Kedaulatan Data:** Pengguna memiliki kendali penuh atas data mereka; data tidak pernah dijual kepada pihak ketiga.
-4. **Batasan Sistem:** PRONOIA bukan pengganti dokter dan bukan instrumen diagnosis medis darurat.
+4. **Batasan Sistem:** AEVYRA bukan pengganti dokter dan bukan instrumen diagnosis medis darurat.
 5. **Peran AI:** Asisten AI berfungsi sebagai mitra edukatif berbasis konteks kesehatan yang telah disetujui pengguna.
 6. **Transparansi:** Tidak ada klaim medis palsu atau janji kesembuhan instan.
 
@@ -280,7 +280,7 @@ Akun Aktif ──▶ Sambutan Selamat Datang ──▶ Profil Dasar ──▶ Pe
 
 ## 15. Onboarding Principle
 
-PRONOIA menolak formulir panjang yang membebani mental pengguna baru. Onboarding menerapkan prinsip **Progressive Profiling**:
+AEVYRA menolak formulir panjang yang membebani mental pengguna baru. Onboarding menerapkan prinsip **Progressive Profiling**:
 
 ```text
 Langkah 1: Profil Esensial  ──▶  Langkah 2: Sasaran Utama  ──▶  Langkah 3: Konteks Hidup  ──▶  Langkah 4: Kendali Privasi
@@ -336,7 +336,7 @@ Langkah persetujuan privasi disajikan secara transparan dan mudah dipahami, buka
 
 - **Penyimpanan Data Terenkripsi:** Penjelasan bahwa catatan kesehatan disimpan dengan enkripsi standar industri.
 - **Penggunaan Konteks AI:** Opsi persetujuan apakah data gaya hidup boleh digunakan sebagai konteks percakapan asisten AI.
-- **Bukan Alat Diagnosis:** Konfirmasi bahwa pengguna memahami PRONOIA adalah alat pemantau preventif, bukan pengganti fasilitas kesehatan darurat.
+- **Bukan Alat Diagnosis:** Konfirmasi bahwa pengguna memahami AEVYRA adalah alat pemantau preventif, bukan pengganti fasilitas kesehatan darurat.
 - **Hak Hapus & Ekspor:** Informasi bahwa pengguna dapat mengunduh atau menghapus data mereka kapan saja.
 
 ---
@@ -362,7 +362,7 @@ Begitu langkah orientasi tuntas, sistem menjalankan inisialisasi akun di latar b
 Simpan Profil & Sasaran ──▶ Inisialisasi Status Baseline [COLLECTING] ──▶ Pasang Pengingat Awal ──▶ Munculkan Layar Sambutan Sukses ──▶ Arahkan ke Dashboard
 ```
 
-Antarmuka memberikan kartu sambutan pertama: *"Selamat datang di PRONOIA! Ruang personal Anda telah siap. Mari mulai mengamati pola sehat harian Anda."*
+Antarmuka memberikan kartu sambutan pertama: *"Selamat datang di AEVYRA! Ruang personal Anda telah siap. Mari mulai mengamati pola sehat harian Anda."*
 
 ---
 
@@ -372,7 +372,7 @@ Kunjungan pertama ke dashboard dirancang teratur, menenangkan, dan langsung menu
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        DASHBOARD PRONOIA                               │
+│                        DASHBOARD AEVYRA                               │
 ├────────────────────────────────────────────────────────────────────────┤
 │ [Header] Halo, Budi! • Sasaran: Memperbaiki Pola Tidur                │
 │                                                                        │
@@ -400,7 +400,7 @@ Pada tahap awal, baseline pengguna belum terbentuk sehingga sistem tidak boleh m
 Sebagai gantinya, dashboard menampilkan status edukasi yang transparan:
 
 > **Status Baseline Anda:**  
-> *"Baseline personal Anda sedang dalam proses pembentukan (Hari ke-1 dari 14). Lanjutkan pencatatan data secara konsisten setiap hari agar PRONOIA dapat mengenali pola ritme hidup unik Anda secara akurat."*
+> *"Baseline personal Anda sedang dalam proses pembentukan (Hari ke-1 dari 14). Lanjutkan pencatatan data secara konsisten setiap hari agar AEVYRA dapat mengenali pola ritme hidup unik Anda secara akurat."*
 
 Hal ini membangun ekspektasi yang benar bahwa wawasan kesehatan berbasis data membutuhkan konsistensi observasi.
 
@@ -408,7 +408,7 @@ Hal ini membangun ekspektasi yang benar bahwa wawasan kesehatan berbasis data me
 
 ## 24. Journey 06 — Health Data Logging
 
-Pencatatan data kesehatan adalah denyut nadi utama sistem PRONOIA. Alur dibuat seringan mungkin agar tidak membebani rutinitas harian pengguna:
+Pencatatan data kesehatan adalah denyut nadi utama sistem AEVYRA. Alur dibuat seringan mungkin agar tidak membebani rutinitas harian pengguna:
 
 ```text
 Dashboard ──▶ Tekan Tombol [Catat Data] ──▶ Pilih Kategori Metrik ──▶ Masukkan Nilai & Satuan ──▶ Validasi Instan ──▶ Simpan ──▶ Garis Waktu Terbarui
@@ -514,7 +514,7 @@ Status baseline pengguna diatur melalui siklus status yang tegas dan dapat dipan
 
 ## 31. Baseline Transparency
 
-PRONOIA menolak algoritma kotak hitam (*black box*). Pengguna berhak mengetahui dasar perhitungan baseline kesehatan mereka setiap saat:
+AEVYRA menolak algoritma kotak hitam (*black box*). Pengguna berhak mengetahui dasar perhitungan baseline kesehatan mereka setiap saat:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -634,7 +634,7 @@ Sistem mencatat interaksi ini untuk memahami apakah wawasan yang diberikan diras
 
 ## 38. Journey 11 — Recommendation
 
-Rekomendasi PRONOIA berfokus pada tindakan mikro yang realistis (*micro-habits*) yang langsung dapat dieksekusi hari ini:
+Rekomendasi AEVYRA berfokus pada tindakan mikro yang realistis (*micro-habits*) yang langsung dapat dieksekusi hari ini:
 
 ```text
 Wawasan Perilaku Aktif ──▶ Cocokkan dengan Sasaran Pengguna ──▶ Pilih Rekomendasi Paling Ringan & Efektif ──▶ Sajikan Opsi Aksi ──▶ Konfirmasi Partisipasi Pengguna
@@ -697,11 +697,11 @@ Status kemajuan intervensi diklasifikasikan ke dalam 4 kondisi terukur:
 
 ## 43. Journey 14 — Closed Preventive Loop
 
-Inilah arsitektur pamungkas dari siklus kesehatan preventif PRONOIA—putaran tertutup (*Closed Preventive Loop*):
+Inilah arsitektur pamungkas dari siklus kesehatan preventif AEVYRA—putaran tertutup (*Closed Preventive Loop*):
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                    SIKLUS PERILAKU TERTUTUP PRONOIA                    │
+│                    SIKLUS PERILAKU TERTUTUP AEVYRA                    │
 └────────────────────────────────────────────────────────────────────────┘
        ▲                                                          │
        │ [8. Capaian Membaik]                                      ▼ [1. Observasi Data]
@@ -724,7 +724,7 @@ Setiap putaran yang tuntas meningkatkan kepekaan sistem terhadap ritme hidup pen
 
 ## 44. Journey 15 — AI Assistant
 
-Asisten AI PRONOIA berfungsi sebagai rekan diskusi edukatif dan penjelas konteks kesehatan, bukan sebagai mesin diagnosis penyakit:
+Asisten AI AEVYRA berfungsi sebagai rekan diskusi edukatif dan penjelas konteks kesehatan, bukan sebagai mesin diagnosis penyakit:
 
 ```text
 Buka Menu AI / Tombol Diskusi ──▶ Cek Izin Akses Konteks Data ──▶ Ajukan Pertanyaan / Pilih Topik Wawasan ──▶ AI Memproses dengan Guardrails ──▶ Respons Edukatif Disajikan
@@ -845,7 +845,7 @@ Antarmuka menampilkan pesan transparan:
 
 ## 52. Scanner Confirmation
 
-Sistem PRONOIA tidak pernah menyimpan hasil pembacaan OCR secara langsung ke basis data tanpa persetujuan manusia (*human-in-the-loop*):
+Sistem AEVYRA tidak pernah menyimpan hasil pembacaan OCR secara langsung ke basis data tanpa persetujuan manusia (*human-in-the-loop*):
 
 ```text
 Ekstraksi Data Selesai ──▶ Tampilkan Formulir Pratinjau Nilai Terdeteksi ──▶ Pengguna Memeriksa & Mengoreksi Angka ──▶ Pengguna Menekan [Konfirmasi Simpan] ──▶ Data Resmi Masuk ke Log Nutrisi
@@ -863,7 +863,7 @@ Tantangan Kebiasaan (*Habit Challenges*) dirancang untuk membina kebiasaan sehat
 Jelajahi Katalog Tantangan ──▶ Pelajari Aturan & Durasi (misal: 7 Hari Hidrasi Cukup) ──▶ Tinjau Beban Tantangan ──▶ Gabung Tantangan ──▶ Mulai Check-in Harian
 ```
 
-Karakteristik tantangan PRONOIA:
+Karakteristik tantangan AEVYRA:
 - Bertahap dan berbasis sains perilaku (durasi pendek: 3–14 hari).
 - Menekankan konsistensi mikro, bukan beban ekstrem yang membahayakan tubuh.
 
@@ -903,7 +903,7 @@ Pengguna dapat memantau status partisipasi tantangan mereka secara visual:
 
 ## 56. Challenge Failure
 
-PRONOIA menerapkan pendekatan psikologi yang suportif terhadap kegagalan atau hari yang terlewat (*missed days*):
+AEVYRA menerapkan pendekatan psikologi yang suportif terhadap kegagalan atau hari yang terlewat (*missed days*):
 
 | Kondisi Kegagalan | Sikap Antarmuka | Opsi Pemulihan Pengguna |
 | :--- | :--- | :--- |
@@ -1042,7 +1042,7 @@ Instruktur Mendeteksi Indikator Risiko Klinis Tinggi
 
 ## 66. Journey 24 — Community
 
-Komunitas PRONOIA adalah ruang berbagi pengalaman, inspirasi gaya hidup sehat, dan saling memotivasi antar-anggota:
+Komunitas AEVYRA adalah ruang berbagi pengalaman, inspirasi gaya hidup sehat, dan saling memotivasi antar-anggota:
 
 ```text
 Masuk Tab Komunitas ──▶ Jelajahi Linimasa Diskusi Berdasarkan Topik ──▶ Baca Kisah Inspiratif / Tips Sehat ──▶ Berikan Reaksi Positif / Komentar ──▶ Buat Unggahan Baru
@@ -1084,7 +1084,7 @@ Laporan Pengguna / Filter Kata Kunci Otomatis
 
 ## 69. Journey 25 — Gamification
 
-Gamifikasi dalam PRONOIA dirancang untuk membangun motivasi intrinsik dan kebanggaan atas konsistensi hidup sehat, bukan untuk memicu kecanduan layar:
+Gamifikasi dalam AEVYRA dirancang untuk membangun motivasi intrinsik dan kebanggaan atas konsistensi hidup sehat, bukan untuk memicu kecanduan layar:
 
 ```text
 Pencatatan Rutin / Tuntas Tantangan ──▶ Kalkulasi Poin Konsistensi ──▶ Evaluasi Syarat Lencana Pencapaian ──▶ Buka Kunci Lencana (Contoh: "Penjaga Tidur 7 Hari") ──▶ Tampilkan di Profil
@@ -1107,7 +1107,7 @@ Halaman Pengaturan Akun ──▶ Pilih Paket Keanggotaan (Free vs Premium) ─�
 
 ## 71. Membership Safety
 
-PRONOIA menetapkan aturan etika yang mutlak terkait keanggotaan berbayar:
+AEVYRA menetapkan aturan etika yang mutlak terkait keanggotaan berbayar:
 
 > [!CAUTION]
 > **Pemisahan Tingkat Keanggotaan dari Keselamatan Medis:**  
@@ -1117,7 +1117,7 @@ PRONOIA menetapkan aturan etika yang mutlak terkait keanggotaan berbayar:
 
 ## 72. Journey 27 — Notification
 
-Notifikasi PRONOIA berfungsi sebagai pengingat tepat waktu yang menghormati kenyamanan pengguna:
+Notifikasi AEVYRA berfungsi sebagai pengingat tepat waktu yang menghormati kenyamanan pengguna:
 
 ```text
 Pemicu Sistem (Jadwal Pengingat / Deviasi Terdeteksi) ──▶ Cek Preferensi Pengguna & Jam Tenang (Do Not Disturb) ──▶ Evaluasi Kebijakan Anti-Kelelahan Pesan ──▶ Kirimkan Notifikasi Ringkas
@@ -1420,7 +1420,7 @@ Perancangan antarmuka mengadopsi filosofi *Mobile-First*:
 
 ## 100. Journey Navigation Model
 
-Arsitektur navigasi global aplikasi PRONOIA:
+Arsitektur navigasi global aplikasi AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -1689,7 +1689,7 @@ Jaringan Internet Terputus
 Integrasi sebagai *Progressive Web App* (PWA) modern:
 
 - **Instalasi Mudah:** Pengguna dapat memasang aplikasi ke layar utama (*Add to Home Screen*) tanpa melalui toko aplikasi konvensional.
-- **Pembaruan Tanpa Hambatan:** Layanan pekerja (*Service Worker*) memperbarui aset di latar belakang dan menampilkan banner ringan: *"Versi terbaru PRONOIA telah siap. [Perbarui Sekarang]".*
+- **Pembaruan Tanpa Hambatan:** Layanan pekerja (*Service Worker*) memperbarui aset di latar belakang dan menampilkan banner ringan: *"Versi terbaru AEVYRA telah siap. [Perbarui Sekarang]".*
 
 ---
 
@@ -1698,7 +1698,7 @@ Integrasi sebagai *Progressive Web App* (PWA) modern:
 **Kisah Pengguna Utama: Budi (Mahasiswa Tingkat Akhir, 22 Tahun)**
 
 1. **Masalah:** Budi sering begadang mengerjakan tugas skripsi, mengonsumsi minuman manis tinggi kafein, dan merasa tubuhnya selalu lemas di pagi hari.
-2. **Titik Temu:** Budi mendaftar PRONOIA melalui program kesehatan kampusnya.
+2. **Titik Temu:** Budi mendaftar AEVYRA melalui program kesehatan kampusnya.
 3. **Fase Awal:** Selama 14 hari pertama, Budi rutin mencatat durasi tidur dan minuman kemasannya via scanner cerdas. Sistem membentuk baseline tidurnya (rata-rata 5 jam 40 menit).
 4. **Intervensi:** Sistem mendeteksi bahwa asupan gula tinggi di malam hari berkorelasi kuat dengan penurunan kualitas tidur Budi. Sistem menyarankan tantangan *"7 Hari Bebas Minuman Manis Setelah Pukul 19.00"*.
 5. **Hasil Nyata:** Dalam 3 minggu, Budi berhasil menaikkan rata-rata tidurnya menjadi 6 jam 45 menit dan merasa energinya jauh lebih stabil saat kuliah.
@@ -1709,7 +1709,7 @@ Integrasi sebagai *Progressive Web App* (PWA) modern:
 
 **Kisah Pengguna Utama: Coach Sarah (Praktisi Kebugaran & Nutrisi, 30 Tahun)**
 
-1. **Peran:** Sarah mengelola 25 anggota binaan aktif di PRONOIA.
+1. **Peran:** Sarah mengelola 25 anggota binaan aktif di AEVYRA.
 2. **Efisiensi:** Setiap pagi, Sarah membuka dasbor instruktur dan langsung melihat daftar prioritas: 2 anggotanya mengalami deviasi tren tidur yang membutuhkan perhatian.
 3. **Bimbingan Personal:** Sarah meninjau grafik tren tanpa harus meminta anggota mengetik ulang riwayatnya, lalu mengirimkan catatan intervensi mikro dan menjadwalkan sesi konsultasi daring 15 menit.
 4. **Hasil Kolaboratif:** Anggota merasa didampingi secara nyata oleh manusia, meningkatkan kepatuhan rencana hidup sehat hingga 80%.
@@ -1722,7 +1722,7 @@ Integrasi sebagai *Progressive Web App* (PWA) modern:
 
 1. **Tanggung Jawab:** Memastikan seluruh materi program, modul AI, dan interaksi komunitas mematuhi standar etika kedokteran preventif.
 2. **Aktivitas Rutin:** Dr. Hendra memeriksa antrean verifikasi sertifikasi instruktur baru dan meninjau log guardrail AI untuk memastikan tidak ada keluaran yang melanggar batas non-diagnostik.
-3. **Dampak Sistemik:** Menjaga ekosistem PRONOIA tetap menjadi platform yang tepercaya, kredibel, dan aman bagi puluhan ribu pengguna.
+3. **Dampak Sistemik:** Menjaga ekosistem AEVYRA tetap menjadi platform yang tepercaya, kredibel, dan aman bagi puluhan ribu pengguna.
 
 ---
 
@@ -1733,7 +1733,7 @@ Matriks prioritas implementasi teknis alur perjalanan pengguna:
 | Tingkat Prioritas | Alur Perjalanan Pengguna | Alasan Prioritas |
 | :--- | :--- | :--- |
 | **P0 (Kritis / MVP)** | Registrasi, Onboarding, Pencatatan Cepat, Timeline, Mode Darurat. | Fondasi fungsional agar aplikasi dapat digunakan sejak hari pertama. |
-| **P1 (Inti Produk)** | Baseline Personal, Deteksi Deviasi, Wawasan, Rekomendasi Mikro. | Pembeda utama PRONOIA sebagai sistem kesehatan preventif cerdas. |
+| **P1 (Inti Produk)** | Baseline Personal, Deteksi Deviasi, Wawasan, Rekomendasi Mikro. | Pembeda utama AEVYRA sebagai sistem kesehatan preventif cerdas. |
 | **P2 (Layanan Lanjutan)**| Asisten AI Terpandu, Scanner Multimodal, Tantangan Kebiasaan. | Fitur bernilai tambah untuk mendongkrak keterlibatan dan kemudahan. |
 | **P3 (Ekosistem Penuh)** | Konsultasi Instruktur, Fitur Komunitas, Mode Luring PWA Lanjut. | Skalabilitas ekosistem kolaborasi manusia dan resiliensi tinggi. |
 
@@ -1754,7 +1754,7 @@ Sebuah perjalanan pengguna dinyatakan tuntas dan siap rilis (*Ready for Producti
 
 ## 127. Final Journey Model
 
-Model terpadu perjalanan pengguna PRONOIA merangkum seluruh dinamika interaksi dalam satu kesatuan arsitektur:
+Model terpadu perjalanan pengguna AEVYRA merangkum seluruh dinamika interaksi dalam satu kesatuan arsitektur:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -1789,6 +1789,6 @@ Model terpadu perjalanan pengguna PRONOIA merangkum seluruh dinamika interaksi d
 
 > [!IMPORTANT]
 > **Prinsip Pamungkas Perjalanan Pengguna:**  
-> *"Setiap interaksi di dalam PRONOIA harus membawa pengguna selangkah lebih dekat pada pemahaman diri yang lebih jernih, tindakan pencegahan yang lebih mudah, kebiasaan yang lebih konsisten, atau bantuan profesional yang tepat pada waktunya."*
+> *"Setiap interaksi di dalam AEVYRA harus membawa pengguna selangkah lebih dekat pada pemahaman diri yang lebih jernih, tindakan pencegahan yang lebih mudah, kebiasaan yang lebih konsisten, atau bantuan profesional yang tepat pada waktunya."*
 
-Perjalanan pengguna PRONOIA bukanlah perpindahan halaman mekanis yang kaku, melainkan sebuah jembatan transformasi perilaku yang mendampingi setiap individu menuju hidup yang lebih berdaya, sehat, dan bermartabat.
+Perjalanan pengguna AEVYRA bukanlah perpindahan halaman mekanis yang kaku, melainkan sebuah jembatan transformasi perilaku yang mendampingi setiap individu menuju hidup yang lebih berdaya, sehat, dan bermartabat.

@@ -1,10 +1,10 @@
-# PRONOIA — Features Specification
+# AEVYRA — Features Specification
 
-> Spesifikasi fungsional seluruh fitur utama PRONOIA, hubungan hierarki antar-modul, prioritas implementasi teknis, aturan perilaku sistem, matriks otorisasi per-peran, batasan keselamatan medis (*health-safety boundary*), dan kriteria penerimaan tingkat produk.
+> Spesifikasi fungsional seluruh fitur utama AEVYRA, hubungan hierarki antar-modul, prioritas implementasi teknis, aturan perilaku sistem, matriks otorisasi per-peran, batasan keselamatan medis (*health-safety boundary*), dan kriteria penerimaan tingkat produk.
 
 ## 1. Purpose
 
-Dokumen ini mendefinisikan secara terstruktur seluruh spesifikasi fungsional fitur dalam platform **PRONOIA**, hierarki modul sistem, relasi ketergantungan antar-komponen, prioritas implementasi (*roadmap priority*), aturan perilaku antarmuka, batas kewenangan otorisasi, serta prinsip keselamatan medis preventif (*health-safety boundary*).
+Dokumen ini mendefinisikan secara terstruktur seluruh spesifikasi fungsional fitur dalam platform **AEVYRA**, hierarki modul sistem, relasi ketergantungan antar-komponen, prioritas implementasi (*roadmap priority*), aturan perilaku antarmuka, batas kewenangan otorisasi, serta prinsip keselamatan medis preventif (*health-safety boundary*).
 
 Dokumen ini memetakan:
 - **Inventaris Fitur Lengkap (*Feature Inventory*):** Seluruh modul mulai dari Grup A (Autentikasi) hingga Grup Y (Kendali Akses).
@@ -22,7 +22,7 @@ Spesifikasi ini menjadi pedoman utama rekayasa perangkat lunak untuk:
 
 ## 2. Product Feature Philosophy
 
-PRONOIA menolak pendekatan fitur yang berdiri sendiri secara terfragmentasi (*feature silos*). Setiap fitur yang dikembangkan wajib berkontribusi langsung pada penguatan siklus perilaku hidup sehat preventif:
+AEVYRA menolak pendekatan fitur yang berdiri sendiri secara terfragmentasi (*feature silos*). Setiap fitur yang dikembangkan wajib berkontribusi langsung pada penguatan siklus perilaku hidup sehat preventif:
 
 ```text
 Amati Pola (Observe)
@@ -50,17 +50,17 @@ Peningkatan Gaya Hidup (Improve)
 ```
 
 > [!TIP]
-> **Prinsip Evaluasi Fitur:** Jika sebuah usulan fitur baru tidak mendukung salah satu mata rantai dalam siklus di atas, maka fitur tersebut dikategorikan sebagai *feature bloat* dan tidak akan dimasukkan ke dalam basis kode PRONOIA.
+> **Prinsip Evaluasi Fitur:** Jika sebuah usulan fitur baru tidak mendukung salah satu mata rantai dalam siklus di atas, maka fitur tersebut dikategorikan sebagai *feature bloat* dan tidak akan dimasukkan ke dalam basis kode AEVYRA.
 
 ---
 
 ## 3. Feature Hierarchy
 
-Hierarki fitur PRONOIA diorganisasi ke dalam 6 domain fungsional utama:
+Hierarki fitur AEVYRA diorganisasi ke dalam 6 domain fungsional utama:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                     ARSITEKTUR DOMAIN FITUR PRONOIA                    │
+│                     ARSITEKTUR DOMAIN FITUR AEVYRA                    │
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. IDENTITAS & KEAMANAN  : Autentikasi, Profiling, Otorisasi Multi-Peran│
 │ 2. PENGALAMAN ANGGOTA    : Dasbor Harian, Quick Log, Timeline Aktivitas│
@@ -75,7 +75,7 @@ Hierarki fitur PRONOIA diorganisasi ke dalam 6 domain fungsional utama:
 
 ## 4. Feature Priority Model
 
-PRONOIA mengklasifikasikan seluruh fitur ke dalam 4 tingkatan prioritas rekayasa yang ketat:
+AEVYRA mengklasifikasikan seluruh fitur ke dalam 4 tingkatan prioritas rekayasa yang ketat:
 
 | Tingkat Prioritas | Definisi & Kriteria Kesiapan | Contoh Fitur dalam Sistem |
 | :--- | :--- | :--- |
@@ -182,7 +182,7 @@ Tahapan onboarding disusun berurutan dengan indikator kemajuan yang jelas:
 
 ## 13. Progressive Profiling
 
-PRONOIA menolak pendekatan kuesioner panjang di hari pertama. Informasi dikumpulkan secara bertahap seiring berjalannya interaksi:
+AEVYRA menolak pendekatan kuesioner panjang di hari pertama. Informasi dikumpulkan secara bertahap seiring berjalannya interaksi:
 
 ```text
 Hari 1: Profil Esensial (Nama & Sasaran Utama)
@@ -271,7 +271,7 @@ Setiap catatan peristiwa kesehatan wajib mencantumkan asal data (*provenance*):
 | `scanner` | Diekstraksi otomatis dari label gizi via kamera OCR. | Tinggi (Objektif) |
 | `wearable` | Disinkronkan dari perangkat sandang pintar. | Sangat Tinggi |
 | `instructor` | Dicatat oleh instruktur saat sesi bimbingan. | Sangat Tinggi (Verifikasi Ahli) |
-| `system` | Dihasilkan secara komputasi oleh sistem PRONOIA. | Otoritatif Sistem |
+| `system` | Dihasilkan secara komputasi oleh sistem AEVYRA. | Otoritatif Sistem |
 
 ---
 
@@ -319,7 +319,7 @@ Jenis peristiwa yang dicatat dalam Garis Waktu:
 
 ## 25. Feature Group F — Personal Baseline
 
-Grup Fitur F adalah fondasi diferensiasi PRONOIA: menghitung baseline kesehatan personal pengguna, bukan membandingkannya dengan rata-rata populasi umum yang kaku:
+Grup Fitur F adalah fondasi diferensiasi AEVYRA: menghitung baseline kesehatan personal pengguna, bukan membandingkannya dengan rata-rata populasi umum yang kaku:
 
 ```text
 14 Hari Pencatatan Data Rutin ──▶ Analisis Distribusi Statistik ──▶ Pembentukan Baseline Pribadi ──▶ Menjadi Acuan Deteksi Deviasi
@@ -400,7 +400,7 @@ Grup Fitur H menerjemahkan sinyal perilaku teknis menjadi narasi wawasan yang ra
 Sinyal Perilaku Terkualifikasi ──▶ Formulasi Narasi Wawasan ──▶ Uji Bahasa Non-Diagnostik ──▶ Tampilkan Kartu Wawasan di Dasbor
 ```
 
-Wawasan PRONOIA mematuhi prinsip kejujuran data: selalu menjelaskan fakta observasi tanpa bumbu klaim medis yang menyesatkan.
+Wawasan AEVYRA mematuhi prinsip kejujuran data: selalu menjelaskan fakta observasi tanpa bumbu klaim medis yang menyesatkan.
 
 ---
 
@@ -438,7 +438,7 @@ Rekomendasi dirancang berbobot ringan (*micro-actions*) agar pengguna merasa mam
 
 ## 36. Recommendation Types
 
-Klasifikasi jenis rekomendasi tindakan dalam PRONOIA:
+Klasifikasi jenis rekomendasi tindakan dalam AEVYRA:
 - **Tindakan Kebiasaan Cepat (*Micro-Habit Action*):** Contoh: *"Lakukan peregangan 3 menit setelah duduk selama 2 jam."*
 - **Pengingat Jadwal Kontekstual (*Contextual Reminder*):** Contoh: *"Nyalakan alarm persiapan tidur 30 menit lebih awal malam ini."*
 - **Partisipasi Tantangan (*Challenge Recommendation*):** Contoh: *"Ikuti Tantangan 7 Hari Hidrasi Cukup."*
@@ -488,7 +488,7 @@ Header Sapaan Ramah • Sasaran Aktif
 
 ## 40. Dashboard Principle
 
-Prinsip dasar perancangan dasbor PRONOIA:
+Prinsip dasar perancangan dasbor AEVYRA:
 - **Bukan Tempat Menimbun Data (*No Data Dumping*):** Menolak grafik rumit yang membuat pengguna kewalahan (*cognitive overload*).
 - **Aksi Lebih Penting dari Angka:** Memprioritaskan apa yang bisa dilakukan hari ini dibandingkan deretan statistik mati masa lalu.
 - **Responsif & Tenang:** Memberikan rasa percaya diri dan ketenangan pikiran saat membuka aplikasi.
@@ -756,7 +756,7 @@ Catat Data Rutin / Tuntas Tantangan ──▶ Dapatkan Poin Konsistensi ──�
 
 ## 66. Gamification Rules
 
-Aturan etis gamifikasi PRONOIA:
+Aturan etis gamifikasi AEVYRA:
 - Menghargai konsistensi proses, bukan angka ekstrem.
 - Dilarang menggunakan pola manipulatif (*dark patterns*) yang memicu kecemasan pengguna saat target terlewat.
 - Lencana dilarang menyiratkan status klinis atau vonis kesembuhan penyakit.
@@ -841,7 +841,7 @@ Pilih Paket Keanggotaan ──▶ Tinjau Fasilitas Tambahan ──▶ Transaksi 
 
 ## 75. Membership Capabilities
 
-Matriks fasilitas paket keanggotaan PRONOIA:
+Matriks fasilitas paket keanggotaan AEVYRA:
 
 | Paket Layanan | Fitur & Kapabilitas Tambahan | Jaminan Keselamatan |
 | :--- | :--- | :---: |
@@ -1056,7 +1056,7 @@ Mata rantai siklus fitur inti yang menggerakkan nilai produk:
 Catat Data Harian ──▶ Kalkulasi Baseline ──▶ Deteksi Sinyal Deviasi ──▶ Jelaskan Wawasan ──▶ Ambil Tindakan Mikro ──▶ Pantau Pemulihan Gaya Hidup
 ```
 
-Siklus ini merupakan tulang punggung arsitektur produk yang membedakan PRONOIA dari aplikasi pelacak statis lainnya.
+Siklus ini merupakan tulang punggung arsitektur produk yang membedakan AEVYRA dari aplikasi pelacak statis lainnya.
 
 ---
 
@@ -1114,7 +1114,7 @@ Telemetri pengukuran keterlibatan fitur (*Feature Instrumentation*):
 
 ## 101. North-Star Feature Metric
 
-Metrik Bintang Kejora (*North-Star Metric*) produk PRONOIA:
+Metrik Bintang Kejora (*North-Star Metric*) produk AEVYRA:
 
 > **Persentase Anggota Aktif Mingguan yang Berhasil Menyelesaikan Siklus Pencegahan Tertutup (Mencatat ──▶ Menerima Wawasan ──▶ Mengambil Tindakan Mikro).**
 
@@ -1154,8 +1154,8 @@ Kriteria penghapusan fitur yang ada (*Feature Deprecation*):
 Kebijakan pencegahan pembengkakan fitur (*Anti-Feature-Sprawl*):
 
 > [!TIP]
-> **Hukum Kesederhanaan PRONOIA:**  
-> *"PRONOIA tidak bercita-cita menjadi jejaring sosial raksasa, platform e-commerce suplemen, atau sistem rekam medis rumah sakit yang rumit. PRONOIA tetap setia pada identitas intinya: pendamping gaya hidup preventif berbasis siklus perilaku tertutup."*
+> **Hukum Kesederhanaan AEVYRA:**  
+> *"AEVYRA tidak bercita-cita menjadi jejaring sosial raksasa, platform e-commerce suplemen, atau sistem rekam medis rumah sakit yang rumit. AEVYRA tetap setia pada identitas intinya: pendamping gaya hidup preventif berbasis siklus perilaku tertutup."*
 
 ---
 
@@ -1265,7 +1265,7 @@ Dasbor Instruktur Menerima Pembaruan Progres & Beri Catatan Penguatan
 
 Skenario demonstrasi realistis:
 - **Profil:** Budi, mahasiswa tingkat akhir yang mengalami penurunan jam tidur akibat tugas skripsi dan konsumsi minuman manis malam hari.
-- **Deteksi:** Sistem PRONOIA mendeteksi bahwa durasi tidur Budi turun dari 7 jam 15 menit menjadi 5 jam 30 menit selama 4 hari berturut-turut.
+- **Deteksi:** Sistem AEVYRA mendeteksi bahwa durasi tidur Budi turun dari 7 jam 15 menit menjadi 5 jam 30 menit selama 4 hari berturut-turut.
 - **Intervensi:** Sistem menyajikan kartu wawasan edukatif yang ramah dan menawarkan tantangan *"7 Hari Bebas Minuman Manis Setelah Pukul 19.00"*.
 - **Kolaborasi:** Coach Sarah memeriksa progres Budi dari dasbor instruktur dan memberikan catatan bimbingan personal.
 
@@ -1273,10 +1273,10 @@ Skenario demonstrasi realistis:
 
 ## 115. Final Feature Principle
 
-PRONOIA bukan sekadar perpaduan dasbor statis, pemindai kamera, atau chatbot percakapan yang berdiri sendiri.
+AEVYRA bukan sekadar perpaduan dasbor statis, pemindai kamera, atau chatbot percakapan yang berdiri sendiri.
 
 ```text
-PRONOIA = Data Riil + Konteks Hidup + Kecerdasan Perilaku + Transparansi Wawasan + Tindakan Nyata + Dukungan Manusia
+AEVYRA = Data Riil + Konteks Hidup + Kecerdasan Perilaku + Transparansi Wawasan + Tindakan Nyata + Dukungan Manusia
 ```
 
 ---
@@ -1284,7 +1284,7 @@ PRONOIA = Data Riil + Konteks Hidup + Kecerdasan Perilaku + Transparansi Wawasan
 ## 116. Final Definition
 
 > [!IMPORTANT]
-> **Definisi Nilai Fitur PRONOIA:**  
-> *"Sebuah fitur di dalam PRONOIA dianggap bernilai apabila fitur tersebut membantu pengguna memahami pola perilaku kesehatannya secara lebih jernih, mengambil tindakan pencegahan yang aman dan realistis, memantau dampak nyata dari kebiasaan tersebut, atau memperoleh bimbingan manusiawi yang tepat pada waktunya."*
+> **Definisi Nilai Fitur AEVYRA:**  
+> *"Sebuah fitur di dalam AEVYRA dianggap bernilai apabila fitur tersebut membantu pengguna memahami pola perilaku kesehatannya secara lebih jernih, mengambil tindakan pencegahan yang aman dan realistis, memantau dampak nyata dari kebiasaan tersebut, atau memperoleh bimbingan manusiawi yang tepat pada waktunya."*
 
-Seluruh fitur PRONOIA wajib senantiasa memegang teguh 6 pilar kehormatan: **Bermanfaat (*Useful*)**, **Aman (*Safe*)**, **Transparan (*Explainable*)**, **Terlindungi (*Private*)**, **Dapat Ditindaklanjuti (*Actionable*)**, dan **Terukur (*Measurable*)**—dengan menjunjung tinggi batas mulia: **Pendampingan preventif, bukan diagnosis medis.**
+Seluruh fitur AEVYRA wajib senantiasa memegang teguh 6 pilar kehormatan: **Bermanfaat (*Useful*)**, **Aman (*Safe*)**, **Transparan (*Explainable*)**, **Terlindungi (*Private*)**, **Dapat Ditindaklanjuti (*Actionable*)**, dan **Terukur (*Measurable*)**—dengan menjunjung tinggi batas mulia: **Pendampingan preventif, bukan diagnosis medis.**

@@ -1,13 +1,13 @@
-# PRONOIA — API Contracts & Interface Architecture
+# AEVYRA — API Contracts & Interface Architecture
 
-> Spesifikasi arsitektur antarmuka pemrograman aplikasi (*API Contracts*) platform PRONOIA. Dokumen ini mendefinisikan standar kanonikal endpoint RESTful, konvensi amplop permintaan dan respons (*Request/Response Envelope*), pipeline autentikasi berbasis token (*Laravel Sanctum*), otorisasi berbasis peran dan kontrak penugasan (*RBAC & Relationship-Scoped Authorization*), validasi data fisiologis ketat, orkestrasi asisten AI cerdas dan eksekusi perkakas terkontrol (*Tool Actions*), pemrosesan asinkron dan *event-driven*, format galat terstandar mesin, kontrol paginasi kursor, pembatasan laju (*rate limiting*), penjaminan idempotensi mutlak, tata kelola log jejak audit forensik, sinkronisasi luring PWA, serta strategi pengujian kontrak otomatis (*BDD & OpenAPI CI Validation*).
+> Spesifikasi arsitektur antarmuka pemrograman aplikasi (*API Contracts*) platform AEVYRA. Dokumen ini mendefinisikan standar kanonikal endpoint RESTful, konvensi amplop permintaan dan respons (*Request/Response Envelope*), pipeline autentikasi berbasis token (*Laravel Sanctum*), otorisasi berbasis peran dan kontrak penugasan (*RBAC & Relationship-Scoped Authorization*), validasi data fisiologis ketat, orkestrasi asisten AI cerdas dan eksekusi perkakas terkontrol (*Tool Actions*), pemrosesan asinkron dan *event-driven*, format galat terstandar mesin, kontrol paginasi kursor, pembatasan laju (*rate limiting*), penjaminan idempotensi mutlak, tata kelola log jejak audit forensik, sinkronisasi luring PWA, serta strategi pengujian kontrak otomatis (*BDD & OpenAPI CI Validation*).
 
 ---
 
 ### Informasi Dokumen Kontrak Teknis
 | Atribut Spesifikasi | Detail Konfigurasi Arsitektur |
 | :--- | :--- |
-| **Identitas Dokumen** | `PRONOIA-DOC-009` |
+| **Identitas Dokumen** | `AEVYRA-DOC-009` |
 | **Klasifikasi Dokumen** | Dokumen Arsitektur Inti (*Restricted / Technical Specification*) |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Pondasi Kanonikal Produksi) |
 | **Versi Rute API** | `/api/v1` |
@@ -42,13 +42,13 @@ Dokumen ini disusun dalam 10 klaster arsitektur utama yang mencakup 226 bagian s
 9. **Bagian 197 – 204: Alur Eksekusi Kanonikal & Jaminan Kualitas Endpoint Baru**
    - Diagram aliran langkah-demi-langkah kanonikal untuk rekam medis, evaluasi mesin perilaku, asisten AI, bimbingan instruktur, reservasi konsultasi, dan mutasi administratif, serta daftar periksa kualitas rilis endpoint baru.
 10. **Bagian 205 – 226: Peringatan Anti-Pola Desain, Piramida Pengujian, & Sintesis Arsitektur Akhir**
-    - Identifikasi 10 anti-pola arsitektur berbahaya beserta solusinya, piramida pengujian otomatis (*Testing Pyramid*), validasi CI otomatis terhadap skema OpenAPI, matriks pemisahan tanggung jawab sistem, orkestrasi *Closed-Loop Wellness*, serta piagam definisi otoritatif API PRONOIA.
+    - Identifikasi 10 anti-pola arsitektur berbahaya beserta solusinya, piramida pengujian otomatis (*Testing Pyramid*), validasi CI otomatis terhadap skema OpenAPI, matriks pemisahan tanggung jawab sistem, orkestrasi *Closed-Loop Wellness*, serta piagam definisi otoritatif API AEVYRA.
 
 ---
 
 ## 1. Tujuan & Ruang Lingkup Kontrak API (Purpose & Scope)
 
-Dokumen ini mendefinisikan kontrak arsitektur dan spesifikasi teknis antarmuka pemrograman aplikasi (**API**) dalam ekosistem **PRONOIA**. 
+Dokumen ini mendefinisikan kontrak arsitektur dan spesifikasi teknis antarmuka pemrograman aplikasi (**API**) dalam ekosistem **AEVYRA**. 
 
 Spesifikasi ini mencakup seluruh aspek integrasi teknis yang mengikat antarmuka klien (*frontend / Progressive Web Application / PWA*) dengan layanan backend:
 
@@ -84,7 +84,7 @@ Database / External Providers
 
 ## 2. Filosofi Desain API (API Philosophy)
 
-Arsitektur API PRONOIA dibangun di atas 8 pilar filosofi rekayasa perangkat lunak:
+Arsitektur API AEVYRA dibangun di atas 8 pilar filosofi rekayasa perangkat lunak:
 - **Predictable:** Pola URL, nama parameter, dan struktur payload konsisten sehingga mudah dipelajari dan diintegrasikan.
 - **Consistent:** Mengadopsi standar representasi JSON yang seragam di seluruh modul tanpa anomali format respons.
 - **Secure by Default:** Setiap rute dilindungi verifikasi autentikasi ketat dan penegakan prinsip hak istimewa terkecil (*least privilege*).
@@ -96,7 +96,7 @@ Arsitektur API PRONOIA dibangun di atas 8 pilar filosofi rekayasa perangkat luna
 
 > [!IMPORTANT]
 > **Prinsip Batas Integritas Produk:**  
-> API PRONOIA bukan sekadar *wrapper* tipis di atas tabel SQL. Setiap endpoint wajib menegakkan:
+> API AEVYRA bukan sekadar *wrapper* tipis di atas tabel SQL. Setiap endpoint wajib menegakkan:
 > 1. **Autentikasi:** Verifikasi identitas pemanggil request melalui token sah.
 > 2. **Otorisasi:** Penegakan izin berbasis peran (RBAC) dan kontrak relasi bimbingan aktif.
 > 3. **Validasi:** Integritas format masukan dan sanitasi parameter.
@@ -108,7 +108,7 @@ Arsitektur API PRONOIA dibangun di atas 8 pilar filosofi rekayasa perangkat luna
 
 ## 3. Arsitektur Lapisan API (API Architecture Layers)
 
-Topologi berlapis (*layered architecture*) yang direkomendasikan untuk platform PRONOIA:
+Topologi berlapis (*layered architecture*) yang direkomendasikan untuk platform AEVYRA:
 
 ```text
                         PWA / Web App
@@ -206,7 +206,7 @@ Strategi pengelolaan siklus hidup versi API dirancang untuk menjaga stabilitas i
 
 ## 7. Mekanisme Autentikasi (Authentication)
 
-Autentikasi API PRONOIA memanfaatkan mekanisme standar industri yang aman dan teruji. Pada implementasi berbasis Laravel, strategi autentikasi yang didukung mencakup:
+Autentikasi API AEVYRA memanfaatkan mekanisme standar industri yang aman dan teruji. Pada implementasi berbasis Laravel, strategi autentikasi yang didukung mencakup:
 - **Laravel Sanctum (Token-Based & SPA Cookies):** Strategi primer yang digunakan untuk aplikasi web berbasis SPA / PWA dan klien mobile, menyediakan pengelolaan token API ringan dengan kemampuan pencabutan (*revocation*) seketika.
 - **Stateful Session Authentication:** Alternatif sesi terenkripsi berbasis cookie HTTP-Only untuk lingkungan peramban modern.
 - **OAuth 2.0 / OpenID Connect (OIDC):** Disiapkan untuk integrasi identitas eksternal atau penyedia perangkat medis terverifikasi.
@@ -217,7 +217,7 @@ Platform menetapkan **Laravel Sanctum** sebagai strategi autentikasi kanonikal t
 
 ## 8. Prinsip Pemisahan Autentikasi & Otorisasi (Authentication Principle)
 
-PRONOIA secara tegas memisahkan lapisan autentikasi dari lapisan otorisasi dalam pipeline middleware:
+AEVYRA secara tegas memisahkan lapisan autentikasi dari lapisan otorisasi dalam pipeline middleware:
 
 > **Pemisahan Tanggung Jawab:**  
 > - **Autentikasi (*Authentication*):** Menjawab pertanyaan *"Siapa Anda?"* — Memverifikasi keabsahan identitas pengguna atau token akses yang dikirimkan.  
@@ -483,7 +483,7 @@ Admin Role + Specific Operational Permission
 
 ## 20. Tipe Konten Permintaan (Request Content Type)
 
-Seluruh pertukaran data API PRONOIA mengadopsi format standar JSON:
+Seluruh pertukaran data API AEVYRA mengadopsi format standar JSON:
 
 ```http
 Content-Type: application/json
@@ -496,7 +496,7 @@ Format `multipart/form-data` hanya diizinkan secara eksklusif pada endpoint ungg
 
 ## 21. Standarisasi Amplop Respons (Response Envelope)
 
-PRONOIA menerapkan amplop respons terstandarisasi (*Consistent Response Envelope*) untuk seluruh variasi luaran:
+AEVYRA menerapkan amplop respons terstandarisasi (*Consistent Response Envelope*) untuk seluruh variasi luaran:
 
 **1. Sumber Daya Tunggal (Single Resource Envelope):**
 ```json
@@ -1561,7 +1561,7 @@ Accept: application/json
     "message": {
       "id": "msg_123",
       "role": "assistant",
-      "content": "PRONOIA mencatat penurunan durasi istirahat Anda dalam 5 hari terakhir dibandingkan nilai acuan (baseline) 7 jam. Hal ini dapat memengaruhi kestabilan energi harian Anda."
+      "content": "AEVYRA mencatat penurunan durasi istirahat Anda dalam 5 hari terakhir dibandingkan nilai acuan (baseline) 7 jam. Hal ini dapat memengaruhi kestabilan energi harian Anda."
     }
   },
   "meta": {
@@ -1955,7 +1955,7 @@ Sangat direkomendasikan untuk aliran kronologis (*activity feed, timeline, chat*
 
 ## 93. Pengunduhan Berkas Laporan (Download Report API)
 
-Standardisasi amplop metadata paginasi pada respons API PRONOIA:
+Standardisasi amplop metadata paginasi pada respons API AEVYRA:
 
 **1. Metadata Paginasi Berbasis Halaman (Offset Metadata):**
 ```json
@@ -2277,7 +2277,7 @@ Content-Type: application/json
 {
   "error": {
     "code": "HEALTH_SAFETY_RESTRICTION",
-    "message": "Permintaan ditolak karena berada di luar cakupan layanan kebugaran dan gaya hidup PRONOIA. Platform tidak melayani diagnosis medis mandiri atau peresepan obat."
+    "message": "Permintaan ditolak karena berada di luar cakupan layanan kebugaran dan gaya hidup AEVYRA. Platform tidak melayani diagnosis medis mandiri atau peresepan obat."
   }
 }
 ```
@@ -2299,7 +2299,7 @@ Content-Type: application/json
 {
   "error": {
     "code": "AI_SAFETY_RESTRICTION",
-    "message": "Pesan atau instruksi yang diminta berada di luar pagar pembatas keselamatan asisten cerdas PRONOIA."
+    "message": "Pesan atau instruksi yang diminta berada di luar pagar pembatas keselamatan asisten cerdas AEVYRA."
   }
 }
 ```
@@ -2405,7 +2405,7 @@ Apabila klien menggunakan autentikasi berbasis sesi cookie (*stateful cookie aut
 Konfigurasi CORS (*Cross-Origin Resource Sharing*) wajib dibatasi secara ketat hanya pada domain asal (*origin*) klien resmi:
 
 ```http
-Access-Control-Allow-Origin: https://app.pronoia.id
+Access-Control-Allow-Origin: https://app.aevyra.id
 Access-Control-Allow-Credentials: true
 Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
 ```
@@ -2672,7 +2672,7 @@ Seluruh rekam data yang diimpor dari pihak luar wajib mempertahankan metadata su
 - `provider`: Nama korporasi atau vendor perangkat.
 - `external_reference`: ID rekaman unik pada peladen penyedia asli.
 - `recorded_at`: Stempel waktu pengukuran saat data diambil oleh perangkat.
-- `synced_at`: Waktu data diterima dan divalidasi oleh sistem PRONOIA.
+- `synced_at`: Waktu data diterima dan divalidasi oleh sistem AEVYRA.
 
 ---
 
@@ -2914,7 +2914,7 @@ Peladen mendeteksi preferensi tersebut dan mengembalikan teks deskriptif yang se
 
 ## 159. Bahasa Baku Komunikasi Keselamatan Medis (Critical Safety Language Policy)
 
-Bahasa utama platform PRONOIA adalah **Bahasa Indonesia**. Seluruh pesan keselamatan medis (*safety disclaimers*) wajib disajikan dalam kalimat yang jelas, lugas, dan mudah dipahami oleh masyarakat umum.
+Bahasa utama platform AEVYRA adalah **Bahasa Indonesia**. Seluruh pesan keselamatan medis (*safety disclaimers*) wajib disajikan dalam kalimat yang jelas, lugas, dan mudah dipahami oleh masyarakat umum.
 
 ---
 
@@ -2927,7 +2927,7 @@ Prosedur penonaktifan endpoint yang usang (*API Deprecation Policy*):
 ```http
 Deprecation: @1735689600
 Sunset: Wed, 01 Jul 2026 00:00:00 GMT
-Link: <https://api.pronoia.id/docs/migrations/v2>; rel="sunset"
+Link: <https://api.aevyra.id/docs/migrations/v2>; rel="sunset"
 ```
 
 ---
@@ -3395,7 +3395,7 @@ Kembali Normal  Buka Kembali Sirkuit
 
 ## 190. Batasan Lapisan Penyedia Pihak Ketiga (External Provider Boundary)
 
-Domain inti platform PRONOIA tidak boleh bergantung secara langsung pada struktur payload mentah vendor pihak ketiga:
+Domain inti platform AEVYRA tidak boleh bergantung secara langsung pada struktur payload mentah vendor pihak ketiga:
 
 ```text
 Vendor Response ──▶ Provider Adapter ──▶ Canonical Domain Entity
@@ -3862,7 +3862,7 @@ Spesifikasi OpenAPI yang disinkronkan secara otomatis dari kode sumber implement
 
 ## 220. Model Arsitektur Kontrak API Menyeluruh (Comprehensive API Architecture Map)
 
-Topologi model arsitektur kontrak API terpadu platform PRONOIA:
+Topologi model arsitektur kontrak API terpadu platform AEVYRA:
 
 ```text
                            KLIEN (PWA / MOBILE)
@@ -3988,11 +3988,11 @@ Pemantauan Perubahan Pola Kebiasaan (Loop Tertutup)
 
 ---
 
-## 225. Prinsip Bintang Utara API PRONOIA (API North-Star Principle)
+## 225. Prinsip Bintang Utara API AEVYRA (API North-Star Principle)
 
 Prinsip Bintang Kejora Arsitektur API (*API North-Star Principle*):
 
-API platform PRONOIA dirancang untuk menggerakkan sistem lingkaran tertutup (*Closed-Loop Wellness System*):
+API platform AEVYRA dirancang untuk menggerakkan sistem lingkaran tertutup (*Closed-Loop Wellness System*):
 
 ```text
 Pencatatan Fakta (Capture)
@@ -4021,11 +4021,11 @@ Evaluasi Berkala (Evaluate)
 
 ---
 
-## 226. Definisi Pamungkas Kontrak API PRONOIA (Final Canon Definition)
+## 226. Definisi Pamungkas Kontrak API AEVYRA (Final Canon Definition)
 
-> **"Sebuah endpoint API PRONOIA wajib mengekspos kapabilitas produk yang aman dan bermakna, bukan sekadar membuka akses langsung ke tabel basis data."**
+> **"Sebuah endpoint API AEVYRA wajib mengekspos kapabilitas produk yang aman dan bermakna, bukan sekadar membuka akses langsung ke tabel basis data."**
 >
-> — *Prinsip Inti Arsitektur Antarmuka PRONOIA*
+> — *Prinsip Inti Arsitektur Antarmuka AEVYRA*
 
 Setiap rute antarmuka pemrograman aplikasi wajib memenuhi 7 pilar keunggulan:
 
@@ -4072,7 +4072,7 @@ PENGGUNA (MEMBER / INSTRUKTUR / ADMIN)
 ```
 
 > [!IMPORTANT]
-> **Piagam Kedaulatan API PRONOIA:**  
+> **Piagam Kedaulatan API AEVYRA:**  
 > API adalah gerbang pembatas kedaulatan teknis (*enforcement boundary*) yang memisahkan intensi subjektif pengguna dari perilaku aplikasi yang otoritatif, aman, dan dapat dipertanggungjawabkan secara hukum dan etika medis.
 
 ---

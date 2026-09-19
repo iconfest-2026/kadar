@@ -1,6 +1,6 @@
-# PRONOIA — Gamifikasi & Keanggotaan (Gamification & Membership Specification)
+# AEVYRA — Gamifikasi & Keanggotaan (Gamification & Membership Specification)
 
-> **Spesifikasi Arsitektur Gamifikasi Berbasis Kebiasaan Positif, Sistem Buku Besar Poin Idempoten, Rangkaian Konsistensi (Streaks) Non-Toksik, Tantangan Preventif, Tingkatan Keanggotaan (Membership Tiers), Kontrak Entitlement Akses Fitur, Batasan Etis Monetisasi Layanan Kesehatan, Privasi Pengguna, dan Kriteria Penerimaan Produksi PRONOIA.**
+> **Spesifikasi Arsitektur Gamifikasi Berbasis Kebiasaan Positif, Sistem Buku Besar Poin Idempoten, Rangkaian Konsistensi (Streaks) Non-Toksik, Tantangan Preventif, Tingkatan Keanggotaan (Membership Tiers), Kontrak Entitlement Akses Fitur, Batasan Etis Monetisasi Layanan Kesehatan, Privasi Pengguna, dan Kriteria Penerimaan Produksi AEVYRA.**
 
 ---
 
@@ -8,12 +8,12 @@
 
 | Atribut Metadata | Rincian Dokumen Teknis |
 | :--- | :--- |
-| **Kode Dokumen** | `PRONOIA-DOC-013` |
+| **Kode Dokumen** | `AEVYRA-DOC-013` |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Release Ready & Standardized) |
 | **Domain Arsitektur** | Gamification Engine, Loyalty Ledger, Membership & Entitlements, Ethical Monetization |
 | **Tingkat Kerahasiaan** | **Internal Confidential & Audit-Ready** (Departemen Produk, Engineering, & Medis) |
 | **Klasifikasi Keamanan** | Penegakan Kedaulatan Data Klinis, Anti-Abuse Server-Authoritative, PCI-DSS Gateway Safe |
-| **Target Ekosistem** | PRONOIA Mobile App (iOS / Android), Web Dashboard, Backend Event Bus, Payment Gateway |
+| **Target Ekosistem** | AEVYRA Mobile App (iOS / Android), Web Dashboard, Backend Event Bus, Payment Gateway |
 | **Penyelarasan Regulasi** | UU No. 27/2022 (PDP), Standar Etika Kedokteran Preventif, HIPAA/GDPR Principle Separation |
 | **Status Validasi** | **181 Seksi Terstruktur Lengkap** (0 Seksi Dihilangkan / 100% Invarian Terpenuhi) |
 
@@ -21,14 +21,14 @@
 
 ### Ringkasan Eksekutif & Peta Klaster Arsitektur (Architecture Clusters)
 
-Sistem Gamifikasi dan Keanggotaan (*Gamification & Membership Engine*) pada platform PRONOIA dirancang dengan landasan filosofis mendasar: **Gamifikasi bertujuan memperkuat pembentukan kebiasaan hidup sehat yang konsisten (*positive behavioral reinforcement*), sedangkan Keanggotaan (*Membership*) mengatur tingkat akses terhadap kapabilitas komputasi dan konsultasi pakar.** Keduanya **bukan dan tidak boleh dijadikan proksi atas derajat kesehatan medis seseorang**.
+Sistem Gamifikasi dan Keanggotaan (*Gamification & Membership Engine*) pada platform AEVYRA dirancang dengan landasan filosofis mendasar: **Gamifikasi bertujuan memperkuat pembentukan kebiasaan hidup sehat yang konsisten (*positive behavioral reinforcement*), sedangkan Keanggotaan (*Membership*) mengatur tingkat akses terhadap kapabilitas komputasi dan konsultasi pakar.** Keduanya **bukan dan tidak boleh dijadikan proksi atas derajat kesehatan medis seseorang**.
 
 Arsitektur ini memisahkan secara tegas antara data klinis, integritas kalkulasi poin (*double-entry points ledger*), mesin pembuktian tantangan (*proof-of-action challenge engine*), hak akses fitur (*feature entitlement middleware*), serta batas etis monetisasi (*no pay-to-be-healthy anti-pattern*).
 
 Seluruh 181 seksi dalam spesifikasi ini dipetakan ke dalam **7 Klaster Strategis**:
 
 ```
-                                      ARSITEKTUR GAMIFIKASI & KEANGGOTAAN PRONOIA
+                                      ARSITEKTUR GAMIFIKASI & KEANGGOTAAN AEVYRA
                                       ═══════════════════════════════════════════
   ┌───────────────────────────────────────────────────────┬───────────────────────────────────────────────────────┐
   │ [Klaster 1] Fondasi & Buku Besar Poin (Seksi 1 - 31)  │ [Klaster 2] Streaks & Tantangan Sehat (Seksi 32 - 55) │
@@ -61,7 +61,7 @@ Seluruh 181 seksi dalam spesifikasi ini dipetakan ke dalam **7 Klaster Strategis
 
 ## 1. Tujuan & Ruang Lingkup Spesifikasi (Purpose & Scope)
 
-Dokumen spesifikasi ini mendefinisikan secara menyeluruh arsitektur, kontrak data, mekanisme operasional, batas etika, dan logika rekayasa untuk subsistem **Gamifikasi (*Gamification*)** dan **Keanggotaan (*Membership*)** pada platform PRONOIA:
+Dokumen spesifikasi ini mendefinisikan secara menyeluruh arsitektur, kontrak data, mekanisme operasional, batas etika, dan logika rekayasa untuk subsistem **Gamifikasi (*Gamification*)** dan **Keanggotaan (*Membership*)** pada platform AEVYRA:
 
 | Area Spesifikasi | Deskripsi Komponen & Ruang Lingkup Sistem |
 | :--- | :--- |
@@ -79,7 +79,7 @@ Dokumen spesifikasi ini mendefinisikan secara menyeluruh arsitektur, kontrak dat
 
 ## 2. Filosofi Desain Produk (Product Philosophy)
 
-Filosofi produk PRONOIA membedakan secara tegas peran fungsional antara sistem gamifikasi dan keanggotaan:
+Filosofi produk AEVYRA membedakan secara tegas peran fungsional antara sistem gamifikasi dan keanggotaan:
 
 ### Alur Tujuan Gamifikasi (Behavioral Progression)
 Gamifikasi diimplementasikan sebagai katalisator psikologis pembentukan kebiasaan sehat preventif:
@@ -104,7 +104,7 @@ Keanggotaan (*Membership*) disediakan sebagai model aksesibilitas layanan tingka
 
 ## 3. Distingsi Kritis Status (Critical Distinction: Health vs Game vs Tier)
 
-Platform PRONOIA mewajibkan pemisahan tegas antara tiga pilar status sistem:
+Platform AEVYRA mewajibkan pemisahan tegas antara tiga pilar status sistem:
 
 ```
 ┌─────────────────────────┐       ┌─────────────────────────┐       ┌─────────────────────────┐
@@ -125,7 +125,7 @@ Berikut adalah distingsi nyata yang wajib ditegakkan di seluruh lapisan arsitekt
 
 ## 4. Tujuan Strategis Gamifikasi (Gamification Objectives)
 
-Gamifikasi pada PRONOIA dirancang secara eksklusif untuk membantu pengguna mencapai sasaran perilaku preventif:
+Gamifikasi pada AEVYRA dirancang secara eksklusif untuk membantu pengguna mencapai sasaran perilaku preventif:
 
 - **Menyelesaikan Tindakan Preventif (*Preventive Action*)**: Memfasilitasi pengguna untuk menyelesaikan pencatatan harian, hidrasi teratur, konsumsi obat/suplemen tepat waktu, dan aktivitas fisik ringan.
 - **Mempertahankan Kebiasaan Positif (*Habit Retention*)**: Membantu pengguna mempertahankan rutinitas hidup sehat secara konsisten tanpa merasa terbebani secara psikologis.
@@ -138,7 +138,7 @@ Gamifikasi pada PRONOIA dirancang secara eksklusif untuk membantu pengguna menca
 
 ## 5. Batasan & Non-Objektif Gamifikasi (Gamification Non-Objectives)
 
-Untuk menjaga integritas etika dan keselamatan pasien, sistem gamifikasi PRONOIA memiliki batasan non-tujuan (*non-objectives*) yang tegas:
+Untuk menjaga integritas etika dan keselamatan pasien, sistem gamifikasi AEVYRA memiliki batasan non-tujuan (*non-objectives*) yang tegas:
 
 - **Bukan Alat Diagnosis Klinis**: Tidak boleh memberikan kesimpulan medis berdasarkan perolehan poin atau lencana.
 - **Bukan Penentu 'Siapa Paling Sehat'**: Tidak boleh membandingkan siapa pengguna yang memiliki kondisi tubuh terbaik.
@@ -152,7 +152,7 @@ Untuk menjaga integritas etika dan keselamatan pasien, sistem gamifikasi PRONOIA
 
 ## 6. Arsitektur Sistem Gamifikasi (Gamification Architecture)
 
-Arsitektur gamifikasi PRONOIA beroperasi dengan pola pemrosesan kejadian terverifikasi (*verified event processing pipeline*):
+Arsitektur gamifikasi AEVYRA beroperasi dengan pola pemrosesan kejadian terverifikasi (*verified event processing pipeline*):
 
 ```
                        AKSI PENGGUNA (USER ACTION)
@@ -184,7 +184,7 @@ Arsitektur gamifikasi PRONOIA beroperasi dengan pola pemrosesan kejadian terveri
 
 ## 7. Komponen Utama Gamifikasi (Gamification Core Components)
 
-Ekosistem gamifikasi PRONOIA tersusun atas 8 komponen inti:
+Ekosistem gamifikasi AEVYRA tersusun atas 8 komponen inti:
 
 | Komponen Gamifikasi | Peran & Fungsi Utama dalam Sistem |
 | :--- | :--- |
@@ -250,7 +250,7 @@ Pada fase skala penuh (P2), platform memperkenalkan kapabilitas gamifikasi ekosi
 
 ## 11. Sistem Poin Imbalan (Points System)
 
-Poin adalah unit imbalan virtual internal pada sistem PRONOIA. Besaran poin ditentukan secara transparan dan dapat dikonfigurasi (*configurable*) melalui panel kontrol administrasi:
+Poin adalah unit imbalan virtual internal pada sistem AEVYRA. Besaran poin ditentukan secara transparan dan dapat dikonfigurasi (*configurable*) melalui panel kontrol administrasi:
 
 | Aksi Pengguna Terverifikasi | Bobot Poin Default | Kriteria Validasi Sisi Server |
 | :--- | :---: | :--- |
@@ -267,14 +267,14 @@ Poin adalah unit imbalan virtual internal pada sistem PRONOIA. Besaran poin dite
 
 ## 12. Poin Bukan Nilai Klinis (Points Are Not Health Scores)
 
-Platform PRONOIA melarang keras penyetaraan saldo poin dengan status kesehatan pengguna:
+Platform AEVYRA melarang keras penyetaraan saldo poin dengan status kesehatan pengguna:
 
 ```
   DILARANG KERAS (ANTI-PATTERN):
   ❌ "Skor Kesehatan Anda Hari Ini: 850 Poin"
   ❌ "Poin Anda rendah, Anda berisiko terkena komplikasi medis"
 
-  STANDAR RESMI PRONOIA:
+  STANDAR RESMI AEVYRA:
   ✅ Saldo Poin: 850 Poin (Tingkat Keterlibatan Aplikasi: Sangat Aktif)
   ✅ Status Kesehatan: Parameter Tekanan Darah Terkendali (Kategori Normal)
 ```
@@ -308,7 +308,7 @@ CREATE INDEX idx_points_ledger_user ON points_ledger(user_id, created_at DESC);
 
 ## 14. Rasionalisasi Desain Buku Besar (Why Points Ledger)
 
-Penerapan pola *ledger* memberikan keunggulan arsitektural krusial bagi keandalan sistem PRONOIA:
+Penerapan pola *ledger* memberikan keunggulan arsitektural krusial bagi keandalan sistem AEVYRA:
 
 - **Jejak Audit Komprehensif (*Auditability*)**: Setiap poin yang masuk atau keluar memiliki catatan asal-usul yang tidak dapat diubah (*immutable history*).
 - **Fasilitasi Pembalikan Transaksi (*Safe Reversals*)**: Jika verifikasi membuktikan adanya aksi palsu (*fraud*), entitas koreksi dapat dicatat tanpa merusak konsistensi data riwayat.
@@ -339,7 +339,7 @@ Untuk kebutuhan kueri cepat pada antarmuka pengguna:
 
 ## 16. Penghargaan Poin Positif (Positive Points Rules)
 
-Sistem imbalan PRONOIA secara eksklusif berfokus pada penghargaan atas tindakan nyata yang bernilai positif (*positive reinforcement*):
+Sistem imbalan AEVYRA secara eksklusif berfokus pada penghargaan atas tindakan nyata yang bernilai positif (*positive reinforcement*):
 
 ```
   ┌─────────────────────────────────┐     +20 Poin
@@ -362,7 +362,7 @@ Setiap penambahan poin wajib disertai referensi kejadian (*event attribution*) y
 
 ## 17. Larangan Penalti Poin Negatif (Negative Points Prohibition)
 
-Kebijakan arsitektur produk PRONOIA **melarang penggunaan penalti poin negatif (*Negative Points Prohibition*)** untuk kelalaian pengguna:
+Kebijakan arsitektur produk AEVYRA **melarang penggunaan penalti poin negatif (*Negative Points Prohibition*)** untuk kelalaian pengguna:
 
 > [!WARNING]
 > Mengurangi poin pengguna karena melewatkan jadwal pencatatan (*missed log*), absen dari tantangan harian, atau terlambat menghadiri konsultasi menciptakan efek psikologis punitif (*shame-driven engagement*) yang terbukti memicu kelelahan mental (*burnout*) dan pengabaian aplikasi (*app abandonment*).
@@ -504,7 +504,7 @@ Penamaan dan kriteria pencapaian wajib mencerminkan pencapaian **perilaku penggu
 
 ```
 ┌────────────────────────────────────────┬────────────────────────────────────────┐
-│      STANDAR AMAN PRONOIA (BENAR)      │      LARANGAN TOKSIK (ANTI-PATTERN)    │
+│      STANDAR AMAN AEVYRA (BENAR)      │      LARANGAN TOKSIK (ANTI-PATTERN)    │
 ├────────────────────────────────────────┼────────────────────────────────────────┤
 │ ✅ "Pembangun Rutinitas 7 Hari"         │ ❌ "Juara Bebas Penyakit Kronis"       │
 │ ✅ "Pencatat Hidrasi Konsisten"         │ ❌ "Penakluk Hipertensi 120/80"        │
@@ -606,7 +606,7 @@ Tonggak (*Milestones*) adalah pencapaian berskala makro yang merayakan akumulasi
 
 ## 31. Desain Arsitektur Milestone (Milestone Architectural Design)
 
-Perancangan tonggak pencapaian pada PRONOIA wajib memenuhi 5 pilar arsitektural:
+Perancangan tonggak pencapaian pada AEVYRA wajib memenuhi 5 pilar arsitektural:
 
 1. **Bermakna Nyata (*Meaningful*)**: Menghargai investasi waktu dan dedikasi pengguna dalam membina kesehatan diri.
 2. **Mudah Dipahami (*Understandable*)**: Kriteria pencapaian dijelaskan dengan bahasa yang lugas tanpa kalkulasi tersembunyi yang membingungkan.
@@ -618,7 +618,7 @@ Perancangan tonggak pencapaian pada PRONOIA wajib memenuhi 5 pilar arsitektural:
 
 ## 32. Mekanisme Rangkaian Konsistensi (Streaks Mechanics)
 
-Rangkaian (*Streaks*) mengukur keteraturan aksi pengguna dalam satuan hari berturut-turut (*consecutive active days*). PRONOIA membedakan tipe *streak* berdasarkan domain aktivitas:
+Rangkaian (*Streaks*) mengukur keteraturan aksi pengguna dalam satuan hari berturut-turut (*consecutive active days*). AEVYRA membedakan tipe *streak* berdasarkan domain aktivitas:
 
 | Tipe Streak | Definisi Aktivitas Kualifikasi | Jendela Batas Waktu |
 | :--- | :--- | :--- |
@@ -652,7 +652,7 @@ Perhitungan hari berturut-turut **hanya boleh dihitung dari kejadian yang secara
 
 ## 34. Perlindungan & Keamanan Streak (Streak Health Safety & Anti-Anxiety)
 
-Mekanisme *streak* memiliki risiko menimbulkan ketergantungan obsesif dan kecemasan psikologis (*streak anxiety*). Oleh karena itu, arsitektur *streak* PRONOIA dilengkapi batasan keamanan preventif:
+Mekanisme *streak* memiliki risiko menimbulkan ketergantungan obsesif dan kecemasan psikologis (*streak anxiety*). Oleh karena itu, arsitektur *streak* AEVYRA dilengkapi batasan keamanan preventif:
 
 - **Pencegahan Pelacakan Berlebihan (*Anti-Obsessive Tracking*)**: Menolak pengakuan aksi berulang-ulang dalam satu hari yang bertujuan menaikkan angka secara buatan.
 - **Pencegahan Perilaku Ekstrem**: Jika seorang pengguna sedang sakit atau demam, sistem menyarankan istirahat tanpa mengancam pemutusan *streak*.
@@ -667,7 +667,7 @@ Ketika pengguna melewatkan hari kualifikasi dan rangkaian konsistensi terputus (
 
 ```
 ┌────────────────────────────────────────┬────────────────────────────────────────┐
-│      KOMUNIKASI BURUK (DILARANG)       │     STANDAR RAMAH PRONOIA (DISETUJUI)  │
+│      KOMUNIKASI BURUK (DILARANG)       │     STANDAR RAMAH AEVYRA (DISETUJUI)  │
 ├────────────────────────────────────────┼────────────────────────────────────────┤
 │ ❌ "Anda Gagal! Streak 14 hari Anda    │ ✅ "Rangkaian hari Anda terhenti,      │
 │     hangus karena malas mencatat."     │     namun 14 hari kebiasaan baik yang  │
@@ -763,7 +763,7 @@ Seluruh target dalam program tantangan wajib memenuhi kriteria keselamatan preve
 
 - **Beban Target Masuk Akal (*Reasonable Targets*)**: Menghindari target fisik atau biologis yang tidak manusiawi (contoh: dilarang membuat target lari 20 km bagi kelompok pemula).
 - **Dapat Disesuaikan (*Configurable & Adaptive*)**: Target intensitas dapat disesuaikan dengan profil mobilitas dan usia pengguna.
-- **Tinjauan Tim Kesehatan (*Medically Reviewed*)**: Setiap kurikulum tantangan wajib melalui tinjauan dan persetujuan dari dewan medis/nutrisi PRONOIA.
+- **Tinjauan Tim Kesehatan (*Medically Reviewed*)**: Setiap kurikulum tantangan wajib melalui tinjauan dan persetujuan dari dewan medis/nutrisi AEVYRA.
 - **Sifat Non-Punitif (*Non-Punitive Design*)**: Kegagalan menyelesaikan satu tugas mikro tidak menghapus pencapaian hari-hari sebelumnya.
 - **Relevansi Demografis**: Kurikulum disesuaikan dengan sasaran audiens (contoh: kelompok lansia memiliki target mobilitas sendi, bukan angkat beban berat).
 
@@ -771,7 +771,7 @@ Seluruh target dalam program tantangan wajib memenuhi kriteria keselamatan preve
 
 ## 41. Klasifikasi Kategori Tantangan (Challenge Categories)
 
-Tantangan pada PRONOIA dikelompokkan ke dalam 7 pilar preventif utama:
+Tantangan pada AEVYRA dikelompokkan ke dalam 7 pilar preventif utama:
 
 | Kode Kategori | Domain Perilaku Kesehatan | Fokus Tindakan Mikro Harian |
 | :--- | :--- | :--- |
@@ -965,7 +965,7 @@ Papan peringkat (*Leaderboards*) bersifat **opsional (*opt-in*)**. Jika diaktifk
 
 ## 52. Restriksi & Batasan Leaderboard (Leaderboard Non-Toxic Restrictions)
 
-Platform PRONOIA **melarang mutlak** penggunaan parameter biologis dan medis sebagai indikator pemeringkatan papan peringkat:
+Platform AEVYRA **melarang mutlak** penggunaan parameter biologis dan medis sebagai indikator pemeringkatan papan peringkat:
 
 ```
   DILARANG KERAS DIJADIKAN DASAR PEMERINGKATAN (STRICT RESTRICTIONS):
@@ -994,7 +994,7 @@ Privasi pengguna pada papan peringkat dilindungi melalui 3 mekanisme penegakan h
 
 ## 54. Rekognisi Positif Komunitas (Community Recognition)
 
-Sebagai alternatif yang jauh lebih sehat dan suportif daripada papan peringkat numerik yang kompetitif, PRONOIA memprioritaskan rekognisi komunitas (*Community Recognition*):
+Sebagai alternatif yang jauh lebih sehat dan suportif daripada papan peringkat numerik yang kompetitif, AEVYRA memprioritaskan rekognisi komunitas (*Community Recognition*):
 
 | Jenis Penghargaan Komunitas | Tindakan Pembuktian di Platform | Dampak Sosial Positif |
 | :--- | :--- | :--- |
@@ -1006,7 +1006,7 @@ Sebagai alternatif yang jauh lebih sehat dan suportif daripada papan peringkat n
 
 ## 55. Kedaulatan & Agensi Pengguna (Gamification and User Agency)
 
-Kedaulatan dan kendali mandiri pengguna (*User Agency*) adalah prioritas tertinggi dalam perancangan sistem gamifikasi PRONOIA:
+Kedaulatan dan kendali mandiri pengguna (*User Agency*) adalah prioritas tertinggi dalam perancangan sistem gamifikasi AEVYRA:
 
 ```
   ┌─────────────────────────────────────────────────────────────┐
@@ -1020,7 +1020,7 @@ Kedaulatan dan kendali mandiri pengguna (*User Agency*) adalah prioritas terting
   └─────────────────────────────────────────────────────────────┘
 ```
 
-Pengguna memiliki hak penuh untuk menikmati layanan analitik kesehatan PRONOIA secara murni tanpa elemen permainan jika mereka merasa tidak membutuhkannya.
+Pengguna memiliki hak penuh untuk menikmati layanan analitik kesehatan AEVYRA secara murni tanpa elemen permainan jika mereka merasa tidak membutuhkannya.
 
 ---
 
@@ -1092,7 +1092,7 @@ Untuk mencegah stigma berat badan (*weight stigma*) dan risiko gangguan perilaku
 
 ## 61. Desain Katalog Imbalan (Reward System Design)
 
-Katalog imbalan (*Reward Catalog*) PRONOIA hanya menyertakan jenis hadiah yang terbukti aman secara etika dan kesehatan:
+Katalog imbalan (*Reward Catalog*) AEVYRA hanya menyertakan jenis hadiah yang terbukti aman secara etika dan kesehatan:
 
 | Klasifikasi Imbalan | Bentuk Imbalan Nyata | Nilai Manfaat Bagi Pengguna |
 | :--- | :--- | :--- |
@@ -1179,7 +1179,7 @@ Jika sebuah imbalan terbukti diterbitkan secara tidak sah (misal: akibat kegagal
 
 ## 66. Vektor Penyalahgunaan Gamifikasi (Gamification Abuse Vectors)
 
-Arsitektur PRONOIA memitigasi 5 vektor potensi penyalahgunaan sistem gamifikasi:
+Arsitektur AEVYRA memitigasi 5 vektor potensi penyalahgunaan sistem gamifikasi:
 
 | Vektor Penyalahgunaan | Pola Penyerangan / Kecurangan | Mekanisme Deteksi & Proteksi |
 | :--- | :--- | :--- |
@@ -1278,7 +1278,7 @@ Pemrosesan kejadian gamifikasi dirancang secara asinkron (*asynchronous event pi
                 │
                 ▼
   PUBLIKASI DOMAIN EVENT KE BUS
-  (Topic: pronoia.events.gamification)
+  (Topic: aevyra.events.gamification)
                 │
                 ▼
   KONSUMEN EVENT ENGINE (GAMIFICATION WORKER)
@@ -1302,7 +1302,7 @@ Arsitektur ini memastikan pemisahan tugas (*separation of concerns*) antara mesi
 
 ## 72. Arsitektur Sistem Keanggotaan (Membership System Overview)
 
-Sistem Keanggotaan (*Membership System*) mengatur tingkatan hak akses fitur dan tingkatan layanan pendampingan pada platform PRONOIA:
+Sistem Keanggotaan (*Membership System*) mengatur tingkatan hak akses fitur dan tingkatan layanan pendampingan pada platform AEVYRA:
 
 | Tingkatan (Tier) | Segmentasi Pengguna | Fokus Kapabilitas Layanan |
 | :--- | :--- | :--- |
@@ -1315,7 +1315,7 @@ Sistem Keanggotaan (*Membership System*) mengatur tingkatan hak akses fitur dan 
 
 ## 73. Filosofi Monetisasi Keanggotaan (Membership Product Philosophy)
 
-Filosofi keanggotaan PRONOIA berakar pada diferensiasi kapasitas layanan, **BUKAN diskriminasi keselamatan medis**:
+Filosofi keanggotaan AEVYRA berakar pada diferensiasi kapasitas layanan, **BUKAN diskriminasi keselamatan medis**:
 
 ```
   AKSES FITUR KOMPUTASI           KAPASITAS LAYANAN PAKAR           TINGKAT DUKUNGAN OPERASIONAL
@@ -1455,7 +1455,7 @@ CREATE INDEX idx_membership_features_lookup ON membership_features(membership_ti
 
 ## 80. Katalog Kunci Fitur (Feature Keys Catalog)
 
-Platform PRONOIA membakukan katalog kunci fitur (*Feature Keys Catalog*) terdaftar:
+Platform AEVYRA membakukan katalog kunci fitur (*Feature Keys Catalog*) terdaftar:
 
 - `core_tracking`: Akses pencatatan data vital harian (Tekanan Darah, Glukosa, Berat Badan, Suhu).
 - `basic_insights`: Generasi wawasan preventif ringkas berbasis aturan deterministik.
@@ -1499,7 +1499,7 @@ Mesin evaluasi perilaku dan aturan inferensi preventif (*Health Behavior Engine*
 
 ## 83. Invariansi Respons Darurat (Membership Does Not Change Emergency Priority)
 
-Platform PRONOIA menegakkan asas keadilan kegawatdaruratan medis:
+Platform AEVYRA menegakkan asas keadilan kegawatdaruratan medis:
 
 - **Prioritas Penanganan Darurat Murni Berbasis Triase Klinis**: Jika sistem mendeteksi sinyal bahaya akut (seperti gejala infark miokard atau krisis hiperglikemia), peringatan darurat disajikan seketika.
 - **Larangan Hak Istimewa Jalur Medis Darurat**: Pengguna Platinum tidak boleh didahulukan secara medis dibandingkan pengguna Free dalam alur triase gawat darurat klinis. Triase kedokteran diatur murni berdasarkan kegawatan ancaman jiwa (*life-threatening priority*).
@@ -1634,7 +1634,7 @@ Arsitektur ini memungkinkan platform beralih atau mendukung multi-gateway terkem
 
 Standar keamanan transaksi pembayaran mematuhi standar PCI-DSS dan regulasi perbankan Indonesia:
 
-- **Larangan Penyimpanan Data Kartu Mentah (*No Raw Card Storage*)**: Server PRONOIA tidak pernah menerima, memproses, atau menyimpan nomor kartu kredit (PAN), CVV, atau PIN perbankan pengguna.
+- **Larangan Penyimpanan Data Kartu Mentah (*No Raw Card Storage*)**: Server AEVYRA tidak pernah menerima, memproses, atau menyimpan nomor kartu kredit (PAN), CVV, atau PIN perbankan pengguna.
 - **Tokenisasi Penuh (*Full Tokenization*)**: Seluruh transaksi kartu diproses melalui pustaka tokenisasi resmi milik mitra gateway pembayaran berizin Bank Indonesia.
 - **Enkripsi Saluran Komunikasi**: Seluruh pertukaran data pembayaran wajib melewati koneksi aman TLS 1.3 dengan verifikasi sertifikat SSL ketat.
 
@@ -1655,7 +1655,7 @@ Endpoint webhook penerima kejadian pembayaran dilindungi dengan 3 lapis pengaman
 
 ## 95. Alur Pemrosesan Webhook (Subscription Webhook Processing Flow)
 
-Alur kerja pemrosesan webhook pembayaran pada backend PRONOIA:
+Alur kerja pemrosesan webhook pembayaran pada backend AEVYRA:
 
 ```
   INCOMING WEBHOOK HTTP POST
@@ -1698,7 +1698,7 @@ Endpoint resmi untuk memeriksa hak akses aktif pengguna:
 ### Permintaan HTTP:
 ```http
 GET /api/v1/me/entitlements HTTP/1.1
-Host: api.pronoia.id
+Host: api.aevyra.id
 Authorization: Bearer <jwt_user_token>
 ```
 
@@ -1931,13 +1931,13 @@ Sinergi antara sistem gamifikasi dan keanggotaan memiliki batasan etika yang teg
 - **Keanggotaan DILARANG Membeli Status Kesehatan**: Pengguna tidak dapat membeli poin, tidak dapat membeli lencana kesehatan, dan tidak dapat membeli lompatan *streak* secara instan (*No Pay-to-Win Health Progression*).
 
 > [!CAUTION]
-> Memperbolehkan pengguna membeli lencana komitmen tanpa melakukan aktivitas kesehatan nyata merusak seluruh validitas ilmiah dan integritas terapeutik platform PRONOIA.
+> Memperbolehkan pengguna membeli lencana komitmen tanpa melakukan aktivitas kesehatan nyata merusak seluruh validitas ilmiah dan integritas terapeutik platform AEVYRA.
 
 ---
 
 ## 109. Batas Keamanan Monetisasi (Monetization Safety Boundaries)
 
-Platform PRONOIA menetapkan batas merah monetisasi (*Monetization Safety Boundaries*) yang tidak boleh dilanggar:
+Platform AEVYRA menetapkan batas merah monetisasi (*Monetization Safety Boundaries*) yang tidak boleh dilanggar:
 
 ```
   DAFTAR MERAH: FITUR YANG TIDAK BOLEH DIMONETISASI (NON-NEGOTIABLE FREE):
@@ -2147,7 +2147,7 @@ Aksesibilitas pada antarmuka penawaran dan perbandingan keanggotaan:
 
 ## 122. Tabel Perbandingan Tingkatan (Membership Tier Comparison Matrix)
 
-Matriks perbandingan resmi fitur keanggotaan PRONOIA:
+Matriks perbandingan resmi fitur keanggotaan AEVYRA:
 
 | Rincian Fitur Layanan | Gratis (Free) | Perak (Silver) | Emas (Gold) | Platina (Platinum) |
 | :--- | :---: | :---: | :---: | :---: |
@@ -2192,7 +2192,7 @@ Standar keterbukaan harga langganan (*Pricing Transparency*):
 
 Layar konfirmasi sebelum pembayaran (*Pre-Payment Confirmation Modal*) wajib merangkum:
 
-1. **Nama Paket yang Dipilih**: (Contoh: *PRONOIA Gold - Langganan Bulanan*).
+1. **Nama Paket yang Dipilih**: (Contoh: *AEVYRA Gold - Langganan Bulanan*).
 2. **Total Tagihan Akhir**: Rincian harga dasar + pajak PPN resmi.
 3. **Metode Pembayaran**: Kanal pembayaran yang dipilih (QRIS, Mandiri VA, GoPay, Kartu Kredit).
 4. **Tanggal Awal & Jatuh Tempo**: Masa aktif awal dan jadwal perpanjangan otomatis.
@@ -2253,11 +2253,11 @@ Mitigasi penyalahgunaan pada subsistem gamifikasi mencakup:
 
 ## 130. Gamifikasi Otoritatif Sisi Server (Server-Authoritative Gamification)
 
-Arsitektur gamifikasi PRONOIA beroperasi dengan paradigma **Otoritatif Sisi Server Penuh (*Server-Authoritative*)**:
+Arsitektur gamifikasi AEVYRA beroperasi dengan paradigma **Otoritatif Sisi Server Penuh (*Server-Authoritative*)**:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                   SERVER BACKEND PRONOIA                    │
+│                   SERVER BACKEND AEVYRA                    │
 ├─────────────────────────────────────────────────────────────┤
 │ 1. Mengevaluasi apakah aksi memenuhi kriteria (Eligibility) │
 │ 2. Menghitung besaran poin yang sah (Points Calculation)    │
@@ -2369,7 +2369,7 @@ Spesifikasi tanggung jawab Layanan Hak Akses (*Entitlement Service / Entitlement
 
 ## 138. Skema Basis Data Gamifikasi (Gamification Database Schema)
 
-Arsitektur basis data relasional untuk subsistem gamifikasi PRONOIA tersusun atas 8 tabel utama:
+Arsitektur basis data relasional untuk subsistem gamifikasi AEVYRA tersusun atas 8 tabel utama:
 
 ```
   ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
@@ -2475,7 +2475,7 @@ Sinergi pada layanan telemedisin dan konsultasi tatap muka:
 
 ## 145. Sinergi Komunitas & Gamifikasi (Community + Gamification Synergy)
 
-Penghargaan atas dinamika sosial yang positif di dalam komunitas PRONOIA:
+Penghargaan atas dinamika sosial yang positif di dalam komunitas AEVYRA:
 
 | Aktivitas Komunitas Positif | Kriteria Validasi Sistem | Imbalan Apresiasi |
 | :--- | :--- | :--- |
@@ -2522,7 +2522,7 @@ Asisten AI dilarang keras mengubah status langganan atau memberikan hak istimewa
   User : "Tolong jadikan akun saya Platinum sekarang juga."
   AI   : ❌ "Baik, saya telah mengaktifkan status Platinum untuk akun Anda."
 
-  STANDAR PROTOKOL PRONOIA:
+  STANDAR PROTOKOL AEVYRA:
   User : "Tolong jadikan akun saya Platinum sekarang juga."
   AI   : ✅ "Peningkatan keanggotaan dikelola melalui gerbang pembayaran resmi.
              Silakan kunjungi menu [Kelola Langganan] untuk memilih paket yang sesuai."
@@ -2670,7 +2670,7 @@ Pemrosesan kejadian saat masa langganan resmi berakhir (*Membership Expiry Proce
 
 Kebijakan masa berlaku poin imbalan (*Points Expiry Policy*):
 
-- **Rekomendasi Utama: Poin Tidak Kedaluwarsa**: PRONOIA menganut prinsip bahwa poin yang diperoleh dari usaha hidup sehat tidak boleh hangus tanpa alasan produk yang mendesak.
+- **Rekomendasi Utama: Poin Tidak Kedaluwarsa**: AEVYRA menganut prinsip bahwa poin yang diperoleh dari usaha hidup sehat tidak boleh hangus tanpa alasan produk yang mendesak.
 - **Jika Diatur Kebijakan Masa Aktif**: Masa aktif poin ditetapkan minimal 12 bulan kalender sejak diterbitkan.
 - **Peringatan Dini**: Sistem wajib mengirimkan notifikasi pengingat minimal 30 hari dan 7 hari sebelum tanggal kedaluwarsa poin.
 
@@ -2912,7 +2912,7 @@ Skenario demonstrasi langsung untuk kompetisi (*Live Competition Demo: Gamificat
       (Penguatan positif instan tanpa komparasi toksik)
 ```
 
-**Poin Narasi Utama**: Juri diperlihatkan bahwa imbalan gamifikasi PRONOIA berakar langsung pada tindakan preventif nyata di dunia fisik, bukan permainan angka virtual yang kosong.
+**Poin Narasi Utama**: Juri diperlihatkan bahwa imbalan gamifikasi AEVYRA berakar langsung pada tindakan preventif nyata di dunia fisik, bukan permainan angka virtual yang kosong.
 
 ---
 
@@ -2947,13 +2947,13 @@ Naratif pembeda platform dalam sesi presentasi (*Pitch Narrative Differentiation
 
 - **Gamifikasi Sebagai Lapisan Penguatan Kebiasaan (*Reinforcement Layer*)**: Gamifikasi bukan gimnasium virtual adiktif, melainkan instrumen ilmu perilaku (*behavioral science*) yang membantu masyarakat Indonesia menjaga konsistensi gaya hidup sehat.
 - **Keanggotaan Sebagai Lapisan Aksesibilitas Layanan (*Service Access Layer*)**: Model monetisasi berkelanjutan yang memungkinkan penyediaan kecerdasan buatan tingkat tinggi dan interaksi dengan dokter spesialis secara terjangkau.
-- **Inovasi Inti Tetap Kedaulatan Preventif**: Nilai utama PRONOIA adalah *Behavioral Intelligence Engine* yang mendeteksi risiko metabolik sebelum menjadi penyakit kronis.
+- **Inovasi Inti Tetap Kedaulatan Preventif**: Nilai utama AEVYRA adalah *Behavioral Intelligence Engine* yang mendeteksi risiko metabolik sebelum menjadi penyakit kronis.
 
 ---
 
 ## 179. Ringkasan Arsitektur Menyeluruh (Comprehensive Architecture Summary)
 
-Ringkasan arsitektur holistik sistem Gamifikasi dan Keanggotaan PRONOIA:
+Ringkasan arsitektur holistik sistem Gamifikasi dan Keanggotaan AEVYRA:
 
 ```
                                   PENGGUNA (USER)
@@ -2981,7 +2981,7 @@ Sistem Keanggotaan mengawal aksesibilitas kapabilitas komputasi:
 
 ## 180. Relasi Sistem Produk Holistik (Final Holistic Product Relationship)
 
-Relasi sinergis menyeluruh seluruh komponen ekosistem PRONOIA:
+Relasi sinergis menyeluruh seluruh komponen ekosistem AEVYRA:
 
 ```
                               KESEHATAN PREVENTIF (PREVENTIVE HEALTH)
@@ -3010,7 +3010,7 @@ Relasi sinergis menyeluruh seluruh komponen ekosistem PRONOIA:
 ## 181. Prinsip Kedaulatan Tertinggi (Final Sovereign Ethical Principle)
 
 > [!IMPORTANT]
-> **Prinsip Tertinggi PRONOIA:**
+> **Prinsip Tertinggi AEVYRA:**
 > **"Gamifikasi harus membuat perilaku hidup sehat menjadi lebih memuaskan dan konsisten, sementara keanggotaan harus membuat kapabilitas teknologi canggih dan konsultasi pakar lebih mudah diakses. Keduanya tidak boleh dan tidak akan pernah dijadikan proksi penentu derajat kesehatan seseorang."**
 
 ### Rangkuman Invariansi Kritis Sistem:
@@ -3022,6 +3022,6 @@ Relasi sinergis menyeluruh seluruh komponen ekosistem PRONOIA:
   Paket Premium   ≠  Prioritas Triase Kegawatdaruratan Medis
 ```
 
-Seluruh arsitektur gamifikasi dan keanggotaan PRONOIA bermuara pada satu tujuan luhur: **Membantu setiap individu memahami tubuhnya, melakukan tindakan pencegahan secara aman dan bermartabat, mempertahankan konsistensi tanpa kecemasan, dan menikmati kualitas hidup yang lebih sehat seutuhnya.**
+Seluruh arsitektur gamifikasi dan keanggotaan AEVYRA bermuara pada satu tujuan luhur: **Membantu setiap individu memahami tubuhnya, melakukan tindakan pencegahan secara aman dan bermartabat, mempertahankan konsistensi tanpa kecemasan, dan menikmati kualitas hidup yang lebih sehat seutuhnya.**
 
 ---

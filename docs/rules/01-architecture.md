@@ -1,8 +1,8 @@
-# PRONOIA — Architecture Rules
+# AEVYRA — Architecture Rules
 
 | Parameter Dokumen | Spesifikasi Teknis Kaidah Arsitektur |
 | :--- | :--- |
-| **Kode Dokumen** | `PRONOIA-RULE-001` |
+| **Kode Dokumen** | `AEVYRA-RULE-001` |
 | **Klasifikasi Dokumen** | Kaidah Pokok Rekayasa Arsitektur Perangkat Lunak (*Core Software Architecture & Engineering Rules*) |
 | **Versi Standar** | `v1.0.0-PROD` (Kaidah Acuan Standar Produksi & Panggung Kompetisi ICONFEST 2026) |
 | **Gaya Arsitektur** | **Monolit Modular (*Modular Monolith*)** — *Domain-Driven, Thin Controllers, Single-Action Classes* |
@@ -14,13 +14,13 @@
 
 ### Ringkasan Eksekutif (Executive Summary)
 
-Dokumen ini mendefinisikan standar arsitektur perangkat lunak resmi yang menjadi fondasi bagi seluruh rekayasa sistem di dalam repositori PRONOIA. Sistem dirancang mengadopsi gaya **Monolit Modular (*Modular Monolith*)** guna memberikan keseimbangan optimal antara isolasi batas domain bisnis yang bersih, kemudahan pengujian otomatis deterministik, serta kesederhanaan operasional rilis produksi tanpa beban kerumitan *microservices* prematur.
+Dokumen ini mendefinisikan standar arsitektur perangkat lunak resmi yang menjadi fondasi bagi seluruh rekayasa sistem di dalam repositori AEVYRA. Sistem dirancang mengadopsi gaya **Monolit Modular (*Modular Monolith*)** guna memberikan keseimbangan optimal antara isolasi batas domain bisnis yang bersih, kemudahan pengujian otomatis deterministik, serta kesederhanaan operasional rilis produksi tanpa beban kerumitan *microservices* prematur.
 
-Dalam arsitektur PRONOIA, logika bisnis kesehatan dipisahkan secara tegas dari lapisan transportasi HTTP. Basis data PostgreSQL bertindak sebagai satu-satunya sumber kebenaran otoritatif (*Single System of Record*), sedangkan kecerdasan buatan (AI) diposisikan sebagai layanan eksternal pendukung yang terpagar di balik antarmuka adapter (*Interface Adapter Pattern*). Seluruh keputusan teknis, rancangan skema basis data, dan kontrak API wajib menjaga kelancaran dan integritas siklus lup kesehatan preventif tertutup: **Observe ──► Detect ──► Explain ──► Intervene ──► Monitor ──► Escalate ──► Improve**.
+Dalam arsitektur AEVYRA, logika bisnis kesehatan dipisahkan secara tegas dari lapisan transportasi HTTP. Basis data PostgreSQL bertindak sebagai satu-satunya sumber kebenaran otoritatif (*Single System of Record*), sedangkan kecerdasan buatan (AI) diposisikan sebagai layanan eksternal pendukung yang terpagar di balik antarmuka adapter (*Interface Adapter Pattern*). Seluruh keputusan teknis, rancangan skema basis data, dan kontrak API wajib menjaga kelancaran dan integritas siklus lup kesehatan preventif tertutup: **Observe ──► Detect ──► Explain ──► Intervene ──► Monitor ──► Escalate ──► Improve**.
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────┐
-│              6 KLASTER KAIDAH ARSITEKTUR SISTEM PRONOIA                   │
+│              6 KLASTER KAIDAH ARSITEKTUR SISTEM AEVYRA                   │
 ├───────────────────────┬───────────────────────────────────────────────────┤
 │ Klaster 1 (Sec 1 - 7) │ Fondasi Arsitektur, Tumpukan Laravel & Lapisan    │
 │ Klaster 2 (Sec 8 - 15)│ Batas Domain, Mesin Perilaku & Integrasi AI       │
@@ -35,9 +35,9 @@ Dalam arsitektur PRONOIA, logika bisnis kesehatan dipisahkan secara tegas dari l
 
 ## 1. Tujuan Standar Arsitektur (Purpose & Scope)
 
-Dokumen ini mendefinisikan standar arsitektur perangkat lunak resmi (*architectural standards*) yang wajib dipatuhi dalam seluruh siklus perancangan, pengembangan, dan pemeliharaan platform PRONOIA.
+Dokumen ini mendefinisikan standar arsitektur perangkat lunak resmi (*architectural standards*) yang wajib dipatuhi dalam seluruh siklus perancangan, pengembangan, dan pemeliharaan platform AEVYRA.
 
-Arsitektur sistem PRONOIA dirancang untuk memenuhi pilar keunggulan teknis:
+Arsitektur sistem AEVYRA dirancang untuk memenuhi pilar keunggulan teknis:
 - **Kemudahan Pemeliharaan (*Maintainability*)**: Batas domain yang bersih dan modularitas tinggi untuk kemudahan evolusi kode.
 - **Keterujian Deterministik (*Testability*)**: Logika bisnis domain yang terisolasi dari lapisan transportasi HTTP dan dependensi luar.
 - **Keamanan Siber Berlapis (*Security-in-Depth*)**: Penegakan otorisasi peran, validasi masukan ketat, dan perlindungan aset digital.
@@ -48,17 +48,17 @@ Arsitektur sistem PRONOIA dirancang untuk memenuhi pilar keunggulan teknis:
 - **Ekstensibilitas Masa Depan (*Future Extensibility*)**: Kesiapan integrasi perangkat medis sandang tanpa merombak arsitektur inti.
 
 > [!IMPORTANT]
-> Arsitektur PRONOIA wajib dipahami secara jernih oleh pengembang perangkat lunak manusia maupun agen rekayasa kecerdasan buatan (*AI coding agents*). Kerapian struktur kode dan kepatuhan konvensi adalah syarat mutlak kelayakan produksi.
+> Arsitektur AEVYRA wajib dipahami secara jernih oleh pengembang perangkat lunak manusia maupun agen rekayasa kecerdasan buatan (*AI coding agents*). Kerapian struktur kode dan kepatuhan konvensi adalah syarat mutlak kelayakan produksi.
 
 ---
 
 ## 2. Gaya Arsitektur Monolit Modular (Architectural Style - Modular Monolith)
 
-PRONOIA menetapkan gaya arsitektur **Monolit Modular (*Modular Monolith*)** sebagai standar baku pengembangan platform. Pendekatan ini menggabungkan kesederhanaan operasional monolit dengan kerapian isolasi batas domain khas arsitektur modular modern.
+AEVYRA menetapkan gaya arsitektur **Monolit Modular (*Modular Monolith*)** sebagai standar baku pengembangan platform. Pendekatan ini menggabungkan kesederhanaan operasional monolit dengan kerapian isolasi batas domain khas arsitektur modular modern.
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────┐
-│              ARSITEKTUR MONOLIT MODULAR APLIKASI PRONOIA                  │
+│              ARSITEKTUR MONOLIT MODULAR APLIKASI AEVYRA                  │
 ├───────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
 │  [ HTTP / API Gateway Layer ] ──> [ Controllers, Form Requests, Policies ] │
@@ -78,7 +78,7 @@ PRONOIA menetapkan gaya arsitektur **Monolit Modular (*Modular Monolith*)** seba
 ### Penolakan Arsitektur Prematur (*Avoid Premature Microservices*):
 Tim pengembang dilarang memecah sistem ke dalam arsitektur *microservices* terdistribusi (seperti *AI Microservice*, *Scanner Microservice*, *Notification Service*) tanpa adanya justifikasi beban operasional atau kebutuhan bisnis nyata yang terdokumentasi.
 
-| Keunggulan Monolit Modular PRONOIA | Bahaya Microservices Prematur |
+| Keunggulan Monolit Modular AEVYRA | Bahaya Microservices Prematur |
 | :--- | :--- |
 | **Transaksi Atomik ACID Mudah**: Integritas data kesehatan terjamin dalam satu transaksi basis data. | **Distribusi Transaksi Rentan**: Butuh *saga pattern* rumit yang rawan kegagalan konsistensi data. |
 | **Pengujian Otomatis Cepat**: Seluruh rangkaian tes berjalan dalam milidetik di memori tanpa mock jaringan. | **Overhead Pengujian Tinggi**: Butuh mock HTTP masif dan orkestrasi kontainer rumit. |
@@ -107,7 +107,7 @@ Kerangka kerja Laravel (versi 11.x / 12.x) adalah fondasi utama aplikasi. Pengem
 
 ## 4. Pemisahan Tanggung Jawab Lapisan Sistem (Separation of Responsibilities)
 
-Arsitektur sistem PRONOIA menerapkan prinsip pemisahan tanggung jawab secara vertikal (*Separation of Concerns*) yang tegas pada setiap lapisan:
+Arsitektur sistem AEVYRA menerapkan prinsip pemisahan tanggung jawab secara vertikal (*Separation of Concerns*) yang tegas pada setiap lapisan:
 
 ```text
 [ Rute HTTP (Route) ]
@@ -150,7 +150,7 @@ Kebijakan (*Policies*) menegakkan izin akses spesifik terhadap entitas data (`He
 
 ## 5. Isolasi Logika Domain Bisnis (Domain Logic Isolation)
 
-Logika bisnis domain (*Domain Logic*) adalah jantung intelektual aplikasi PRONOIA dan wajib diisolasi penuh dari kekhawatiran lapisan transportasi HTTP (*transport concerns*).
+Logika bisnis domain (*Domain Logic*) adalah jantung intelektual aplikasi AEVYRA dan wajib diisolasi penuh dari kekhawatiran lapisan transportasi HTTP (*transport concerns*).
 
 ### Contoh Entitas & Logika Domain Murni:
 - Algoritma penghitungan garis acuan personal (*Personal Baseline Calculator*).
@@ -201,7 +201,7 @@ Abstraksi baru diizinkan jika dan hanya jika terdapat logika bisnis multi-langka
 
 ## 8. Batasan Domain Antarmodul (Domain Boundaries)
 
-Arsitektur PRONOIA membagi kapabilitas sistem ke dalam 5 (lima) domain fungsional dengan batasan ketergantungan (*dependency boundaries*) yang jelas:
+Arsitektur AEVYRA membagi kapabilitas sistem ke dalam 5 (lima) domain fungsional dengan batasan ketergantungan (*dependency boundaries*) yang jelas:
 
 ```text
 [ Health Data ] ──► [ Behavioral Intelligence ] ──► [ Intervention ]
@@ -222,7 +222,7 @@ Arsitektur PRONOIA membagi kapabilitas sistem ke dalam 5 (lima) domain fungsiona
 
 ## 9. Arsitektur Mesin Perilaku Kesehatan (Core Behavioral Engine Architecture)
 
-Mesin Perilaku Kesehatan (*Health Behavior Engine*) adalah komponen arsitektur paling strategis dalam PRONOIA. Alur kerja mesin ini dirancang dalam pipa pemrosesan bertahap (*multi-stage pipeline*):
+Mesin Perilaku Kesehatan (*Health Behavior Engine*) adalah komponen arsitektur paling strategis dalam AEVYRA. Alur kerja mesin ini dirancang dalam pipa pemrosesan bertahap (*multi-stage pipeline*):
 
 ```text
 [ Rekaman Data Mentah (Raw Ingestion) ]
@@ -331,7 +331,7 @@ Pendekatan ini memastikan bahwa apabila penyedia AI memperbarui format API atau 
 
 ## 15. Isolasi Kegagalan Subsistem (Failure Isolation & Graceful Degradation)
 
-Layanan eksternal pihak ketiga dapat mengalami lonjakan latensi atau pemadaman total (*outages*). Arsitektur PRONOIA menjamin prinsip isolasi kegagalan (*Failure Isolation & Graceful Degradation*):
+Layanan eksternal pihak ketiga dapat mengalami lonjakan latensi atau pemadaman total (*outages*). Arsitektur AEVYRA menjamin prinsip isolasi kegagalan (*Failure Isolation & Graceful Degradation*):
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────┐
@@ -422,7 +422,7 @@ Dilarang mengandalkan *localStorage* peramban, state memori sesi AI, atau cache 
 
 ## 21. Model Eloquent Berbasis Entitas (Eloquent Models)
 
-Model Eloquent pada PRONOIA bertindak sebagai representasi lapisan persistensi data, pemetaan relasi antar-entitas, konversi tipe data (*attribute casting*), dan pendefinisian kueri lokal (*query scopes*).
+Model Eloquent pada AEVYRA bertindak sebagai representasi lapisan persistensi data, pemetaan relasi antar-entitas, konversi tipe data (*attribute casting*), dan pendefinisian kueri lokal (*query scopes*).
 
 ### Batasan Tanggung Jawab Model Eloquent:
 - Model berfokus pada operasi data lokal entitas tersebut.
@@ -507,7 +507,7 @@ Dua pengguna yang menekan tombol pesan pada milidetik yang sama dilarang berhasi
 
 ## 26. Arsitektur Antarmuka Pemrograman Aplikasi (API Architecture)
 
-Seluruh antarmuka pemrograman aplikasi (API) PRONOIA dikelola secara terstruktur, terversi secara ketat di bawah awalan `/api/v1/`, dan diorganisasikan berdasarkan domain bisnis:
+Seluruh antarmuka pemrograman aplikasi (API) AEVYRA dikelola secara terstruktur, terversi secara ketat di bawah awalan `/api/v1/`, dan diorganisasikan berdasarkan domain bisnis:
 
 ```text
 /api/v1/profile         ──► Manajemen Profil & Sasaran Pribadi
@@ -667,7 +667,7 @@ Seluruh berkas yang diunggah pengguna (foto piring makanan, dokumen rekam medis 
 
 ## 38. Batas Perlindungan Data Sensitif (Sensitive Data Boundaries)
 
-Arsitektur PRONOIA memetakan dan mengawal perlindungan data kesehatan sensitif di setiap gerbang batas transit:
+Arsitektur AEVYRA memetakan dan mengawal perlindungan data kesehatan sensitif di setiap gerbang batas transit:
 
 ```text
 [ Frontend PWA ] ──► [ API Gateway ] ──► [ Backend Service ] ──► [ PostgreSQL ]
@@ -865,7 +865,7 @@ Optimasi kinerja dilakukan secara terukur dan rasional:
 
 ## 52. Skalabilitas Terencana Non-Prematur (Architecture and Scalability)
 
-Arsitektur PRONOIA merancang jalur pertumbuhan kapasitas (*Scalability Path*) secara elegan tanpa rekayasa infrastruktur prematur:
+Arsitektur AEVYRA merancang jalur pertumbuhan kapasitas (*Scalability Path*) secara elegan tanpa rekayasa infrastruktur prematur:
 
 ```text
 Pertumbuhan Beban:
@@ -951,7 +951,7 @@ Perancangan fitur dianggap cacat dan belum siap jika hanya menggambarkan tampila
 
 ## 58. Taksonomi Anti-Pola Arsitektur (Architecture Anti-Patterns)
 
-Sistem PRONOIA secara tegas melarang 8 (delapan) anti-pola arsitektur berikut:
+Sistem AEVYRA secara tegas melarang 8 (delapan) anti-pola arsitektur berikut:
 
 1. **Fat Controllers**: Pengendali yang memuat ratusan baris logika bisnis dan kueri basis data langsung.
 2. **God Models**: Satu model Eloquent yang mengendalikan seluruh proses lintas domain aplikasi.
@@ -982,9 +982,9 @@ Ketika seorang arsitek sistem atau agen perancang menyerahkan rencana implementa
 
 ---
 
-## 60. Prinsip Pamungkas Arsitektur PRONOIA (Final Architecture Principle)
+## 60. Prinsip Pamungkas Arsitektur AEVYRA (Final Architecture Principle)
 
-Kaidah arsitektur pamungkas yang menjadi kompas bagi seluruh pengembang dan sistem dalam ekosistem PRONOIA adalah:
+Kaidah arsitektur pamungkas yang menjadi kompas bagi seluruh pengembang dan sistem dalam ekosistem AEVYRA adalah:
 
 ```text
 Sederhana pada Fondasi Inti (Simple at Core)
@@ -1010,7 +1010,7 @@ Aliran arsitektur yang mengikat seluruh ekosistem adalah:
 Pengguna ──► Antarmuka PWA ──► Lapisan Aplikasi ──► Logika Domain ──► Basis Data ──► Luaran Terukur
 ```
 
-Setiap keputusan arsitektur, sekecil apa pun, wajib menjaga kemampuan PRONOIA untuk mengeksekusi siklus lup pencegahan kesehatan tertutup:
+Setiap keputusan arsitektur, sekecil apa pun, wajib menjaga kemampuan AEVYRA untuk mengeksekusi siklus lup pencegahan kesehatan tertutup:
 
 > **OBSERVE ──► DETECT ──► EXPLAIN ──► INTERVENE ──► MONITOR ──► ESCALATE ──► IMPROVE**
 

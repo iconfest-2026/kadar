@@ -1,13 +1,13 @@
-# PRONOIA — Health Safety & Clinical Boundaries (Spesifikasi Keselamatan Kesehatan & Batas Klinis)
+# AEVYRA — Health Safety & Clinical Boundaries (Spesifikasi Keselamatan Kesehatan & Batas Klinis)
 
-> Dokumen spesifikasi arsitektur komprehensif untuk **Keselamatan Kesehatan (*Health Safety*)** dan **Batas Kewenangan Klinis (*Clinical Boundaries*)** platform PRONOIA. Dokumen ini mendefinisikan piagam batas keselamatan produk (*Product Health Safety Boundary*), filosofi keselamatan 7 pilar, klasifikasi keparahan risiko kesehatan (*BLOCKER, HIGH, MEDIUM, LOW*), kebijakan mutlak anti-diagnosis medis mandiri (*Zero Diagnostic Verdicts*), larangan peresepan dan modifikasi dosis obat farmasi (*Medication Dosing Bans*), pembersihan diksi diagnostik ke bahasa observasi objektif terkalibrasi (*Calibrated Observation & Uncertainty Language*), mitigasi bahaya skor kesehatan agregat tunggal (*Single Health Score Hazards*), keselamatan sinyal deviasi perilaku biologis, penanganan data riwayat tidak lengkap (*Missing Data ≠ Bad Data*), keselamatan pemindai citra nutrisi dan penanganan keyakinan rendah (*Scanner Low Confidence*), perlindungan alergi, etika nutrisi dan larangan diet/puasa ekstrem, diksi berat badan bebas stigmatisasi, keselamatan gerak dan batas cedera fisik, higiene tidur preventif, kesejahteraan emosional non-psikiatris, protokol krisis ancaman nyata & menyakiti diri (*Self-Harm / 119 / 112*), independensi alur darurat dari modul AI (*Zero AI Dependency*), pembatasan wewenang instruktur kebugaran, pagar pengaman model AI (*Anti-Hallucination, Zero Data/Citation Fabrication, Prompt Injection Defense, Tool Authorization Sandboxing, Write Action Confirmation*), pemisahan deterministik mesin perilaku dari AI generatif, larangan klaim kausalitas semu (*Correlation ≠ Causality*), etika gamifikasi dan mitigasi rekor konsistensi (*Streak Anxiety*), papan peringkat non-toksik, moderasi misinformasi medis komunitas, privasi notifikasi push layar kunci (*Lock Screen Privacy*), semantik palet warna visual netral non-menakut-nakuti, batas pergeseran garis acuan (*Baseline Drift Safety*), pencegahan kepenatan sinyal (*Signal Fatigue & Quiet Hours*), perlindungan pengguna di bawah umur dan kelompok usia, aksesibilitas inklusif, kepekaan budaya pangan Nusantara, konfigurasi kontak darurat regional terintegrasi, standardisasi integritas satuan kanonikal dan stempel waktu biologis (`recorded_at` vs `created_at`), 4 tingkatan eskalasi keselamatan berjenjang, protokol pengalihan kasus ke manusia (*Human Handoff* & minimisasi data), audit forensik peristiwa keselamatan (`safety_events`), pengujian regresi keselamatan otomatis, tata kelola versi aturan keselamatan, kumpulan data evaluasi keselamatan AI (*Golden Safety Dataset 11 Kategori*), 11 skenario uji keselamatan mendalam, 6 metrik kuantitatif keselamatan produk, mitigasi positif palsu dan penanganan insiden negatif palsu P0, daftar periksa gerbang rilis keselamatan (*Safety Release Quality Gate*), harmonisasi 13 kompromi desain keselamatan vs kebutuhan produk, Definisi Standar Selesai (*Definition of Done / DoD* 13 butir), dewan peninjau keselamatan independen, 5 studi kasus evaluasi nyata, topologi arsitektur keselamatan komprehensif, lingkaran tertutup penjaminan keselamatan kesehatan (9 tahap), serta Piagam Prinsip Pamungkas Kedaulatan Keselamatan Produk PRONOIA.
+> Dokumen spesifikasi arsitektur komprehensif untuk **Keselamatan Kesehatan (*Health Safety*)** dan **Batas Kewenangan Klinis (*Clinical Boundaries*)** platform AEVYRA. Dokumen ini mendefinisikan piagam batas keselamatan produk (*Product Health Safety Boundary*), filosofi keselamatan 7 pilar, klasifikasi keparahan risiko kesehatan (*BLOCKER, HIGH, MEDIUM, LOW*), kebijakan mutlak anti-diagnosis medis mandiri (*Zero Diagnostic Verdicts*), larangan peresepan dan modifikasi dosis obat farmasi (*Medication Dosing Bans*), pembersihan diksi diagnostik ke bahasa observasi objektif terkalibrasi (*Calibrated Observation & Uncertainty Language*), mitigasi bahaya skor kesehatan agregat tunggal (*Single Health Score Hazards*), keselamatan sinyal deviasi perilaku biologis, penanganan data riwayat tidak lengkap (*Missing Data ≠ Bad Data*), keselamatan pemindai citra nutrisi dan penanganan keyakinan rendah (*Scanner Low Confidence*), perlindungan alergi, etika nutrisi dan larangan diet/puasa ekstrem, diksi berat badan bebas stigmatisasi, keselamatan gerak dan batas cedera fisik, higiene tidur preventif, kesejahteraan emosional non-psikiatris, protokol krisis ancaman nyata & menyakiti diri (*Self-Harm / 119 / 112*), independensi alur darurat dari modul AI (*Zero AI Dependency*), pembatasan wewenang instruktur kebugaran, pagar pengaman model AI (*Anti-Hallucination, Zero Data/Citation Fabrication, Prompt Injection Defense, Tool Authorization Sandboxing, Write Action Confirmation*), pemisahan deterministik mesin perilaku dari AI generatif, larangan klaim kausalitas semu (*Correlation ≠ Causality*), etika gamifikasi dan mitigasi rekor konsistensi (*Streak Anxiety*), papan peringkat non-toksik, moderasi misinformasi medis komunitas, privasi notifikasi push layar kunci (*Lock Screen Privacy*), semantik palet warna visual netral non-menakut-nakuti, batas pergeseran garis acuan (*Baseline Drift Safety*), pencegahan kepenatan sinyal (*Signal Fatigue & Quiet Hours*), perlindungan pengguna di bawah umur dan kelompok usia, aksesibilitas inklusif, kepekaan budaya pangan Nusantara, konfigurasi kontak darurat regional terintegrasi, standardisasi integritas satuan kanonikal dan stempel waktu biologis (`recorded_at` vs `created_at`), 4 tingkatan eskalasi keselamatan berjenjang, protokol pengalihan kasus ke manusia (*Human Handoff* & minimisasi data), audit forensik peristiwa keselamatan (`safety_events`), pengujian regresi keselamatan otomatis, tata kelola versi aturan keselamatan, kumpulan data evaluasi keselamatan AI (*Golden Safety Dataset 11 Kategori*), 11 skenario uji keselamatan mendalam, 6 metrik kuantitatif keselamatan produk, mitigasi positif palsu dan penanganan insiden negatif palsu P0, daftar periksa gerbang rilis keselamatan (*Safety Release Quality Gate*), harmonisasi 13 kompromi desain keselamatan vs kebutuhan produk, Definisi Standar Selesai (*Definition of Done / DoD* 13 butir), dewan peninjau keselamatan independen, 5 studi kasus evaluasi nyata, topologi arsitektur keselamatan komprehensif, lingkaran tertutup penjaminan keselamatan kesehatan (9 tahap), serta Piagam Prinsip Pamungkas Kedaulatan Keselamatan Produk AEVYRA.
 
 ---
 
 ### Informasi Dokumen Kontrak Teknis
 | Atribut Spesifikasi | Detail Konfigurasi Arsitektur |
 | :--- | :--- |
-| **Identitas Dokumen** | `PRONOIA-DOC-011` |
+| **Identitas Dokumen** | `AEVYRA-DOC-011` |
 | **Klasifikasi Dokumen** | Dokumen Arsitektur Inti (*Restricted / Clinical Safety & Product Boundary Specification*) |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Pondasi Kanonikal Produksi) |
 | **Kategori Perangkat Lunak** | Non-Medical Device / Preventive Behavioral Wellness Platform (Bukan Fasilitas Pelayanan Medis / Alkes) |
@@ -36,13 +36,13 @@ Spesifikasi keselamatan kesehatan dan batas klinis ini disusun dalam 7 klaster a
 6. **Klaster 6 (Bagian 151 – 170): Kepercayaan Pengguna, Analisis 13 Trade-Off Arsitektur, & Definisi Standar Selesai (DoD)**
    - 5 pilar pembentukan kepercayaan pengguna, penolakan edukatif yang solutif, penghapusan diksi mempermalukan (*Zero Shame*), penghapusan diksi menakut-nakuti (*Zero Fear*), penghormatan otonomi & kedaulatan pengguna (*User Sovereignty*), analisis komprehensif 13 kompromi desain arsitektur (Keselamatan vs Otomasi, Personalisasi, Gamifikasi, Komunitas, Keanggotaan Berbayar, Analitik Telemetri, Laporan Admin, Retensi Data, Logging, Integrasi Pihak Ketiga, PWA Luring, Kecepatan Performa, dan Pengalaman UX), Definisi Standar Selesai Keselamatan Produk (*Health Safety Definition of Done / DoD* 13 butir), serta skema struktur laporan hasil tinjauan keselamatan (*Health Safety Review Output Schema*).
 7. **Klaster 7 (Bagian 171 – 183): Tata Kelola Kepemilikan, 5 Studi Kasus Evaluasi Nyata, & Piagam Pamungkas Kedaulatan**
-   - Kepemilikan dan akuntabilitas keselamatan fitur (Product Owner, Engineering Lead, Safety Reviewer), komposisi dewan peninjau keselamatan independen (*Independent Safety Review Board*), peran aktif Agen Keselamatan Kesehatan (*Health Safety Agent*), independensi etis peninjauan fitur, prinsip keutamaan jiwa manusia di atas kecanggihan teknologi, 5 studi kasus evaluasi arsitektur nyata (Peringkat Skor AI Ditolak, Tantangan Puasa Ekstrem Diblokir, Diagnosis Darurat AI Dilarang Keras, Pengingat Tidur Disetujui Bersyarat, Wawasan Pola Tidur Disetujui Penuh), ringkasan topologi arsitektur sistem keselamatan komprehensif, lingkaran tertutup penjaminan keselamatan kesehatan (9 tahap), serta Piagam Prinsip Pamungkas Kedaulatan Keselamatan Produk PRONOIA (*Final Sovereign Principle*).
+   - Kepemilikan dan akuntabilitas keselamatan fitur (Product Owner, Engineering Lead, Safety Reviewer), komposisi dewan peninjau keselamatan independen (*Independent Safety Review Board*), peran aktif Agen Keselamatan Kesehatan (*Health Safety Agent*), independensi etis peninjauan fitur, prinsip keutamaan jiwa manusia di atas kecanggihan teknologi, 5 studi kasus evaluasi arsitektur nyata (Peringkat Skor AI Ditolak, Tantangan Puasa Ekstrem Diblokir, Diagnosis Darurat AI Dilarang Keras, Pengingat Tidur Disetujui Bersyarat, Wawasan Pola Tidur Disetujui Penuh), ringkasan topologi arsitektur sistem keselamatan komprehensif, lingkaran tertutup penjaminan keselamatan kesehatan (9 tahap), serta Piagam Prinsip Pamungkas Kedaulatan Keselamatan Produk AEVYRA (*Final Sovereign Principle*).
 
 ---
 
 ## 1. Tujuan & Ruang Lingkup Keselamatan Klinis (Purpose & Scope)
 
-Dokumen ini mendefinisikan piagam batas keselamatan produk (*Product Health Safety Boundary*) untuk seluruh kapabilitas dan fitur dalam ekosistem **PRONOIA**.
+Dokumen ini mendefinisikan piagam batas keselamatan produk (*Product Health Safety Boundary*) untuk seluruh kapabilitas dan fitur dalam ekosistem **AEVYRA**.
 
 Standar keselamatan ini menjamin bahwa platform:
 - Berfokus murni pada bimbingan gaya hidup preventif (*Preventive Lifestyle Support*), pembentukan kebiasaan sehat (*Habit Formation*), dan manajemen risiko metabolik.
@@ -55,17 +55,17 @@ Standar keselamatan ini menjamin bahwa platform:
 
 > [!IMPORTANT]
 > **Prinsip Batas Klinis:**  
-> PRONOIA adalah platform bimbingan perilaku preventif (*Behavioral Prevention Platform*), **bukan fasilitas pelayanan kesehatan atau alat diagnosis medis mandiri (*Medical Device*)**.
+> AEVYRA adalah platform bimbingan perilaku preventif (*Behavioral Prevention Platform*), **bukan fasilitas pelayanan kesehatan atau alat diagnosis medis mandiri (*Medical Device*)**.
 
 ---
 
 ## 2. Filosofi Keselamatan Inti (Core Safety Philosophy)
 
-Filosofi keselamatan inti (*Core Safety Philosophy*) PRONOIA dibangun di atas 7 pilar:
+Filosofi keselamatan inti (*Core Safety Philosophy*) AEVYRA dibangun di atas 7 pilar:
 
 ```text
        ┌─────────────────────────────────────────────────────────┐
-       │             FILOSOFI KESELAMATAN PRONOIA                │
+       │             FILOSOFI KESELAMATAN AEVYRA                │
        ├─────────────────────────────────────────────────────────┤
        │  1. First, Do No Harm        → Utamakan ketiadaan bahaya│
        │  2. Prevention, Not Cure     → Preventif, bukan kuratif │
@@ -85,7 +85,7 @@ Setiap modul analitis, algoritma mesin perilaku, dan asisten cerdas wajib tunduk
 
 Pemisahan tegas antara ranah bimbingan gaya hidup dan praktik kedokteran klinis:
 
-| Ranah Layanan PRONOIA (Diizinkan) | Ranah Praktik Kedokteran Klinis (Dilarang Keras) |
+| Ranah Layanan AEVYRA (Diizinkan) | Ranah Praktik Kedokteran Klinis (Dilarang Keras) |
 | :--- | :--- |
 | Pemantauan konsistensi durasi dan kualitas tidur. | Mendiagnosis gangguan *Sleep Apnea* atau *Insomnia* klinis. |
 | Pelacakan variabilitas tren glukosa darah harian. | Menetapkan vonis penyakit *Diabetes Mellitus* tipe 1 atau 2. |
@@ -210,7 +210,7 @@ Kebijakan larangan diagnosis medis (*Strict Non-Diagnosis Policy*):
 
 > [!CAUTION]
 > **Kebijakan Anti-Diagnosis:**  
-> Platform PRONOIA, mesin analitis perilaku, instruktur bimbingan, dan asisten kecerdasan buatan **DILARANG KERAS MENEGAKKAN DIAGNOSIS MEDIS KLINIS**. Seluruh hasil komputasi berstatus murni sebagai **observasi kebiasaan gaya hidup (*Lifestyle Observation*)**.
+> Platform AEVYRA, mesin analitis perilaku, instruktur bimbingan, dan asisten kecerdasan buatan **DILARANG KERAS MENEGAKKAN DIAGNOSIS MEDIS KLINIS**. Seluruh hasil komputasi berstatus murni sebagai **observasi kebiasaan gaya hidup (*Lifestyle Observation*)**.
 
 ---
 
@@ -224,7 +224,7 @@ Studi kasus pelanggaran: Vonis diagnosis medis tidak sah:
 Anda terkonfirmasi menderita Diabetes Tipe 2 stadium awal."
 
 // BENTUK PENYAJIAN YANG SAH & AMAN:
-"PRONOIA mencatat variabilitas kadar glukosa Anda cenderung lebih tinggi 
+"AEVYRA mencatat variabilitas kadar glukosa Anda cenderung lebih tinggi 
 setelah makan malam dalam sepekan terakhir. Pertimbangkan untuk mendiskusikan 
 tren pola ini dengan dokter Anda untuk pemeriksaan medis lebih lanjut."
 ```
@@ -298,7 +298,7 @@ Bahaya skor kesehatan tunggal arbitrer (*Health Score Hazards*):
 ## 22. Alternatif Rekomendasi Pengganti Skor Kesehatan (Preferred Metric Alternatives)
 
 Alternatif rekomendasi pengganti skor kesehatan (*Preferred Metric Alternatives*):
-Sebagai ganti skor angka arbitrer, PRONOIA menyajikan:
+Sebagai ganti skor angka arbitrer, AEVYRA menyajikan:
 - **Status Kesiapan Nilai Acuan (*Baseline Readiness*):** Menampilkan kecukupan data historis.
 - **Arah Tren Spesifik (*Domain Trends*):** Indikator stabil, meningkat, atau menurun per metrik mandiri.
 - **Evaluasi Sasaran Pribadi (*Goal Achievement*):** Persentase konsistensi rutinitas yang disepakati pengguna.
@@ -410,13 +410,13 @@ Batasan pemindaian kemasan obat (*Medicine Scanner Safety Restrictions*):
 
 > [!CAUTION]
 > **Larangan Analisis Farmakologis Mandiri:**  
-> Modul pemindai citra PRONOIA dilarang digunakan untuk memindai resep dokter, mengidentifikasi butiran pil obat tanpa kemasan, atau memberikan anjuran kecocokan obat. Risiko kesalahan pembacaan visual pada obat berakibat fatal bagi keselamatan jiwa.
+> Modul pemindai citra AEVYRA dilarang digunakan untuk memindai resep dokter, mengidentifikasi butiran pil obat tanpa kemasan, atau memberikan anjuran kecocokan obat. Risiko kesalahan pembacaan visual pada obat berakibat fatal bagi keselamatan jiwa.
 
 ---
 
 ## 36. Keselamatan Terkait Informasi Obat-Obatan (Medication Safety Policy)
 
-Sistem dan asisten AI PRONOIA dilarang keras terlibat dalam tata laksana pengobatan medis farmakologis (*Medication Management*). 
+Sistem dan asisten AI AEVYRA dilarang keras terlibat dalam tata laksana pengobatan medis farmakologis (*Medication Management*). 
 
 Larangan eksplisit (*Absolute Medication Prohibitions*):
 - **Memulai Terapi Obat (*Start Medication*):** AI dilarang menyarankan atau menginstruksikan pengguna untuk mulai mengonsumsi obat farmasi apa pun.
@@ -447,7 +447,7 @@ Jika pengguna mengajukan pertanyaan terkait obat-obatan farmasi, sistem wajib me
 ```
 
 **Standar Diksi Penafian Obat:**
-> *"Saya dapat menjelaskan kegunaan umum dan mekanisme kerja obat tersebut secara edukatif, namun PRONOIA tidak dapat menentukan apakah Anda harus menggunakannya, menyesuaikan dosisnya, atau mengubah jadwal konsumsinya. Harap selalu berkonsultasi langsung dengan dokter atau apoteker Anda."*
+> *"Saya dapat menjelaskan kegunaan umum dan mekanisme kerja obat tersebut secara edukatif, namun AEVYRA tidak dapat menentukan apakah Anda harus menggunakannya, menyesuaikan dosisnya, atau mengubah jadwal konsumsinya. Harap selalu berkonsultasi langsung dengan dokter atau apoteker Anda."*
 
 ---
 
@@ -463,7 +463,7 @@ Apabila platform menyimpan data riwayat alergi pengguna (*Allergy & Adverse Reac
 
 ## 39. Pedoman Keselamatan Bimbingan Nutrisi (Nutrition Safety Guidelines)
 
-Seluruh modul dan rekomendasi nutrisi preventif PRONOIA wajib menjunjung tinggi keselamatan metabolisme tubuh dan mencegah gangguan makan (*Eating Disorders*).
+Seluruh modul dan rekomendasi nutrisi preventif AEVYRA wajib menjunjung tinggi keselamatan metabolisme tubuh dan mencegah gangguan makan (*Eating Disorders*).
 
 Rekomendasi nutrisi dilarang mempromosikan:
 - **Pembatasan Kalori Ekstrem (*Extreme Caloric Restriction*):** Anjuran defisit kalori drastis di bawah angka metabolisme basal (BMR) harian.
@@ -544,7 +544,7 @@ Penyusunan rekomendasi aktivitas fisik wajib memprioritaskan 4 karakteristik uta
 
 ## 46. Batas Penanganan Rasa Nyeri & Cedera Fisik (Pain & Physical Injury Boundary)
 
-PRONOIA **bukan alat diagnosis ortopedi atau cedera fisik**. 
+AEVYRA **bukan alat diagnosis ortopedi atau cedera fisik**. 
 
 Apabila pengguna melaporkan keluhan rasa nyeri, pegal hebat, atau gejala cedera fisik akut:
 ```text
@@ -682,8 +682,8 @@ Penggunaan koordinat lokasi perangkat (*Device Geolocation*) pada alur darurat:
 
 ## 55. Penafian Tanggung Jawab Kedaruratan Medis (Emergency Legal Disclaimer)
 
-Antarmuka pengguna PRONOIA wajib menampilkan penafian hukum (*Legal Disclaimer*) yang tegas:
-- Aplikasi tidak boleh memberi kesan semu bahwa *"PRONOIA secara otomatis mengirimkan ambulans atau tim paramedis ke lokasi Anda"*, kecuali fasilitas integrasi dispatch resmi memang aktif dan berlisensi di wilayah tersebut.
+Antarmuka pengguna AEVYRA wajib menampilkan penafian hukum (*Legal Disclaimer*) yang tegas:
+- Aplikasi tidak boleh memberi kesan semu bahwa *"AEVYRA secara otomatis mengirimkan ambulans atau tim paramedis ke lokasi Anda"*, kecuali fasilitas integrasi dispatch resmi memang aktif dan berlisensi di wilayah tersebut.
 - Pengguna harus diberi pemahaman bahwa tombol darurat memfasilitasi panggilan langsung ke dinas gawat darurat resmi pemerintah (seperti SPGDT 119 / Call Center 112).
 
 ---
@@ -700,7 +700,7 @@ Sistem menyediakan jalur eskalasi ke manusia (*Human Escalation*) apabila terdet
 
 ## 57. Batas Wewenang Pendampingan Instruktur (Instructor Clinical Boundaries)
 
-Instruktur gaya hidup atau pembimbing kebugaran (*Fitness & Lifestyle Instructor*) dalam platform PRONOIA bukan secara otomatis tenaga medis klinis:
+Instruktur gaya hidup atau pembimbing kebugaran (*Fitness & Lifestyle Instructor*) dalam platform AEVYRA bukan secara otomatis tenaga medis klinis:
 - Sistem antarmuka dilarang menyajikan istilah *"Vonis Diagnosis Medis"* atau *"Keputusan Terapi Klinis"* dari alur kerja instruktur umum.
 - Rekomendasi instruktur dibatasi pada edukasi kebiasaan harian, rancangan rutinitas olahraga non-terapeutik, dan motivasi pola makan seimbang.
 
@@ -830,7 +830,7 @@ Informasi kesehatan yang diekstraksi dari teks percakapan bebas pengguna tidak b
 
 ## 68. Keselamatan Mesin Inferensi Perilaku (Behavioral Engine Safety)
 
-Mesin inferensi perilaku (*Behavioral Engine*) PRONOIA wajib dibangun dengan logika deterministik berbasis aturan (*deterministic rule-based logic*):
+Mesin inferensi perilaku (*Behavioral Engine*) AEVYRA wajib dibangun dengan logika deterministik berbasis aturan (*deterministic rule-based logic*):
 - Komputasi aritmatika, pergeseran waktu (*timestamp diffing*), ambang batas deviasi (*signal thresholds*), perhitungan garis pangkal (*baseline drift*), status kepesertaan, dan hak akses otorisasi tidak boleh diserahkan pada model bahasa generatif probabilistik yang tidak konsisten.
 
 ---
@@ -1021,7 +1021,7 @@ Papan peringkat (*Leaderboards*) antarpengguna wajib dibatasi secara etis untuk 
 ## 83. Keselamatan Interaksi Komunitas Kesehatan (Community Health Safety)
 
 Ruang komunitas kesehatan rentan terhadap penyebaran mitos, produk suplemen ilegal, dan klaim kesembuhan palsu.  
-Platform PRONOIA menyediakan mekanisme perlindungan proaktif:
+Platform AEVYRA menyediakan mekanisme perlindungan proaktif:
 - **Fitur Laporkan (*Flag & Report*):** Tombol pelaporan konten yang mudah diakses pada setiap unggahan atau komentar.
 - **Moderasi Hibrida:** Kombinasi filter kata kunci otomatis dan tinjauan kurator manusia (*human moderation*).
 - **Penafian Diskusi Publik:** Peringatan otomatis pada utas yang membahas topik gejala fisik atau terapi herbal.
@@ -1073,7 +1073,7 @@ Penyampaian notifikasi kesehatan melalui aplikasi (*Push Notification*) atau pes
    (Berpotensi terbaca oleh orang lain di ruang kerja/umum dan memicu kepanikan).
 
 ✔ CONTOH NOTIFIKASI AMAN:
-   "PRONOIA: Terdapat ringkasan wawasan kebiasaan baru yang siap Anda pelajari hari ini."
+   "AEVYRA: Terdapat ringkasan wawasan kebiasaan baru yang siap Anda pelajari hari ini."
 ```
 
 ---
@@ -1087,7 +1087,7 @@ Notifikasi *push* pada layar kunci perangkat (*Device Lock Screen*) dilarang mem
 ## 89. Keselamatan Surel Transaksional (Transactional Email Safety)
 
 Pengiriman komunikasi via surat elektronik (*Transactional & Insight Emails*):
-- Judul subjek email harus bersifat netral (contoh: *"Ringkasan Tren Mingguan PRONOIA"*).
+- Judul subjek email harus bersifat netral (contoh: *"Ringkasan Tren Mingguan AEVYRA"*).
 - Dilarang mencantumkan vonis kesehatan atau peringatan penyakit pada baris subjek email yang rentan terbaca di notifikasi surel publik.
 
 ---
@@ -1122,7 +1122,7 @@ Hindari penggunaan warna merah menyala yang disertai simbol sirine untuk perubah
 
 ## 92. Pengukuran Kemajuan Berbasis Tren (Progress Measurement Safety)
 
-Indikator kemajuan (*Progress Tracking*) dalam PRONOIA merepresentasikan pergerakan perilaku menuju target gaya hidup yang ditentukan pengguna secara sadar, **bukan indikator kesembuhan klinis (*Clinical Remission*)**, kecuali dalam program khusus di bawah pengawasan dokter penanggung jawab.
+Indikator kemajuan (*Progress Tracking*) dalam AEVYRA merepresentasikan pergerakan perilaku menuju target gaya hidup yang ditentukan pengguna secara sadar, **bukan indikator kesembuhan klinis (*Clinical Remission*)**, kecuali dalam program khusus di bawah pengawasan dokter penanggung jawab.
 
 ---
 
@@ -1722,13 +1722,13 @@ Penomoran versi eksplisit menjamin keterlacakan (*auditability*) dan kemampuan r
 
 ## 149. Arsitektur Sistem Keselamatan Terpadu (Integrated Safety Architecture)
 
-Arsitektur sistem keselamatan terpadu PRONOIA (*Integrated Safety Architecture*):
+Arsitektur sistem keselamatan terpadu AEVYRA (*Integrated Safety Architecture*):
 
 ```text
                                 PENGGUNA (USER)
                                        │
                                        ▼
-                       ANTARMUKA TERPADU PRONOIA
+                       ANTARMUKA TERPADU AEVYRA
                                        │
         ┌──────────────────────────────┼──────────────────────────────┐
         ▼                              ▼                              ▼
@@ -1785,7 +1785,7 @@ Kepercayaan dibangun secara konsisten melalui 5 pilar fondasi:
 
 Ketika sistem menolak permintaan pengguna karena melanggar batas keselamatan medis, pesan penolakan wajib bersifat edukatif, ramah, dan solutif (*Constructive Rejection*):
 
-> *"PRONOIA berfokus pada bimbingan gaya hidup preventif dan tidak berwenang menetapkan diagnosis medis klinis maupun mengubah dosis terapi obat farmasi Anda. Namun, saya dapat membantu menjelaskan mekanisme biologis secara umum, memantau konsistensi kebiasaan harian Anda, atau mengarahkan Anda ke dokter spesialis yang sesuai."*
+> *"AEVYRA berfokus pada bimbingan gaya hidup preventif dan tidak berwenang menetapkan diagnosis medis klinis maupun mengubah dosis terapi obat farmasi Anda. Namun, saya dapat membantu menjelaskan mekanisme biologis secara umum, memantau konsistensi kebiasaan harian Anda, atau mengarahkan Anda ke dokter spesialis yang sesuai."*
 
 ---
 
@@ -2064,7 +2064,7 @@ Studi Kasus Evaluasi 5 — Wawasan Edukatif Deviasi Pola Tidur:
 
 ## 181. Ringkasan Topologi Arsitektur Keselamatan (Health Safety Architecture Summary)
 
-Ringkasan topologi arsitektur sistem keselamatan komprehensif PRONOIA (*Health Safety Comprehensive Architecture*):
+Ringkasan topologi arsitektur sistem keselamatan komprehensif AEVYRA (*Health Safety Comprehensive Architecture*):
 
 ```text
                                DATA KESEHATAN BIOLOGIS
@@ -2108,11 +2108,11 @@ Ringkasan topologi arsitektur sistem keselamatan komprehensif PRONOIA (*Health S
 
 ## 182. Lingkaran Tertutup Penjaminan Keselamatan (Core Health Safety Loop)
 
-Lingkaran tertutup penjaminan keselamatan kesehatan preventif PRONOIA (*Core Health Safety Loop*):
+Lingkaran tertutup penjaminan keselamatan kesehatan preventif AEVYRA (*Core Health Safety Loop*):
 
 ```text
 ┌────────────────────────────────────────────────────────┐
-│           LINGKARAN TERTUTUP KESELAMATAN KADAR         │
+│           LINGKARAN TERTUTUP KESELAMATAN AEVYRA         │
 ├────────────────────────────────────────────────────────┤
 │  1. OBSERVASI (Observe)      → Tangkap data biologis.  │
 │  2. VALIDASI (Validate)      → Uji kualitas & satuan.  │
@@ -2130,13 +2130,13 @@ Lingkaran tertutup penjaminan keselamatan kesehatan preventif PRONOIA (*Core Hea
 
 ## 183. Piagam Prinsip Pamungkas Keselamatan Produk (Final Sovereign Safety Principle)
 
-Piagam prinsip pamungkas keselamatan produk PRONOIA (*Final Sovereign Principle*):
+Piagam prinsip pamungkas keselamatan produk AEVYRA (*Final Sovereign Principle*):
 
 > [!IMPORTANT]
-> **PIAGAM KESELAMATAN BERDAULAT PRONOIA:**  
-> *"PRONOIA hadir untuk membantu setiap individu menyadari perubahan biologis yang bermakna dalam tubuhnya dan mengambil tindakan preventif yang aman, tanpa pernah berpura-pura mengetahui lebih banyak daripada apa yang dapat diketahui sistem secara andal dan bertanggung jawab."*
+> **PIAGAM KESELAMATAN BERDAULAT AEVYRA:**  
+> *"AEVYRA hadir untuk membantu setiap individu menyadari perubahan biologis yang bermakna dalam tubuhnya dan mengambil tindakan preventif yang aman, tanpa pernah berpura-pura mengetahui lebih banyak daripada apa yang dapat diketahui sistem secara andal dan bertanggung jawab."*
 
-Platform PRONOIA berkomitmen tanpa kompromi untuk senantiasa menjunjung tinggi:
+Platform AEVYRA berkomitmen tanpa kompromi untuk senantiasa menjunjung tinggi:
 - **Keselamatan Jiwa (*Safety First*)**
 - **Kejujuran Ilmiah (*Scientific Honesty*)**
 - **Otonomi Manusia (*User Agency*)**

@@ -1,13 +1,13 @@
-# PRONOIA — Documentation Index
+# AEVYRA — Documentation Index
 
-> **Peta Navigasi & Indeks Dokumentasi Resmi PRONOIA**  
+> **Peta Navigasi & Indeks Dokumentasi Resmi AEVYRA**  
 > Panduan terpadu untuk memahami arsitektur produk, spesifikasi teknis, model kecerdasan perilaku, batasan keselamatan medis, dan strategi implementasi sistem.
 
 ---
 
 ## 1. Purpose
 
-Dokumen ini berfungsi sebagai **peta navigasi utama (master navigation index)** untuk seluruh dokumentasi produk dan rekayasa perangkat lunak PRONOIA.
+Dokumen ini berfungsi sebagai **peta navigasi utama (master navigation index)** untuk seluruh dokumentasi produk dan rekayasa perangkat lunak AEVYRA.
 
 Direktori `docs/` merumuskan secara komprehensif:
 
@@ -29,14 +29,14 @@ Direktori `docs/` merumuskan secara komprehensif:
 
 > [!NOTE]
 > **Inti Peran `docs/`:** 
-> Direktori ini mendefinisikan **apa yang dibangun oleh PRONOIA dan mengapa hal tersebut dibangun (*What & Why*)**.  
+> Direktori ini mendefinisikan **apa yang dibangun oleh AEVYRA dan mengapa hal tersebut dibangun (*What & Why*)**.  
 > Direktori ini **tidak menggantikan** [`AGENTS.md`](../AGENTS.md) (pedoman kerja agen workspace) maupun [`.agents/rules/`](../.agents/rules/) (aturan arsitektur dan batasan teknis kode). Kedua instrumen tersebut mengatur *bagaimana agen dan developer mengeksekusi kode (*How*)*.
 
 ---
 
 ## 2. Documentation Hierarchy
 
-Dokumentasi repositori PRONOIA distrukturkan ke dalam tiga lapisan hierarki yang saling melengkapi:
+Dokumentasi repositori AEVYRA distrukturkan ke dalam tiga lapisan hierarki yang saling melengkapi:
 
 ```text
 AGENTS.md
@@ -92,12 +92,12 @@ Untuk mengoptimalkan efisiensi kerja agen dan developer, **hindari membaca selur
 
 ## 4. Document List
 
-Katalog lengkap 16 dokumen spesifikasi PRONOIA (`docs/00` hingga `docs/15`):
+Katalog lengkap 16 dokumen spesifikasi AEVYRA (`docs/00` hingga `docs/15`):
 
 | Kode | Berkas Dokumen | Domain Utama | Fokus Pertanyaan Kunci |
 | :---: | :--- | :--- | :--- |
 | **00** | [`00-index.md`](00-index.md) | **Navigation Index** | *Bagaimana struktur dan navigasi dokumentasi proyek?* |
-| **01** | [`01-product-vision.md`](01-product-vision.md) | **Product Strategy** | *Mengapa PRONOIA ada dan apa inovasi utamanya?* |
+| **01** | [`01-product-vision.md`](01-product-vision.md) | **Product Strategy** | *Mengapa AEVYRA ada dan apa inovasi utamanya?* |
 | **02** | [`02-problem-and-users.md`](02-problem-and-users.md) | **User Research** | *Masalah siapa yang sedang kita selesaikan?* |
 | **03** | [`03-core-features.md`](03-core-features.md) | **Functional Specs** | *Apa saja kapabilitas konkret yang disediakan aplikasi?* |
 | **04** | [`04-user-journeys.md`](04-user-journeys.md) | **Experience Flow** | *Bagaimana alur pengguna dari awal hingga akhir?* |
@@ -121,8 +121,8 @@ Lapisan ini mendefinisikan identitas strategis, target audiens, dan seluruh kapa
 
 ### 01 — Product Vision
 - **File:** [`01-product-vision.md`](01-product-vision.md)
-- **Pertanyaan Kunci:** *"Why does PRONOIA exist?"*
-- **Tujuan:** Menetapkan arah strategis, proposisi nilai, dan narasi pembeda PRONOIA di pasar kesehatan preventif digital.
+- **Pertanyaan Kunci:** *"Why does AEVYRA exist?"*
+- **Tujuan:** Menetapkan arah strategis, proposisi nilai, dan narasi pembeda AEVYRA di pasar kesehatan preventif digital.
 - **Ruang Lingkup:** Visi, misi, positioning, value proposition, inovasi inti (*Behavioral Health Loop*), filosofi produk, dan peta jalan jangka panjang.
 
 ### 02 — Problem and Users
@@ -133,7 +133,7 @@ Lapisan ini mendefinisikan identitas strategis, target audiens, dan seluruh kapa
 
 ### 03 — Features
 - **File:** [`03-core-features.md`](03-core-features.md)
-- **Pertanyaan Kunci:** *"What does PRONOIA actually do?"*
+- **Pertanyaan Kunci:** *"What does AEVYRA actually do?"*
 - **Tujuan:** Menyajikan katalog spesifikasi lengkap seluruh fitur untuk setiap role pengguna.
 - **Ruang Lingkup:**
   - **Member:** Authentication, Health Profile, Dashboard, Health Timeline, Tracker, Smart Scanner, AI Assistant, Insights, Rekomendasi, Intervensi, Tantangan, Konsultasi, Komunitas, Badge, Membership, Darurat.
@@ -162,11 +162,11 @@ Lapisan ini mendefinisikan identitas strategis, target audiens, dan seluruh kapa
 
 ## 7. Intelligence Documentation
 
-Lapisan kecerdasan yang menjadi diferensiasi inovasi utama PRONOIA:
+Lapisan kecerdasan yang menjadi diferensiasi inovasi utama AEVYRA:
 
 ### 05 — Health Behavior Engine
 - **File:** [`05-health-behavior-engine.md`](05-health-behavior-engine.md)
-- **Pertanyaan Kunci:** *"How does PRONOIA turn health behavior data into meaningful preventive action?"*
+- **Pertanyaan Kunci:** *"How does AEVYRA turn health behavior data into meaningful preventive action?"*
 - **Tujuan:** Mendefinisikan algoritma analitik perilaku personal dan pembentukan siklus preventif tertutup (*closed-loop*).
 - **Alur Data Mesin:**
   ```text
@@ -198,7 +198,7 @@ Spesifikasi fondasi teknis rekayasa perangkat lunak:
 
 ### 08 — Data Model
 - **File:** [`08-data-model.md`](08-data-model.md)
-- **Pertanyaan Kunci:** *"What data does PRONOIA need and how is it related?"*
+- **Pertanyaan Kunci:** *"What data does AEVYRA need and how is it related?"*
 - **Tujuan:** Mendefinisikan skema basis data konseptual, entitas, atribut, dan relasi referensial.
 - **Entitas Inti:** `User`, `Role`, `HealthProfile`, `HealthMetric`, `FoodLog`, `Scan`, `ScanResult`, `BehaviorBaseline`, `BehaviorSignal`, `HealthInsight`, `InterventionPlan`, `InterventionProgress`, `Challenge`, `ChallengeParticipation`, `Consultation`, `ConsultationMessage`, `Notification`, `Badge`, `UserBadge`, `Subscription`, `AuditLog`.
 
@@ -214,13 +214,13 @@ Spesifikasi fondasi teknis rekayasa perangkat lunak:
 
 ### 10 — Security and Privacy
 - **File:** [`10-security-privacy.md`](10-security-privacy.md)
-- **Pertanyaan Kunci:** *"How should PRONOIA protect user data?"*
+- **Pertanyaan Kunci:** *"How should AEVYRA protect user data?"*
 - **Tujuan:** Menetapkan tata kelola perlindungan data sensitif pengguna dan hak privasi.
 - **Ruang Lingkup:** Klasifikasi kerahasiaan data (publik, internal, sensitif medis), enkripsi data, kendali akses berbasis kepemilikan (anti-IDOR), retensi & penghapusan akun, serta audit jejak akses data.
 
 ### 11 — Health Safety
 - **File:** [`11-health-safety.md`](11-health-safety.md)
-- **Pertanyaan Kunci:** *"How should PRONOIA behave safely around health-related decisions?"*
+- **Pertanyaan Kunci:** *"How should AEVYRA behave safely around health-related decisions?"*
 - **Tujuan:** Menjaga sistem agar mutlak berfungsi sebagai **pendamping preventif**, bukan instrumen diagnostik medis.
 - **Ruang Lingkup:** Pagar batas non-diagnostik, larangan mengubah dosis obat, disclaimer wajib, validasi alergen, pemisahan mutlak tombol darurat (119) dari ketergantungan AI, dan penanganan ketidakpastian data.
 
@@ -230,7 +230,7 @@ Spesifikasi fondasi teknis rekayasa perangkat lunak:
 
 ### 12 — UX/UI
 - **File:** [`12-ux-ui.md`](12-ux-ui.md)
-- **Pertanyaan Kunci:** *"How should PRONOIA feel and behave for the user?"*
+- **Pertanyaan Kunci:** *"How should AEVYRA feel and behave for the user?"*
 - **Tujuan:** Memandu standar estetika visual premium, kenyamanan navigasi, dan aksesibilitas antarmuka.
 - **Ruang Lingkup:** Skema warna klinis modern (Medical Deep Teal `#00433e`, Soft Mint Surface `#f3fbf6`, Alert Amber `#ba1a1a`), tipografi berkarakter (Newsreader & Inter/IBM Plex), tata letak dashboard intuitif, kartu insight yang jelas, interaksi scanner mulus, dan adaptasi PWA ramah mobile.
 
@@ -240,7 +240,7 @@ Spesifikasi fondasi teknis rekayasa perangkat lunak:
 
 ### 13 — Gamification and Membership
 - **File:** [`13-gamification-membership.md`](13-gamification-membership.md)
-- **Pertanyaan Kunci:** *"How does PRONOIA encourage sustainable engagement?"*
+- **Pertanyaan Kunci:** *"How does AEVYRA encourage sustainable engagement?"*
 - **Tujuan:** Membangun dorongan psikologis positif untuk mempertahankan rutinitas hidup sehat tanpa pendekatan yang memaksa atau memalukan pengguna (*non-punitive*).
 - **Ruang Lingkup:** Poin partisipasi, lencana pencapaian (*badges*), pemantau konsistensi (*streaks* non-toksik), tantangan komunitas, dan tier keanggotaan (Silver, Gold, Platinum).
 
@@ -308,7 +308,7 @@ Seluruh berkas dokumentasi saling terhubung membentuk rantai pemahaman yang utuh
 
 ## 15. Core Documents
 
-Bila Anda membutuhkan orientasi kilat, empat pilar dokumen ini merupakan inti dari PRONOIA:
+Bila Anda membutuhkan orientasi kilat, empat pilar dokumen ini merupakan inti dari AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────┐
@@ -329,7 +329,7 @@ Bila Anda membutuhkan orientasi kilat, empat pilar dokumen ini merupakan inti da
 
 ## 16. Most Important Innovation Document
 
-Di antara seluruh dokumen yang ada, berkas yang paling menentukan keunggulan inovasi PRONOIA adalah:
+Di antara seluruh dokumen yang ada, berkas yang paling menentukan keunggulan inovasi AEVYRA adalah:
 
 ### 👉 [`05-health-behavior-engine.md`](05-health-behavior-engine.md)
 
@@ -347,7 +347,7 @@ Targeted Preventive Intervention
 Measurable Progress & Follow-up
 ```
 
-Inilah diferensiasi fundamental yang memisahkan PRONOIA dari sekadar aplikasi pencatat kalori biasa atau chatbot medis generik.
+Inilah diferensiasi fundamental yang memisahkan AEVYRA dari sekadar aplikasi pencatat kalori biasa atau chatbot medis generik.
 
 ---
 
@@ -488,18 +488,18 @@ Setiap dokumen wajib memenuhi standar penulisan teknis bermutu tinggi:
 Dokumentasi produk tidak boleh menggunakan terminologi medis diagnostik yang menyesatkan:
 
 ❌ **Bad:**
-> *"PRONOIA mendeteksi dan mengobati diabetes pada stadium awal sebelum gejala muncul."*
+> *"AEVYRA mendeteksi dan mengobati diabetes pada stadium awal sebelum gejala muncul."*
 
 ✅ **Prefer:**
-> *"PRONOIA memantau tren asupan gula harian dan konsistensi aktivitas untuk memberikan wawasan pencegahan metabolik serta mendorong kebiasaan yang lebih sehat."*
+> *"AEVYRA memantau tren asupan gula harian dan konsistensi aktivitas untuk memberikan wawasan pencegahan metabolik serta mendorong kebiasaan yang lebih sehat."*
 
-PRONOIA adalah sistem pendukung pencegahan dan pendamping gaya hidup, bukan alat diagnosis maupun instrumen pengganti dokter.
+AEVYRA adalah sistem pendukung pencegahan dan pendamping gaya hidup, bukan alat diagnosis maupun instrumen pengganti dokter.
 
 ---
 
 ## 25. Documentation and Competition Claims
 
-Dalam konteks kompetisi inovasi, posisikan keunggulan PRONOIA berdasarkan bukti fungsional perangkat lunak:
+Dalam konteks kompetisi inovasi, posisikan keunggulan AEVYRA berdasarkan bukti fungsional perangkat lunak:
 
 Hindari klaim kosong seperti:
 - *"Aplikasi kesehatan paling revolusioner di Indonesia"*
@@ -573,7 +573,7 @@ Dokumentasi dinyatakan memadai untuk memandu pengembangan MVP apabila telah mamp
 
 ## 29. Final Documentation Map
 
-Struktur direktori `docs/` resmi PRONOIA:
+Struktur direktori `docs/` resmi AEVYRA:
 
 ```text
 docs/
@@ -614,12 +614,12 @@ docs/
 
 ## 30. Final Rule
 
-Direktori `docs/` adalah **pusat pengetahuan resmi (*single knowledge base*)** produk PRONOIA.
+Direktori `docs/` adalah **pusat pengetahuan resmi (*single knowledge base*)** produk AEVYRA.
 
 Dokumentasi ini harus secara konsisten menjawab tangga pemahaman produk:
 
 ```text
-WHAT IS PRONOIA?
+WHAT IS AEVYRA?
        ↓
 WHY DOES IT EXIST?
        ↓
@@ -641,4 +641,4 @@ HOW DO WE PROVE THAT IT WORKS?
 ```
 
 > **Prinsip Panduan:**  
-> Tujuan dokumentasi bukan sekadar mengumpulkan file Markdown. Tujuannya adalah memastikan setiap developer manusia maupun agen AI dapat memahami secara tepat **maksud dan tujuan produk PRONOIA** tanpa perlu menebak-nebak, ragu, atau membuat asumsi yang keliru.
+> Tujuan dokumentasi bukan sekadar mengumpulkan file Markdown. Tujuannya adalah memastikan setiap developer manusia maupun agen AI dapat memahami secara tepat **maksud dan tujuan produk AEVYRA** tanpa perlu menebak-nebak, ragu, atau membuat asumsi yang keliru.

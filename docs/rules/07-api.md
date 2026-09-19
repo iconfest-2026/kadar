@@ -1,8 +1,8 @@
-# PRONOIA — Kaidah Rekayasa Titik Akhir API & Standar Integrasi Layanan (API Engineering Rules & Service Integration Standards)
+# AEVYRA — Kaidah Rekayasa Titik Akhir API & Standar Integrasi Layanan (API Engineering Rules & Service Integration Standards)
 
-Dokumen spesifikasi teknis ini menetapkan standar rekayasa titik akhir (*endpoints*), tata kelola kontrak data (*API contracts*), protokol komunikasi antarmuka pemrograman aplikasi (API), serta arsitektur integrasi layanan pada platform **PRONOIA**. Titik akhir API bertindak sebagai gerbang terdepan (*perimeter gateway*) yang menghubungkan seluruh antarmuka klien—mulai dari aplikasi web progresif pengguna (*Member PWA*), portal instruktur kesehatan (*Instructor Dashboard*), panel kendali administrator (*Admin Command Center*), hingga konsumen layanan internal dan integrasi sistem pihak ketiga terpercaya (*trusted third-party integrations*).
+Dokumen spesifikasi teknis ini menetapkan standar rekayasa titik akhir (*endpoints*), tata kelola kontrak data (*API contracts*), protokol komunikasi antarmuka pemrograman aplikasi (API), serta arsitektur integrasi layanan pada platform **AEVYRA**. Titik akhir API bertindak sebagai gerbang terdepan (*perimeter gateway*) yang menghubungkan seluruh antarmuka klien—mulai dari aplikasi web progresif pengguna (*Member PWA*), portal instruktur kesehatan (*Instructor Dashboard*), panel kendali administrator (*Admin Command Center*), hingga konsumen layanan internal dan integrasi sistem pihak ketiga terpercaya (*trusted third-party integrations*).
 
-Seluruh API PRONOIA dirancang mengadopsi kaidah **RESTful Berorientasi Sumber Daya (*Resource-Oriented RESTful Architecture*)**, penataan versi jalur seragam (*URI Path Versioning* `/api/v1/...`), skema respons beramplop tunggal (*canonical unified response envelope*), serta penegakan protokol keamanan tingkat tinggi sesuai standar **OWASP API Security Top 10 (2023)** dan **Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022)**. Setiap titik akhir beroperasi di bawah prinsip hak akses terendah (*Principle of Least Privilege*), menolak paparan data sensitif secara implisit, serta menerapkan isolasi ketat terhadap logika inferensi kecerdasan buatan (*AI*) agar tidak pernah menggantikan kalkulasi deterministik kesehatan yang teruji secara klinis.
+Seluruh API AEVYRA dirancang mengadopsi kaidah **RESTful Berorientasi Sumber Daya (*Resource-Oriented RESTful Architecture*)**, penataan versi jalur seragam (*URI Path Versioning* `/api/v1/...`), skema respons beramplop tunggal (*canonical unified response envelope*), serta penegakan protokol keamanan tingkat tinggi sesuai standar **OWASP API Security Top 10 (2023)** dan **Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27/2022)**. Setiap titik akhir beroperasi di bawah prinsip hak akses terendah (*Principle of Least Privilege*), menolak paparan data sensitif secara implisit, serta menerapkan isolasi ketat terhadap logika inferensi kecerdasan buatan (*AI*) agar tidak pernah menggantikan kalkulasi deterministik kesehatan yang teruji secara klinis.
 
 ---
 
@@ -10,7 +10,7 @@ Seluruh API PRONOIA dirancang mengadopsi kaidah **RESTful Berorientasi Sumber Da
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-007` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-007` |
 | **Versi Standar API** | `v1.0.0-PROD` (Edisi Standar Kontrak Terpadu & ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory API Engineering Standard*) |
@@ -23,11 +23,11 @@ Seluruh API PRONOIA dirancang mengadopsi kaidah **RESTful Berorientasi Sumber Da
 
 ---
 
-### Matriks 10 Klaster Rekayasa Titik Akhir API PRONOIA
+### Matriks 10 Klaster Rekayasa Titik Akhir API AEVYRA
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                 TOPOLOGI TITIK AKHIR API & INTEGRASI LAYANAN PLATFORM PRONOIA              │
+│                 TOPOLOGI TITIK AKHIR API & INTEGRASI LAYANAN PLATFORM AEVYRA              │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Fondasi Arsitektur RESTful & Pengelolaan Versi API (Bagian 1 – 7)
@@ -65,7 +65,7 @@ Seluruh API PRONOIA dirancang mengadopsi kaidah **RESTful Berorientasi Sumber Da
 
 ## 1. Tujuan & Ruang Lingkup Rekayasa API (Purpose & API Scope)
 
-Kaidah ini menetapkan standar perancangan, implementasi, keamanan, dan pemeliharaan antarmuka pemrograman aplikasi (*Application Programming Interface* / API) untuk platform **PRONOIA**. Seluruh titik akhir API dirancang untuk menyediakan akses terkelola, aman, dan berkinerja tinggi terhadap kemampuan inti sistem bagi seluruh ekosistem klien:
+Kaidah ini menetapkan standar perancangan, implementasi, keamanan, dan pemeliharaan antarmuka pemrograman aplikasi (*Application Programming Interface* / API) untuk platform **AEVYRA**. Seluruh titik akhir API dirancang untuk menyediakan akses terkelola, aman, dan berkinerja tinggi terhadap kemampuan inti sistem bagi seluruh ekosistem klien:
 
 1. **Aplikasi Web Progresif Pengguna (*Member PWA Client*):** Mengakses data biometrik pribadi, skor kesiapan harian, pemindai nutrisi & label makanan, visualisasi tren kesehatan, asisten percakapan AI, serta modul gamifikasi.
 2. **Dasbor Profesional Instruktur (*Instructor Web Dashboard*):** Meninjau ringkasan metrik kesehatan anggota binaan yang telah memberikan persetujuan (*consented members*), riwayat intervensi, serta jadwal konsultasi daring/luring.
@@ -75,13 +75,13 @@ Kaidah ini menetapkan standar perancangan, implementasi, keamanan, dan pemelihar
 6. **Integrasi Pihak Ketiga Terpercaya (*Trusted Third-Party Webhooks & Integrations*):** Menerima peristiwa eksternal (seperti pembaruan gateway pembayaran atau telemetri perangkat kebugaran) melalui verifikasi tanda tangan kriptografi.
 
 > [!IMPORTANT]
-> API PRONOIA berkedudukan sebagai batas penegakan keamanan tertinggi (*highest security perimeter*). Tidak ada logika bisnis atau aturan otorisasi yang boleh dialihkan berasumsi telah diverifikasi oleh klien frontend. Seluruh permintaan diperlakukan sebagai masukan dari lingkungan yang tidak dipercaya (*zero-trust client boundary*).
+> API AEVYRA berkedudukan sebagai batas penegakan keamanan tertinggi (*highest security perimeter*). Tidak ada logika bisnis atau aturan otorisasi yang boleh dialihkan berasumsi telah diverifikasi oleh klien frontend. Seluruh permintaan diperlakukan sebagai masukan dari lingkungan yang tidak dipercaya (*zero-trust client boundary*).
 
 ---
 
 ## 2. Arsitektur Layanan RESTful API (RESTful API Architecture)
 
-Setiap permintaan HTTP yang ditujukan ke API PRONOIA wajib melalui alur pipa pemrosesan (*pipeline flow*) yang terstruktur, linear, dan tidak boleh melewati tahapan gerbang keamanan:
+Setiap permintaan HTTP yang ditujukan ke API AEVYRA wajib melalui alur pipa pemrosesan (*pipeline flow*) yang terstruktur, linear, dan tidak boleh melewati tahapan gerbang keamanan:
 
 ```text
 Permintaan Klien (HTTP / HTTPS)
@@ -127,7 +127,7 @@ Tabel berikut menguraikan fungsi spesifik pada setiap lapisan arsitektur:
 
 ## 3. Pengelolaan Versi API pada URI Jalur (URI Path API Versioning)
 
-Platform PRONOIA menerapkan strategi penataan versi berbasis jalur URL secara eksplisit (*URI Path Versioning*) untuk seluruh antarmuka publik dan aplikasi klien:
+Platform AEVYRA menerapkan strategi penataan versi berbasis jalur URL secara eksplisit (*URI Path Versioning*) untuk seluruh antarmuka publik dan aplikasi klien:
 
 * **Format Jalur Baku:**
   ```text
@@ -232,7 +232,7 @@ Seluruh titik akhir yang menangani data pengguna privat atau operasional sistem 
 
 ```http
 GET /api/v1/health/metrics HTTP/1.1
-Host: api.pronoia.id
+Host: api.aevyra.id
 Authorization: Bearer 14|7kFh9u3QpLx2...
 Accept: application/json
 ```
@@ -276,7 +276,7 @@ Penegakan otorisasi diimplementasikan secara deklaratif menggunakan **Laravel Po
 
 ## 10. Kontrol Akses Berbasis Peran Pengguna (Role-Based Access Control - RBAC)
 
-Titik akhir yang peka terhadap peran wajib menegakkan pemisahan tegas antara tiga entitas peran utama dalam sistem PRONOIA:
+Titik akhir yang peka terhadap peran wajib menegakkan pemisahan tegas antara tiga entitas peran utama dalam sistem AEVYRA:
 
 | Peran (*Role*) | Lingkup Hak Akses (*Scope of Authority*) | Larangan Mutlak (*Hard Boundaries*) |
 | :--- | :--- | :--- |
@@ -406,7 +406,7 @@ Format respons kesalahan validasi wajib konsisten di seluruh platform:
 
 ## 15. Standarisasi Pembungkus Respons Sukses JSON (Standard Success Response Envelope)
 
-Seluruh respons sukses dari API PRONOIA wajib dibungkus dalam **amplop kanonikal terpadu (*Canonical Unified Success Envelope*)**:
+Seluruh respons sukses dari API AEVYRA wajib dibungkus dalam **amplop kanonikal terpadu (*Canonical Unified Success Envelope*)**:
 
 ```json
 {
@@ -474,7 +474,7 @@ Jika tidak ada data yang ditemukan sesuai kriteria filter, `data` wajib dikembal
 
 ## 17. Transformasi Data Melalui Laravel API Resources (API Resource Transformers)
 
-Backend PRONOIA **wajib menggunakan Laravel API Resource** (`JsonResource`) atau kelas serialisasi eksplisit untuk menyusun respons. Dilarang keras mengembalikan model Eloquent secara mentah:
+Backend AEVYRA **wajib menggunakan Laravel API Resource** (`JsonResource`) atau kelas serialisasi eksplisit untuk menyusun respons. Dilarang keras mengembalikan model Eloquent secara mentah:
 
 ```php
 // ❌ DILARANG KERAS: Mengembalikan model Eloquent mentah secara langsung
@@ -516,7 +516,7 @@ DTO menjamin pengetikan ketat (*strict typing*) pada tingkat kode PHP, mempermud
 
 ## 19. Pencegahan Pemaparan Kolom Sensitif (Sensitive Field Scrubbing)
 
-API PRONOIA memberlakukan aturan tanpa toleransi (*zero tolerance*) terhadap paparan bidang sensitif ke dalam respons HTTP:
+API AEVYRA memberlakukan aturan tanpa toleransi (*zero tolerance*) terhadap paparan bidang sensitif ke dalam respons HTTP:
 
 > [!CAUTION]
 > Jangan pernah mengekspos atribut rahasia, kredensial, atau data diagnostik internal berikut dalam respons API apa pun:
@@ -923,7 +923,7 @@ Retry-After: 30
   "success": false,
   "error": {
     "code": "AI_SERVICE_UNAVAILABLE",
-    "message": "Asisten cerdas PRONOIA sedang mengalami kepadatan antrean. Mohon coba beberapa saat lagi.",
+    "message": "Asisten cerdas AEVYRA sedang mengalami kepadatan antrean. Mohon coba beberapa saat lagi.",
     "details": {
       "fallback_available": true
     }
@@ -991,7 +991,7 @@ Setiap wawasan memiliki kategori eksplisit (`HYDRATION`, `SLEEP_RECOVERY`, `GLUC
 
 ## 41. Struktur Respons Keterjelasan Alasan Rekomendasi (Recommendation Explainability Contract)
 
-Setiap wawasan kesehatan yang disajikan oleh API PRONOIA wajib memiliki **bukti pendukung yang transparan dan dapat dijelaskan (*Evidence-Based Explainability*)**:
+Setiap wawasan kesehatan yang disajikan oleh API AEVYRA wajib memiliki **bukti pendukung yang transparan dan dapat dijelaskan (*Evidence-Based Explainability*)**:
 
 ```json
 {
@@ -1012,7 +1012,7 @@ Setiap wawasan kesehatan yang disajikan oleh API PRONOIA wajib memiliki **bukti 
 }
 ```
 
-Kontrak ini menjamin bahwa sistem dapat menjawab pertanyaan penting pengguna: *Mengapa skor saya berubah? Data apa yang mendasari kesimpulan ini?*. Hal ini membangun kredibilitas dan membedakan PRONOIA dari aplikasi yang menggenerasi teks spekulatif tanpa dasar data.
+Kontrak ini menjamin bahwa sistem dapat menjawab pertanyaan penting pengguna: *Mengapa skor saya berubah? Data apa yang mendasari kesimpulan ini?*. Hal ini membangun kredibilitas dan membedakan AEVYRA dari aplikasi yang menggenerasi teks spekulatif tanpa dasar data.
 
 ---
 
@@ -1214,7 +1214,7 @@ Untuk operasi mutasi data yang berpotensi dikirim ulang oleh klien saat terjadi 
 
 ```http
 POST /api/v1/consultations/bookings HTTP/1.1
-Host: api.pronoia.id
+Host: api.aevyra.id
 Authorization: Bearer 14|7kFh9u3QpLx2...
 Idempotency-Key: 7b5a1902-8f11-4091-881c-99a41b7189c2
 Content-Type: application/json
@@ -1268,7 +1268,7 @@ Untuk sumber daya baca yang memiliki frekuensi pembaruan sedang namun sering dia
 
 ```http
 GET /api/v1/interventions HTTP/1.1
-Host: api.pronoia.id
+Host: api.aevyra.id
 If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"
 ```
 
@@ -1286,7 +1286,7 @@ Mekanisme ini menghemat penggunaan kuota bandwidth internet pengguna ponsel seca
 
 ## 57. Kontrak Metadata Paginasi Standar (Standard Pagination Metadata Contract)
 
-Kontrak metadata paginasi pada respons API PRONOIA wajib menyajikan informasi yang memadai agar klien frontend dapat mengelola navigasi halaman atau pengguliran tak terbatas (*infinite scroll*) secara mulus:
+Kontrak metadata paginasi pada respons API AEVYRA wajib menyajikan informasi yang memadai agar klien frontend dapat mengelola navigasi halaman atau pengguliran tak terbatas (*infinite scroll*) secara mulus:
 
 ```json
 {
@@ -1327,7 +1327,7 @@ Untuk kumpulan data deret waktu bervolume tinggi (*high-volume time-series data*
 
 ## 59. Sasaran Kinerja & Batas Ambang Latensi API (API Performance & SLA Targets)
 
-API PRONOIA menetapkan Perjanjian Tingkat Layanan Kinerja (*Performance Service Level Agreement* / SLA) yang ketat untuk seluruh titik akhir produksi:
+API AEVYRA menetapkan Perjanjian Tingkat Layanan Kinerja (*Performance Service Level Agreement* / SLA) yang ketat untuk seluruh titik akhir produksi:
 
 ```text
 Target Waktu Respon API (Persentil 95 / P95):
@@ -1433,7 +1433,7 @@ Output Mentah dari Model AI (LLM Provider)
 [3. Pemeriksaan Sentimen Empati & Bahasa Ramah (Safe Persona Check)]
                     │
                     ▼
-[4. Penambahan Penafian Pencegahan Resmi PRONOIA]
+[4. Penambahan Penafian Pencegahan Resmi AEVYRA]
                     │
                     ▼
 Respons API yang Sah & Aman Dikirimkan ke Klien (JSON 200 OK)
@@ -1492,7 +1492,7 @@ Titik akhir penerima webhook dari penyedia eksternal (`POST /api/v1/webhooks/{pr
 
 ```http
 POST /api/v1/webhooks/payment-gateway HTTP/1.1
-Host: api.pronoia.id
+Host: api.aevyra.id
 X-Signature-SHA256: 3b9a10ef4...
 X-Event-Timestamp: 1758124890
 Content-Type: application/json
@@ -1534,7 +1534,7 @@ Kaidah Pemrosesan Webhook Asinkron:
 
 ## 69. Penegakan Header Keamanan HTTP Standar (Mandatory HTTP Security Headers)
 
-Seluruh respons dari API PRONOIA pada lingkungan produksi wajib menyertakan kumpulan **header keamanan HTTP terstandarisasi (*Security Headers*)**:
+Seluruh respons dari API AEVYRA pada lingkungan produksi wajib menyertakan kumpulan **header keamanan HTTP terstandarisasi (*Security Headers*)**:
 
 ```http
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
@@ -1560,9 +1560,9 @@ return [
     'paths'                    => ['api/v1/*'],
     'allowed_methods'          => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     'allowed_origins'          => [
-        'https://app.pronoia.id',
-        'https://instructor.pronoia.id',
-        'https://admin.pronoia.id',
+        'https://app.aevyra.id',
+        'https://instructor.aevyra.id',
+        'https://admin.aevyra.id',
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers'          => ['Content-Type', 'Authorization', 'X-Requested-With', 'Idempotency-Key'],
@@ -1669,10 +1669,10 @@ Pencatatan log aktivitas API wajib mematuhi standar higienitas keamanan data pri
 
 ## 76. Strategi Pembatasan Laju Bertingkat (Tiered API Rate Limiting Strategy)
 
-Strategi pembatasan laju (*Rate Limiting*) pada API PRONOIA dikelompokkan ke dalam tingkatan (*tiers*) yang disesuaikan dengan sensitivitas keamanan dan biaya komputasi masing-masing titik akhir:
+Strategi pembatasan laju (*Rate Limiting*) pada API AEVYRA dikelompokkan ke dalam tingkatan (*tiers*) yang disesuaikan dengan sensitivitas keamanan dan biaya komputasi masing-masing titik akhir:
 
 ```text
-Tingkatan Kebijakan Rate Limiting PRONOIA:
+Tingkatan Kebijakan Rate Limiting AEVYRA:
 ├── [Tier 1: Ekstrem Ketat] ─> Titik Akhir Kredensial & Pendaftaran (/api/v1/auth/*)
 │   └── 5 permintaan / menit per IP (Mitigasi Serangan Credential Stuffing)
 │
@@ -1705,7 +1705,7 @@ Penolakan pada gerbang terluar melindungi alokasi memori peladen PHP-FPM dan men
 
 ## 78. Pembatasan Ukuran Halaman Maksimum (Maximum Page Size Guardrails)
 
-API PRONOIA memberlakukan batas atas absolut (*server-side hard ceiling*) terhadap parameter ukuran halaman paginasi (`limit` / `per_page`):
+API AEVYRA memberlakukan batas atas absolut (*server-side hard ceiling*) terhadap parameter ukuran halaman paginasi (`limit` / `per_page`):
 
 ```php
 // ✅ BENAR: Mengunci batas maksimum ukuran halaman di sisi server
@@ -1931,15 +1931,15 @@ Dokumentasi API, deskripsi rute, dan nama parameter dilarang keras menggunakan b
   ❌ DILARANG: Field: "cured_disease"                 (Gunakan: "improved_biomarker")
   ❌ DILARANG: Field: "patient_medical_history"       (Gunakan: "member_health_profile")
   ```
-* **Kepatuhan Penamaan Standar PRONOIA:** Seluruh terminologi wajib mencerminkan identitas platform sebagai pendukung gaya hidup sehat preventif (*lifestyle health companion*), membina kebiasaan baik, dan pendampingan nutrisi seimbang.
+* **Kepatuhan Penamaan Standar AEVYRA:** Seluruh terminologi wajib mencerminkan identitas platform sebagai pendukung gaya hidup sehat preventif (*lifestyle health companion*), membina kebiasaan baik, dan pendampingan nutrisi seimbang.
 
 ---
 
 ## 87. Keselarasan Nomenklatur API dengan Domain Produk (API Naming & Ubiquitous Language)
 
-Penamaan titik akhir, parameter kueri, dan kunci properti JSON wajib konsisten dengan nomenklatur produk resmi PRONOIA:
+Penamaan titik akhir, parameter kueri, dan kunci properti JSON wajib konsisten dengan nomenklatur produk resmi AEVYRA:
 
-| Konsep Produk PRONOIA | Jalur URI Standar | Kunci Properti JSON |
+| Konsep Produk AEVYRA | Jalur URI Standar | Kunci Properti JSON |
 | :--- | :--- | :--- |
 | **Wawasan Kesehatan** | `/api/v1/insights` | `health_insights`, `score_impact` |
 | **Program Intervensi** | `/api/v1/interventions` | `intervention_plans`, `milestone_status` |
@@ -2039,7 +2039,7 @@ Klien PWA di perangkat pengguna dapat berjalan pada versi aset statis yang lebih
 * **Pemeriksaan Versi Klien Melalui Header:**
   ```http
   GET /api/v1/dashboard/summary HTTP/1.1
-  Host: api.pronoia.id
+  Host: api.aevyra.id
   X-Client-Version: 1.4.2
   X-Client-Platform: pwa-android
   ```
@@ -2067,7 +2067,7 @@ Frontend berfungsi memberikan pengalaman pengguna yang responsif, sedangkan back
 
 ## 94. Topologi Arsitektur Aliran Permintaan API Terpadu (Unified API Architecture)
 
-Platform PRONOIA menerapkan topologi arsitektur alur titik akhir komprehensif yang seragam untuk setiap kategori domain layanan:
+Platform AEVYRA menerapkan topologi arsitektur alur titik akhir komprehensif yang seragam untuk setiap kategori domain layanan:
 
 ### 1. Alur Standar Permintaan RESTful Umum
 ```text
@@ -2163,9 +2163,9 @@ KONFIRMASI RESERVASI & DISPATCHING EVENT NOTIFIKASI
 
 ---
 
-## 95. Kaidah Pamungkas Rekayasa Titik Akhir API PRONOIA (Final Sovereign API Rule)
+## 95. Kaidah Pamungkas Rekayasa Titik Akhir API AEVYRA (Final Sovereign API Rule)
 
-Sebagai doktrin puncak rekayasa perangkat lunak PRONOIA, seluruh titik akhir API wajib senantiasa mematuhi prinsip kedaulatan absolut:
+Sebagai doktrin puncak rekayasa perangkat lunak AEVYRA, seluruh titik akhir API wajib senantiasa mematuhi prinsip kedaulatan absolut:
 
 1. **Terprediksi (*Predictable*):** Format amplop, kode status HTTP, struktur data, dan kode galat mesin dirancang seragam di seluruh modul sistem.
 2. **Eksplisit (*Explicit*):** Tidak ada data yang diekspos secara kebetulan atau tersembunyi; seluruh pertukaran informasi tunduk pada kontrak data tertulis.
@@ -2173,6 +2173,6 @@ Sebagai doktrin puncak rekayasa perangkat lunak PRONOIA, seluruh titik akhir API
 4. **Dapat Dikelola Versinya (*Versionable*):** Menjamin stabilitas antarmuka bagi klien frontend dan mendukung evolusi platform jangka panjang tanpa pemutusan kontrak sepihak.
 5. **Aman Secara Klinis (*Clinically Safe*):** Menolak segala bentuk manipulasi atau halusinasi AI yang membahayakan keselamatan pengguna, serta mempertahankan batas tegas antara edukasi gaya hidup preventif dan diagnosis medis berizin.
 
-Kepatuhan terhadap kaidah ini bersifat mutlak bagi seluruh perekayasa perangkat lunak demi menjaga integritas, reputasi, dan keselamatan pengguna ekosistem **PRONOIA**.
+Kepatuhan terhadap kaidah ini bersifat mutlak bagi seluruh perekayasa perangkat lunak demi menjaga integritas, reputasi, dan keselamatan pengguna ekosistem **AEVYRA**.
 
 ---

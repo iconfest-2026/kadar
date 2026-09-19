@@ -1,13 +1,13 @@
-# PRONOIA — UX/UI Design System & Interaction Architecture (Spesifikasi Desain Antarmuka & Pengalaman Pengguna)
+# AEVYRA — UX/UI Design System & Interaction Architecture (Spesifikasi Desain Antarmuka & Pengalaman Pengguna)
 
-> Dokumen spesifikasi arsitektur komprehensif untuk **Pengalaman Pengguna (*User Experience / UX*)**, **Desain Antarmuka (*User Interface / UI*)**, dan **Sistem Desain Visual (*Visual Design System*)** platform PRONOIA. Dokumen ini mendefinisikan filosofi desain berpusat pada manusia (*Human-Centered Design*), model interaksi preventif lingkaran tertutup (*Observe, Understand, Act, Monitor, Improve*), hierarki prioritas UX (Keselamatan > Kejelasan > Aksesibilitas > Tugas > Estetika), arsitektur informasi dan hierarki kognitif layar, prinsip pengungkapan bertahap (*Progressive Disclosure*), reduksi beban kognitif, fokus satu tindakan utama tunggal (*One Primary Action*), arsitektur sistem navigasi responsif berbasis peran (*Member, Instructor, Admin*), penegasan identitas ruang kerja (*Workspace Identity*), sistem kisi tata letak 12 kolom, skala spasi kanonikal kelipatan 8 (*8-point Spacing Scale*), hierarki kontainer kartu (*Primary, Secondary, Muted*), filosofi dasbor berbasis tindakan preventif, sapaan empatis kontekstual, kartu wawasan tren utama, pusat akses cepat tindakan (*Quick Actions Hub*), alur pencatatan biometrik minim gesekan, prinsip formulir masukan dengan kejelasan label permanen dan visibilitas satuan kanonikal, validasi interaktif sebaris (*Inline Validation*), penanganan status pemuatan data (*Loading*), kerangka tulang berdenyut (*Skeleton Shimmer*), status ruang data kosong (*Empty States*), penanganan galat ramah (*Error Handling*), mode luring dan visualisasi status sinkronisasi data lokal (*Offline & Sync States PWA*), interaktivitas tombol 6 status, perlakuan tombol nonaktif dengan teks bantuan, dialog konfirmasi sadar, perlindungan tindakan destruktif, notifikasi melayang (*Toast*) dan umpan balik sebaris (*Inline Alerts*), pedoman modal terfokus dan panel laci samping (*Drawer*), fondasi sistem tipografi modern dan skala hierarki terpadu (Plus Jakarta Sans / Inter), standar keterbacaan teks bodi minimal 14px, sistem palet warna terkalibrasi (Teal, Slate, Indigo), semantik warna fungsional netral non-menakut-nakuti, kepatuhan rasio kontras aksesibilitas WCAG 2.1 Level AA, adaptasi tema gelap (*Dark Mode*), sistem ikonografi baku dan tombol ikon aksesibel, pustaka komponen modular mandiri, koleksi komponen khusus kesehatan, komponen antarmuka cerdas AI, komponen ruang instruktur, komponen dasbor admin, terminologi status sistem seragam, terminologi sinyal deviasi perilaku, desain kartu wawasan 4 elemen, penyajian bukti data pendukung wawasan, filosofi visualisasi grafik biometrik untuk menjawab pertanyaan, visualisasi garis acuan normal pengguna (*Baseline Reference Chart*), pencegahan grafik informasi berlebih, aksesibilitas grafik data (ringkasan teks sebaris dan tabel alternatif), indikator tren teks, visualisasi kemajuan sasaran tanpa angka presisi desimal semu, diksi kemajuan tanpa menghakimi, antarmuka sesi obrolan asisten AI, transparansi persona AI, rekomendasi pertanyaan awal pintar (*Prompt Chips*), dialog konfirmasi eksekusi alat sistem oleh AI (*Tool Confirmation*), penafian keselamatan AI permanen, alur pengalihan kasus ke staf manusia (*Human Handoff*), pengalaman pemindai visual kamera makanan 6 tahap, tata letak bingkai bidik (*Viewfinder*), edukasi izin kamera perangkat ramah, penyajian hasil estimasi zat gizi, penanganan pemindaian meragukan (*Scanner Low Confidence*), konfirmasi draf rekam biologis, alur penjadwalan bimbingan 5 langkah, kalender ketersediaan sesi, bukti konfirmasi pemesanan, pengingat jadwal bimbingan ramah, tata letak dasbor kerja instruktur 4 kuadran, antrean sinyal deviasi klien, tampilan profil anggota berbasis tab horizontal, formulir perancangan intervensi instruktur, dasbor pemantauan operasional administrator, tabel data terstruktur, perlindungan tabel rekam medis sensitif, tabel jejak audit forensik kekal, penanganan kolom masukan sensitif, pusat pengaturan privasi terpadu (7 menu), bahasa kebijakan privasi transparan, permintaan izin perangkat kontekstual (*In-Context*), edukasi izin notifikasi push, pengalaman akses bantuan darurat medis cepat, penempatan tombol darurat cepat, konfirmasi panggilan darurat instan 119/112, integrasi fasilitas IGD terdekat dan fail-safe tanpa GPS, pengalaman ruang komunitas sehat, penyusun unggahan diskusi dengan peringatan privasi otomatis, antarmuka pelaporan dan moderasi konten, etika gamifikasi bernada suportif, lencana pencapaian sehat, pengalaman keanggotaan transparan bebas superioritas medis, diksi inklusif keanggotaan, pencarian global cepat dan status kosong, fondasi aksesibilitas universal 4 pilar WCAG, dukungan penuh navigasi keyboard, indikator cincin fokus visual berkontras tinggi (2px solid), dukungan pembaca layar semantik murni, pembaruan dinamis suara (*Live Regions aria-live="polite"*), aksesibilitas label formulir terhubung eksplisit, indikator kesalahan masukan aksesibel (`aria-invalid`), area target sentuh minimal 48x48 piksel, animasi lembut dan preferensi gerak (*Reduced Motion*), prinsip desain responsif fleksibel (5 breakpoint), strategi ponsel pintar pertama (*Mobile-First*), optimalisasi tablet 2 kolom, pemanfaatan ruang desktop layar lebar, adaptasi tabel responsif (kartu mandiri / gulir horizontal), adaptasi grafik tren dinamis, adaptasi panel obrolan AI responsif, persepsi kinerja antarmuka (*Perceived Performance* & App Shell), panduan kerangka tulang vs pemutar putar, peningkatan persepsi responsivitas tombol, batasan pembaruan antarmuka optimistik, umpan balik alur penyimpanan data, visualisasi komputasi mesin perilaku, pemuatan teks asisten AI bertahap (*Streaming Response*), penanganan kegagalan koneksi AI ramah, status pemuatan pemindai radar, status konfirmasi pemesanan sesi, bahasa kesalahan otorisasi manusiawi (penyamaran 403), perlindungan privasi bagi instruktur dan admin, visualisasi asal-usul sumber data biometrik, visualisasi kartu garis acuan normal pengguna, visualisasi sinyal deviasi perilaku, penghapusan visual peringatan medis menakutkan (sirine/tengkorak), kartu rekomendasi tindakan mikro harian, konfirmasi penyelesaian tindakan, garis waktu siklus kebiasaan (*Habit Timeline*), pengumpulan umpan balik berkala non-memaksa, penyaringan masukan sensitif, konsistensi istilah antarmuka lintas modul, pencegahan pergeseran istilah baku, standar lokalisasi Bahasa Indonesia luwes, format tanggal dan jam lokal (17 September 2026, 15.00 WIB), format angka desimal dan ribuan, format satuan biometrik akrab, 5 pilar penulisan teks antarmuka empatis (*UX Copywriting*), 6 studi kasus perbandingan teks baik vs buruk, teks penegasan otonomi penuh pengguna (*User Agency*), teks konstruktif ruang kosong dan kondisi galat, teks transparan dialog konfirmasi, batas visual keselamatan kesehatan (larangan melebih-lebihkan kepastian), penyajian derajat keyakinan algoritma kualitatif, visualisasi jejak asal riwayat data (*Data Provenance*), penyuntingan dan koreksi mandiri data biologis, riwayat perubahan catatan biometrik, transparansi konteks data masukan AI, kendali privasi personalisasi asisten AI, indikator status pembagian data ke instruktur, indikator visibilitas publik komunitas, etika penamaan paket berlangganan non-medis, spanduk instalasi aplikasi PWA tepat waktu, pengalaman penggunaan saat jaringan internet terputus, sinkronisasi otomatis luring ke daring, notifikasi pembaruan versi PWA ramah, urutan permintaan izin bertahap (*Just-in-Time*), alur pemulihan saat izin perangkat ditolak, sinergi aksesibilitas dan keselamatan kesehatan, aksesibilitas khusus alur darurat medis, metodologi pengujian keterpakaian pengguna (5 segmen), skenario tugas uji keterpakaian inti (Member, Instructor, Admin), metrik evaluasi UX kuantitatif (Penyelesaian Tugas, Waktu Tugas, SUS Skor), metrik khusus keselamatan UX (Tingkat Pemahaman Wawasan, Ketiadaan Salah Tafsir Diagnostik), eksperimentasi A/B bertanggung jawab, arsitektur sistem desain visual (14 pilar), standarisasi radius sudut lengkung, standarisasi lapisan bayangan elevasi atmosferik, standarisasi garis pembatas netral lembut, struktur token desain kanonikal terpusat, strategi konfigurasi Tailwind CSS, prinsip penggunaan ulang komponen, desain API props komponen terprediksi, penegakan kontrak aksesibilitas komponen, konsistensi visual dan interaksi seluruh sistem, ringkasan topologi arsitektur UX terpadu PRONOIA, siklus pengalaman inti anggota (*Observe-Understand-Act-Monitor*), siklus pengalaman kerja instruktur pendamping, siklus pengalaman operasional administrator, taksonomi 7 anti-pola desain antarmuka terlarang (Banjir Data Berlebih, Dominasi AI di Setiap Sudut, Inflasi Peringatan Alarmist, Sandiwara Medis Semu, Presisi Desimal Palsu, Stigmatisasi Pengguna, Desain Manipulatif Menjebak), 7 daftar periksa kepatuhan penerimaan desain (*Acceptance Checklists*), Prinsip Utama Pengalaman Pengguna Berdaulat (*Final UX Sovereign Principle*), Model Interaksi Lingkaran Tertutup Preventif, Prinsip Pamungkas Sistem Desain Visual, serta Pernyataan Pengalaman Bintang Panduan (*North-Star Human Experience*).
+> Dokumen spesifikasi arsitektur komprehensif untuk **Pengalaman Pengguna (*User Experience / UX*)**, **Desain Antarmuka (*User Interface / UI*)**, dan **Sistem Desain Visual (*Visual Design System*)** platform AEVYRA. Dokumen ini mendefinisikan filosofi desain berpusat pada manusia (*Human-Centered Design*), model interaksi preventif lingkaran tertutup (*Observe, Understand, Act, Monitor, Improve*), hierarki prioritas UX (Keselamatan > Kejelasan > Aksesibilitas > Tugas > Estetika), arsitektur informasi dan hierarki kognitif layar, prinsip pengungkapan bertahap (*Progressive Disclosure*), reduksi beban kognitif, fokus satu tindakan utama tunggal (*One Primary Action*), arsitektur sistem navigasi responsif berbasis peran (*Member, Instructor, Admin*), penegasan identitas ruang kerja (*Workspace Identity*), sistem kisi tata letak 12 kolom, skala spasi kanonikal kelipatan 8 (*8-point Spacing Scale*), hierarki kontainer kartu (*Primary, Secondary, Muted*), filosofi dasbor berbasis tindakan preventif, sapaan empatis kontekstual, kartu wawasan tren utama, pusat akses cepat tindakan (*Quick Actions Hub*), alur pencatatan biometrik minim gesekan, prinsip formulir masukan dengan kejelasan label permanen dan visibilitas satuan kanonikal, validasi interaktif sebaris (*Inline Validation*), penanganan status pemuatan data (*Loading*), kerangka tulang berdenyut (*Skeleton Shimmer*), status ruang data kosong (*Empty States*), penanganan galat ramah (*Error Handling*), mode luring dan visualisasi status sinkronisasi data lokal (*Offline & Sync States PWA*), interaktivitas tombol 6 status, perlakuan tombol nonaktif dengan teks bantuan, dialog konfirmasi sadar, perlindungan tindakan destruktif, notifikasi melayang (*Toast*) dan umpan balik sebaris (*Inline Alerts*), pedoman modal terfokus dan panel laci samping (*Drawer*), fondasi sistem tipografi modern dan skala hierarki terpadu (Plus Jakarta Sans / Inter), standar keterbacaan teks bodi minimal 14px, sistem palet warna terkalibrasi (Teal, Slate, Indigo), semantik warna fungsional netral non-menakut-nakuti, kepatuhan rasio kontras aksesibilitas WCAG 2.1 Level AA, adaptasi tema gelap (*Dark Mode*), sistem ikonografi baku dan tombol ikon aksesibel, pustaka komponen modular mandiri, koleksi komponen khusus kesehatan, komponen antarmuka cerdas AI, komponen ruang instruktur, komponen dasbor admin, terminologi status sistem seragam, terminologi sinyal deviasi perilaku, desain kartu wawasan 4 elemen, penyajian bukti data pendukung wawasan, filosofi visualisasi grafik biometrik untuk menjawab pertanyaan, visualisasi garis acuan normal pengguna (*Baseline Reference Chart*), pencegahan grafik informasi berlebih, aksesibilitas grafik data (ringkasan teks sebaris dan tabel alternatif), indikator tren teks, visualisasi kemajuan sasaran tanpa angka presisi desimal semu, diksi kemajuan tanpa menghakimi, antarmuka sesi obrolan asisten AI, transparansi persona AI, rekomendasi pertanyaan awal pintar (*Prompt Chips*), dialog konfirmasi eksekusi alat sistem oleh AI (*Tool Confirmation*), penafian keselamatan AI permanen, alur pengalihan kasus ke staf manusia (*Human Handoff*), pengalaman pemindai visual kamera makanan 6 tahap, tata letak bingkai bidik (*Viewfinder*), edukasi izin kamera perangkat ramah, penyajian hasil estimasi zat gizi, penanganan pemindaian meragukan (*Scanner Low Confidence*), konfirmasi draf rekam biologis, alur penjadwalan bimbingan 5 langkah, kalender ketersediaan sesi, bukti konfirmasi pemesanan, pengingat jadwal bimbingan ramah, tata letak dasbor kerja instruktur 4 kuadran, antrean sinyal deviasi klien, tampilan profil anggota berbasis tab horizontal, formulir perancangan intervensi instruktur, dasbor pemantauan operasional administrator, tabel data terstruktur, perlindungan tabel rekam medis sensitif, tabel jejak audit forensik kekal, penanganan kolom masukan sensitif, pusat pengaturan privasi terpadu (7 menu), bahasa kebijakan privasi transparan, permintaan izin perangkat kontekstual (*In-Context*), edukasi izin notifikasi push, pengalaman akses bantuan darurat medis cepat, penempatan tombol darurat cepat, konfirmasi panggilan darurat instan 119/112, integrasi fasilitas IGD terdekat dan fail-safe tanpa GPS, pengalaman ruang komunitas sehat, penyusun unggahan diskusi dengan peringatan privasi otomatis, antarmuka pelaporan dan moderasi konten, etika gamifikasi bernada suportif, lencana pencapaian sehat, pengalaman keanggotaan transparan bebas superioritas medis, diksi inklusif keanggotaan, pencarian global cepat dan status kosong, fondasi aksesibilitas universal 4 pilar WCAG, dukungan penuh navigasi keyboard, indikator cincin fokus visual berkontras tinggi (2px solid), dukungan pembaca layar semantik murni, pembaruan dinamis suara (*Live Regions aria-live="polite"*), aksesibilitas label formulir terhubung eksplisit, indikator kesalahan masukan aksesibel (`aria-invalid`), area target sentuh minimal 48x48 piksel, animasi lembut dan preferensi gerak (*Reduced Motion*), prinsip desain responsif fleksibel (5 breakpoint), strategi ponsel pintar pertama (*Mobile-First*), optimalisasi tablet 2 kolom, pemanfaatan ruang desktop layar lebar, adaptasi tabel responsif (kartu mandiri / gulir horizontal), adaptasi grafik tren dinamis, adaptasi panel obrolan AI responsif, persepsi kinerja antarmuka (*Perceived Performance* & App Shell), panduan kerangka tulang vs pemutar putar, peningkatan persepsi responsivitas tombol, batasan pembaruan antarmuka optimistik, umpan balik alur penyimpanan data, visualisasi komputasi mesin perilaku, pemuatan teks asisten AI bertahap (*Streaming Response*), penanganan kegagalan koneksi AI ramah, status pemuatan pemindai radar, status konfirmasi pemesanan sesi, bahasa kesalahan otorisasi manusiawi (penyamaran 403), perlindungan privasi bagi instruktur dan admin, visualisasi asal-usul sumber data biometrik, visualisasi kartu garis acuan normal pengguna, visualisasi sinyal deviasi perilaku, penghapusan visual peringatan medis menakutkan (sirine/tengkorak), kartu rekomendasi tindakan mikro harian, konfirmasi penyelesaian tindakan, garis waktu siklus kebiasaan (*Habit Timeline*), pengumpulan umpan balik berkala non-memaksa, penyaringan masukan sensitif, konsistensi istilah antarmuka lintas modul, pencegahan pergeseran istilah baku, standar lokalisasi Bahasa Indonesia luwes, format tanggal dan jam lokal (17 September 2026, 15.00 WIB), format angka desimal dan ribuan, format satuan biometrik akrab, 5 pilar penulisan teks antarmuka empatis (*UX Copywriting*), 6 studi kasus perbandingan teks baik vs buruk, teks penegasan otonomi penuh pengguna (*User Agency*), teks konstruktif ruang kosong dan kondisi galat, teks transparan dialog konfirmasi, batas visual keselamatan kesehatan (larangan melebih-lebihkan kepastian), penyajian derajat keyakinan algoritma kualitatif, visualisasi jejak asal riwayat data (*Data Provenance*), penyuntingan dan koreksi mandiri data biologis, riwayat perubahan catatan biometrik, transparansi konteks data masukan AI, kendali privasi personalisasi asisten AI, indikator status pembagian data ke instruktur, indikator visibilitas publik komunitas, etika penamaan paket berlangganan non-medis, spanduk instalasi aplikasi PWA tepat waktu, pengalaman penggunaan saat jaringan internet terputus, sinkronisasi otomatis luring ke daring, notifikasi pembaruan versi PWA ramah, urutan permintaan izin bertahap (*Just-in-Time*), alur pemulihan saat izin perangkat ditolak, sinergi aksesibilitas dan keselamatan kesehatan, aksesibilitas khusus alur darurat medis, metodologi pengujian keterpakaian pengguna (5 segmen), skenario tugas uji keterpakaian inti (Member, Instructor, Admin), metrik evaluasi UX kuantitatif (Penyelesaian Tugas, Waktu Tugas, SUS Skor), metrik khusus keselamatan UX (Tingkat Pemahaman Wawasan, Ketiadaan Salah Tafsir Diagnostik), eksperimentasi A/B bertanggung jawab, arsitektur sistem desain visual (14 pilar), standarisasi radius sudut lengkung, standarisasi lapisan bayangan elevasi atmosferik, standarisasi garis pembatas netral lembut, struktur token desain kanonikal terpusat, strategi konfigurasi Tailwind CSS, prinsip penggunaan ulang komponen, desain API props komponen terprediksi, penegakan kontrak aksesibilitas komponen, konsistensi visual dan interaksi seluruh sistem, ringkasan topologi arsitektur UX terpadu AEVYRA, siklus pengalaman inti anggota (*Observe-Understand-Act-Monitor*), siklus pengalaman kerja instruktur pendamping, siklus pengalaman operasional administrator, taksonomi 7 anti-pola desain antarmuka terlarang (Banjir Data Berlebih, Dominasi AI di Setiap Sudut, Inflasi Peringatan Alarmist, Sandiwara Medis Semu, Presisi Desimal Palsu, Stigmatisasi Pengguna, Desain Manipulatif Menjebak), 7 daftar periksa kepatuhan penerimaan desain (*Acceptance Checklists*), Prinsip Utama Pengalaman Pengguna Berdaulat (*Final UX Sovereign Principle*), Model Interaksi Lingkaran Tertutup Preventif, Prinsip Pamungkas Sistem Desain Visual, serta Pernyataan Pengalaman Bintang Panduan (*North-Star Human Experience*).
 
 ---
 
 ### Informasi Dokumen Kontrak Teknis
 | Atribut Spesifikasi | Detail Konfigurasi Arsitektur |
 | :--- | :--- |
-| **Identitas Dokumen** | `PRONOIA-DOC-012` |
+| **Identitas Dokumen** | `AEVYRA-DOC-012` |
 | **Klasifikasi Dokumen** | Dokumen Arsitektur Inti (*Restricted / Design System & User Experience Specification*) |
 | **Versi Spesifikasi** | `v1.0.0-PROD` (Pondasi Kanonikal Produksi) |
 | **Standar Aksesibilitas** | W3C Web Content Accessibility Guidelines (WCAG) 2.1 Level AA Compliant |
@@ -38,13 +38,13 @@ Spesifikasi desain antarmuka dan pengalaman pengguna ini disusun dalam 8 klaster
 7. **Klaster 7 (Bagian 183 – 215): Batas Keselamatan UX, Provenance Data, PWA Luring, Desain Sistem Visual, & Token Desain**
    - Batas visual keselamatan kesehatan (larangan melebih-lebihkan kepastian), penyajian derajat keyakinan algoritma kualitatif, visualisasi jejak asal riwayat data (*Data Provenance*), pengalaman penyuntingan dan koreksi mandiri data biologis, riwayat perubahan catatan biometrik, transparansi konteks data masukan AI, kendali privasi personalisasi asisten AI, indikator status pembagian data ke instruktur, indikator visibilitas publik komunitas, etika penamaan paket berlangganan non-medis, spanduk instalasi aplikasi PWA tepat waktu, pengalaman penggunaan saat jaringan internet terputus, sinkronisasi otomatis luring ke daring, alur notifikasi pembaruan versi PWA ramah, urutan permintaan izin bertahap (*Just-in-Time*), alur pemulihan saat izin perangkat ditolak (kamera/lokasi), sinergi aksesibilitas dan keselamatan kesehatan, aksesibilitas khusus alur darurat medis, metodologi pengujian keterpakaian pengguna (5 segmen), skenario tugas uji keterpakaian inti (Member, Instructor, Admin), metrik evaluasi UX kuantitatif (Penyelesaian Tugas, Waktu Tugas, SUS Skor), metrik khusus keselamatan UX (Tingkat Pemahaman Wawasan, Ketiadaan Salah Tafsir Diagnostik), eksperimentasi A/B bertanggung jawab, arsitektur sistem desain visual (14 pilar), standarisasi radius sudut lengkung (Small, Medium, Large, XL, Pill), standarisasi lapisan bayangan elevasi atmosferik, standarisasi garis pembatas netral lembut, struktur token desain kanonikal terpusat, strategi konfigurasi Tailwind CSS, prinsip penggunaan ulang komponen antarmuka, desain API props komponen terprediksi, penegakan kontrak aksesibilitas komponen, serta konsistensi visual dan interaksi seluruh sistem.
 8. **Klaster 8 (Bagian 216 – 238): Topologi UX Terpadu, Taksonomi 7 Anti-Pola, 7 Daftar Periksa Kepatuhan, & Bintang Panduan Pamungkas**
-   - Ringkasan topologi arsitektur UX terpadu PRONOIA (Ruang Anggota, Ruang Instruktur, Ruang Admin), siklus pengalaman inti anggota (*Observe-Understand-Act-Monitor*), siklus pengalaman kerja instruktur pendamping, siklus pengalaman operasional administrator, taksonomi 7 anti-pola desain antarmuka terlarang (Banjir Data Berlebih, Dominasi AI di Setiap Sudut, Inflasi Peringatan Alarmist, Sandiwara Medis Semu, Presisi Desimal Palsu, Stigmatisasi/Mempermalukan Pengguna, Desain Manipulatif Menjebak), 7 daftar periksa kepatuhan penerimaan desain (*Acceptance Checklists: Overall UX, Dashboard, AI UI, Scanner UI, Instructor UI, Admin UI, Mobile Experience*), Prinsip Utama Pengalaman Pengguna Berdaulat (*Final UX Sovereign Principle*), Model Interaksi Lingkaran Tertutup Preventif, Prinsip Pamungkas Sistem Desain Visual, serta Pernyataan Pengalaman Bintang Panduan (*North-Star Human Experience: "Saya memahami apa yang berubah, saya tahu apa yang bisa saya lakukan berikutnya, dan saya bisa melihat apa yang terjadi setelahnya"*).
+   - Ringkasan topologi arsitektur UX terpadu AEVYRA (Ruang Anggota, Ruang Instruktur, Ruang Admin), siklus pengalaman inti anggota (*Observe-Understand-Act-Monitor*), siklus pengalaman kerja instruktur pendamping, siklus pengalaman operasional administrator, taksonomi 7 anti-pola desain antarmuka terlarang (Banjir Data Berlebih, Dominasi AI di Setiap Sudut, Inflasi Peringatan Alarmist, Sandiwara Medis Semu, Presisi Desimal Palsu, Stigmatisasi/Mempermalukan Pengguna, Desain Manipulatif Menjebak), 7 daftar periksa kepatuhan penerimaan desain (*Acceptance Checklists: Overall UX, Dashboard, AI UI, Scanner UI, Instructor UI, Admin UI, Mobile Experience*), Prinsip Utama Pengalaman Pengguna Berdaulat (*Final UX Sovereign Principle*), Model Interaksi Lingkaran Tertutup Preventif, Prinsip Pamungkas Sistem Desain Visual, serta Pernyataan Pengalaman Bintang Panduan (*North-Star Human Experience: "Saya memahami apa yang berubah, saya tahu apa yang bisa saya lakukan berikutnya, dan saya bisa melihat apa yang terjadi setelahnya"*).
 
 ---
 
 ## 1. Tujuan & Ruang Lingkup Spesifikasi UX/UI (Purpose & Scope)
 
-Dokumen spesifikasi ini mendefinisikan standar komprehensif bagi **Pengalaman Pengguna (*User Experience / UX*)** dan **Desain Antarmuka (*User Interface / UI*)** dalam ekosistem platform **PRONOIA**.
+Dokumen spesifikasi ini mendefinisikan standar komprehensif bagi **Pengalaman Pengguna (*User Experience / UX*)** dan **Desain Antarmuka (*User Interface / UI*)** dalam ekosistem platform **AEVYRA**.
 
 Standar ini mencakup:
 - Filosofi desain berpusat pada manusia (*Human-Centered Design*).
@@ -65,7 +65,7 @@ Dokumen ini merupakan rujukan wajib untuk:
 
 ## 2. Filosofi Pengalaman Pengguna (UX Philosophy)
 
-Filosofi pengalaman pengguna (*UX Philosophy*) PRONOIA dibangun untuk menciptakan atmosfer kesehatan yang menenangkan, memberdayakan, dan terpercaya.
+Filosofi pengalaman pengguna (*UX Philosophy*) AEVYRA dibangun untuk menciptakan atmosfer kesehatan yang menenangkan, memberdayakan, dan terpercaya.
 
 Prinsip dasar karakteristik antarmuka:
 
@@ -92,7 +92,7 @@ Prinsip dasar karakteristik antarmuka:
 
 ## 3. Prinsip Utama Siklus Pengalaman Pengguna (Core UX Principle)
 
-PRONOIA **bukan sekadar repositori penyimpan angka kesehatan** (*Data Dump Dashboard*), melainkan sistem bimbingan perilaku tertutup (*Closed-Loop Preventive Guidance*).
+AEVYRA **bukan sekadar repositori penyimpan angka kesehatan** (*Data Dump Dashboard*), melainkan sistem bimbingan perilaku tertutup (*Closed-Loop Preventive Guidance*).
 
 Setiap layar antarmuka wajib mencerminkan siklus 4 tahap:
 
@@ -146,7 +146,7 @@ Efek visual atau animasi transisi tidak boleh mengorbankan keterbacaan, aksesibi
 
 ## 6. Desain Berpusat pada Manusia (User-Centered Design)
 
-Setiap layar dan antarmuka modul PRONOIA wajib memiliki 5 atribut desain berpusat pada pengguna (*User-Centered Design*):
+Setiap layar dan antarmuka modul AEVYRA wajib memiliki 5 atribut desain berpusat pada pengguna (*User-Centered Design*):
 1. **Tujuan Pengguna yang Jelas (*Clear User Goal*):** Pengguna mengerti tujuan berada di layar tersebut dalam waktu <3 detik.
 2. **Tindakan Utama Menonjol (*Primary Action*):** Aksi terpenting disajikan dengan penekanan visual yang tegas.
 3. **Informasi Pendukung Relevan (*Contextual Data*):** Hanya menampilkan metrik yang mendasari tindakan tersebut.
@@ -254,7 +254,7 @@ Pada perangkat ponsel pintar (*Mobile Smartphone*), navigasi utama diletakkan pa
 ## 14. Navigasi Sisi Layar Lebar Desktop (Desktop Sidebar Navigation)
 
 Pada tampilan layar lebar desktop (*Desktop Layout*), navigasi diimplementasikan sebagai bilah sisi kiri (*Left Sidebar Navigation*):
-- Menampilkan identitas logo PRONOIA, daftar menu fungsional dengan ikon dan teks, indikator ruang kerja aktif (*Workspace Badge*), serta avatar profil pengguna di bagian bawah.
+- Menampilkan identitas logo AEVYRA, daftar menu fungsional dengan ikon dan teks, indikator ruang kerja aktif (*Workspace Badge*), serta avatar profil pengguna di bagian bawah.
 - Dapat diperkecil (*collapsible sidebar*) menjadi mode ikon untuk memperluas area kanvas kerja analitik.
 
 ---
@@ -586,7 +586,7 @@ Visualisasi status sinkronisasi data antrean lokal (*Sync State UX*):
 | Status Sinkronisasi | Tampilan Visual & Ikon | Keterangan & Harapan Pengguna |
 | :--- | :--- | :--- |
 | **Tersimpan Lokal** | Ikon Jam Pasir Abu-abu (*Clock*) | Data tercatat di perangkat, menunggu koneksi internet stabil. |
-| **Menyinkronkan** | Ikon Putar Biru (*Sync Spinner*) | Data sedang diunggah ke peladen pusat PRONOIA. |
+| **Menyinkronkan** | Ikon Putar Biru (*Sync Spinner*) | Data sedang diunggah ke peladen pusat AEVYRA. |
 | **Tersinkronisasi** | Ikon Centang Hijau (*Checkmark*) | Data telah diverifikasi dan masuk ke basis data cloud otoritatif. |
 | **Gagal Sinkron** | Ikon Peringatan Oranye (*Warning*) | Terjadi benturan koneksi; tombol *[Coba Lagi]* tersedia. |
 
@@ -944,7 +944,7 @@ Antarmuka sesi percakapan asisten cerdas AI (*AI Chat Interface*):
 
 ```text
 ┌────────────────────────────────────────────────────────┐
-│ 🤖 ASISTEN GAYA HIDUP PRONOIA                          │
+│ 🤖 ASISTEN GAYA HIDUP AEVYRA                          │
 │ [Status: Aktif Mendampingi]                            │
 ├────────────────────────────────────────────────────────┤
 │ AI: Halo Fikri, ada wawasan pola kebiasaan yang ingin  │
@@ -967,7 +967,7 @@ Antarmuka sesi percakapan asisten cerdas AI (*AI Chat Interface*):
 ## 85. Kejelasan Identitas & Peran Asisten AI (AI Identity & Persona Clarity)
 
 Kejelasan identitas dan peran asisten AI (*AI Identity & Persona Clarity*):
-- Bilah tajuk obrolan wajib menyematkan label transparan: **"Asisten AI PRONOIA (Kecerdasan Buatan)"**.
+- Bilah tajuk obrolan wajib menyematkan label transparan: **"Asisten AI AEVYRA (Kecerdasan Buatan)"**.
 - Wajah avatar, gaya bahasa, dan lencana visual wajib secara tegas membedakan asisten AI dari profil instruktur manusia nyata (*Human Instructor*).
 
 ---
@@ -1007,7 +1007,7 @@ AI dilarang keras memanipulasi jadwal atau data pengguna di balik layar tanpa pe
 
 Pemberitahuan batas keselamatan AI (*AI Safety Notice & Disclaimer*):
 - Menampilkan teks catatan kaki permanen yang elegan di bawah kotak masukan obrolan:
-  > *"Asisten AI PRONOIA menyajikan edukasi kebiasaan preventif dan bukan pengganti saran atau diagnosis medis dokter."*
+  > *"Asisten AI AEVYRA menyajikan edukasi kebiasaan preventif dan bukan pengganti saran atau diagnosis medis dokter."*
 - Hindari spanduk peringatan merah mencolok yang mengganggu kenyamanan berdialog.
 
 ---
@@ -1039,7 +1039,7 @@ Tata letak bidang pandang kamera pemindai (*Scanner Viewfinder UI*):
 ## 92. Persetujuan Izin Kamera Perangkat (Scanner Permission Onboarding)
 
 Edukasi persetujuan izin kamera perangkat (*Scanner Permission Onboarding*):
-- Sebelum peramban memunculkan dialog izin natif (*native camera prompt*), antarmuka menyajikan layar pengantar ramah: *"PRONOIA memerlukan akses kamera untuk memindai komposisi makanan Anda secara praktis. Foto Anda tidak dibagikan ke publik."*
+- Sebelum peramban memunculkan dialog izin natif (*native camera prompt*), antarmuka menyajikan layar pengantar ramah: *"AEVYRA memerlukan akses kamera untuk memindai komposisi makanan Anda secara praktis. Foto Anda tidak dibagikan ke publik."*
 
 ---
 
@@ -1635,7 +1635,7 @@ Kartu rekomendasi tindakan kebiasaan mikro (*Micro-Habit Recommendation Card*):
 
 Konfirmasi sadar penyelesaian tindakan (*Action Completion Confirmation*):
 - Ketika pengguna menandai rekomendasi telah selesai dijalankan:
-  - Tampilkan umpan balik apresiatif: *"Langkah mikro dimulai! PRONOIA akan memantau tren keteraturan kebiasaan Anda dalam beberapa hari ke depan."*
+  - Tampilkan umpan balik apresiatif: *"Langkah mikro dimulai! AEVYRA akan memantau tren keteraturan kebiasaan Anda dalam beberapa hari ke depan."*
   - Hindari klaim berlebihan bahwa satu tindakan telah menyelesaikan seluruh masalah kesehatan.
 
 ---
@@ -1725,7 +1725,7 @@ Standardisasi format satuan biometrik yang akrab (*Health Metric Unit Formatting
 ## 172. Prinsip Penulisan Teks Antarmuka Empatis (UX Copywriting Principles)
 
 Prinsip penulisan teks antarmuka yang empatis (*UX Copywriting Principles*):
-- Teks antarmuka kesehatan PRONOIA wajib memenuhi 5 pilar: **Jelas (*Clear*)**, **Tenang (*Calm*)**, **Menghargai (*Respectful*)**, **Bebas Penghakiman (*Non-judgmental*)**, dan **Dapat Ditindaklanjuti (*Actionable*)**.
+- Teks antarmuka kesehatan AEVYRA wajib memenuhi 5 pilar: **Jelas (*Clear*)**, **Tenang (*Calm*)**, **Menghargai (*Respectful*)**, **Bebas Penghakiman (*Non-judgmental*)**, dan **Dapat Ditindaklanjuti (*Actionable*)**.
 
 ---
 
@@ -1760,7 +1760,7 @@ Contoh Teks Buruk: Diagnosis Tidur Sepihak (*Bad Copy: Premature Diagnosis*):
 ## 177. Contoh Teks Baik: Bimbingan Aktivitas Fisik (Good Copy: Physical Activity)
 
 Contoh Teks Baik: Pemantauan Data Awal (*Good Copy: Baseline Building*):
-> *"PRONOIA sedang mengumpulkan rekaman harian Anda untuk membangun garis acuan tubuh yang akurat. Terus catat kebiasaan Anda beberapa hari ke depan."*
+> *"AEVYRA sedang mengumpulkan rekaman harian Anda untuk membangun garis acuan tubuh yang akurat. Terus catat kebiasaan Anda beberapa hari ke depan."*
 
 ---
 
@@ -1782,7 +1782,7 @@ Teks penegasan otonomi penuh pengguna (*User Agency & Autonomy Copy*):
 ## 180. Teks Konstruktif untuk Ruang Kosong (Constructive Empty-State Copy)
 
 Teks konstruktif untuk ruang data kosong (*Constructive Empty-State Copy*):
-- Menyertakan arahan langkah pertama: *"Belum ada data garis acuan kebugaran. Mulai catat rutinitas hari ini agar PRONOIA dapat mengenali ritme unik tubuh Anda."* disertai tombol *[+ Catat Sekarang]*.
+- Menyertakan arahan langkah pertama: *"Belum ada data garis acuan kebugaran. Mulai catat rutinitas hari ini agar AEVYRA dapat mengenali ritme unik tubuh Anda."* disertai tombol *[+ Catat Sekarang]*.
 
 ---
 
@@ -1904,7 +1904,7 @@ Pengalaman sinkronisasi luring ke daring (*Offline-to-Online Sync UX*):
 
 Pemberitahuan pembaruan versi aplikasi PWA (*PWA Version Update Flow*):
 - Ketika rilis versi baru aplikasi tersedia di server:
-  - Tampilkan bilah pengingat ramah: *"Versi terbaru PRONOIA telah siap dengan pembaruan performa yang lebih mulus. [Perbarui Sekarang]"*.
+  - Tampilkan bilah pengingat ramah: *"Versi terbaru AEVYRA telah siap dengan pembaruan performa yang lebih mulus. [Perbarui Sekarang]"*.
   - Hindari memuat ulang (*reload*) halaman secara paksa di tengah-tengah pengguna sedang mengetik formulir.
 
 ---
@@ -1989,9 +1989,9 @@ Eksperimentasi pengujian A/B yang bertanggung jawab (*Responsible UX Experimenta
 
 ---
 
-## 206. Arsitektur Sistem Desain Visual PRONOIA (Visual Design System Blueprint)
+## 206. Arsitektur Sistem Desain Visual AEVYRA (Visual Design System Blueprint)
 
-Arsitektur sistem desain visual PRONOIA (*Visual Design System Blueprint*):
+Arsitektur sistem desain visual AEVYRA (*Visual Design System Blueprint*):
 - Membangun bahasa visual tunggal yang kohesif mencakup 14 fondasi:
   `Colors`, `Typography`, `Spacing`, `Border Radius`, `Elevation Shadows`, `Borders & Dividers`, `Buttons`, `Inputs`, `Cards`, `Badges`, `Icons`, `Charts`, `Responsive Breakpoints`, dan `Motion Physics`.
 
@@ -2097,10 +2097,10 @@ Konsistensi visual dan interaksi seluruh sistem (*Systemwide Visual Consistency*
 
 ## 216. Ringkasan Topologi Arsitektur UX Terpadu (Comprehensive UX Topology)
 
-Ringkasan topologi arsitektur pengalaman pengguna terpadu PRONOIA (*Comprehensive UX Topology*):
+Ringkasan topologi arsitektur pengalaman pengguna terpadu AEVYRA (*Comprehensive UX Topology*):
 
 ```text
-                                PENGALAMAN PENGGUNA PRONOIA
+                                PENGALAMAN PENGGUNA AEVYRA
                                              │
                ┌─────────────────────────────┼─────────────────────────────┐
                ▼                             ▼                             ▼
@@ -2162,7 +2162,7 @@ Dasbor Operasional ➔ Deteksi Peristiwa Anomali ➔ Tinjau Laporan Moderasi ➔
 ## 220. Taksonomi Anti-Pola Desain Antarmuka (UX Anti-Patterns Taxonomy)
 
 Taksonomi anti-pola desain antarmuka (*UX Anti-Patterns Taxonomy*):
-- Antarmuka PRONOIA wajib bebas dari 7 anti-pola desain yang merusak pengalaman pengguna:
+- Antarmuka AEVYRA wajib bebas dari 7 anti-pola desain yang merusak pengalaman pengguna:
   1. Banjir Data Berlebih (*Data Dump*).
   2. Dominasi AI di Setiap Sudut (*AI Everywhere*).
   3. Inflasi Peringatan Alarmist (*Alert Everything*).
@@ -2177,7 +2177,7 @@ Taksonomi anti-pola desain antarmuka (*UX Anti-Patterns Taxonomy*):
 
 Anti-Pola UX 1: Banjir Data Berlebih (*UX Anti-Pattern — Data Dump*):
 - **Pola Buruk:** Menampilkan 20 grafik biometrik dan 15 angka statistik sekaligus di layar utama tanpa hierarki, membingungkan pengguna awam.
-- **Pola Rekomendasi PRONOIA:** 1 Wawasan Tren Utama + 3 Metrik Terkait + 1 Tindakan Mikro Nyata Hari Ini.
+- **Pola Rekomendasi AEVYRA:** 1 Wawasan Tren Utama + 3 Metrik Terkait + 1 Tindakan Mikro Nyata Hari Ini.
 
 ---
 
@@ -2185,7 +2185,7 @@ Anti-Pola UX 1: Banjir Data Berlebih (*UX Anti-Pattern — Data Dump*):
 
 Anti-Pola UX 2: Dominasi AI di Setiap Sudut (*UX Anti-Pattern — AI Everywhere*):
 - **Pola Buruk:** Menempelkan tombol *"Tanya AI"* pada setiap sudut tabel dan kartu tanpa tujuan fungsional yang jelas.
-- **Pola Rekomendasi PRONOIA:** Asisten AI dihadirkan pada ruang khusus yang membutuhkan pendalaman dialog edukatif terpandu.
+- **Pola Rekomendasi AEVYRA:** Asisten AI dihadirkan pada ruang khusus yang membutuhkan pendalaman dialog edukatif terpandu.
 
 ---
 
@@ -2193,7 +2193,7 @@ Anti-Pola UX 2: Dominasi AI di Setiap Sudut (*UX Anti-Pattern — AI Everywhere*
 
 Anti-Pola UX 3: Inflasi Peringatan Alarmist (*UX Anti-Pattern — Alert Everything*):
 - **Pola Buruk:** Mengirimkan notifikasi darurat merah menyala untuk setiap perubahan kecil jam tidur harian, memicu kejenuhan peringatan (*alert fatigue*).
-- **Pola Rekomendasi PRONOIA:** Hanya memunculkan sinyal jika deviasi konsisten terjadi minimal 3-5 hari berturut-turut.
+- **Pola Rekomendasi AEVYRA:** Hanya memunculkan sinyal jika deviasi konsisten terjadi minimal 3-5 hari berturut-turut.
 
 ---
 
@@ -2201,7 +2201,7 @@ Anti-Pola UX 3: Inflasi Peringatan Alarmist (*UX Anti-Pattern — Alert Everythi
 
 Anti-Pola UX 4: Sandiwara Medis Semu (*UX Anti-Pattern — Medical Theater*):
 - **Pola Buruk:** Mendesain antarmuka menyerupai monitor ruang rawat inap rumah sakit lengkap dengan istilah *Pasien*, *Diagnosis*, *Risiko Kematian*.
-- **Pola Rekomendasi PRONOIA:** Menggunakan pendekatan sahabat bimbingan gaya hidup sehat yang tenang, modern, dan bersahabat.
+- **Pola Rekomendasi AEVYRA:** Menggunakan pendekatan sahabat bimbingan gaya hidup sehat yang tenang, modern, dan bersahabat.
 
 ---
 
@@ -2209,7 +2209,7 @@ Anti-Pola UX 4: Sandiwara Medis Semu (*UX Anti-Pattern — Medical Theater*):
 
 Anti-Pola UX 5: Presisi Desimal Palsu (*UX Anti-Pattern — False Precision*):
 - **Pola Buruk:** Menampilkan *"Skor Kebugaran Anda 83.742%"* yang memberi ilusi kepastian laboratorium semu.
-- **Pola Rekomendasi PRONOIA:** Menggunakan pembulatan bilangan bulat dan kategori tren deskriptif.
+- **Pola Rekomendasi AEVYRA:** Menggunakan pembulatan bilangan bulat dan kategori tren deskriptif.
 
 ---
 
@@ -2217,7 +2217,7 @@ Anti-Pola UX 5: Presisi Desimal Palsu (*UX Anti-Pattern — False Precision*):
 
 Anti-Pola UX 6: Stigmatisasi & Mempermalukan Pengguna (*UX Anti-Pattern — Shame & Guilt*):
 - **Pola Buruk:** Menggunakan kata-kata *"Anda Malas"*, *"Gagal Mencapai Target"*, atau visual orang menangis saat pengguna beristirahat.
-- **Pola Rekomendasi PRONOIA:** Nada suportif yang memvalidasi kebutuhan istirahat tubuh: *"Dengarkan sinyal tubuh Anda; mari mulai kembali langkah kecil esok hari."*
+- **Pola Rekomendasi AEVYRA:** Nada suportif yang memvalidasi kebutuhan istirahat tubuh: *"Dengarkan sinyal tubuh Anda; mari mulai kembali langkah kecil esok hari."*
 
 ---
 
@@ -2225,7 +2225,7 @@ Anti-Pola UX 6: Stigmatisasi & Mempermalukan Pengguna (*UX Anti-Pattern — Sham
 
 Anti-Pola UX 7: Desain Manipulatif Menjebak (*UX Anti-Pattern — Dark Patterns*):
 - **Pola Buruk:** Menyembunyikan tombol pembatalan langganan, memaksa persetujuan pembagian data privasi, atau menghitung mundur waktu palsu (*fake urgency*).
-- **Pola Rekomendasi PRONOIA:** Menghormati otonomi penuh pengguna dengan kontrol privasi transparan dan alur pembatalan yang jujur.
+- **Pola Rekomendasi AEVYRA:** Menghormati otonomi penuh pengguna dengan kontrol privasi transparan dan alur pembatalan yang jujur.
 
 ---
 
@@ -2335,8 +2335,8 @@ Daftar periksa kepatuhan pengalaman ponsel pintar (*Mobile Acceptance Checklist*
 Prinsip utama pengalaman pengguna berdaulat (*Final UX Sovereign Principle*):
 
 > [!IMPORTANT]
-> **PRINSIP PENGALAMAN MANUSIAWI PRONOIA:**  
-> *"PRONOIA hadir sebagai sahabat pendamping gaya hidup preventif yang tenang, memberdayakan, dan terpercaya — bukan sistem sirine alarm medis yang menakut-nakuti, dan bukan sekadar kotak obrolan AI tanpa tujuan nyata."*
+> **PRINSIP PENGALAMAN MANUSIAWI AEVYRA:**  
+> *"AEVYRA hadir sebagai sahabat pendamping gaya hidup preventif yang tenang, memberdayakan, dan terpercaya — bukan sistem sirine alarm medis yang menakut-nakuti, dan bukan sekadar kotak obrolan AI tanpa tujuan nyata."*
 
 Pengalaman pengguna dirancang untuk terus mengalir menuju:
 ```text
@@ -2373,19 +2373,19 @@ Model interaksi lingkaran tertutup preventif (*Final Interaction Loop Model*):
 
 ## 237. Prinsip Pamungkas Sistem Desain Visual (Final Design System Principle)
 
-Prinsip pamungkas sistem desain visual PRONOIA (*Final Design System Principle*):
+Prinsip pamungkas sistem desain visual AEVYRA (*Final Design System Principle*):
 - Setiap halaman, komponen, dan interaksi wajib terasa sebagai bagian tak terpisahkan dari satu ekosistem yang utuh.
 - Keharmonisan visual ditegakkan tanpa kompromi pada: **Tata Letak (*Layout*)**, **Tipografi (*Typography*)**, **Palet Warna (*Color*)**, **Spasi (*Spacing*)**, **Komponen (*Components*)**, **Terminologi (*Terminology*)**, **Aksesibilitas (*Accessibility*)**, dan **Standar Keselamatan (*Safety*)**.
 
 ---
 
-## 238. Bintang Panduan Pengalaman Manusiawi PRONOIA (North-Star Human Experience)
+## 238. Bintang Panduan Pengalaman Manusiawi AEVYRA (North-Star Human Experience)
 
-Bintang panduan pengalaman manusiawi PRONOIA (*North-Star Human Experience*):
+Bintang panduan pengalaman manusiawi AEVYRA (*North-Star Human Experience*):
 
 > [!NOTE]
 > **Pernyataan Pengalaman Bintang Panduan (North-Star UX):**  
-> Desain antarmuka PRONOIA berhasil memenuhi takdirnya ketika pengguna merasakan:  
+> Desain antarmuka AEVYRA berhasil memenuhi takdirnya ketika pengguna merasakan:  
 > *"Saya memahami apa yang berubah pada ritme tubuh saya, saya tahu persis tindakan mikro apa yang dapat saya lakukan hari ini, dan saya dapat melihat dampak positif yang terjadi setelahnya."*  
 >   
 > **Bukan:** *"Aplikasi ini membombardir saya dengan tumpukan grafik dan angka yang membuat saya cemas."*
@@ -2394,4 +2394,4 @@ Siklus Pengalaman Inti Terpadu:
 ```text
 AMATI (Observe) ➔ PAHAMI (Understand) ➔ BERTINDAK (Act) ➔ PANTAU (Monitor) ➔ TINGKATKAN (Improve)
 ```
-Dan seluruh desain visual antarmuka PRONOIA wajib senantiasa memperkuat lingkaran tertutup yang menyehatkan ini.
+Dan seluruh desain visual antarmuka AEVYRA wajib senantiasa memperkuat lingkaran tertutup yang menyehatkan ini.

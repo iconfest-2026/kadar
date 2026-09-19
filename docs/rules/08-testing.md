@@ -1,8 +1,8 @@
-# PRONOIA — Kaidah Rekayasa Pengujian Perangkat Lunak & Jaminan Kualitas Sistem (Software Testing Engineering Rules & System Quality Assurance Standards)
+# AEVYRA — Kaidah Rekayasa Pengujian Perangkat Lunak & Jaminan Kualitas Sistem (Software Testing Engineering Rules & System Quality Assurance Standards)
 
-Dokumen spesifikasi teknis ini menetapkan standar rekayasa pengujian perangkat lunak (*software testing*), metodologi jaminan kualitas (*quality assurance* / QA), strategi mitigasi cacat (*defect mitigation*), serta protokol verifikasi kepatuhan sistem untuk seluruh platform **PRONOIA**. Mengingat posisi PRONOIA sebagai platform pendamping kesehatan perilaku preventif (*behavioral preventive health*), pengujian perangkat lunak bukan sekadar formalitas siklus pengembangan, melainkan mekanisme perlindungan mutlak bagi keselamatan fisik, privasi data sensitif, dan ketenangan psikologis para anggota pengguna.
+Dokumen spesifikasi teknis ini menetapkan standar rekayasa pengujian perangkat lunak (*software testing*), metodologi jaminan kualitas (*quality assurance* / QA), strategi mitigasi cacat (*defect mitigation*), serta protokol verifikasi kepatuhan sistem untuk seluruh platform **AEVYRA**. Mengingat posisi AEVYRA sebagai platform pendamping kesehatan perilaku preventif (*behavioral preventive health*), pengujian perangkat lunak bukan sekadar formalitas siklus pengembangan, melainkan mekanisme perlindungan mutlak bagi keselamatan fisik, privasi data sensitif, dan ketenangan psikologis para anggota pengguna.
 
-Platform PRONOIA menerapkan **Piramida Pengujian Terpadu (*Unified Test Pyramid*)** yang mengutamakan ribuan uji satuan deterministik (*fast deterministic unit tests*), ratusan uji fitur dan integrasi API (*robust API feature & contract tests*), pengujian mutasi kegagalan (*fault injection & mutation testing*), hingga pengujian perjalanan pengguna menyeluruh (*end-to-end user journeys*) menggunakan **Pest PHP v3+** pada sisi backend dan **Vitest / Playwright** pada sisi frontend PWA. Seluruh formula kalkulasi biometrik, pagar pembatas keselamatan medis (*health-safety guardrails*), pencegahan eksfiltrasi data pribadi (UU PDP No. 27/2022), serta isolasi model kecerdasan buatan (*AI*) wajib teruji secara otomatis pada pipa integrasi kontinu (*Continuous Integration*) sebelum diperbolehkan meluncur ke lingkungan produksi.
+Platform AEVYRA menerapkan **Piramida Pengujian Terpadu (*Unified Test Pyramid*)** yang mengutamakan ribuan uji satuan deterministik (*fast deterministic unit tests*), ratusan uji fitur dan integrasi API (*robust API feature & contract tests*), pengujian mutasi kegagalan (*fault injection & mutation testing*), hingga pengujian perjalanan pengguna menyeluruh (*end-to-end user journeys*) menggunakan **Pest PHP v3+** pada sisi backend dan **Vitest / Playwright** pada sisi frontend PWA. Seluruh formula kalkulasi biometrik, pagar pembatas keselamatan medis (*health-safety guardrails*), pencegahan eksfiltrasi data pribadi (UU PDP No. 27/2022), serta isolasi model kecerdasan buatan (*AI*) wajib teruji secara otomatis pada pipa integrasi kontinu (*Continuous Integration*) sebelum diperbolehkan meluncur ke lingkungan produksi.
 
 ---
 
@@ -10,7 +10,7 @@ Platform PRONOIA menerapkan **Piramida Pengujian Terpadu (*Unified Test Pyramid*
 
 | Parameter Dokumen | Spesifikasi Teknis / Status Resmi |
 | :--- | :--- |
-| **Nomor Dokumen Standar** | `PRONOIA-RULE-008` |
+| **Nomor Dokumen Standar** | `AEVYRA-RULE-008` |
 | **Versi Standar Pengujian** | `v1.0.0-PROD` (Edisi Verifikasi Mutu & Kepatuhan ICONFEST 2026) |
 | **Tanggal Efektif Berlaku** | 17 September 2026 |
 | **Status Otorisasi** | Resmi Disetujui / Berlaku Mutlak (*Mandatory QA & Testing Standard*) |
@@ -23,11 +23,11 @@ Platform PRONOIA menerapkan **Piramida Pengujian Terpadu (*Unified Test Pyramid*
 
 ---
 
-### Matriks 10 Klaster Rekayasa Pengujian Sistem PRONOIA
+### Matriks 10 Klaster Rekayasa Pengujian Sistem AEVYRA
 
 ```text
 ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-│                 TOPOLOGI JAMINAN KUALITAS & PROTOKOL PENGUJIAN SISTEM PRONOIA             │
+│                 TOPOLOGI JAMINAN KUALITAS & PROTOKOL PENGUJIAN SISTEM AEVYRA             │
 └───────────────────────────────────────────────────────────────────────────────────────────┘
    │
    ├── [Klaster 1] Fondasi Filosofi, Piramida Uji, & Satuan Deterministik (Bagian 1 – 11)
@@ -65,7 +65,7 @@ Platform PRONOIA menerapkan **Piramida Pengujian Terpadu (*Unified Test Pyramid*
 
 ## 1. Tujuan & Ruang Lingkup Standar Pengujian (Testing Purpose & Scope)
 
-Kaidah ini menetapkan standar teknis, metodologi, dan protokol pengujian perangkat lunak untuk platform **PRONOIA**. Seluruh pengujian bertujuan memberikan kepastian matematis, keandalan fungsional, dan jaminan keamanan pada setiap komponen sistem:
+Kaidah ini menetapkan standar teknis, metodologi, dan protokol pengujian perangkat lunak untuk platform **AEVYRA**. Seluruh pengujian bertujuan memberikan kepastian matematis, keandalan fungsional, dan jaminan keamanan pada setiap komponen sistem:
 
 1. **Kebenaran Fungsional (*Functional Correctness*):** Memastikan seluruh alur pengguna, mulai dari pencatatan metrik, konsultasi instruktur, hingga pemindaian nutrisi, berjalan tepat sesuai spesifikasi.
 2. **Integritas Aturan Bisnis (*Business Invariants*):** Mengunci invarian domain agar tidak dapat dilanggar oleh kondisi balapan (*race condition*) atau manipulasi muatan klien.
@@ -75,13 +75,13 @@ Kaidah ini menetapkan standar teknis, metodologi, dan protokol pengujian perangk
 6. **Ketahanan Mode Luring (*Offline Resilience*):** Memverifikasi kemampuan klien PWA dalam mengantrekan mutasi data saat luring dan melakukan rekonsiliasi yang aman dari konflik saat daring.
 
 > [!IMPORTANT]
-> Di PRONOIA, pengujian otomatis bukan sekadar pelengkap kualitas kode, melainkan instrumen perlindungan klinis dan hukum yang menjaga integritas fisik serta privasi para anggota.
+> Di AEVYRA, pengujian otomatis bukan sekadar pelengkap kualitas kode, melainkan instrumen perlindungan klinis dan hukum yang menjaga integritas fisik serta privasi para anggota.
 
 ---
 
 ## 2. Filosofi & Doktrin Pengujian Perangkat Lunak (Software Testing Philosophy & Doctrine)
 
-Pengembangan fitur di PRONOIA berpegang teguh pada paradigma **Pengujian Berkelanjutan Berorientasi Syarat Keberterimaan (*Acceptance-Driven Engineering*)**:
+Pengembangan fitur di AEVYRA berpegang teguh pada paradigma **Pengujian Berkelanjutan Berorientasi Syarat Keberterimaan (*Acceptance-Driven Engineering*)**:
 
 ```text
 Kebutuhan Produk & Batasan Medis
@@ -109,9 +109,9 @@ Prinsip Filosofis Utama:
 
 ---
 
-## 3. Piramida Pengujian PRONOIA (PRONOIA Test Pyramid)
+## 3. Piramida Pengujian AEVYRA (AEVYRA Test Pyramid)
 
-Platform PRONOIA menerapkan struktur **Piramida Pengujian Berlapis (*Layered Test Pyramid*)** yang terdistribusi secara efisien:
+Platform AEVYRA menerapkan struktur **Piramida Pengujian Berlapis (*Layered Test Pyramid*)** yang terdistribusi secara efisien:
 
 ```text
              ▲
@@ -149,9 +149,9 @@ Alokasi waktu dan intensitas pengujian wajib mengikuti urutan prioritas risiko s
 
 ---
 
-## 5. Pengujian Siklus Inti Pengguna PRONOIA (Core PRONOIA Loop Testing)
+## 5. Pengujian Siklus Inti Pengguna AEVYRA (Core AEVYRA Loop Testing)
 
-Siklus utama PRONOIA adalah rantai proses yang mengubah data mentah menjadi perubahan perilaku nyata. Seluruh mata rantai ini wajib diuji secara terpadu:
+Siklus utama AEVYRA adalah rantai proses yang mengubah data mentah menjadi perubahan perilaku nyata. Seluruh mata rantai ini wajib diuji secara terpadu:
 
 ```text
 Data Mentah Masukan (Gula Darah, Tidur, Hidrasi)
@@ -873,7 +873,7 @@ Hal ini menjamin klien frontend dapat melakukan percabangan logika penanganan ke
 Seluruh fitur kesehatan wajib memiliki pengujian kepatuhan pagar pembatas medis (*Health Safety Guardrail Tests*) yang mencakup 100% jalur kode evaluasi klinis:
 
 > [!IMPORTANT]
-> Pengujian pagar pembatas medis memverifikasi bahwa sistem PRONOIA:
+> Pengujian pagar pembatas medis memverifikasi bahwa sistem AEVYRA:
 > - Dilarang membuat diagnosis medis definitif atas penyakit kronis/akut.
 > - Dilarang merekomendasikan penyesuaian dosis obat resep farmasi.
 > - Dilarang mengarahkan pengguna menghentikan terapi dokter berlisensi.
@@ -1314,7 +1314,7 @@ test('perintah analisis kesehatan terjadwal terdaftar pada jadwal malam hari dan
     $events = collect($schedule->events());
 
     $nightlyAnalysis = $events->first(function ($event) {
-        return str_contains($event->command, 'pronoia:evaluate-nightly-baselines');
+        return str_contains($event->command, 'aevyra:evaluate-nightly-baselines');
     });
 
     expect($nightlyAnalysis)->not->toBeNull()
@@ -1442,7 +1442,7 @@ Pengujian isolasi transaksi (*Transaction Isolation & Lock Tests*) memvalidasi p
 
 Pengujian fungsionalitas Aplikasi Web Progresif (*PWA Functional Tests*) memvalidasi kesiapan aplikasi saat diakses melalui peramban ponsel:
 
-1. **Ketersediaan Web App Manifest:** Memverifikasi dokumen `/manifest.webmanifest` dapat diunduh, valid JSON, memuat nama `PRONOIA`, ikon resolusi 192x192 & 512x512, serta tema warna `#0F172A`.
+1. **Ketersediaan Web App Manifest:** Memverifikasi dokumen `/manifest.webmanifest` dapat diunduh, valid JSON, memuat nama `AEVYRA`, ikon resolusi 192x192 & 512x512, serta tema warna `#0F172A`.
 2. **Pendaftaran Service Worker:** Memverifikasi berkas `sw.js` terdaftar sukses pada cakupan rute `/` dan tidak menghasilkan galat konsol JavaScript.
 3. **Penyimpanan Cache Statis:** Memverifikasi aset shell aplikasi (*HTML, CSS, JS, Fonts*) tersimpan di CacheStorage peramban untuk pemuatan instan.
 
@@ -1476,10 +1476,10 @@ Pengujian ujung-ke-ujung (*End-to-End Core Journey Tests*) menggunakan Playwrigh
 // tests/e2e/core-journey.spec.ts
 import { test, expect } from '@playwright/test';
 
-test('perjalanan pengguna inti PRONOIA: login, catat metrik, dan terima wawasan', async ({ page }) => {
+test('perjalanan pengguna inti AEVYRA: login, catat metrik, dan terima wawasan', async ({ page }) => {
     // 1. Masuk aplikasi
     await page.goto('/login');
-    await page.fill('#email', 'haikal@pronoia.id');
+    await page.fill('#email', 'haikal@aevyra.id');
     await page.fill('#password', 'Rahasia123!');
     await page.click('#btn-login');
 
@@ -1691,7 +1691,7 @@ Jika suatu fitur memanfaatkan nilai acak (seperti pemilihan rekomendasi interven
 
 Pengujian yang sesekali gagal tanpa alasan jelas (*Flaky Tests*) diperlakukan sebagai **kerusakan mutu sistem (*Quality Defect*)**:
 
-Penyebab umum uji *flaky* di PRONOIA:
+Penyebab umum uji *flaky* di AEVYRA:
 1. Penggunaan `sleep()` alih-alih polling kondisi asinkron.
 2. Perbandingan waktu mikrodetik yang tidak dibulatkan.
 3. Ketergantungan implisit pada urutan indeks array atau baris basis data.
@@ -1768,7 +1768,7 @@ Asersi pengujian (*Assertions*) wajib bersifat bermakna dan memverifikasi kontra
 
 Cakupan kode (*Code Coverage*) merupakan indikator pelengkap, bukan tujuan akhir kualitas sistem:
 
-Target Standar Cakupan Kode PRONOIA:
+Target Standar Cakupan Kode AEVYRA:
 - **Pagar Pembatas Keselamatan Medis (*Health Safety*):** Wajib **100% Mutlak**.
 - **Logika Otorisasi & Penegakan Hak Akses (*Security & RBAC*):** Wajib **100% Mutlak**.
 - **Formula Matematika & Mesin Kalkulasi Baseline:** Minimal **95%**.
@@ -1796,7 +1796,7 @@ Jika modifikasi di atas tetap membuat pengujian lulus (*GREEN*), maka rangkaian 
 
 ## 79. Arsitektur Rangkaian Uji Regresi Menyeluruh (Comprehensive Regression Testing Suite)
 
-Setiap kali terjadi insiden cacat perangkat lunak (*bug*) pada platform PRONOIA, penanganannya wajib mematuhi **Protokol Uji Regresi Siklus Tertutup (*Closed-Loop Regression Protocol*)**:
+Setiap kali terjadi insiden cacat perangkat lunak (*bug*) pada platform AEVYRA, penanganannya wajib mematuhi **Protokol Uji Regresi Siklus Tertutup (*Closed-Loop Regression Protocol*)**:
 
 ```text
 Insiden Cacat Ditemukan (Laporan QA / Log Sentry)
@@ -1995,7 +1995,7 @@ Evaluasi berkala terhadap model AI (*AI Quality & Safety Evaluation*) menilai em
 
 ## 91. Uji Kasus Emas Validasi Inferensi Model (Golden Test Cases for AI Validation)
 
-Platform PRONOIA memelihara **Katalog Kasus Uji Emas (*Golden Test Cases*)** yang memuat pasangan prompt masukan dan kriteria keberterimaan jawaban:
+Platform AEVYRA memelihara **Katalog Kasus Uji Emas (*Golden Test Cases*)** yang memuat pasangan prompt masukan dan kriteria keberterimaan jawaban:
 
 ```json
 [
@@ -2035,7 +2035,7 @@ test('luaran asisten AI mematuhi format kontrak kartu rekomendasi terstruktur', 
         ->and($aiResponse->title)->toBeString()->not->toBeEmpty()
         ->and($aiResponse->actionType)->toBeInstanceOf(StandardActionType::class)
         ->and($aiResponse->estimatedMinutes)->toBeInt()->toBeBetween(1, 30)
-        ->and($aiResponse->disclaimer)->toBeString()->toContain('PRONOIA');
+        ->and($aiResponse->disclaimer)->toBeString()->toContain('AEVYRA');
 });
 ```
 
@@ -2091,7 +2091,7 @@ Pengujian kontrak layanan pihak ketiga (*Third-Party Provider Contract Tests*) m
   - Penyedia eksternal mengembalikan kode galat HTTP 429 atau 503.
   - Respons penyedia eksternal mengalami pemutusan koneksi di tengah pengiriman (*truncated stream*).
 
-Pengujian ini memastikan backend PRONOIA tidak roboh saat vendor eksternal mengalami gangguan teknis.
+Pengujian ini memastikan backend AEVYRA tidak roboh saat vendor eksternal mengalami gangguan teknis.
 
 ---
 
@@ -2111,7 +2111,7 @@ Seluruh pengujian dijalankan secara otomatis pada pipa Integrasi Kontinu (*Conti
 
 ```yaml
 # .github/workflows/ci.yml
-name: PRONOIA Quality Gate & CI Suite
+name: AEVYRA Quality Gate & CI Suite
 
 on: [push, pull_request]
 
@@ -2122,7 +2122,7 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_DB: pronoia_test
+          POSTGRES_DB: aevyra_test
           POSTGRES_PASSWORD: secret_testing_password
         ports: ['5432:5432']
       redis:
@@ -2166,7 +2166,7 @@ Strategi pengujian kompleks yang melibatkan kalkulasi biometrik rumit wajib dise
 
 ## 100. Definisi Selesai untuk Fitur Baru (Feature Definition of Done / DoD)
 
-Suatu fitur perangkat lunak baru di PRONOIA **dinyatakan belum selesai (*NOT DONE*)** sebelum seluruh daftar periksa Definisi Selesai (*Definition of Done* / DoD) terpenuhi secara komprehensif:
+Suatu fitur perangkat lunak baru di AEVYRA **dinyatakan belum selesai (*NOT DONE*)** sebelum seluruh daftar periksa Definisi Selesai (*Definition of Done* / DoD) terpenuhi secara komprehensif:
 
 ```text
 DAFTAR PERIKSA DEFINISI SELESAI (FEATURE DEFINITION OF DONE):
@@ -2186,10 +2186,10 @@ DAFTAR PERIKSA DEFINISI SELESAI (FEATURE DEFINITION OF DONE):
 
 ## 101. Definisi Selesai untuk Rilis Produk Inti (Core Product Release Definition of Done)
 
-Rilis produk inti platform PRONOIA (*Core Product Release*) wajib memverifikasi bahwa seluruh mata rantai Siklus Inti Pengguna dapat diuji dan beroperasi tanpa hambatan:
+Rilis produk inti platform AEVYRA (*Core Product Release*) wajib memverifikasi bahwa seluruh mata rantai Siklus Inti Pengguna dapat diuji dan beroperasi tanpa hambatan:
 
 ```text
-RANTAI SIKLUS INTI PRODUK PRONOIA TERVERIFIKASI:
+RANTAI SIKLUS INTI PRODUK AEVYRA TERVERIFIKASI:
 Data Mentah Biometrik (Glukosa, Tidur, Hidrasi)
        │ (Teruji: Validasi Rentang Klinis & Penolakan Data Rusak)
        ▼
@@ -2218,11 +2218,11 @@ Setiap transisi status antar-fase wajib memiliki cakupan pengujian otomatis yang
 
 ## 102. Prinsip Pamungkas Pengujian Berkelanjutan (Final Sovereign Testing Principle)
 
-Sebagai doktrin tertinggi dalam rekayasa perangkat lunak platform PRONOIA, pengujian sistem wajib membuktikan lima pilar kualitas mutlak:
+Sebagai doktrin tertinggi dalam rekayasa perangkat lunak platform AEVYRA, pengujian sistem wajib membuktikan lima pilar kualitas mutlak:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│               LIMA PILAR KUALITAS SISTEM PLATFORM PRONOIA                    │
+│               LIMA PILAR KUALITAS SISTEM PLATFORM AEVYRA                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  1. BENAR SECARA FUNGSIONAL (CORRECT)                                      │
 │  2. AMAN DARI SERANGAN SIBER (SECURE)                                      │
@@ -2232,7 +2232,7 @@ Sebagai doktrin tertinggi dalam rekayasa perangkat lunak platform PRONOIA, pengu
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Rangkaian pengujian perangkat lunak dinyatakan berhasil dan paripurna apabila memberikan rasa percaya diri (*engineering confidence*) yang kokoh bahwa sistem PRONOIA mampu mendeteksi, menjelaskan, dan merespons perubahan perilaku kesehatan anggota secara cerdas tanpa:
+Rangkaian pengujian perangkat lunak dinyatakan berhasil dan paripurna apabila memberikan rasa percaya diri (*engineering confidence*) yang kokoh bahwa sistem AEVYRA mampu mendeteksi, menjelaskan, dan merespons perubahan perilaku kesehatan anggota secara cerdas tanpa:
 - Membocorkan data pribadi atau rekam medis pengguna ke pihak yang tidak berhak,
 - Menghasilkan bimbingan atau diagnosis medis yang spekulatif dan membahayakan keselamatan,
 - Merusak integritas riwayat deret waktu biometrik anggota,

@@ -1,99 +1,100 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import AuthLayout from '../../Layouts/AuthLayout';
 
 export default function Login() {
-    const [role, setRole] = useState('member'); // 'member' | 'instruktur' | 'admin'
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        identifier: '',
-        password: '',
-        remember: false,
+
+    const { data, setData, post, processing, errors } = useForm({
+        email: 'member@kadar.id',
+        password: 'password',
+        remember: true,
     });
-    const [loading, setLoading] = useState(false);
+
+    const handleRoleSelect = (roleEmail) => {
+        setData('email', roleEmail);
+        setData('password', 'password');
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            alert(`Simulasi masuk berhasil sebagai ${role === 'member' ? 'Member' : role === 'instruktur' ? 'Instruktur' : 'Admin'}!`);
-        }, 500);
+        post('/login');
     };
 
     return (
         <AuthLayout
             title="Masuk ke Akun Kadar"
-            subtitle="Akses dashboard kesehatan, scanner, dan konsultasi Anda"
+            subtitle="Akses dashboard kesehatan, pemantauan baseline, dan pendampingan Anda"
         >
-            <Head title="Masuk Akun - Kadar PWA" />
+            <Head title="Masuk Akun - Kadar" />
 
-            {/* Role Switcher: 3 Roles (Member, Instruktur, Admin) */}
-            <div className="flex p-1 bg-surface-container-low rounded-xl border border-surface-container mb-5">
-                <button
-                    type="button"
-                    onClick={() => setRole('member')}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        role === 'member'
-                            ? 'bg-primary text-on-primary shadow-xs'
-                            : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                >
-                    Member
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setRole('instruktur')}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        role === 'instruktur'
-                            ? 'bg-primary text-on-primary shadow-xs'
-                            : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                >
-                    Instruktur
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setRole('admin')}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        role === 'admin'
-                            ? 'bg-primary text-on-primary shadow-xs'
-                            : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                >
-                    Admin
-                </button>
+            {/* Quick Demo Credentials Switcher */}
+            <div className="mb-5 p-3 rounded-2xl bg-surface-container-low border border-surface-container/60">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="font-label-mono text-[10px] uppercase font-bold text-primary tracking-wider">
+                        Demo Login Cepat
+                    </span>
+                    <span className="text-[11px] text-on-surface-variant">Klik untuk mengisi:</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                        type="button"
+                        onClick={() => handleRoleSelect('member@kadar.id')}
+                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
+                            data.email === 'member@kadar.id'
+                                ? 'bg-primary text-on-primary border-primary shadow-xs'
+                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
+                        }`}
+                    >
+                        Member
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleRoleSelect('instruktur@kadar.id')}
+                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
+                            data.email === 'instruktur@kadar.id'
+                                ? 'bg-primary text-on-primary border-primary shadow-xs'
+                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
+                        }`}
+                    >
+                        Instruktur
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleRoleSelect('admin@kadar.id')}
+                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
+                            data.email === 'admin@kadar.id'
+                                ? 'bg-primary text-on-primary border-primary shadow-xs'
+                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
+                        }`}
+                    >
+                        Admin
+                    </button>
+                </div>
             </div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1">
                     <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                        {role === 'member'
-                            ? 'Email / Nomor WhatsApp'
-                            : role === 'instruktur'
-                            ? 'Email Instruktur / ID Tenaga Ahli'
-                            : 'Email / Username Admin'}
+                        Alamat Email
                     </label>
                     <div className="relative">
                         <input
-                            type="text"
+                            type="email"
                             required
-                            value={formData.identifier}
-                            onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
-                            placeholder={
-                                role === 'member'
-                                    ? 'user@email.com / 0812xxxx'
-                                    : role === 'instruktur'
-                                    ? 'instruktur@kadar.id'
-                                    : 'admin@kadar.id'
-                            }
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            placeholder="user@kadar.id"
                             className="w-full px-3.5 py-2.5 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
                         />
                         <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                            {role === 'member' ? 'person' : role === 'instruktur' ? 'co_present' : 'admin_panel_settings'}
+                            mail
                         </span>
                     </div>
+                    {errors.email && (
+                        <p className="text-[11px] text-error font-medium">{errors.email}</p>
+                    )}
                 </div>
 
                 <div className="space-y-1">
@@ -101,16 +102,13 @@ export default function Login() {
                         <label className="font-label-mono text-[11px] text-primary uppercase font-semibold">
                             Kata Sandi
                         </label>
-                        <a href="#forgot" className="font-label-mono text-[10px] text-primary hover:underline">
-                            Lupa Sandi?
-                        </a>
                     </div>
                     <div className="relative">
                         <input
                             type={showPassword ? 'text' : 'password'}
                             required
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
                             placeholder="Masukkan kata sandi"
                             className="w-full px-3.5 py-2.5 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
                         />
@@ -124,27 +122,30 @@ export default function Login() {
                             </span>
                         </button>
                     </div>
+                    {errors.password && (
+                        <p className="text-[11px] text-error font-medium">{errors.password}</p>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2 pt-0.5">
                     <input
                         type="checkbox"
                         id="remember"
-                        checked={formData.remember}
-                        onChange={(e) => setFormData({ ...formData, remember: e.target.checked })}
+                        checked={data.remember}
+                        onChange={(e) => setData('remember', e.target.checked)}
                         className="rounded text-primary focus:ring-primary border-surface-container"
                     />
                     <label htmlFor="remember" className="text-xs text-on-surface-variant cursor-pointer select-none">
-                        Ingat sesi di perangkat ini
+                        Ingat sesi saya
                     </label>
                 </div>
 
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={processing}
                     className="w-full py-3 px-4 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all duration-200 active:scale-98 shadow-sm flex items-center justify-center gap-2"
                 >
-                    {loading ? (
+                    {processing ? (
                         <>
                             <span className="w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
                             <span>Memproses Masuk...</span>
@@ -160,7 +161,7 @@ export default function Login() {
                 <div className="pt-2 text-center text-xs text-on-surface-variant">
                     Belum punya akun?{' '}
                     <Link href="/register" className="text-primary font-semibold hover:underline">
-                        Daftar Sebagai Member / Instruktur →
+                        Daftar Sebagai Member Baru →
                     </Link>
                 </div>
             </form>

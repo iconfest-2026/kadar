@@ -1,12 +1,12 @@
-# PRONOIA — Health Behavior Engine
+# AEVYRA — Health Behavior Engine
 
-> Spesifikasi komprehensif arsitektur, algoritma, dan perilaku *Health Behavior Engine* sebagai inti sistem kecerdasan (*intelligence system*) PRONOIA. Engine ini bertanggung jawab membangun *personal baseline* adaptif, mendeteksi deviasi pola perilaku secara dini, menghasilkan sinyal preventif yang transparan dan dapat dijelaskan (*explainable*), mendukung intervensi terarah, serta mengevaluasi luaran kesehatan secara longitudinal tanpa melanggar batasan non-diagnostik medis.
+> Spesifikasi komprehensif arsitektur, algoritma, dan perilaku *Health Behavior Engine* sebagai inti sistem kecerdasan (*intelligence system*) AEVYRA. Engine ini bertanggung jawab membangun *personal baseline* adaptif, mendeteksi deviasi pola perilaku secara dini, menghasilkan sinyal preventif yang transparan dan dapat dijelaskan (*explainable*), mendukung intervensi terarah, serta mengevaluasi luaran kesehatan secara longitudinal tanpa melanggar batasan non-diagnostik medis.
 
 ---
 
 ## 1. Purpose
 
-*Health Behavior Engine* adalah modul kecerdasan sentral dalam ekosistem **PRONOIA** yang mengolah data catatan kesehatan (*health-related logs*) mentah menjadi pemahaman mendalam atas pola dan perubahan kebiasaan pengguna.
+*Health Behavior Engine* adalah modul kecerdasan sentral dalam ekosistem **AEVYRA** yang mengolah data catatan kesehatan (*health-related logs*) mentah menjadi pemahaman mendalam atas pola dan perubahan kebiasaan pengguna.
 
 Engine ini memegang tanggung jawab teknis penuh terhadap:
 - **Normalisasi Data (*Data Normalization*):** Penyeragaman satuan, zona waktu, dan format log dari berbagai instrumen input.
@@ -29,7 +29,7 @@ Engine ini memegang tanggung jawab teknis penuh terhadap:
 
 ## 2. Core Principle
 
-PRONOIA dibangun dengan filosofi bahwa angka metrik kesehatan tidak memiliki arti tanpa konteks personal. Sistem tidak sekadar bertanya:
+AEVYRA dibangun dengan filosofi bahwa angka metrik kesehatan tidak memiliki arti tanpa konteks personal. Sistem tidak sekadar bertanya:
 
 > *"Berapa nilai metrik kesehatan pengguna saat ini?"*
 
@@ -231,7 +231,7 @@ Model metrik kanonikal merepresentasikan entitas terstandarisasi yang dikonsumsi
 
 ## 11. Supported Metric Categories
 
-PRONOIA mengelompokkan metrik perilaku ke dalam 9 domain gaya hidup preventif terintegrasi:
+AEVYRA mengelompokkan metrik perilaku ke dalam 9 domain gaya hidup preventif terintegrasi:
 
 | No | Kategori Metrik | Fokus Pengukuran Perilaku | Metrik Kunci |
 | :---: | :--- | :--- | :--- |
@@ -320,7 +320,7 @@ Metrik kesejahteraan merefleksikan persepsi kualitatif pengguna secara mandiri (
 
 ## 18. Engagement Metrics
 
-Metrik keterlibatan mengukur tingkat interaksi pengguna dengan platform PRONOIA sebagai konteks perilaku:
+Metrik keterlibatan mengukur tingkat interaksi pengguna dengan platform AEVYRA sebagai konteks perilaku:
 - **`logging_frequency` (Hari aktif / 7 hari):** Konsistensi kehadiran mencatat data.
 - **`challenge_adherence` (%):** Rasio penyelesaian tantangan kebiasaan aktif.
 - **`insight_interaction_rate` (%):** Rasio pembacaan kartu wawasan dan penerimaan saran aksi.
@@ -437,7 +437,7 @@ Engine menerapkan konfigurasi jendela observasi bertahap sesuai siklus biologis 
 | Durasi Jendela | Karakteristik Penggunaan | Kategori Metrik |
 | :---: | :--- | :--- |
 | **7 Hari** | *Early Rolling Window* untuk orientasi pengguna baru. | Hidrasi, keteraturan jam makan. |
-| **14 Hari** | **Jendela Standar PRONOIA** (*Default Golden Baseline*). | Durasi tidur, langkah harian, variabilitas rutinitas. |
+| **14 Hari** | **Jendela Standar AEVYRA** (*Default Golden Baseline*). | Durasi tidur, langkah harian, variabilitas rutinitas. |
 | **30 Hari** | Jendela stabilitas jangka menengah untuk tren musiman. | Frekuensi olahraga, fluktuasi berat badan. |
 | **90 Hari** | Jendela analisis longitudinal untuk tinjauan instruktur. | Perubahan kebiasaan seumur hidup (*lifestyle evolution*). |
 
@@ -506,7 +506,7 @@ Kebiasaan Sehat (7.5 jam) ──▶ Begadang Beruntun (5 jam) ──▶ Baseline
                                       BAHAYA: Defisit Tidur Kronis Dianggap "Normal Baru"
 ```
 
-Strategi mitigasi PRONOIA untuk mencegah *harmful drift*:
+Strategi mitigasi AEVYRA untuk mencegah *harmful drift*:
 1. Mengunci jendela referensi historis (*Historical Anchor Baseline*) selama 30–60 hari.
 2. Membutuhkan intervensi aktif atau persetujuan eksplisit pengguna sebelum menurunkan baseline target kebiasaan.
 3. Menyimpan riwayat versi baseline agar tren penurunan jangka panjang tetap terdeteksi.
@@ -704,7 +704,7 @@ Struktur atribut wajib sebuah sinyal:
 
 ## 44. Signal Types
 
-PRONOIA mendefinisikan 8 tipe sinyal perilaku inti:
+AEVYRA mendefinisikan 8 tipe sinyal perilaku inti:
 
 | Kode Sinyal | Kondisi Pemicu Komputasional | Relevansi Tindakan Preventif |
 | :--- | :--- | :--- |
@@ -727,7 +727,7 @@ Setiap representasi teks dari sinyal wajib menjaga batas non-diagnostik:
 ┌────────────────────────────────────────────────────────────┐
 │                     SINYAL: SLEEP_DECLINE                  │
 ├─────────────────────────────┬──────────────────────────────┤
-│      ARTINYA DI PRONOIA     │       BUKAN DIAGNOSIS        │
+│      ARTINYA DI AEVYRA     │       BUKAN DIAGNOSIS        │
 │ "Penurunan rata-rata durasi │ "Pengguna menderita insomnia │
 │ tidur sebesar 60 menit dari │ klinis atau gangguan tidur   │
 │ baseline dalam 5 hari ini." │ saraf yang memerlukan obat." │
@@ -890,7 +890,7 @@ Perbandingan kualitas komunikasi edukatif antarmuka:
 | Format Komunikasi | Contoh Redaksi Pesan | Dampak Psikologis Pengguna |
 | :--- | :--- | :--- |
 | ❌ **Buruk (*Black-box & Menakut-nakuti*)** | *"Skor kesehatan Anda turun drastis ke 60%! Anda berisiko sakit."* | Memicu kecemasan tanpa pemahaman konteks. |
-| ✅ **Benar (*PRONOIA Explainable Standard*)** | *"Rata-rata tidur Anda dalam 5 hari terakhir adalah 6 jam 05 menit, yaitu 65 menit lebih rendah dari baseline biasa Anda (7 jam 10 menit)."* | Pengguna paham bukti fakta dan merasa berdaya untuk memperbaiki diri. |
+| ✅ **Benar (*AEVYRA Explainable Standard*)** | *"Rata-rata tidur Anda dalam 5 hari terakhir adalah 6 jam 05 menit, yaitu 65 menit lebih rendah dari baseline biasa Anda (7 jam 10 menit)."* | Pengguna paham bukti fakta dan merasa berdaya untuk memperbaiki diri. |
 
 ---
 
@@ -927,7 +927,7 @@ Rekomendasi tindakan preventif disaring melalui 5 filter relevansi:
 
 ## 59. Recommendation Strategy
 
-PRONOIA menerapkan prinsip **Tindakan Mikro Berbasis Bukti (*Evidence-based Micro-actions*)**:
+AEVYRA menerapkan prinsip **Tindakan Mikro Berbasis Bukti (*Evidence-based Micro-actions*)**:
 - **Rendah Risiko (*Low-risk*):** Berupa perbaikan kebiasaan hidup sehari-hari, bukan terapi invasif.
 - **Praktikal (*Practical*):** Dapat dieksekusi dalam hitungan menit.
 - **Dapat Dicapai (*Achievable*):** Beban target realistis (misal: memajukan jam tidur 20 menit, bukan 2 jam seketika).
@@ -1016,13 +1016,13 @@ Sistem membedakan secara tegas antara urutan kronologis peristiwa (*temporal ass
 ✅ ASOSIASI TEMPORAL BENAR: "Durasi tidur Anda membaik selama periode pelaksanaan pengingat istirahat."
 ```
 
-PRONOIA selalu menggunakan bahasa sains perilaku yang terukur dan rendah hati (*humble science*).
+AEVYRA selalu menggunakan bahasa sains perilaku yang terukur dan rendah hati (*humble science*).
 
 ---
 
 ## 67. Behavioral Loop
 
-Siklus perilaku tertutup (*Closed Preventive Behavioral Loop*) merupakan esensi pembeda sistem PRONOIA:
+Siklus perilaku tertutup (*Closed Preventive Behavioral Loop*) merupakan esensi pembeda sistem AEVYRA:
 
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
@@ -1382,7 +1382,7 @@ Sistem mengakui secara terbuka keterbatasan teknologinya:
 
 > [!IMPORTANT]
 > **Ketiadaan Sinyal Bukan Berarti Kebal Masalah:**  
-> PRONOIA tidak pernah menjamin mampu mendeteksi seluruh risiko kesehatan pengguna. Komunikasi produk menyatakan secara jujur: *"PRONOIA menganalisis tren dari data yang Anda catat. Jika Anda merasakan ketidaknyamanan fisik, selalu utamakan konsultasi medis langsung."*
+> AEVYRA tidak pernah menjamin mampu mendeteksi seluruh risiko kesehatan pengguna. Komunikasi produk menyatakan secara jujur: *"AEVYRA menganalisis tren dari data yang Anda catat. Jika Anda merasakan ketidaknyamanan fisik, selalu utamakan konsultasi medis langsung."*
 
 ---
 
@@ -1427,9 +1427,9 @@ Alur kegawatdaruratan medis (*Emergency Flow*) dipisahkan 100% secara arsitektur
 
 ## 99. Health Score Policy
 
-PRONOIA menolak secara sadar pembuatan skor kesehatan tunggal generik (*Global Health Score*):
+AEVYRA menolak secara sadar pembuatan skor kesehatan tunggal generik (*Global Health Score*):
 - Skor tunggal seperti *"Skor Kesehatan Anda: 72/100"* menyederhanakan biologi manusia secara sembrono, memicu obsesi tidak sehat (*orthorexia*), dan tidak memberikan konteks tindakan konkret.
-- PRONOIA menyajikan status multi-dimensi: **Konsistensi Tidur**, **Mobilitas Fisik**, dan **Kepatuhan Sasaran**.
+- AEVYRA menyajikan status multi-dimensi: **Konsistensi Tidur**, **Mobilitas Fisik**, dan **Kepatuhan Sasaran**.
 
 ---
 
@@ -1886,7 +1886,7 @@ Pemisahan tegas dari fungsi pertolongan pertama medis:
 
 ## 139. Longitudinal Model
 
-Model longitudinal PRONOIA memetakan evolusi gaya hidup pengguna sepanjang waktu:
+Model longitudinal AEVYRA memetakan evolusi gaya hidup pengguna sepanjang waktu:
 
 ```text
 Bulan 1: Pembentukan Baseline Awal ──▶ Deteksi Deviasi ──▶ Intervensi 1 ──▶ Pemulihan
@@ -1961,7 +1961,7 @@ Skenario demonstrasi langsung (*Live Demo Protocol*) untuk dewan juri kompetisi:
 6. Simulasikan Pemulihan Hari ke-5 & ke-6 ──▶ Status Sinyal Berubah Menjadi RESOLVED.
 ```
 
-Alur ini membuktikan bahwa PRONOIA bukan sekadar penampil grafik statis, melainkan mesin kecerdasan perilaku adaptif tertutup.
+Alur ini membuktikan bahwa AEVYRA bukan sekadar penampil grafik statis, melainkan mesin kecerdasan perilaku adaptif tertutup.
 
 ---
 
@@ -1976,7 +1976,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 148. Anti-Pattern — Dashboard-only
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Menampilkan tumpukan grafik statistik rumit dan membiarkan pengguna bingung menyimpulkan artinya sendiri. | ✅ Menerjemahkan grafik menjadi kartu wawasan ramah yang menjelaskan makna perubahan dan langkah nyata yang perlu diambil. |
 
@@ -1984,7 +1984,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 149. Anti-Pattern — AI-only
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Menyerahkan seluruh analisis data mentah ke model bahasa besar (LLM) yang rentan halusinasi angka dan kesalahan berhitung. | ✅ Menghitung metrik secara deterministik melalui *Behavior Engine*, lalu menggunakan AI murni sebagai penyusun bahasa edukatif yang aman. |
 
@@ -1992,7 +1992,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 150. Anti-Pattern — Alert Spam
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Mengirimkan puluhan notifikasi setiap kali ada fluktuasi angka kecil, sehingga pengguna mematikan notifikasi (*alert fatigue*). | ✅ Menerapkan ambang batas kualifikasi, masa jeda (*cooldown*), dan pembatasan maksimal 2 sinyal prioritas aktif. |
 
@@ -2000,7 +2000,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 151. Anti-Pattern — Population-only Comparison
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Memaksa target populasi kaku (misal: semua orang wajib 10.000 langkah atau tidur 8 jam) yang tidak realistis bagi banyak individu. | ✅ Membangun baseline personal adaptif yang menghargai kapasitas dan ritme hidup unik masing-masing pengguna. |
 
@@ -2008,7 +2008,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 152. Anti-Pattern — False Precision
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Menyajikan angka presisi semu yang menyesatkan, seperti: *"Skor Kesehatan Organ Tubuh Anda: 84.72%"*. | ✅ Menggunakan istilah sains perilaku terukur: *"Aktivitas fisik Anda minggu ini stabil dan berada dalam rentang target personal Anda."* |
 
@@ -2016,7 +2016,7 @@ Tiga proposisi nilai unik yang wajib dipahami evaluator:
 
 ## 153. Anti-Pattern — Hidden Computation
 
-| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif PRONOIA |
+| Pola Salah (*Anti-Pattern*) | Pendekatan Solutif AEVYRA |
 | :--- | :--- |
 | ❌ Memberikan saran kesehatan tanpa membeberkan landasan data pendukung (*black-box algorithm*). | ✅ Melampirkan objek bukti transparan (*Evidence Object*) yang menjawab apa, kapan, dan mengapa saran tersebut dihadirkan. |
 
@@ -2108,7 +2108,7 @@ Kartu Wawasan Edukatif ──▶ Aksi Pengingat Tidur ──▶ Evaluasi Pemulih
 
 ## 159. Final Engine Model
 
-Model komprehensif arsitektur *Health Behavior Engine* merangkum seluruh siklus kecerdasan preventif PRONOIA:
+Model komprehensif arsitektur *Health Behavior Engine* merangkum seluruh siklus kecerdasan preventif AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -2181,4 +2181,4 @@ Kecerdasan Perilaku Hidup Sehat (Behavioral Intelligence)
              Diagnosis Medis Klinis (Medical Diagnosis)
 ```
 
-PRONOIA tidak berusaha menjadi mesin yang menghakimi penyakit pengguna, melainkan mitra cerdas yang membantu pengguna memahami dirinya sendiri dan mengambil langkah pencegahan terbaik setiap hari.
+AEVYRA tidak berusaha menjadi mesin yang menghakimi penyakit pengguna, melainkan mitra cerdas yang membantu pengguna memahami dirinya sendiri dan mengambil langkah pencegahan terbaik setiap hari.

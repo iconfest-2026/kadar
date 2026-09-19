@@ -1,12 +1,12 @@
-# PRONOIA — Instructor & Admin
+# AEVYRA — Instructor & Admin
 
-> Spesifikasi komprehensif arsitektur operasional, batasan otorisasi (*role-based & relationship-based access control*), alur kerja pendampingan manusia (*human-in-the-loop*), dasbor analitik, manajemen intervensi, sistem konsultasi, moderasi komunitas, tata kelola konfigurasi sistem, hingga kepatuhan audit untuk peran Instructor dan Administrator dalam platform PRONOIA.
+> Spesifikasi komprehensif arsitektur operasional, batasan otorisasi (*role-based & relationship-based access control*), alur kerja pendampingan manusia (*human-in-the-loop*), dasbor analitik, manajemen intervensi, sistem konsultasi, moderasi komunitas, tata kelola konfigurasi sistem, hingga kepatuhan audit untuk peran Instructor dan Administrator dalam platform AEVYRA.
 
 ---
 
 ## 1. Purpose
 
-Dokumen ini mendefinisikan arsitektur dan tata kelola dua peran operasional utama dalam platform **PRONOIA**:
+Dokumen ini mendefinisikan arsitektur dan tata kelola dua peran operasional utama dalam platform **AEVYRA**:
 
 | Peran Operasional (*Role*) | Fokus Utama Peran | Tanggung Jawab Kunci |
 | :--- | :--- | :--- |
@@ -19,7 +19,7 @@ Kedua peran ini beroperasi dengan batasan akses yang terisolasi secara ketat gun
 
 ## 2. Role Philosophy
 
-Dalam PRONOIA, peran (*role*) bukan sekadar label visual pada antarmuka, melainkan kontrak penegakan izin multi-dimensi (*multi-dimensional authorization contract*):
+Dalam AEVYRA, peran (*role*) bukan sekadar label visual pada antarmuka, melainkan kontrak penegakan izin multi-dimensi (*multi-dimensional authorization contract*):
 
 ```text
 Autentikasi (Siapa Pengguna?)
@@ -41,11 +41,11 @@ Konteks Keamanan (Kapan & Melalui Saluran Apa Akses Dilakukan?)
 
 ## 3. Role Hierarchy
 
-Struktur hierarki peran operasional platform PRONOIA:
+Struktur hierarki peran operasional platform AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                     PLATFORM TATA KELOLA PRONOIA                       │
+│                     PLATFORM TATA KELOLA AEVYRA                       │
 └──────────────────────────────────┬─────────────────────────────────────┘
                                    │
                  ┌─────────────────┴─────────────────┐
@@ -85,7 +85,7 @@ Matriks komparasi kapabilitas lintas-peran:
 
 ## 5. Instructor Definition
 
-Instructor adalah profesional atau pendamping gaya hidup terverifikasi yang bermitra dengan PRONOIA untuk memberikan bimbingan preventif berbasis bukti:
+Instructor adalah profesional atau pendamping gaya hidup terverifikasi yang bermitra dengan AEVYRA untuk memberikan bimbingan preventif berbasis bukti:
 - **Bukan Pengganti Dokter:** Peran instruktur berfokus pada pendampingan kebiasaan (*behavioral coaching*), bukan penegakan diagnosis klinis patologis.
 - **Kredensial Resmi:** Instruktur wajib melalui verifikasi dokumen keahlian, afiliasi organisasi kebugaran/kesehatan, dan persetujuan pakta integritas etika privasi.
 
@@ -93,7 +93,7 @@ Instructor adalah profesional atau pendamping gaya hidup terverifikasi yang berm
 
 ## 6. Instructor Goals
 
-Instruktur memanfaatkan PRONOIA melalui siklus pendampingan tertutup (*Support Loop*):
+Instruktur memanfaatkan AEVYRA melalui siklus pendampingan tertutup (*Support Loop*):
 
 ```text
 Pahami Konteks Member ──▶ Tinjau Deviasi Sinyal ──▶ Berikan Bimbingan Preventif
@@ -107,7 +107,7 @@ Rancang Intervensi ──▶ Pantau Progres Harian ──▶ Evaluasi Tindak Lan
 
 ## 7. Instructor Core Responsibilities
 
-Tanggung jawab utama instruktur dalam ekosistem PRONOIA:
+Tanggung jawab utama instruktur dalam ekosistem AEVYRA:
 - **Memantau Dasbor Binaan (*Caseload Monitoring*):** Meninjau status anggota yang ditugaskan secara berkala.
 - **Mengevaluasi Sinyal Perilaku:** Mempelajari ringkasan deviasi yang dihasilkan oleh *Health Behavior Engine*.
 - **Merancang Rencana Intervensi (*Intervention Plan*):** Menetapkan aksi mikro bertahap yang selaras dengan kapasitas member.
@@ -221,7 +221,7 @@ Tata letak dasbor instruktur dirancang mengutamakan aksi bimbingan cepat:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                     DASBOR INSTRUKTUR PRONOIA                          │
+│                     DASBOR INSTRUKTUR AEVYRA                          │
 ├────────────────────────────────────────────────────────────────────────┤
 │ [METRIK BINAAN]                                                        │
 │  Total Member: 24 | Butuh Perhatian: 3 | Agenda Sesi Hari Ini: 2       │
@@ -652,7 +652,7 @@ Tinjauan kepatuhan keselamatan instruktur:
 
 ## 60. Admin Definition
 
-Administrator adalah pengelola operasional platform tingkat tertinggi yang bertanggung jawab atas ketersediaan layanan, integritas keamanan, kepatuhan regulasi, tata kelola pengguna, dan pengawasan mutu ekosistem PRONOIA.
+Administrator adalah pengelola operasional platform tingkat tertinggi yang bertanggung jawab atas ketersediaan layanan, integritas keamanan, kepatuhan regulasi, tata kelola pengguna, dan pengawasan mutu ekosistem AEVYRA.
 
 ---
 
@@ -670,11 +670,11 @@ Tanggung jawab utama administrator platform:
 
 ## 62. Admin Dashboard
 
-Arsitektur modul pada Dasbor Administrator PRONOIA:
+Arsitektur modul pada Dasbor Administrator AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                     DASBOR ADMINISTRATOR PRONOIA                       │
+│                     DASBOR ADMINISTRATOR AEVYRA                       │
 ├────────────────────────────────────────────────────────────────────────┤
 │ [RINGKASAN OPERASIONAL PLATFORM]                                       │
 │  Total Pengguna: 12.450 | Instruktur Aktif: 48 | Program Berjalan: 12  │
@@ -837,7 +837,7 @@ Pilihan tindakan moderasi konten:
 
 ## 79. Moderation Principles
 
-Prinsip penegakan moderasi PRONOIA:
+Prinsip penegakan moderasi AEVYRA:
 - **Proporsional:** Sanksi disesuaikan dengan tingkat keparahan pelanggaran.
 - **Transparan:** Pengguna yang dikenai sanksi menerima penjelasan pasal pedoman yang dilanggar.
 - **Auditabel:** Setiap tindakan moderasi mencatat nama admin penanggung jawab.
@@ -969,7 +969,7 @@ Tata kelola tingkat keanggotaan platform (*Membership Tiers*):
 
 ## 96. Aturan Akses Tingkatan Membership (Membership Access Rules)
 
-Sistem otorisasi PRONOIA menerapkan pemetaan akses berbasis tingkatan (*membership tiering*) yang dapat dikonfigurasi secara dinamis oleh Administrator tanpa memerlukan deployment ulang kode.
+Sistem otorisasi AEVYRA menerapkan pemetaan akses berbasis tingkatan (*membership tiering*) yang dapat dikonfigurasi secara dinamis oleh Administrator tanpa memerlukan deployment ulang kode.
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1016,7 +1016,7 @@ Modul laporan eksekutif menyajikan visibilitas makro terhadap dinamika platform,
 
 ## 98. Perlindungan Data Kesehatan dalam Laporan Admin (Health Data in Admin Reports)
 
-Platform PRONOIA memberlakukan postur kepatuhan privasi yang ketat dalam perancangan laporan manajerial:
+Platform AEVYRA memberlakukan postur kepatuhan privasi yang ketat dalam perancangan laporan manajerial:
 
 $$\mathbf{Prinsip\ Utama:}\quad \text{Data Agregat} \gg \text{Data Mentah Individual}$$
 
@@ -1045,7 +1045,7 @@ Data individual hanya diizinkan untuk diakses pada laporan manajerial jika dan h
 
 ## 99. Tata Kelola Ekspor Laporan (Report Export Governance)
 
-Setiap pengunduhan data keluar dari sistem PRONOIA wajib melewati gerbang verifikasi ketat guna mencegah kebocoran data (*data exfiltration*):
+Setiap pengunduhan data keluar dari sistem AEVYRA wajib melewati gerbang verifikasi ketat guna mencegah kebocoran data (*data exfiltration*):
 
 ```text
 Permintaan Ekspor ──> Verifikasi Hak ──> Batasi Filter ──> Tentukan Format ──> Catat Audit ──> Tautan Bertarget (TTL)
@@ -1232,7 +1232,7 @@ Diagram operasional penonaktifan akun secara massal:
 
 ## 109. Batasan Akses Data Kesehatan oleh Admin (Admin Data Access Boundary)
 
-PRONOIA menegakkan pemisahan wewenang yang tegas antara pengelolaan infrastruktur sistem dan rekam data personal:
+AEVYRA menegakkan pemisahan wewenang yang tegas antara pengelolaan infrastruktur sistem dan rekam data personal:
 
 $$\mathbf{Prinsip\ Mutlak:}\quad \text{Hak Istimewa Admin} \neq \text{Akses Tanpa Batas ke Rekam Medis}$$
 
@@ -1276,7 +1276,7 @@ Instruktur Utama ──> Permintaan Delegasi ──> Verifikasi Kualifikasi ─�
 
 ## 112. Otorisasi Tingkat Program (Program-Level Permissions)
 
-Untuk mendukung organisasi kesehatan atau korporasi yang mengelola beragam program kohor mandiri, PRONOIA mendukung izin terisolasi (*scoped permissions*):
+Untuk mendukung organisasi kesehatan atau korporasi yang mengelola beragam program kohor mandiri, AEVYRA mendukung izin terisolasi (*scoped permissions*):
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1292,13 +1292,13 @@ Untuk mendukung organisasi kesehatan atau korporasi yang mengelola beragam progr
 ```
 
 > [!IMPORTANT]
-> Administrator Program tidak memiliki hak untuk mengubah peran pengguna global, mengakses audit log seluruh sistem, atau mengubah konfigurasi inti server PRONOIA.
+> Administrator Program tidak memiliki hak untuk mengubah peran pengguna global, mengakses audit log seluruh sistem, atau mengubah konfigurasi inti server AEVYRA.
 
 ---
 
 ## 113. Model Daftar Hak Izin Terstandar (Standard Permission Model)
 
-PRONOIA mengadopsi taksonomi perizinan granular yang dapat digabungkan ke dalam peran (*Role-Based Access Control*):
+AEVYRA mengadopsi taksonomi perizinan granular yang dapat digabungkan ke dalam peran (*Role-Based Access Control*):
 
 ```text
 users.view               users.manage
@@ -1425,7 +1425,7 @@ Permintaan Klien (POST /api/v1/admin/users/{id}/roles)
 
 ## 118. Otorisasi UI vs Otorisasi Backend (UI vs Backend Authorization)
 
-PRONOIA memperlakukan keamanan antarmuka dan keamanan server sebagai dua disiplin yang terpisah namun saling melengkapi:
+AEVYRA memperlakukan keamanan antarmuka dan keamanan server sebagai dua disiplin yang terpisah namun saling melengkapi:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1500,7 +1500,7 @@ Ruang Kerja Admin (Admin Workspace)
 
 ## 122. Isolasi Peran Antarmuka (Role Isolation Principle)
 
-Aplikasi klien PRONOIA menerapkan prinsip isolasi aset antarmuka secara tegas:
+Aplikasi klien AEVYRA menerapkan prinsip isolasi aset antarmuka secara tegas:
 - Bundel JavaScript dan modul antarmuka Administrator **tidak pernah dimuat** pada sesi pengguna dengan peran Member biasa.
 - Modul administrasi dipisahkan menjadi *code-splitting bundle* tersendiri yang diproteksi oleh *auth-guard* rute sebelum diunduh oleh peramban klien.
 - Kegagalan otorisasi rute langsung me-redirect pengguna ke halaman aman tanpa menampilkan struktur UI internal.
@@ -1595,7 +1595,7 @@ Indikator kinerja kunci (*KPI*) operasional yang dipantau oleh Administrator:
 
 ## 128. Menghindari Metrik Kinerja yang Menyesatkan (Avoid Misleading Performance Metrics)
 
-PRONOIA secara tegas **melarang penggunaan metrik reduktif klinis** untuk mengevaluasi kinerja Instruktur:
+AEVYRA secara tegas **melarang penggunaan metrik reduktif klinis** untuk mengevaluasi kinerja Instruktur:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1700,7 +1700,7 @@ Panduan sistem dalam mengatasi kebuntuan operasional administratif:
 
 ## 133. Kebijakan Penghapusan Aman Entitas (Safe Deletion Policy)
 
-PRONOIA memberlakukan aturan ketergantungan relasional ketat guna melindungi integritas data ekosistem:
+AEVYRA memberlakukan aturan ketergantungan relasional ketat guna melindungi integritas data ekosistem:
 
 ```text
 [ Permintaan Hapus Entitas: Program / Kohor ]
@@ -1752,7 +1752,7 @@ Sebagai bagian dari pakta integritas profesional, setiap Instruktur wajib menyet
 1. **Larangan Tangkapan Layar (*No Screenshots*):** Dilarang mengambil tangkapan layar data bimbingan member untuk dibagikan di media sosial atau forum publik.
 2. **Larangan Ekspor ke AI Eksternal (*No External AI Ingestion*):** Dilarang menyalin dan menempelkan teks keluhan atau data klinis member ke aplikasi pihak ketiga yang tidak tersertifikasi.
 3. **Prinsip Kebutuhan Minimum (*Need-to-Know Basis*):** Hanya mengakses data member yang menjadi tanggung jawab aktif bimbingannya.
-4. **Kepatuhan Kanal Resmi (*Official Channel Adherence*):** Seluruh komunikasi intervensi wajib dilakukan melalui infrastruktur PRONOIA demi akuntabilitas rekam jejak.
+4. **Kepatuhan Kanal Resmi (*Official Channel Adherence*):** Seluruh komunikasi intervensi wajib dilakukan melalui infrastruktur AEVYRA demi akuntabilitas rekam jejak.
 
 ---
 
@@ -1800,7 +1800,7 @@ AI dapat dimanfaatkan oleh Administrator untuk tugas-tugas penunjang efisiensi o
 
 ## 141. Prinsip Pengawasan Manusia (Human-in-the-Loop Principle)
 
-Kecerdasan Buatan (AI) dalam platform PRONOIA tidak pernah mengambil tindakan klinis atau intervensi perilaku kritis secara sepihak tanpa supervisi manusia:
+Kecerdasan Buatan (AI) dalam platform AEVYRA tidak pernah mengambil tindakan klinis atau intervensi perilaku kritis secara sepihak tanpa supervisi manusia:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1965,7 +1965,7 @@ Log audit keamanan dikelola dengan kepatuhan regulasi perlindungan data yang ket
 
 ## 151. Postur Keamanan Operasional Platform (Operational Security Standards)
 
-Infrastruktur PRONOIA mengimplementasikan strategi pertahanan berlapis (*Defense-in-Depth*):
+Infrastruktur AEVYRA mengimplementasikan strategi pertahanan berlapis (*Defense-in-Depth*):
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -2315,7 +2315,7 @@ Prioritas ini disajikan secara intuitif dengan penanda warna dan skor urgensi ta
 
 ## 174. Menghindari Pelabelan Tingkat Keparahan Klinis (Avoid Clinical Severity Claims)
 
-Platform PRONOIA **bukanlah sistem instalasi gawat darurat (IGD)** rumah sakit:
+Platform AEVYRA **bukanlah sistem instalasi gawat darurat (IGD)** rumah sakit:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -2324,14 +2324,14 @@ Platform PRONOIA **bukanlah sistem instalasi gawat darurat (IGD)** rumah sakit:
 │  LABEL YANG DILARANG DIGUNAKAN DI DASBOR TRIASE:                            │
 │  "Pasien Kritis", "Pasien Risiko Tinggi Akut", "Pasien Stabil / Rendah"     │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  TERMINOLOGI RESMI PRONOIA YANG BENAR & AMAN:                               │
+│  TERMINOLOGI RESMI AEVYRA YANG BENAR & AMAN:                               │
 │  • "Perlu Tindak Lanjut" (Follow-up Needed)                                 │
 │  • "Sinyal Anomali Baru Terdeteksi" (Recent Signal Detected)                │
 │  • "Menunggu Tinjauan Instruktur" (Awaiting Review)                         │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Pendekatan ini menegaskan posisi PRONOIA sebagai platform intervensi preventif gaya hidup, bukan unit penanganan krisis medis gawat darurat.
+Pendekatan ini menegaskan posisi AEVYRA sebagai platform intervensi preventif gaya hidup, bukan unit penanganan krisis medis gawat darurat.
 
 ---
 
@@ -2356,7 +2356,7 @@ Administrator menggunakan templat resmi untuk komunikasi terpusat ke seluruh pen
 
 ## 177. Prinsip Pengalaman Pengguna Berbasis Peran (Role UX Core Principles)
 
-Desain antarmuka PRONOIA dirancang untuk secara instan menjawab satu pertanyaan fundamental bagi setiap aktor:
+Desain antarmuka AEVYRA dirancang untuk secara instan menjawab satu pertanyaan fundamental bagi setiap aktor:
 
 $$\mathbf{Prinsip\ Desain:}\quad \text{"Apa tindakan bernilai tertinggi yang harus saya ambil berikutnya?"}$$
 
@@ -2461,12 +2461,12 @@ Diagram komprehensif alur kerja pemeliharaan ekosistem administratif:
 
 ---
 
-## 182. Model Interaksi Peran Ekosistem PRONOIA (Final Role Model)
+## 182. Model Interaksi Peran Ekosistem AEVYRA (Final Role Model)
 
-Arsitektur relasi peran dalam PRONOIA menempatkan Member sebagai pusat layanan, didukung oleh dua pilar profesional:
+Arsitektur relasi peran dalam AEVYRA menempatkan Member sebagai pusat layanan, didukung oleh dua pilar profesional:
 
 ```text
-                               PRONOIA ECOSYSTEM
+                               AEVYRA ECOSYSTEM
                                        │
                     ┌──────────────────┴──────────────────┐
                     │                                     │
@@ -2482,7 +2482,7 @@ Arsitektur relasi peran dalam PRONOIA menempatkan Member sebagai pusat layanan, 
                     └──────────────────┬──────────────────┘
                                        │
                                        ▼
-                               MEMBER PRONOIA
+                               MEMBER AEVYRA
                      (Kedaulatan & Kesehatan Preventif)
 ```
 
@@ -2545,7 +2545,7 @@ Untuk kebutuhan penjurian dan demonstrasi panggung kompetisi teknologi, fokuskan
 7. Admin: Menampilkan dasbor metrik kepatuhan kohor dan bukti rekaman audit trail
 ```
 
-Skenario ini membuktikan secara nyata bahwa PRONOIA memiliki:
+Skenario ini membuktikan secara nyata bahwa AEVYRA memiliki:
 - **Pengalaman Member yang Ramah (*Member Experience*)**
 - **Kecerdasan Perilaku Akurat (*Behavioral Intelligence Engine*)**
 - **Dukungan Manusia Berempati (*Human-in-the-Loop Empathy*)**
@@ -2553,14 +2553,14 @@ Skenario ini membuktikan secara nyata bahwa PRONOIA memiliki:
 
 ---
 
-## 185. Prinsip Puncak Ekosistem PRONOIA (Final Guiding Principle)
+## 185. Prinsip Puncak Ekosistem AEVYRA (Final Guiding Principle)
 
-PRONOIA menolak paradigma usang di mana privasi dikorbankan demi efisiensi operasional. PRONOIA tidak dibangun dengan asumsi:
+AEVYRA menolak paradigma usang di mana privasi dikorbankan demi efisiensi operasional. AEVYRA tidak dibangun dengan asumsi:
 - *"Admin berhak melihat segalanya"*
 - *"Instruktur berhak mengakses segalanya"*
 - *"AI berhak mengetahui segalanya"*
 
-Sebaliknya, arsitektur PRONOIA dibangun di atas fondasi tata kelola yang bermartabat:
+Sebaliknya, arsitektur AEVYRA dibangun di atas fondasi tata kelola yang bermartabat:
 
 ```text
 Member memegang kedaulatan penuh atas rekam jejak kesehatan pribadinya
@@ -2579,7 +2579,7 @@ Setiap akses dan mutasi tercatat secara imutabel dalam buku besar audit
 ```
 
 > [!TIP]
-> **Prinsip Puncak PRONOIA:**  
+> **Prinsip Puncak AEVYRA:**  
 > *"Orang yang tepat menerima informasi yang tepat, untuk tujuan yang sah, dalam cakupan yang minimum, pada waktu yang tepat."*  
 >  
 > Didukung oleh komitmen pendampingan manusia yang berkesinambungan:  

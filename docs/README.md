@@ -1,6 +1,6 @@
-# PRONOIA / HealthCheck — Platform Intervensi Dini & Kesehatan Preventif Personal (Personal Preventive Health & Early Intervention Platform)
+# AEVYRA / HealthCheck — Platform Intervensi Dini & Kesehatan Preventif Personal (Personal Preventive Health & Early Intervention Platform)
 
-> **Dokumen Kanonikal Produk & Panduan Pengembang**: Repositori ini memuat implementasi lengkap **PRONOIA / HealthCheck**, sebuah ekosistem kesehatan preventif berbasis *Health Behavior Engine (HBE)*, kecerdasan buatan terpandu (*Guided AI*), arsitektur web progresif (*PWA Offline-First*), dan keterlibatan manusia dalam lingkaran keputusan (*Human-in-the-Loop*). Dokumen ini berfungsi sebagai gerbang utama bagi pemangku kepentingan produk, pengembang perangkat lunak, dan agen koding otonom dalam memahami arsitektur, menjalankan instalasi lokal, dan memperluas kapabilitas sistem.
+> **Dokumen Kanonikal Produk & Panduan Pengembang**: Repositori ini memuat implementasi lengkap **AEVYRA / HealthCheck**, sebuah ekosistem kesehatan preventif berbasis *Health Behavior Engine (HBE)*, kecerdasan buatan terpandu (*Guided AI*), arsitektur web progresif (*PWA Offline-First*), dan keterlibatan manusia dalam lingkaran keputusan (*Human-in-the-Loop*). Dokumen ini berfungsi sebagai gerbang utama bagi pemangku kepentingan produk, pengembang perangkat lunak, dan agen koding otonom dalam memahami arsitektur, menjalankan instalasi lokal, dan memperluas kapabilitas sistem.
 
 ---
 
@@ -8,8 +8,8 @@
 
 | Parameter Metrik | Rincian Spesifikasi Teknis |
 | :--- | :--- |
-| **Identitas Dokumen** | `PRONOIA-DOC-000` (Master Product & Developer Specification) |
-| **Nama Produk Resmi** | **PRONOIA / HealthCheck** |
+| **Identitas Dokumen** | `AEVYRA-DOC-000` (Master Product & Developer Specification) |
+| **Nama Produk Resmi** | **AEVYRA / HealthCheck** |
 | **Repositori Target** | `c:\laragon\www\kadar` |
 | **Versi Platform** | `v1.4.2-enterprise-release` |
 | **Status Repositori** | `Production-Ready / Active Development` |
@@ -21,11 +21,11 @@
 
 ## Ringkasan Eksekutif & Topologi 8 Klaster Sistem
 
-Dokumen README ini merangkum 41 bagian direktif teknis dan operasional yang dikelompokkan ke dalam **8 Klaster Ekosistem PRONOIA**:
+Dokumen README ini merangkum 41 bagian direktif teknis dan operasional yang dikelompokkan ke dalam **8 Klaster Ekosistem AEVYRA**:
 
 ```text
 +---------------------------------------------------------------------------------------------------+
-|                        PRONOIA SYSTEM & PRODUCT TOPOLOGY (41 SECTIONS)                            |
+|                        AEVYRA SYSTEM & PRODUCT TOPOLOGY (41 SECTIONS)                            |
 +---------------------------------------------------------------------------------------------------+
 |  [Klaster 1: Bagian 1-4]    Visi Produk, Ide Inti, Pembeda Utama (HBE), & Arsitektur Sistem       |
 |  [Klaster 2: Bagian 5-7]    16 Fitur Utama, 3 Peran Pengguna, & Siklus Hidup Preventif            |
@@ -64,10 +64,10 @@ Catat Data (Track)  ──>  Tampilkan Angka Generik (Display)  ──>  Dilupak
 
 Pengguna disuguhi grafik angka yang padat dan skor kesehatan generik yang dihitung berdasarkan rata-rata populasi umum tanpa mempertimbangkan konteks fisiologis unik masing-masing individu. Akibatnya, pengguna tidak memahami makna di balik data tersebut dan tidak memperoleh arahan praktis mengenai tindakan nyata apa yang harus dilakukan.
 
-**PRONOIA / HealthCheck** mentransformasikan paradigma tersebut secara mendasar menjadi **Ekosistem Intervensi Dini & Tindakan Preventif**:
+**AEVYRA / HealthCheck** mentransformasikan paradigma tersebut secara mendasar menjadi **Ekosistem Intervensi Dini & Tindakan Preventif**:
 
 ```text
-[ SIKLUS PREVENTIF AKTIF PRONOIA ]:
+[ SIKLUS PREVENTIF AKTIF AEVYRA ]:
 Observe (Amati)  ──>  Understand (Pahami Tren)  ──>  Detect Change (Deteksi Deviasi)
        │                                                         │
        ▼                                                         ▼
@@ -77,13 +77,13 @@ Explain (Beri Bukti) ──> Intervene (Aksi Nyata) ──> Monitor (Pantau Kepa
 Escalate (Dukungan Ahli Manusia)              <──> Improve (Evaluasi Dampak)
 ```
 
-PRONOIA dirancang bukan sebagai sistem diagnosis medis statis, melainkan sebagai pendamping cerdas yang memberdayakan pengguna untuk membangun kesadaran biologis mandiri, mendeteksi anomali gaya hidup sejak dini, dan mengeksekusi kebiasaan mikro (*micro-habits*) yang realistis.
+AEVYRA dirancang bukan sebagai sistem diagnosis medis statis, melainkan sebagai pendamping cerdas yang memberdayakan pengguna untuk membangun kesadaran biologis mandiri, mendeteksi anomali gaya hidup sejak dini, dan mengeksekusi kebiasaan mikro (*micro-habits*) yang realistis.
 
 ---
 
 ## 2. Ide Inti Produk (Core Product Idea)
 
-Inovasi konseptual PRONOIA berakar pada satu keyakinan ilmiah: **Kesehatan Preventif Berkelanjutan Ditentukan oleh Perubahan Perilaku Personal, Bukan Sekadar Angka Skor Statis**.
+Inovasi konseptual AEVYRA berakar pada satu keyakinan ilmiah: **Kesehatan Preventif Berkelanjutan Ditentukan oleh Perubahan Perilaku Personal, Bukan Sekadar Angka Skor Statis**.
 
 ```text
 +-----------------------------------------------------------------------------------------+
@@ -96,14 +96,14 @@ Inovasi konseptual PRONOIA berakar pada satu keyakinan ilmiah: **Kesehatan Preve
 ### Mengapa Garis Pangkal Pribadi Bersifat Esensial?
 
 1. **Keunikan Ritme Biologis**: Setiap individu memiliki garis pangkal (*baseline*) fisiologis yang berbeda. Seseorang yang secara teratur tidur 8 jam sehari akan mengalami penurunan imunitas dan konsentrasi yang signifikan jika durasi tidurnya berkurang menjadi 6 jam. Sebaliknya, bagi individu yang memiliki baseline tidur 6,5 jam, durasi 6 jam tidak memicu sinyal risiko yang sama.
-2. **Konteks Historis**: PRONOIA tidak menghakimi pengguna berdasarkan tolok ukur yang kaku, melainkan memetakan pola historis minimal 7 hingga 30 hari terakhir untuk mendeteksi kapan kebiasaan pengguna mulai bergeser secara mengkhawatirkan.
+2. **Konteks Historis**: AEVYRA tidak menghakimi pengguna berdasarkan tolok ukur yang kaku, melainkan memetakan pola historis minimal 7 hingga 30 hari terakhir untuk mendeteksi kapan kebiasaan pengguna mulai bergeser secara mengkhawatirkan.
 3. **Pemberdayaan Mandiri**: Dengan memahami deviasi baseline personal, pengguna memiliki kendali penuh atas keputusan gaya hidupnya sendiri.
 
 ---
 
 ## 3. Pembeda Teknis Utama (Core Differentiator)
 
-Pembeda teknis utama (*core technical differentiator*) yang membedakan PRONOIA dari seluruh aplikasi kesehatan konvensional adalah:
+Pembeda teknis utama (*core technical differentiator*) yang membedakan AEVYRA dari seluruh aplikasi kesehatan konvensional adalah:
 
 ### Health Behavior Engine (HBE)
 
@@ -134,7 +134,7 @@ Pembeda teknis utama (*core technical differentiator*) yang membedakan PRONOIA d
 
 ## 4. Arsitektur Produk & Topologi Sistem (Product Architecture)
 
-Arsitektur sistem PRONOIA dibangun dengan pola **Modular Monolith Berlapis** yang menjamin keandalan, keterpisahan tanggung jawab, dan kemudahan pemeliharaan:
+Arsitektur sistem AEVYRA dibangun dengan pola **Modular Monolith Berlapis** yang menjamin keandalan, keterpisahan tanggung jawab, dan kemudahan pemeliharaan:
 
 ```text
 +-----------------------------------------------------------------------------------------+
@@ -178,7 +178,7 @@ Arsitektur sistem PRONOIA dibangun dengan pola **Modular Monolith Berlapis** yan
 
 ## 5. Fitur Utama Sistem (Main Features)
 
-Sistem PRONOIA menyediakan 16 modul fitur fungsional yang saling terintegrasi secara harmonis:
+Sistem AEVYRA menyediakan 16 modul fitur fungsional yang saling terintegrasi secara harmonis:
 
 ### 5.1 Profil Kesehatan Personal (Personal Health Profile)
 Pencatatan profil demografis, riwayat alergi, kondisi medis kronis, preferensi diet, dan parameter biologis dasar yang menjadi landasan kalibrasi sistem.
@@ -232,7 +232,7 @@ Akses instan bebas hambatan ke tombol panggilan ambulans nasional **119** dan di
 
 ## 6. Peran & Hak Akses Pengguna (User Roles)
 
-Sistem PRONOIA menegakkan kontrol akses berbasis peran (*Role-Based Access Control / RBAC*) yang memisahkan wewenang ke dalam tiga entitas utama:
+Sistem AEVYRA menegakkan kontrol akses berbasis peran (*Role-Based Access Control / RBAC*) yang memisahkan wewenang ke dalam tiga entitas utama:
 
 ```text
 +-----------------------------------------------------------------------------------------+
@@ -310,7 +310,7 @@ Fitur sekunder yang kompleks (seperti turnamen gamifikasi lintas komunitas atau 
 
 ## 9. Peta Jalan Pengembangan (Development Roadmap)
 
-Peta jalan rekayasa perangkat lunak PRONOIA dibagi ke dalam 4 fase strategis:
+Peta jalan rekayasa perangkat lunak AEVYRA dibagi ke dalam 4 fase strategis:
 
 ```text
 +---------------------+   +---------------------+   +---------------------+   +---------------------+
@@ -327,7 +327,7 @@ Peta jalan rekayasa perangkat lunak PRONOIA dibagi ke dalam 4 fase strategis:
 
 ## 10. Tumpukan Teknologi Sistem (Technology Stack)
 
-Aplikasi PRONOIA dibangun menggunakan kombinasi teknologi modern yang teruji keandalan dan kecepatannya di lingkungan produksi:
+Aplikasi AEVYRA dibangun menggunakan kombinasi teknologi modern yang teruji keandalan dan kecepatannya di lingkungan produksi:
 
 ### Komposisi Tumpukan Teknologi Resmi
 
@@ -355,7 +355,7 @@ Aplikasi PRONOIA dibangun menggunakan kombinasi teknologi modern yang teruji kea
 
 ## 11. Struktur Repositori Proyek (Repository Structure)
 
-Repositori PRONOIA diorganisasikan dengan struktur berkas modular yang memisahkan instruksi orkestrasi agentik, aturan domain, kode aplikasi, dan spesifikasi dokumentasi:
+Repositori AEVYRA diorganisasikan dengan struktur berkas modular yang memisahkan instruksi orkestrasi agentik, aturan domain, kode aplikasi, dan spesifikasi dokumentasi:
 
 ```text
 c:\laragon\www\kadar/
@@ -400,7 +400,7 @@ c:\laragon\www\kadar/
 
 ## 12. Peta Dokumentasi Kanonikal (Documentation)
 
-Dokumentasi sistem PRONOIA disusun secara tematik dalam direktori `docs/` untuk menjadi sumber spesifikasi resmi:
+Dokumentasi sistem AEVYRA disusun secara tematik dalam direktori `docs/` untuk menjadi sumber spesifikasi resmi:
 
 | Berkas Spesifikasi | Domain Pembahasan | Fokus Tanggung Jawab Resmi |
 | :--- | :--- | :--- |
@@ -548,9 +548,9 @@ Aplikasi kini dapat diakses melalui peramban web pada alamat:
 * **Laragon Virtual Host**: `http://kadar.test` (jika Laragon telah dikonfigurasi).
 
 ### Kredensial Akun Demonstrasi Bawaan (Seeder)
-* **Anggota (Member)**: `member@pronoia.test` / kata sandi: `password`
-* **Instruktur (Instructor)**: `instructor@pronoia.test` / kata sandi: `password`
-* **Administrator (Admin)**: `admin@pronoia.test` / kata sandi: `password`
+* **Anggota (Member)**: `member@aevyra.test` / kata sandi: `password`
+* **Instruktur (Instructor)**: `instructor@aevyra.test` / kata sandi: `password`
+* **Administrator (Admin)**: `admin@aevyra.test` / kata sandi: `password`
 
 ---
 
@@ -569,7 +569,7 @@ Pada lingkungan pengembangan lokal, pastikan variabel `QUEUE_CONNECTION=database
 
 ## 21. Penjadwal Tugas Otomatis (Scheduler)
 
-Platform PRONOIA memanfaatkan penjadwal tugas (*Task Scheduler*) untuk mengeksekusi tugas pemeliharaan berkala secara otomatis (seperti evaluasi defisit tidur mingguan dan agregasi data kebugaran):
+Platform AEVYRA memanfaatkan penjadwal tugas (*Task Scheduler*) untuk mengeksekusi tugas pemeliharaan berkala secara otomatis (seperti evaluasi defisit tidur mingguan dan agregasi data kebugaran):
 
 ```bash
 # Jalankan simulasi penjadwal tugas pada lingkungan lokal
@@ -586,7 +586,7 @@ Pada peladen produksi Linux, daftarkan entri Cron berikut pada sistem operasi:
 
 ## 22. Pengujian Otomatis Sistem (Testing)
 
-Repositori PRONOIA mewajibkan verifikasi mutu otomatis secara ketat menggunakan *test suite* Laravel berbasis Pest / PHPUnit:
+Repositori AEVYRA mewajibkan verifikasi mutu otomatis secara ketat menggunakan *test suite* Laravel berbasis Pest / PHPUnit:
 
 ```bash
 # Menjalankan seluruh rangkaian pengujian otomatis
@@ -658,7 +658,7 @@ Pastikan berkas `.gitignore` selalu mengecualikan berkas `.env`. Pengembang baru
 Data kesehatan pribadi (*Personal Health Information / PHI*) diperlakukan sebagai **Aset Sangat Rahasia** dengan perlindungan keamanan berlapis:
 
 ```text
-[ ARSITEKTUR KEAMANAN SISTEM PRONOIA ]
+[ ARSITEKTUR KEAMANAN SISTEM AEVYRA ]
 • Privacy by Default       --> Data tertutup rapat secara baku
 • Least Privilege          --> Akses hanya diberikan sesuai kebutuhan peran
 • Server-Authoritative     --> Otorisasi diverifikasi mutlak di peladen backend
@@ -675,11 +675,11 @@ Data kesehatan pribadi (*Personal Health Information / PHI*) diperlakukan sebaga
 
 ## 26. Batasan Keselamatan Medis & Klinis (Health Safety)
 
-Sistem PRONOIA adalah platform kesehatan preventif dan intervensi gaya hidup dini, **BUKAN FASILITAS DIAGNOSIS MEDIS KLINIS**:
+Sistem AEVYRA adalah platform kesehatan preventif dan intervensi gaya hidup dini, **BUKAN FASILITAS DIAGNOSIS MEDIS KLINIS**:
 
 ```text
 +-----------------------------------------------------------------------------------------+
-|                  BATASAN HAKIKI KESELAMATAN KESEHATAN PRONOIA:                          |
+|                  BATASAN HAKIKI KESELAMATAN KESEHATAN AEVYRA:                          |
 +-----------------------------------------------------------------------------------------+
 | SISTEM MEMILIKI WEWENANG UNTUK:                                                         |
 | • Memetakan pola kebiasaan harian dan membandingkannya dengan garis pangkal personal.   |
@@ -726,7 +726,7 @@ Lapisan kecerdasan buatan (*AI Assistant*) beroperasi secara terpandu di dalam k
 
 ## 28. Aplikasi Web Progresif & Ketahanan Luring (PWA)
 
-PRONOIA dirancang dengan kapabilitas **Progressive Web App (PWA)** untuk memberikan pengalaman aplikasi yang cepat, responsif, dan tangguh saat terjadi gangguan jaringan:
+AEVYRA dirancang dengan kapabilitas **Progressive Web App (PWA)** untuk memberikan pengalaman aplikasi yang cepat, responsif, dan tangguh saat terjadi gangguan jaringan:
 
 ```text
 +-----------------------------------------------------------------------------------------+
@@ -745,7 +745,7 @@ PRONOIA dirancang dengan kapabilitas **Progressive Web App (PWA)** untuk memberi
 
 ## 29. Prinsip Desain Pengalaman Pengguna (Design Principles)
 
-Pengalaman visual dan interaksi antarmuka PRONOIA dirancang berlandaskan pada 5 prinsip filosofi desain `docs/12-ux-ui.md`:
+Pengalaman visual dan interaksi antarmuka AEVYRA dirancang berlandaskan pada 5 prinsip filosofi desain `docs/12-ux-ui.md`:
 
 ```text
 +-------------+---------------------------------------------------------------------------+
@@ -765,7 +765,7 @@ Antarmuka dibangun dengan pendekatan *Mobile-First* yang nyaman dioperasikan den
 
 ## 30. Filosofi Tata Kelola Data (Core Data Philosophy)
 
-Sistem PRONOIA mengklasifikasikan data ke dalam tiga tingkatan otoritas yang berbeda secara fundamental:
+Sistem AEVYRA mengklasifikasikan data ke dalam tiga tingkatan otoritas yang berbeda secara fundamental:
 
 ```text
 +-----------------------------------------------------------------------------------------+
@@ -783,7 +783,7 @@ Model AI **tidak pernah diizinkan** menjadi sumber kebenaran untuk menentukan ha
 
 ## 31. Pemisahan Batas Domain Inti (Core Domain Separation)
 
-Untuk menjaga skalabilitas dan mencegah keterikatan kode yang rapuh (*tight coupling*), repositori PRONOIA menegakkan batas-batas domain yang tidak boleh dilanggar:
+Untuk menjaga skalabilitas dan mencegah keterikatan kode yang rapuh (*tight coupling*), repositori AEVYRA menegakkan batas-batas domain yang tidak boleh dilanggar:
 
 ```text
 [ Data Kesehatan Mentah ]   !=   [ Garis Pangkal Personal ]   !=   [ Sinyal Perilaku ]
@@ -829,7 +829,7 @@ Dilarang keras memulai pengerjaan fitur gamifikasi atau integrasi AI sebelum mat
 
 ## 33. Definisi Ketuntasan Fitur (Definition of Done)
 
-Sebuah fitur atau modul sistem PRONOIA **HANYA DIAKUI SELESAI (*DONE*)** jika telah memenuhi seluruh kriteria ketuntasan holistik:
+Sebuah fitur atau modul sistem AEVYRA **HANYA DIAKUI SELESAI (*DONE*)** jika telah memenuhi seluruh kriteria ketuntasan holistik:
 
 ```text
 [ DEFINISI KETUNTASAN FITUR (DEFINITION OF DONE) ]
@@ -847,7 +847,7 @@ Sebuah fitur atau modul sistem PRONOIA **HANYA DIAKUI SELESAI (*DONE*)** jika te
 
 ## 34. Kriteria Keberhasilan MVP (MVP Success Criteria)
 
-Keberhasilan rilis Minimum Viable Product (MVP) PRONOIA diukur dari kemampuannya mengeksekusi satu skenario pengguna dari hulu ke hilir secara sempurna tanpa galat:
+Keberhasilan rilis Minimum Viable Product (MVP) AEVYRA diukur dari kemampuannya mengeksekusi satu skenario pengguna dari hulu ke hilir secara sempurna tanpa galat:
 
 ```text
 [ SKENARIO EMAS KEBERHASILAN MVP (GOLDEN JOURNEY) ]
@@ -878,9 +878,9 @@ Jika alur terpadu di atas dapat dijalankan secara lancar, responsif, dan bebas g
 
 ## 35. Narasi Posisi Kompetisi (Competition Narrative)
 
-Dalam pameran inovasi teknologi, kompetisi perangkat lunak, maupun presentasi dewan juri, proposisi nilai PRONOIA diposisikan secara tegas:
+Dalam pameran inovasi teknologi, kompetisi perangkat lunak, maupun presentasi dewan juri, proposisi nilai AEVYRA diposisikan secara tegas:
 
-> **"PRONOIA bukan sekadar aplikasi pelacak angka. PRONOIA adalah platform kesehatan preventif personal yang memahami perubahan bermakna dalam perilaku biologis harian Anda dan memandu tindakan intervensi nyata sebelum berkembang menjadi risiko klinis."**
+> **"AEVYRA bukan sekadar aplikasi pelacak angka. AEVYRA adalah platform kesehatan preventif personal yang memahami perubahan bermakna dalam perilaku biologis harian Anda dan memandu tindakan intervensi nyata sebelum berkembang menjadi risiko klinis."**
 
 ### Pilar Narasi Keunggulan Bersaing
 
@@ -892,7 +892,7 @@ Dalam pameran inovasi teknologi, kompetisi perangkat lunak, maupun presentasi de
 
 ## 36. Metrik Bintang Utara Produk (Product North Star)
 
-Metrik evaluasi tertinggi yang menjadi kompas pemandu seluruh keputusan produk PRONOIA adalah:
+Metrik evaluasi tertinggi yang menjadi kompas pemandu seluruh keputusan produk AEVYRA adalah:
 
 ### Metrik Bintang Utara (North Star Metric)
 
@@ -975,10 +975,10 @@ Daftar Awalan Resmi:
 
 ## 40. Lisensi Repositori (License)
 
-Hak cipta dan ketentuan lisensi kode sumber repositori PRONOIA / HealthCheck diatur sebagai berikut:
+Hak cipta dan ketentuan lisensi kode sumber repositori AEVYRA / HealthCheck diatur sebagai berikut:
 
 ```text
-Hak Cipta (c) 2026 PRONOIA Engineering Guild & Tim Pengembang Platform.
+Hak Cipta (c) 2026 AEVYRA Engineering Guild & Tim Pengembang Platform.
 Seluruh Hak Cipta Dilindungi Undang-Undang.
 
 Lisensi Resmi: Proprietary / Restricted Enterprise Software License.
@@ -993,16 +993,16 @@ Untuk informasi lisensi khusus kompetisi atau pengujian akademik, silakan hubung
 
 ## 41. Prinsip Pamungkas Proyek (Project Principle)
 
-Sebagai penutup panduan rekayasa ini, camkan selalu prinsip fundamental yang melandasi eksistensi platform PRONOIA:
+Sebagai penutup panduan rekayasa ini, camkan selalu prinsip fundamental yang melandasi eksistensi platform AEVYRA:
 
 ```text
 +-----------------------------------------------------------------------------------------+
-|                  PRINSIP REKAYASA PAMUNGKAS PRONOIA / HEALTHCHECK                       |
+|                  PRINSIP REKAYASA PAMUNGKAS AEVYRA / HEALTHCHECK                       |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|      PRONOIA BUKANLAH SEKADAR GABUNGAN FITUR-FITUR TEKNOLOGI YANG TERISOLASI.           |
+|      AEVYRA BUKANLAH SEKADAR GABUNGAN FITUR-FITUR TEKNOLOGI YANG TERISOLASI.           |
 |                                                                                         |
-|                     PRONOIA ADALAH SATU SIKLUS HIDUP PREVENTIF:                         |
+|                     AEVYRA ADALAH SATU SIKLUS HIDUP PREVENTIF:                         |
 |                                                                                         |
 |       Observe  ──>  Understand  ──>  Detect  ──>  Explain  ──>  Intervene               |
 |                                                                                         |

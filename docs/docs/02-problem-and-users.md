@@ -1,10 +1,10 @@
-# PRONOIA — Problem & Users
+# AEVYRA — Problem & Users
 
-> Analisis mendalam mengenai akar permasalahan kesehatan preventif yang diselesaikan oleh PRONOIA, taksonomi pengguna sasaran, persona representatif, kebutuhan esensial, konteks perilaku harian, titik nyeri (*pain points*), kerangka kerja *Jobs-to-be-Done* (JTBD), serta dinamika interaksi seluruh peran dalam ekosistem.
+> Analisis mendalam mengenai akar permasalahan kesehatan preventif yang diselesaikan oleh AEVYRA, taksonomi pengguna sasaran, persona representatif, kebutuhan esensial, konteks perilaku harian, titik nyeri (*pain points*), kerangka kerja *Jobs-to-be-Done* (JTBD), serta dinamika interaksi seluruh peran dalam ekosistem.
 
 ## 1. Purpose
 
-Dokumen ini mendefinisikan secara komprehensif lanskap permasalahan kesehatan preventif yang ingin diselesaikan oleh **PRONOIA**, karakteristik seluruh kelompok pengguna sasaran, kebutuhan esensial (*user needs*), konteks perilaku harian, titik nyeri (*pain points*), serta kerangka kerja *Jobs-to-be-Done* (JTBD).
+Dokumen ini mendefinisikan secara komprehensif lanskap permasalahan kesehatan preventif yang ingin diselesaikan oleh **AEVYRA**, karakteristik seluruh kelompok pengguna sasaran, kebutuhan esensial (*user needs*), konteks perilaku harian, titik nyeri (*pain points*), serta kerangka kerja *Jobs-to-be-Done* (JTBD).
 
 Dokumen ini memetakan:
 - **Akar Permasalahan Gaya Hidup:** Kesenjangan antara kesadaran (*awareness*), pemahaman (*understanding*), dan tindakan nyata (*action*).
@@ -46,8 +46,8 @@ Data Kesehatan Tersebar di Berbagai Perangkat & Catatan
         Pola Hidup Buruk Menjadi Kebiasaan Menetap
 ```
 
-### 2.2 Transformasi yang Dihadirkan PRONOIA
-PRONOIA dirancang untuk menjembatani jurang tersebut melalui siklus penguatan perilaku yang terarah:
+### 2.2 Transformasi yang Dihadirkan AEVYRA
+AEVYRA dirancang untuk menjembatani jurang tersebut melalui siklus penguatan perilaku yang terarah:
 
 ```text
 Kesadaran Awal (Health Awareness)
@@ -86,8 +86,8 @@ Log Jam Tidur:
 
 Deretan angka di atas gagal menyadarkan pengguna bahwa tubuh mereka sedang mengalami akumulasi defisit tidur (*sleep debt*) sebesar hampir 2 jam per malam dibandingkan kebutuhan normal mereka. Tanpa interpretasi makna, pengguna tidak terdorong untuk bertindak.
 
-### 3.2 Pendekatan Nilai Tambah PRONOIA
-PRONOIA mengubah angka mentah menjadi panduan hidup nyata melalui 6 tingkatan transformasi:
+### 3.2 Pendekatan Nilai Tambah AEVYRA
+AEVYRA mengubah angka mentah menjadi panduan hidup nyata melalui 6 tingkatan transformasi:
 
 ```text
 Data Mentah (Data) ──▶ Analisis Tren (Trend) ──▶ Identifikasi Pola (Pattern) ──▶ Deteksi Deviasi (Change) ──▶ Makna Personal (Meaning) ──▶ Saran Aksi Preventif (Action)
@@ -97,7 +97,7 @@ Data Mentah (Data) ──▶ Analisis Tren (Trend) ──▶ Identifikasi Pola (
 
 ## 4. Problem Categories
 
-PRONOIA mengidentifikasi bahwa kegagalan memelihara gaya hidup sehat bersumber dari 6 kategori hambatan struktural:
+AEVYRA mengidentifikasi bahwa kegagalan memelihara gaya hidup sehat bersumber dari 6 kategori hambatan struktural:
 
 1. **Kurangnya Kesadaran Perilaku Dini (*Lack of Health Awareness*):** Pengguna sering kali tidak menyadari bahwa kebiasaan kecil yang berulang secara perlahan menggeser baseline kesehatan mereka.
 2. **Ketiadaan Personalisasi (*Lack of Personalization*):** Nasihat kesehatan umum terlalu generik dan tidak memperhitungkan realitas profesi serta ritme biologis individu.
@@ -116,7 +116,7 @@ Meskipun secara umum benar, anjuran tersebut mengabaikan konteks nyata:
 - Seorang mahasiswa kedokteran yang sedang dinas malam memiliki ritme biologis yang berbeda dari seorang karyawan kantor berjam kerja teratur.
 - Beban fisik, usia, riwayat metabolisme, dan target pribadi membuat kebutuhan setiap individu unik.
 
-PRONOIA membangun personalisasi berdasarkan rumus kontekstual:
+AEVYRA membangun personalisasi berdasarkan rumus kontekstual:
 
 ```text
 Rekomendasi Relevan = Perilaku Terkini + Baseline Personal + Tren Deviasi + Sasaran Hidup
@@ -128,7 +128,7 @@ Rekomendasi Relevan = Perilaku Terkini + Baseline Personal + Tren Deviasi + Sasa
 
 Banyak inisiatif kesehatan digital gagal karena menuntut perubahan drastis dalam satu malam. Pengguna mengunduh aplikasi, mencatat dengan sangat detail selama 3 hari, kemudian merasa jenuh (*burnout*) dan menghapus aplikasi.
 
-PRONOIA memecahkan masalah diskontinuitas ini dengan pendekatan **Micro-Habits**:
+AEVYRA memecahkan masalah diskontinuitas ini dengan pendekatan **Micro-Habits**:
 - Mendorong tindakan mikro berdurasi 2–5 menit yang sangat ringan dilakukan.
 - Menjaga momentum melalui pengingat cerdas pada waktu yang paling tepat.
 - Menghargai proses pembiasaan bertahap daripada perubahan instan yang tidak berkelanjutan.
@@ -143,7 +143,7 @@ Saat ini pengguna dihadapkan pada ekosistem aplikasi yang terpecah-pecah:
 - Aplikasi C untuk relaksasi atau meditasi.
 - Aplikasi D untuk konsultasi dokter saat sakit.
 
-Ketiadaan integrasi ini menyebabkan data tidak saling berbicara. PRONOIA menyatukan seluruh dimensi ini ke dalam **satu garis waktu kesehatan terpadu (*Unified Health Timeline*)**, di mana tidur, aktivitas, nutrisi, dan bimbingan instruktur membentuk satu narasi kesehatan yang utuh.
+Ketiadaan integrasi ini menyebabkan data tidak saling berbicara. AEVYRA menyatukan seluruh dimensi ini ke dalam **satu garis waktu kesehatan terpadu (*Unified Health Timeline*)**, di mana tidur, aktivitas, nutrisi, dan bimbingan instruktur membentuk satu narasi kesehatan yang utuh.
 
 ---
 
@@ -151,7 +151,7 @@ Ketiadaan integrasi ini menyebabkan data tidak saling berbicara. PRONOIA menyatu
 
 Sistem pelayanan kesehatan tradisional bersifat kuratif—menunggu seseorang merasakan sakit parah sebelum mencari pertolongan medis. Pendekatan ini sangat mahal secara finansial dan emosional.
 
-PRONOIA beroperasi di ranah **pencegahan primer dini (*early preventive intervention*)**:
+AEVYRA beroperasi di ranah **pencegahan primer dini (*early preventive intervention*)**:
 - Mendeteksi penurunan durasi tidur atau lonjakan konsumsi gula pada hari ke-3, bukan pada bulan ke-6 saat sudah timbul komplikasi.
 - Memberikan intervensi preventif berbobot ringan tepat di saat kebiasaan buruk baru mulai terbentuk, sehingga pemulihannya jauh lebih mudah dan alami.
 
@@ -161,7 +161,7 @@ PRONOIA beroperasi di ranah **pencegahan primer dini (*early preventive interven
 
 Menjaga konsistensi gaya hidup sehat membutuhkan rasa tanggung jawab (*accountability*). Ketika pengguna hanya berhadapan dengan grafik dingin di layar gawai, sangat mudah untuk mengabaikan target harian.
 
-PRONOIA menumbuhkan akuntabilitas melalui tiga pilar:
+AEVYRA menumbuhkan akuntabilitas melalui tiga pilar:
 1. **Akuntabilitas Visual Mandiri:** Grafik baseline yang menunjukkan secara jujur apakah pola hidup sedang membaik atau menurun.
 2. **Akuntabilitas Rekan Sebaya (*Peer Accountability*):** Bergabung dalam tantangan kebiasaan kelompok di komunitas.
 3. **Akuntabilitas Profesional:** Pendampingan oleh instruktur kesehatan terverifikasi yang memantau perkembangan anggota binaannya.
@@ -172,7 +172,7 @@ PRONOIA menumbuhkan akuntabilitas melalui tiga pilar:
 
 Kecerdasan buatan dan otomasi algoritma memiliki keterbatasan: mereka tidak memiliki empati sejati. Di sisi lain, biaya menyewa pelatih kebugaran pribadi atau konsultan gizi penuh waktu sangat mahal bagi sebagian besar orang.
 
-PRONOIA menghadirkan model hibrida **AI + Human-in-the-Loop**:
+AEVYRA menghadirkan model hibrida **AI + Human-in-the-Loop**:
 - Mesin perilaku dan AI menangani analisis kuantitatif dan pemantauan harian tanpa henti.
 - Instruktur manusia memberikan bimbingan empati, motivasi psikologis, dan penyesuaian program yang peka terhadap kondisi mental anggota.
 
@@ -180,7 +180,7 @@ PRONOIA menghadirkan model hibrida **AI + Human-in-the-Loop**:
 
 ## 11. Problem Root Cause
 
-PRONOIA menganalisis masalah kesehatan menggunakan kerangka pemikiran akar masalah (*Root Cause Thinking*):
+AEVYRA menganalisis masalah kesehatan menggunakan kerangka pemikiran akar masalah (*Root Cause Thinking*):
 
 | Lapisan Masalah | Pernyataan Gejala Permukaan | Akar Masalah Sebenarnya (*Root Cause*) |
 | :--- | :--- | :--- |
@@ -188,17 +188,17 @@ PRONOIA menganalisis masalah kesehatan menggunakan kerangka pemikiran akar masal
 | **Tengah (*Intermediate*)** | *"Saya tidak tahu apakah kebiasaan saya sudah benar."* | Data kesehatan tidak pernah diinterpretasikan secara transparan menjadi makna personal. |
 | **Mendasar (*Fundamental*)** | *"Saya baru bertindak setelah tubuh saya drop/sakit."* | Ketiadaan sistem peringatan dini yang mendeteksi deviasi sebelum menjadi keluhan klinis. |
 
-PRONOIA tidak menyalahkan motivasi pengguna; PRONOIA memperbaiki arsitektur umpan balik dan memangkas friksi sistemik.
+AEVYRA tidak menyalahkan motivasi pengguna; AEVYRA memperbaiki arsitektur umpan balik dan memangkas friksi sistemik.
 
 ---
 
 ## 12. Target User
 
-Ekosistem PRONOIA melayani empat kelompok pengguna utama yang saling berinteraksi:
+Ekosistem AEVYRA melayani empat kelompok pengguna utama yang saling berinteraksi:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        TAKSONOMI PENGGUNA PRONOIA                      │
+│                        TAKSONOMI PENGGUNA AEVYRA                      │
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. MEMBER             : Individu yang ingin memantau dan memperbaiki   │
 │                         pola gaya hidup preventifnya secara konsisten. │
@@ -215,7 +215,7 @@ Ekosistem PRONOIA melayani empat kelompok pengguna utama yang saling berinteraks
 ## 13. Primary User — Member
 
 ### 13.1 Definisi Peran
-Member adalah pengguna utama dan pusat dari seluruh pengalaman PRONOIA. Member berinteraksi dengan aplikasi untuk:
+Member adalah pengguna utama dan pusat dari seluruh pengalaman AEVYRA. Member berinteraksi dengan aplikasi untuk:
 - Mencatat ritme kebiasaan harian (tidur, hidrasi, nutrisi, langkah kaki).
 - Membangun dan melihat profil baseline kesehatan personal yang transparan.
 - Menerima wawasan dan rekomendasi preventif mikro berbasis data nyata.
@@ -325,7 +325,7 @@ Persona ini sangat penting dalam perancangan produk. Aplikasi tidak boleh berasu
 - Jika formulir pencatatan membutuhkan pengetikan teks ──▶ Pengguna berhenti mencatat.
 - Jika notifikasi bernada menghakimi ──▶ Pengguna menonaktifkan izin notifikasi.
 
-#### Strategi PRONOIA
+#### Strategi AEVYRA
 - Menghadirkan tombol pencatatan preset satu ketukan (*one-tap presets*).
 - Menghilangkan penghakiman visual saat target tidak tercapai.
 - Memberikan toleransi pengampunan (*grace period*) pada rentetan kebiasaan (*streaks*).
@@ -336,7 +336,7 @@ Persona ini sangat penting dalam perancangan produk. Aplikasi tidak boleh berasu
 
 Kerangka kerja kebutuhan fungsional dan emosional anggota (*Jobs-to-be-Done*):
 
-| Dimensi JTBD | Pernyataan Kebutuhan Anggota (*Job Statement*) | Solusi Terpasang di PRONOIA |
+| Dimensi JTBD | Pernyataan Kebutuhan Anggota (*Job Statement*) | Solusi Terpasang di AEVYRA |
 | :--- | :--- | :--- |
 | **Fungsional Utama** | *"Bantu saya memahami pola kebiasaan alami tubuh saya tanpa perlu menjadi pakar statistik kesehatan."* | Mesin *BehaviorBaseline* otomatis dengan jendela 14 hari. |
 | **Fungsional Harian** | *"Bantu saya mencatat apa yang saya makan dan minum dalam hitungan detik saat sedang sibuk."* | Pemindai cerdas (*Scanner OCR*) dan tombol *Quick Log*. |
@@ -350,7 +350,7 @@ Kerangka kerja kebutuhan fungsional dan emosional anggota (*Jobs-to-be-Done*):
 
 Matriks mitigasi titik nyeri utama anggota:
 
-| Titik Nyeri (*Pain Point*) | Tingkat Dampak | Respon Rekayasa PRONOIA |
+| Titik Nyeri (*Pain Point*) | Tingkat Dampak | Respon Rekayasa AEVYRA |
 | :--- | :---: | :--- |
 | **Data Kesehatan Tercecer** | Tinggi | Penyatuan seluruh data ke dalam Garis Waktu Terpadu (*Health Timeline*). |
 | **Beban Pencatatan Berat** | Tinggi | Mekanisme pencatatan kilat (< 5 detik) dan pembacaan label gizi otomatis. |
@@ -369,13 +369,13 @@ Instruktur adalah profesional kesehatan, kebugaran, dan gaya hidup terverifikasi
 - Peran instruktur bergantung pada spesialisasi sertifikasi resmi mereka (pelatih kebugaran bersertifikat, ahli gizi terdaftar, atau konselor kebiasaan sehat).
 
 ### 20.2 Nilai Tambah bagi Instruktur
-Platform PRONOIA menyediakan data tren historis anggota binaan yang objektif, sehingga instruktur tidak perlu lagi menghabiskan waktu sesi konsultasi hanya untuk menanyakan riwayat aktivitas dasar secara berulang-ulang.
+Platform AEVYRA menyediakan data tren historis anggota binaan yang objektif, sehingga instruktur tidak perlu lagi menghabiskan waktu sesi konsultasi hanya untuk menanyakan riwayat aktivitas dasar secara berulang-ulang.
 
 ---
 
 ## 21. Instructor Responsibilities
 
-Ruang lingkup tanggung jawab profesional instruktur dalam ekosistem PRONOIA mencakup:
+Ruang lingkup tanggung jawab profesional instruktur dalam ekosistem AEVYRA mencakup:
 - **Pemantauan Proaktif:** Mengawasi daftar anggota binaan (*caseload*) dan merespons sinyal deviasi tren yang memerlukan perhatian.
 - **Perancangan Intervensi Terarah:** Merumuskan rencana tindakan kebiasaan mikro yang sesuai dengan kesiapan fisik anggota.
 - **Pelaksanaan Bimbingan Terjadwal:** Memfasilitasi sesi temu telekonsultasi dengan memanfaatkan data garis waktu kesehatan sebagai bahan telaah objektif.
@@ -396,9 +396,9 @@ Untuk menjalankan perannya secara optimal, instruktur membutuhkan instrumen kerj
 
 ## 23. Instructor Pain Points
 
-Tantangan kerja nyata yang dihadapi instruktur dalam praktik konvensional dan solusinya di PRONOIA:
+Tantangan kerja nyata yang dihadapi instruktur dalam praktik konvensional dan solusinya di AEVYRA:
 
-| Titik Nyeri Instruktur | Dampak Operasional | Solusi Terintegrasi di PRONOIA |
+| Titik Nyeri Instruktur | Dampak Operasional | Solusi Terintegrasi di AEVYRA |
 | :--- | :--- | :--- |
 | **Ketergantungan Ingatan Subjektif Anggota** | Sesi habis hanya untuk wawancara riwayat makan/tidur yang sering tidak akurat. | Garis waktu objektif yang mencatat data riil secara otomatis. |
 | **Beban Administratif Tinggi** | Terlalu banyak waktu terbuang untuk mencatat di spreadsheet atau buku manual. | Modul intervensi digital yang terhubung langsung ke dasbor anggota. |
@@ -419,7 +419,7 @@ Kerangka kerja kebutuhan instruktur (*Instructor JTBD*):
 
 ## 25. Tertiary User — Admin
 
-Administrator adalah pemegang tata kelola tertinggi dalam platform PRONOIA. Admin bertanggung jawab atas kelangsungan operasional, kepatuhan etika kedokteran preventif, verifikasi mutu instruktur, serta keamanan seluruh ekosistem teknologi.
+Administrator adalah pemegang tata kelola tertinggi dalam platform AEVYRA. Admin bertanggung jawab atas kelangsungan operasional, kepatuhan etika kedokteran preventif, verifikasi mutu instruktur, serta keamanan seluruh ekosistem teknologi.
 
 ---
 
@@ -447,7 +447,7 @@ Kebutuhan fungsional administrator:
 
 Tantangan tata kelola platform kesehatan dan mitigasinya:
 
-| Tantangan Tata Kelola | Risiko Sistemik | Mitigasi Tata Kelola PRONOIA |
+| Tantangan Tata Kelola | Risiko Sistemik | Mitigasi Tata Kelola AEVYRA |
 | :--- | :--- | :--- |
 | **Klaim Medis Liar di Komunitas** | Anggota terpapar anjuran berbahaya (misal: diet ekstrem mematikan). | Filter kata kunci otomatis dan peninjauan manual tim kepatuhan medis. |
 | **Instruktur Bodong Tanpa Lisensi** | Kualitas pembinaan buruk dan membahayakan keselamatan pengguna. | Mekanisme verifikasi berkas dua tahap sebelum izin pembinaan diterbitkan. |
@@ -457,7 +457,7 @@ Tantangan tata kelola platform kesehatan dan mitigasinya:
 
 ## 29. AI as System Actor
 
-Dalam arsitektur PRONOIA, Kecerdasan Buatan diperlakukan sebagai **Aktor Sistem Cerdas (*Autonomous System Actor*)** yang memiliki peran dan batasan yang terdefinisi secara ketat:
+Dalam arsitektur AEVYRA, Kecerdasan Buatan diperlakukan sebagai **Aktor Sistem Cerdas (*Autonomous System Actor*)** yang memiliki peran dan batasan yang terdefinisi secara ketat:
 - AI bertindak sebagai komunikator kontekstual yang ramah dan penjelas makna data.
 - AI **bukan penentu tunggal keputusan klinis** dan dilarang menegakkan diagnosis.
 - AI selalu beroperasi di bawah pengawasan aturan deterministik (*deterministic safety guardrails*) dan pengawasan manusia (*Human-in-the-Loop*).
@@ -491,7 +491,7 @@ Seluruh interaksi dalam platform diorkestrasi melalui sinergi antara aktor manus
 
 ## 31. User Context
 
-Perilaku kesehatan manusia sangat dipengaruhi oleh lingkungan dan konteks sosialnya. PRONOIA membagi konteks pengguna ke dalam 4 dimensi:
+Perilaku kesehatan manusia sangat dipengaruhi oleh lingkungan dan konteks sosialnya. AEVYRA membagi konteks pengguna ke dalam 4 dimensi:
 
 1. **Konteks Temporal (Waktu & Rutinitas):** Jam kerja, jadwal ujian mahasiswa, hari libur akhir pekan, atau periode lembur.
 2. **Konteks Fisik & Lingkungan:** Pekerja kantoran yang duduk seharian vs pekerja lapangan dengan mobilitas tinggi.
@@ -504,7 +504,7 @@ Sistem memperhitungkan dimensi ini agar rekomendasi yang diberikan selalu realis
 
 ## 32. User Motivation Model
 
-PRONOIA menerapkan model motivasi perilaku berbasis **Self-Determination Theory**:
+AEVYRA menerapkan model motivasi perilaku berbasis **Self-Determination Theory**:
 - **Otonomi (*Autonomy*):** Pengguna memegang kendali penuh atas sasaran dan data mereka, tanpa paksaan atau manipulasi antarmuka.
 - **Kompetensi (*Competence*):** Pengguna merasakan pencapaian nyata melalui tindakan pencegahan mikro yang mudah dituntaskan.
 - **Keterhubungan (*Relatedness*):** Pengguna merasa didukung oleh instruktur ahli dan rekan seperjuangan di komunitas sehat.
@@ -515,9 +515,9 @@ Pendekatan ini menjamin pembentukan motivasi intrinsik jangka panjang, berbeda d
 
 ## 33. User Barriers
 
-PRONOIA merancang antarmuka khusus untuk menembus 4 hambatan utama adopsi gaya hidup sehat:
+AEVYRA merancang antarmuka khusus untuk menembus 4 hambatan utama adopsi gaya hidup sehat:
 
-| Hambatan Pengguna | Deskripsi Kendala | Solusi Rekayasa PRONOIA |
+| Hambatan Pengguna | Deskripsi Kendala | Solusi Rekayasa AEVYRA |
 | :--- | :--- | :--- |
 | **Hambatan Waktu (*Time Barrier*)** | Pengguna terlalu sibuk untuk mengisi formulir panjang. | Fitur *Quick Log* satu ketukan dan scanner label gizi kamera. |
 | **Hambatan Kognitif (*Cognitive Barrier*)** | Pengguna bingung memahami istilah medis dan angka statistik rumit. | Kartu wawasan yang menjawab *"Apa yang berubah?"* dalam bahasa sehari-hari. |
@@ -528,7 +528,7 @@ PRONOIA merancang antarmuka khusus untuk menembus 4 hambatan utama adopsi gaya h
 
 ## 34. User Needs Hierarchy
 
-Hierarki kebutuhan pengguna dalam ekosistem PRONOIA mengadopsi struktur piramida:
+Hierarki kebutuhan pengguna dalam ekosistem AEVYRA mengadopsi struktur piramida:
 
 ```text
                        [ TINGKAT 4: TRANSFORMASI MANDIRI ]
@@ -558,7 +558,7 @@ Segmentasi pengguna didasarkan pada kesiapan perilaku (*Behavioral Readiness*), 
 
 ## 36. Personalization Dimensions
 
-Dimensi personalisasi dalam PRONOIA mencakup:
+Dimensi personalisasi dalam AEVYRA mencakup:
 1. **Personalisasi Bahasa & Nada Bicara:** Menyesuaikan gaya komunikasi santai bagi mahasiswa dan lebih profesional bagi pekerja kantoran.
 2. **Personalisasi Ambang Batas Sinyal:** Mengalibrasi deviasi berdasarkan baseline unik individu, bukan standar populasi umum.
 3. **Personalisasi Waktu Pengingat:** Mengirimkan notifikasi pada jam-jam di mana pengguna memiliki peluang tertinggi untuk bertindak.
@@ -578,7 +578,7 @@ Personalisasi wajib memiliki batasan etika dan keamanan yang tegas:
 
 ## 38. User Lifecycle
 
-Siklus hidup pengguna dalam PRONOIA mengalir melalui 6 tahapan progresif:
+Siklus hidup pengguna dalam AEVYRA mengalir melalui 6 tahapan progresif:
 
 ```text
 Akuisisi (Acquisition) ──▶ Aktivasi (Onboarding) ──▶ Pembentukan Baseline (14 Hari)
@@ -620,7 +620,7 @@ Tingkat aktivasi ini menjadi metrik utama keberhasilan alur orientasi awal produ
 
 ## 41. Successful Member Outcome
 
-Indikator keberhasilan sejati bagi seorang anggota PRONOIA mencakup transformasi perilaku yang terukur:
+Indikator keberhasilan sejati bagi seorang anggota AEVYRA mencakup transformasi perilaku yang terukur:
 - Mampu mendeteksi dan menghentikan perburukan kebiasaan buruk dalam waktu kurang dari 7 hari.
 - Memiliki baseline kesehatan personal yang dipahami secara jernih tanpa kebingungan statistik.
 - Merasakan peningkatan energi harian, kualitas tidur yang lebih restoratif, dan kebugaran tubuh yang stabil.
@@ -650,7 +650,7 @@ Indikator keberhasilan bagi peran administrator:
 
 Matriks relasi antara kebutuhan kelompok pengguna dengan fitur utama platform:
 
-| Kelompok Pengguna | Kebutuhan Utama | Fitur Terkait di PRONOIA |
+| Kelompok Pengguna | Kebutuhan Utama | Fitur Terkait di AEVYRA |
 | :--- | :--- | :--- |
 | **Member** | Pencatatan cepat tanpa friksi | *Quick Log Presets*, *Nutrient Vision Scanner OCR*. |
 | | Pemahaman tren personal | *Unified Health Timeline*, *Personal Baseline Engine*. |
@@ -666,7 +666,7 @@ Matriks relasi antara kebutuhan kelompok pengguna dengan fitur utama platform:
 
 ## 45. User Permission Philosophy
 
-Filosofi izin akses data PRONOIA bertumpu pada kedaulatan pengguna (*User Data Sovereignty*):
+Filosofi izin akses data AEVYRA bertumpu pada kedaulatan pengguna (*User Data Sovereignty*):
 
 ```text
 [Data Kesehatan Pengguna] ──▶ Secara Default Terisolasi Hanya untuk Pemilik Akun
@@ -690,7 +690,7 @@ Standar pemenuhan ekspektasi privasi pengguna modern:
 
 ## 47. Community User Context
 
-Konteks interaksi dalam komunitas PRONOIA:
+Konteks interaksi dalam komunitas AEVYRA:
 - Menjadi wadah berbagi cerita perjuangan hidup sehat dan kiat-kiat praktis mengatasi kejenuhan rutinitas.
 - Memfasilitasi opsi berbagi secara anonim bagi pengguna yang ingin menceritakan kendala kesehatan tanpa rasa canggung.
 - Setiap unggahan dilindungi oleh sistem moderasi aktif guna mencegah penyebaran klaim pengobatan alternatif yang berbahaya.
@@ -726,19 +726,19 @@ Konteks penanganan situasi gawat darurat medis:
 
 ## 51. Non-Goals From User Perspective
 
-Batasan eksplisit hal-hal yang **bukan merupakan tujuan** PRONOIA dari sudut pandang pengguna (*Explicit Non-Goals*):
-- **Bukan Pengganti Dokter:** PRONOIA tidak menggantikan fungsi pemeriksaan klinis, biopsi laboratorium, atau diagnosis dokter spesialis.
-- **Bukan Toko Obat Daring:** PRONOIA tidak menjual atau mempromosikan suplemen makanan dan obat-obatan keras.
-- **Bukan Jejaring Sosial Bebas:** PRONOIA bukan tempat debat terbuka tanpa moderasi seputar teori medis yang belum terbukti.
-- **Bukan Alat Vonis Kesehatan:** PRONOIA tidak memberikan vonis angka tunggal yang menghakimi derajat kesehatan pengguna.
+Batasan eksplisit hal-hal yang **bukan merupakan tujuan** AEVYRA dari sudut pandang pengguna (*Explicit Non-Goals*):
+- **Bukan Pengganti Dokter:** AEVYRA tidak menggantikan fungsi pemeriksaan klinis, biopsi laboratorium, atau diagnosis dokter spesialis.
+- **Bukan Toko Obat Daring:** AEVYRA tidak menjual atau mempromosikan suplemen makanan dan obat-obatan keras.
+- **Bukan Jejaring Sosial Bebas:** AEVYRA bukan tempat debat terbuka tanpa moderasi seputar teori medis yang belum terbukti.
+- **Bukan Alat Vonis Kesehatan:** AEVYRA tidak memberikan vonis angka tunggal yang menghakimi derajat kesehatan pengguna.
 
 ---
 
 ## 52. Core User Value Proposition
 
-Proposisi nilai utama PRONOIA bagi setiap pengguna:
+Proposisi nilai utama AEVYRA bagi setiap pengguna:
 
-> *"PRONOIA adalah pendamping gaya hidup preventif cerdas yang membantu Anda memahami ritme unik tubuh sendiri, mendeteksi penurunan kebiasaan sebelum jatuh sakit, dan mendampingi Anda melalui tindakan pencegahan mikro yang realistis bersama instruktur terpercaya."*
+> *"AEVYRA adalah pendamping gaya hidup preventif cerdas yang membantu Anda memahami ritme unik tubuh sendiri, mendeteksi penurunan kebiasaan sebelum jatuh sakit, dan mendampingi Anda melalui tindakan pencegahan mikro yang realistis bersama instruktur terpercaya."*
 
 Tiga kata kunci pembeda: **Pribadi (*Personal*)**, **Dini (*Preventive*)**, dan **Terhubung (*Connected*)**.
 
@@ -748,7 +748,7 @@ Tiga kata kunci pembeda: **Pribadi (*Personal*)**, **Dini (*Preventive*)**, dan 
 
 Pemetaan langsung antara masalah mendasar pengguna dan solusi rekayasa terpasang:
 
-| Masalah Utama Pengguna | Akar Permasalahan | Solusi Terintegrasi di PRONOIA |
+| Masalah Utama Pengguna | Akar Permasalahan | Solusi Terintegrasi di AEVYRA |
 | :--- | :--- | :--- |
 | **Tidak Sadar Pola Menurun** | Data tersebar dan tidak terlihat trennya. | *Personal Baseline Engine* & *Explainable Signals*. |
 | **Saran Terlalu Umum** | Nasihat kesehatan tidak mengenal konteks profesi. | Personalisasi konteks rutinitas & rekomendasi aksi mikro. |
@@ -836,9 +836,9 @@ Apakah fitur ini aman dan bebas dari risiko misdiagnosis?
 
 ## 60. Competition-Relevant User Insight
 
-Diferensiasi fundamental PRONOIA terhadap kompetitor aplikasi kesehatan di pasar:
+Diferensiasi fundamental AEVYRA terhadap kompetitor aplikasi kesehatan di pasar:
 
-| Parameter Evaluasi | Aplikasi Pelacak Umum Lainnya | Keunggulan Sistemik PRONOIA |
+| Parameter Evaluasi | Aplikasi Pelacak Umum Lainnya | Keunggulan Sistemik AEVYRA |
 | :--- | :--- | :--- |
 | **Orientasi Data** | Hanya mencatat angka mentah statis. | Mengubah data menjadi pola baseline personal dinamis. |
 | **Titik Intervensi** | Reaktif menunggu pengguna mencari tahu sendiri. | Proaktif mendeteksi deviasi sebelum berkembang menjadi penyakit. |
@@ -850,11 +850,11 @@ Diferensiasi fundamental PRONOIA terhadap kompetitor aplikasi kesehatan di pasar
 
 ## 61. Final User Model
 
-Model terpadu ekosistem pengguna PRONOIA:
+Model terpadu ekosistem pengguna AEVYRA:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                   MODEL TERPADU PENGGUNA PRONOIA                       │
+│                   MODEL TERPADU PENGGUNA AEVYRA                       │
 └────────────────────────────────────────────────────────────────────────┘
   ANGGOTA (MEMBER) ◀────────────────────────────────▶ INSTRUKTUR (INSTRUCTOR)
          │                                                    │
@@ -874,7 +874,7 @@ Model terpadu ekosistem pengguna PRONOIA:
 
 ## 62. Final Principle
 
-Perjalanan transformasi pengalaman anggota di dalam ekosistem PRONOIA bermuara pada empat kesadaran bertahap yang saling menguatkan:
+Perjalanan transformasi pengalaman anggota di dalam ekosistem AEVYRA bermuara pada empat kesadaran bertahap yang saling menguatkan:
 
 ```text
 1. KESADARAN BASELINE    : "Saya mulai memahami pola kebiasaan alami tubuh saya."

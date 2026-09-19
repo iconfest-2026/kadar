@@ -1,12 +1,12 @@
-# PRONOIA — Data Model
+# AEVYRA — Data Model
 
-> Spesifikasi arsitektur data konseptual, logis, dan fisik platform PRONOIA. Dokumen ini mendefinisikan entitas utama, hubungan relasional (*entity-relationships*), batasan arsitektur basis data (*database boundaries*), tata kelola rekam kesehatan (*health records*), jejak analitik mesin perilaku (*behavioral intelligence pipeline*), orkestrasi data AI, isolasi data instruktur dan administrator, kepatuhan privasi (PDP/GDPR), auditabilitas imutabel, strategi pengindeksan (*indexing*), integritas referensial, serta siklus hidup data (*data lifecycle*).
+> Spesifikasi arsitektur data konseptual, logis, dan fisik platform AEVYRA. Dokumen ini mendefinisikan entitas utama, hubungan relasional (*entity-relationships*), batasan arsitektur basis data (*database boundaries*), tata kelola rekam kesehatan (*health records*), jejak analitik mesin perilaku (*behavioral intelligence pipeline*), orkestrasi data AI, isolasi data instruktur dan administrator, kepatuhan privasi (PDP/GDPR), auditabilitas imutabel, strategi pengindeksan (*indexing*), integritas referensial, serta siklus hidup data (*data lifecycle*).
 
 ---
 
 ## 1. Tujuan & Ruang Lingkup Arsitektur Data (Purpose)
 
-Dokumen ini merupakan cetak biru resmi (*canonical blueprint*) yang mendefinisikan seluruh struktur, relasi, dan tata kelola data dalam ekosistem **PRONOIA**:
+Dokumen ini merupakan cetak biru resmi (*canonical blueprint*) yang mendefinisikan seluruh struktur, relasi, dan tata kelola data dalam ekosistem **AEVYRA**:
 
 | Pilar Arsitektur Data | Cakupan Spesifikasi Teknis |
 | :--- | :--- |
@@ -35,7 +35,7 @@ Spesifikasi ini menjadi rujukan teknis mengikat untuk:
 
 ## 2. Filosofi Pemodelan Data (Data Modeling Philosophy)
 
-Arsitektur data PRONOIA dirancang dengan memadukan kekakuan integritas relasional dan kelenturan pemrosesan analitik perilaku:
+Arsitektur data AEVYRA dirancang dengan memadukan kekakuan integritas relasional dan kelenturan pemrosesan analitik perilaku:
 
 > **Prinsip Inti:** $\text{Data Mentah} + \text{Konteks} + \text{Relasi} + \text{Inteligensi Derivatif} + \text{Auditabilitas} = \mathbf{Model\ Data\ Tepercaya}$
 
@@ -53,7 +53,7 @@ Arsitektur data PRONOIA dirancang dengan memadukan kekakuan integritas relasiona
 
 ## 3. Lapisan Data Inti (Core Data Layers)
 
-Secara konseptual dan struktural, skema basis data PRONOIA dipisahkan menjadi 13 lapisan domain modular:
+Secara konseptual dan struktural, skema basis data AEVYRA dipisahkan menjadi 13 lapisan domain modular:
 
 | Layer | Nama Lapisan Domain | Deskripsi & Tanggung Jawab Utama |
 | :---: | :--- | :--- |
@@ -75,7 +75,7 @@ Secara konseptual dan struktural, skema basis data PRONOIA dipisahkan menjadi 13
 
 ## 4. Prinsip Sumber Kebenaran Tunggal (Source of Truth)
 
-Setiap entitas bisnis dalam PRONOIA wajib memiliki **satu dan hanya satu** tabel basis data yang bertindak sebagai sumber kebenaran primer (*Single Source of Truth*):
+Setiap entitas bisnis dalam AEVYRA wajib memiliki **satu dan hanya satu** tabel basis data yang bertindak sebagai sumber kebenaran primer (*Single Source of Truth*):
 
 | Entitas Bisnis Utama | Tabel Sumber Kebenaran (*Single Source of Truth*) | Peran Arsitektural |
 | :--- | :--- | :--- |
@@ -94,7 +94,7 @@ Dilarang keras menduplikasi atribut status primer ke tabel lain (*data duplicati
 
 ## 5. Data Otoritatif vs Data Derivatif (Authoritative vs Derived Data)
 
-PRONOIA membedakan penanganan siklus hidup antara data otoritatif dan data hasil komputasi turunan:
+AEVYRA membedakan penanganan siklus hidup antara data otoritatif dan data hasil komputasi turunan:
 
 | Data Otoritatif (Authoritative) | Data Derivatif (Derived Intelligence) |
 | :--- | :--- |
@@ -203,14 +203,14 @@ Integritas akun pengguna dilindungi oleh aturan ketat pada tingkat basis data da
 
 Penghapusan akun pengguna menggunakan kolom `deleted_at` guna mempertahankan keutuhan referensial:
 - **Integritas Relasional:** Rekam jejak intervensi klinis dan bukti kehadiran konsultasi di masa lampau tidak boleh putus (*dangling references*).
-- **Penyamaran Data Pribadi (*Data Masking*):** Saat akun dihapus, kolom nama dan email dapat di-pseudonimkan (misal: `user_deleted_84712@pronoia.id`) untuk memenuhi ketentuan hak dilupakan (*Right to be Forgotten*).
+- **Penyamaran Data Pribadi (*Data Masking*):** Saat akun dihapus, kolom nama dan email dapat di-pseudonimkan (misal: `user_deleted_84712@aevyra.id`) untuk memenuhi ketentuan hak dilupakan (*Right to be Forgotten*).
 - **Masa Tenggang (*Grace Period*):** Akun berada dalam status hapus lunak selama 30 hari sebelum data non-medis diproses untuk penghapusan permanen.
 
 ---
 
 ## 12. Entitas Peran Sistem (Role Entity)
 
-Entitas `roles` berfungsi sebagai jangkar utama sistem otorisasi berbasis peran (*Role-Based Access Control* / RBAC) di PRONOIA, menentukan batasan wewenang operasional untuk setiap pengguna:
+Entitas `roles` berfungsi sebagai jangkar utama sistem otorisasi berbasis peran (*Role-Based Access Control* / RBAC) di AEVYRA, menentukan batasan wewenang operasional untuk setiap pengguna:
 
 | Kolom | Tipe Data | Definisi |
 | :--- | :--- | :--- |
@@ -344,7 +344,7 @@ Entitas `goals` merekam komitmen target kesehatan preventif yang diinisiasi oleh
 ---
 ## 20. Tipe Sasaran Perilaku (Goal Types Enum)
 
-Taksonomi target kesehatan terstandar dalam PRONOIA:
+Taksonomi target kesehatan terstandar dalam AEVYRA:
 - `SLEEP_ROUTINE`: Konsistensi jadwal istirahat malam dan perbaikan durasi tidur.
 - `PHYSICAL_ACTIVITY`: Peningkatan langkah harian atau frekuensi latihan aerobik.
 - `NUTRITION_AWARENESS`: Pengurangan konsumsi gula berlebih dan pemantauan karbohidrat.
@@ -416,7 +416,7 @@ Entitas `health_records` bertindak sebagai repositori fakta kesehatan primer (*s
 ---
 ## 24. Prinsip Desain Rekam Kesehatan (Health Record Design Principle)
 
-PRONOIA menolak pendekatan anti-pola *"Satu Tabel Raksasa Berbasis JSON Penuh"* (*Everything-in-JSON Anti-Pattern*):
+AEVYRA menolak pendekatan anti-pola *"Satu Tabel Raksasa Berbasis JSON Penuh"* (*Everything-in-JSON Anti-Pattern*):
 
 > [!TIP]
 > **Praktik Terbaik Desain Skema Rekam Kesehatan:**
@@ -1335,7 +1335,7 @@ Entitas `community_posts` memfasilitasi ruang diskusi positif, berbagi kisah per
 ## 81. Tingkat Keterlihatan Postingan (Community Visibility Enum)
 
 Cakupan sebaran diskusi forum:
-- `PUBLIC`: Terbuka untuk seluruh anggota komunitas terdaftar di PRONOIA.
+- `PUBLIC`: Terbuka untuk seluruh anggota komunitas terdaftar di AEVYRA.
 - `COMMUNITY`: Dibatasi untuk kelompok minat atau topik kesehatan spesifik.
 - `PROGRAM`: Terisolasi hanya untuk rekan peserta dalam satu kohor bimbingan yang sama.
 - `PRIVATE`: Mode draf pribadi yang hanya dapat dibaca oleh penulis sendiri.
@@ -1471,7 +1471,7 @@ Status operasional langganan member:
 
 ## 90. Batasan Etis Konseptual Membership (Membership Boundary Principle)
 
-PRONOIA memisahkan secara tegas model bisnis keanggotaan dari integritas keselamatan kesehatan:
+AEVYRA memisahkan secara tegas model bisnis keanggotaan dari integritas keselamatan kesehatan:
 
 > [!WARNING]
 > **Prinsip Mutlak:** Tingkatan Membership $\neq$ Tingkat Keparahan atau Prioritas Medis.
@@ -1483,7 +1483,7 @@ PRONOIA memisahkan secara tegas model bisnis keanggotaan dari integritas keselam
 
 ## 91. Entitas Sesi Percakapan AI (AI Conversation Entity)
 
-Entitas `ai_conversations` mengelola sesi percakapan tematik antara anggota dan asisten cerdas PRONOIA dengan isolasi konteks yang ketat:
+Entitas `ai_conversations` mengelola sesi percakapan tematik antara anggota dan asisten cerdas AEVYRA dengan isolasi konteks yang ketat:
 
 | Kolom | Tipe Data | Definisi |
 | :--- | :--- | :--- |
@@ -1517,7 +1517,7 @@ Entitas `ai_messages` menyimpan riwayat dialog percakapan secara kronologis deng
 ---
 ## 93. Tipe Pesan Percakapan AI (AI Message Types Enum)
 
-Format pesan yang didukung dalam pipeline AI PRONOIA:
+Format pesan yang didukung dalam pipeline AI AEVYRA:
 - `TEXT`: Pesan percakapan standar dalam format Markdown ramah baca.
 - `TOOL_CALL`: Instruksi pemanggilan perkakas internal terstruktur (JSON RPC).
 - `TOOL_RESULT`: Data balasan dari sistem internal yang disanitasi untuk AI.
@@ -1776,7 +1776,7 @@ Entitas `system_events` mencatat telemetri operasional infrastruktur (seperti ke
 ---
 ## 108. Model Hierarki Kepemilikan Data (Data Ownership Model)
 
-Arsitektur data PRONOIA menegakkan batas kepemilikan yang terbagi menjadi tiga domain otoritas:
+Arsitektur data AEVYRA menegakkan batas kepemilikan yang terbagi menjadi tiga domain otoritas:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -1873,7 +1873,7 @@ Untuk operasi yang rentan terhadap pengiriman berulang akibat latensi jaringan s
 
 ## 115. Strategi Penanda Waktu (Timestamp Strategy)
 
-PRONOIA menerapkan disiplin pemisahan antara waktu administratif server dan waktu kejadian biologis riil:
+AEVYRA menerapkan disiplin pemisahan antara waktu administratif server dan waktu kejadian biologis riil:
 
 | Kolom Timestamp | Makna & Konteks Penggunaan |
 | :--- | :--- |
@@ -1901,7 +1901,7 @@ Mesin perilaku dan kalkulasi tren glukosa wajib menggunakan `recorded_at` agar k
 
 ## 117. Tata Kelola Zona Waktu Baku (Timezone Governance)
 
-Standar penyimpanan waktu pada basis data PRONOIA:
+Standar penyimpanan waktu pada basis data AEVYRA:
 - **Penyimpanan Internal:** Seluruh kolom timestamp disimpan secara konsisten dalam zona waktu **UTC (Coordinated Universal Time)** dengan presisi mikrodetik.
 - **Penyajian Antarmuka:** Antarmuka klien dan transformer API bertugas mengonversi timestamp UTC ke zona waktu lokal member (misal: WIB/WITA/WIT di Indonesia) berdasarkan kolom `timezone` pada profil pengguna.
 
@@ -1917,7 +1917,7 @@ Untuk data jadwal konsultasi dan pengingat harian:
 
 ## 119. Batasan Penggunaan Kolom JSON (JSON Fields Usage Boundary)
 
-PRONOIA memberlakukan aturan ketat kapan kolom tipe data `JSON` diizinkan untuk digunakan:
+AEVYRA memberlakukan aturan ketat kapan kolom tipe data `JSON` diizinkan untuk digunakan:
 
 > [!IMPORTANT]
 > **Panduan Arsitektur Kolom JSON:**
@@ -2026,7 +2026,7 @@ Skema JSON terstandar untuk respons linimasa klien:
   "title": "Lonjakan Glukosa Terdeteksi",
   "summary": "Pola makan siang hari ini menghasilkan kenaikan glukosa 42 mg/dL di atas baseline.",
   "severity": "ATTENTION",
-  "action_url": "pronoia://insights/01923e7a-9b41",
+  "action_url": "aevyra://insights/01923e7a-9b41",
   "metadata": {
     "metric_type": "blood_glucose",
     "peak_value": 158.0
@@ -2038,7 +2038,7 @@ Skema JSON terstandar untuk respons linimasa klien:
 
 ## 126. Kemampuan Rekonstruksi Data Derivatif (Derived Data Rebuildability)
 
-Prinsip dasar arsitektur data analitik PRONOIA:
+Prinsip dasar arsitektur data analitik AEVYRA:
 
 > **Prinsip Rekonstruksi:** $\text{Data Derivatif} = f(\text{Data Otoritatif})$
 
@@ -2075,7 +2075,7 @@ Versi data dicatat secara ketat pada domain yang memerlukan pembuktian saintifik
 
 ## 130. Perlindungan Integritas Riwayat Masa Lampau (Historical Integrity)
 
-Basis data PRONOIA melarang pembaruan destruktif (*no destructive in-place updates*) pada:
+Basis data AEVYRA melarang pembaruan destruktif (*no destructive in-place updates*) pada:
 - Resep intervensi masa lalu yang telah diselesaikan.
 - Bukti kehadiran dan catatan evaluasi sesi konsultasi.
 - Seluruh baris entitas audit log forensik.
@@ -2100,7 +2100,7 @@ Jadwal masa simpan data disesuaikan dengan mandat regulasi perlindungan data med
 
 ## 132. Prinsip Minimisasi Pengumpulan Data (Data Minimization)
 
-PRONOIA menganut prinsip minimisasi data (*Data Minimization Principle*):
+AEVYRA menganut prinsip minimisasi data (*Data Minimization Principle*):
 - Hanya mengumpulkan data yang secara nyata memberikan nilai preventif bagi kesehatan member.
 - Menolak praktik pengumpulan data pribadi spekulatif *"untuk cadangan di masa depan"*.
 - Kolom yang tidak memiliki fungsi operasional langsung dalam 6 bulan ke depan wajib dikeluarkan dari draf migrasi database.
@@ -2271,7 +2271,7 @@ Jika salah satu langkah mengalami kegagalan, seluruh mutasi dibatalkan otomatis 
 
 ## 147. Batasan Transaksi Basis Data (Transaction Boundaries)
 
-PRONOIA memberlakukan aturan batasan ketat untuk transaksi database:
+AEVYRA memberlakukan aturan batasan ketat untuk transaksi database:
 
 > [!CAUTION]
 > **Aturan Emas:** Dilarang keras menjalankan panggilan API eksternal di dalam blok transaksi basis data.
@@ -2310,7 +2310,7 @@ Penerapan *Soft Delete* (`deleted_at`) dievaluasi secara selektif:
 
 ## 151. Pengarsipan vs Penghapusan Data (Archived vs Deleted)
 
-PRONOIA membedakan secara tegas perlakuan siklus akhir hidup data antara pengarsipan dan pemusnahan:
+AEVYRA membedakan secara tegas perlakuan siklus akhir hidup data antara pengarsipan dan pemusnahan:
 
 | Status: ARCHIVED (Diarsipkan) | Status: DELETED (Dihapus / Dimusnahkan) |
 | :--- | :--- |
@@ -2424,7 +2424,7 @@ Prosedur berurutan saat sebuah akun pengguna dinonaktifkan atau dihapus secara m
 
 ## 159. Pemisahan Model Eloquent dan Lapisan API (API Resource Separation)
 
-PRONOIA mewajibkan pemisahan tegas antara model basis data (*Eloquent Models*) dan representasi data keluar (*API Resources / Transformers*):
+AEVYRA mewajibkan pemisahan tegas antara model basis data (*Eloquent Models*) dan representasi data keluar (*API Resources / Transformers*):
 
 ```text
 ┌─────────────────────────┐         ┌─────────────────────────┐         ┌─────────────────────────┐
@@ -2452,7 +2452,7 @@ Untuk mengoptimalkan penggunaan memori dan performa basis data, kueri aplikasi w
 Pengambilan koleksi data relasional wajib mengimplementasikan pemuatan cepat (*Eager Loading*):
 
 ```php
-// CONTOH PRAKTIK TERBAIK DI PRONOIA:
+// CONTOH PRAKTIK TERBAIK DI AEVYRA:
 $assignedMembers = MemberProfile::query()
     ->where('instructor_id', $instructor->id)
     ->with([
@@ -2762,7 +2762,7 @@ Hubungan buku besar keamanan:
 
 ## 187. Kebijakan Penggunaan Relasi Polimorfis (Polymorphic Relationships Policy)
 
-PRONOIA membatasi penggunaan relasi polimorfis (*Polymorphic Relations*) hanya pada domain yang benar-benar membutuhkan kelenturan objek:
+AEVYRA membatasi penggunaan relasi polimorfis (*Polymorphic Relations*) hanya pada domain yang benar-benar membutuhkan kelenturan objek:
 - **Diizinkan:** `community_reactions` (bisa mereaksi Post atau Comment), `community_reports` (melaporkan Post/Comment/User), `audit_logs` (target entitas dinamis).
 - **Dilarang:** Menggunakan polimorfis untuk rekam kesehatan, tiket konsultasi, atau penugasan instruktur. Domain inti medis wajib menggunakan kunci asing eksplisit (*Strict Foreign Keys*) guna menjamin integritas referensial basis data.
 
@@ -2770,7 +2770,7 @@ PRONOIA membatasi penggunaan relasi polimorfis (*Polymorphic Relations*) hanya p
 
 ## 188. Standar Pemilihan Identitas Unik: UUIDv7 vs BigInt (ID Strategy)
 
-PRONOIA mengadopsi pendekatan hibrida terstandar:
+AEVYRA mengadopsi pendekatan hibrida terstandar:
 
 | UUIDv7 (Time-Ordered 128-bit) | BIGINT UNSIGNED (Auto-Increment) |
 | :--- | :--- |
@@ -2864,7 +2864,7 @@ Daftar urutan 21 tahapan migrasi untuk menjamin pemenuhan dependensi relasional:
 
 ## 196. Pola Pembaruan Skema Tanpa Downtime (Zero-Downtime Migration Pattern)
 
-PRONOIA menerapkan pola *Expand and Contract* saat mengubah skema di lingkungan produksi:
+AEVYRA menerapkan pola *Expand and Contract* saat mengubah skema di lingkungan produksi:
 
 ```text
 Langkah 1: Tambahkan Kolom Baru (Expand) ──► Kode Mendukung Kedua Kolom
@@ -2919,7 +2919,7 @@ Pipeline pemrosesan data kesehatan secara kontinu memantau metrik kualitas data 
 
 ## 201. Strategi Pengujian Model Data (Data Model Test Strategy)
 
-Setiap entitas model Eloquent dalam PRONOIA wajib memiliki rangkaian pengujian otomatis (*Automated Test Suite*) yang mencakup 8 dimensi verifikasi:
+Setiap entitas model Eloquent dalam AEVYRA wajib memiliki rangkaian pengujian otomatis (*Automated Test Suite*) yang mencakup 8 dimensi verifikasi:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -3097,7 +3097,7 @@ Pagar pengaman arsitektur data medis:
 
 ## 211. Siklus Hidup Data Umum Platform (General Data Lifecycle)
 
-Perjalanan hidup setiap rekaman data dalam sistem PRONOIA:
+Perjalanan hidup setiap rekaman data dalam sistem AEVYRA:
 
 ```text
 Penciptaan (Create) ──► Validasi Format & Izin ──► Pemanfaatan Aktif ──► Pembaruan Terkelola
@@ -3174,7 +3174,7 @@ Alur pemeliharaan sistem oleh Administrator:
 
 ## 217. Anti-Pola Desain: Satu Tabel Raksasa (One Giant Table Anti-Pattern)
 
-PRONOIA secara tegas menolak pembuatan satu tabel raksasa (*God-Table Anti-Pattern*):
+AEVYRA secara tegas menolak pembuatan satu tabel raksasa (*God-Table Anti-Pattern*):
 
 > [!CAUTION]
 > **Mengapa Anti-Pola "Health Everything" Ditolak:**
@@ -3182,7 +3182,7 @@ PRONOIA secara tegas menolak pembuatan satu tabel raksasa (*God-Table Anti-Patte
 > - Menghilangkan kemampuan pengindeksan komposit performa tinggi pada rentang waktu.
 > - Mempersulit penegakan izin akses granular (*column-level security*) dan audit kepatuhan PDP/GDPR.
 
-Solusi PRONOIA: Pemisahan domain modular dengan batas kepemilikan dan skema relasional yang bersih.
+Solusi AEVYRA: Pemisahan domain modular dengan batas kepemilikan dan skema relasional yang bersih.
 
 ---
 
@@ -3200,7 +3200,7 @@ Menolak kebiasaan malas menampung seluruh atribut dinamis ke dalam kolom `user.m
 Menghindari penyimpanan nilai yang sama di berbagai tabel tanpa konsistensi transaksional:
 - **Contoh Buruk:** Menyimpan `health_score` di tabel `users`, tabel `member_profiles`, dan tabel `dashboard_summaries`.
 - Jika terjadi kegagalan sinkronisasi, data akan saling bertentangan dan merusak kepercayaan pengguna.
-- **Solusi PRONOIA:** Tetapkan satu tabel pemilik fakta otoritatif; data lain mengambil via relasi atau dihitung saat dibutuhkan (*Single Source of Truth*).
+- **Solusi AEVYRA:** Tetapkan satu tabel pemilik fakta otoritatif; data lain mengambil via relasi atau dihitung saat dibutuhkan (*Single Source of Truth*).
 
 ---
 
@@ -3216,7 +3216,7 @@ Menolak anggapan bahwa riwayat obrolan teks AI dapat menggantikan basis data kes
 
 Menolak struktur basis data yang menempatkan data kesehatan sebagai milik pribadi instruktur:
 - **Pola Keliru:** Member hanya menjadi atribut anak dari entitas instruktur.
-- **Pola Sejati PRONOIA:** Member adalah pemilik berdaulat atas rekam kesehatannya. Instruktur hanyalah profesional berlisensi yang menerima hak akses terbatas dan berbatas waktu melalui relasi penugasan resmi.
+- **Pola Sejati AEVYRA:** Member adalah pemilik berdaulat atas rekam kesehatannya. Instruktur hanyalah profesional berlisensi yang menerima hak akses terbatas dan berbatas waktu melalui relasi penugasan resmi.
 
 ---
 
@@ -3332,7 +3332,7 @@ users ──┬──► member_profiles
 
 ## 230. Keselarasan Model Data dengan Lingkaran Tertutup (Closed-Loop Alignment)
 
-Skema basis data PRONOIA dirancang secara presisi untuk menopang siklus lingkaran tertutup (*Closed-Loop Behavioral Engine*):
+Skema basis data AEVYRA dirancang secara presisi untuk menopang siklus lingkaran tertutup (*Closed-Loop Behavioral Engine*):
 
 ```text
 1. HealthRecord Dibuat ──► 2. Baseline Dihitung ──► 3. Sinyal Anomali Terbit
@@ -3352,7 +3352,7 @@ Skema basis data PRONOIA dirancang secara presisi untuk menopang siklus lingkara
 
 ## 231. Matriks Keterlacakan Data Multi-Lapis (Data Traceability Matrix)
 
-Kemampuan penelusuran relasional antar-tabel dalam PRONOIA:
+Kemampuan penelusuran relasional antar-tabel dalam AEVYRA:
 - **Melacak Wawasan:** `behavior_insights` $\rightarrow$ `behavior_signal_id` $\rightarrow$ `health_baselines` $\rightarrow$ `health_records`.
 - **Melacak Intervensi:** `interventions` $\rightarrow$ `instructor_id` + `behavior_signal_id` + `user_id`.
 - **Melacak Luaran:** `intervention_outcomes` $\rightarrow$ `intervention_id` $\rightarrow$ rentang waktu observasi sebelum dan sesudah.
@@ -3394,11 +3394,11 @@ Struktur skema mempermudah penegakan hukum privasi:
 
 ## 235. Narasi Nilai Arsitektur untuk Penjurian Kompetisi (Competition Architecture Pitch)
 
-Struktur model data PRONOIA membuktikan keunggulan rekayasa perangkat lunak kepada dewan juri:
+Struktur model data AEVYRA membuktikan keunggulan rekayasa perangkat lunak kepada dewan juri:
 
 > **Diferensiasi Rekayasa:** Bukan sekadar aplikasi CRUD percakapan biasa, melainkan platform rekam jejak inteligensi perilaku berstandar industri medis.
 
-Skema data PRONOIA membuktikan:
+Skema data AEVYRA membuktikan:
 1. **Fakta Medis Otoritatif** yang terlindungi dan terstandarisasi.
 2. **Mesin Derivatif Matematis** yang dapat dihitung ulang dan diuji secara objektif.
 3. **Sentuhan Empati Manusia (*Human-in-the-Loop*)** yang terdokumentasi akuntabel.
@@ -3490,7 +3490,7 @@ Setiap kelas model wajib mengonfigurasi proteksi keamanan atribut:
 
 ## 240. Pencegahan Kerentanan Mass Assignment (Mass Assignment Protection)
 
-PRONOIA melarang keras memasukkan payload mentah permintaan klien langsung ke dalam metode pembuatan model:
+AEVYRA melarang keras memasukkan payload mentah permintaan klien langsung ke dalam metode pembuatan model:
 
 > [!CAUTION]
 > **Dilarang (Rentan Eksploitasi):**
@@ -3525,7 +3525,7 @@ protected $casts = [
 
 ## 242. Kebijakan Model Events vs Domain Actions (Model Events Policy)
 
-PRONOIA membatasi penggunaan *Eloquent Observers / Model Magic Events*:
+AEVYRA membatasi penggunaan *Eloquent Observers / Model Magic Events*:
 - Logika bisnis kritis (seperti penerbitan intervensi atau transfer poin) **tidak boleh disembunyikan** di dalam event model `saved()` atau `updated()`.
 - Logika bisnis wajib dieksekusi secara transparan melalui *Domain Action Classes* (e.g. `PrescribeInterventionAction::execute()`) agar alur data mudah dibaca dan diuji.
 
@@ -3562,7 +3562,7 @@ Memilih abstraksi paling sederhana yang tetap memenuhi:
 
 ## 246. Standar Dokumentasi Entitas Baru (Entity Documentation Standard)
 
-Setiap pengembang yang mengajukan tabel baru di PRONOIA wajib melampirkan spesifikasi 10 poin:
+Setiap pengembang yang mengajukan tabel baru di AEVYRA wajib melampirkan spesifikasi 10 poin:
 1. Tujuan Bisnis Entitas (*Purpose*)
 2. Pemilik Data Sah (*Data Owner*)
 3. Tingkat Sensitivitas Privasi (*Sensitivity Tier*)
@@ -3600,7 +3600,7 @@ Pertanyaan audit sebelum arsitektur basis data disetujui:
 
 ## 249. Kriteria Penyelesaian Arsitektur Data (Completion Acceptance Criteria)
 
-Arsitektur data PRONOIA dinyatakan siap untuk tahap produksi (*Production-Ready*) apabila:
+Arsitektur data AEVYRA dinyatakan siap untuk tahap produksi (*Production-Ready*) apabila:
 
 - [ ] Seluruh 34 tabel relasional utama telah didefinisikan dengan tipe data
 - [ ] Batasan foreign key dan aturan delete constraint terpasang di database
@@ -3617,7 +3617,7 @@ Arsitektur data PRONOIA dinyatakan siap untuk tahap produksi (*Production-Ready*
 
 ## 250. Diagram Arsitektur Data Menyeluruh (Final Comprehensive Data Architecture)
 
-Cetak biru holistik platform PRONOIA yang mengintegrasikan seluruh aktor dan pipeline komputasi:
+Cetak biru holistik platform AEVYRA yang mengintegrasikan seluruh aktor dan pipeline komputasi:
 
 ```text
                                   ┌──────────────┐
@@ -3691,13 +3691,13 @@ Cetak biru holistik platform PRONOIA yang mengintegrasikan seluruh aktor dan pip
 
 ---
 
-## 251. Prinsip Puncak Arsitektur Data PRONOIA (Final Guiding Principle)
+## 251. Prinsip Puncak Arsitektur Data AEVYRA (Final Guiding Principle)
 
 > [!TIP]
-> **Prinsip Puncak Model Data PRONOIA:**  
-> **"Arsitektur data PRONOIA wajib membuat kepemilikan data, silsilah asal-usul, relasi entitas, batas otorisasi, dan keterlacakan ilmiah menjadi eksplisit, transparan, dan tidak terbantahkan."**
+> **Prinsip Puncak Model Data AEVYRA:**  
+> **"Arsitektur data AEVYRA wajib membuat kepemilikan data, silsilah asal-usul, relasi entitas, batas otorisasi, dan keterlacakan ilmiah menjadi eksplisit, transparan, dan tidak terbantahkan."**
 
-Arsitektur data PRONOIA dirancang untuk memungkinkan alur bernilai tinggi yang berkesinambungan:
+Arsitektur data AEVYRA dirancang untuk memungkinkan alur bernilai tinggi yang berkesinambungan:
 
 $$\mathbf{TANGKAP} \longrightarrow \mathbf{PAHAMI} \longrightarrow \mathbf{DETEKSI} \longrightarrow \mathbf{JELASKAN} \longrightarrow \mathbf{INTERVENSI} \longrightarrow \mathbf{PANTAU} \longrightarrow \mathbf{EVALUASI}$$
 
