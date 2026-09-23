@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+            'verified-instructor' => \App\Http\Middleware\EnsureInstructorIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

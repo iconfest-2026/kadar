@@ -10,6 +10,7 @@ export default function QuickChatDialog() {
             sender: 'bot',
             time: 'Sekarang',
             text: 'Halo! Saya Asisten Pintar Kadar. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
+            text: 'Halo! Saya Asisten Pintar AEVYRA. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
         },
     ]);
 
@@ -24,15 +25,15 @@ export default function QuickChatDialog() {
         },
         {
             id: 'q2',
-            label: 'Perbedaan Chat AI vs Instruktur?',
-            question: 'Apa bedanya Konsultasi Chat AI dengan Instruktur?',
-            answer: 'Chat AI menjawab pertanyaan ringan seputar gizi dan kalkulasi kalori instan 24/7. Sedangkan sesi Instruktur adalah bimbingan mendalam bersama tenaga ahli sungguhan berdasarkan riwayat tracker Anda.',
+            label: 'Apa itu Tracker Kesehatan?',
+            question: 'Apa fungsi Tracker Kesehatan Pribadi?',
+            answer: 'Tracker mencatat asupan kalori, riwayat biometrik, dan hidrasi harian Anda secara otomatis. Sistem akan memberikan notifikasi cerdas jika ada pola yang tidak normal.',
         },
         {
             id: 'q3',
-            label: 'Perbedaan Member Silver, Gold, Platinum?',
-            question: 'Apa saja perbedaan tingkat Member (Silver, Gold, Platinum)?',
-            answer: 'Silver adalah tier gratis untuk scanner & tracker dasar. Gold membuka personalisasi profil dan program challenge 90 hari. Platinum menyediakan bimbingan 1-on-1 prioritas bersama instruktur & dokter spesialis.',
+            label: 'Program Challenge Kesehatan?',
+            question: 'Bagaimana cara mengikuti Program Challenge Kesehatan?',
+            answer: 'Anda dapat memilih challenge sesuai target (misal: 14 hari tanpa gula tambahan, atau 30 hari defisit kalori). Setiap target harian yang tercapai akan memberikan Anda lencana prestasi.',
         },
         {
             id: 'q4',
@@ -42,9 +43,10 @@ export default function QuickChatDialog() {
         },
         {
             id: 'q5',
-            label: 'Cara bergabung sebagai Instruktur / Member?',
-            question: 'Bagaimana alur pendaftaran akun Member atau Instruktur?',
-            answer: 'Klik tombol "Daftar" di atas, lalu pilih peran yang sesuai: "Member" untuk pengguna harian atau "Instruktur" bagi tenaga ahli bersertifikasi yang ingin mendampingi pasien.',
+            label: 'Apakah ini Aplikasi Gratis?',
+            question: 'Apakah aplikasi Kadar gratis digunakan?',
+            question: 'Apakah aplikasi AEVYRA gratis digunakan?',
+            answer: 'Ya, Anda dapat mendaftar secara gratis untuk mengakses Scanner, Tracker dasar, dan tanya jawab dengan Asisten AI. Tersedia juga paket berbayar untuk fitur konsultasi tingkat lanjut.',
         },
     ];
 
@@ -97,7 +99,7 @@ export default function QuickChatDialog() {
         <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
             {/* Chat Popup Box */}
             {isOpen && (
-                <div className="w-[90vw] sm:w-[360px] h-[480px] mb-3 bg-surface rounded-2xl shadow-2xl border border-surface-container flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
+                <div className="w-[90vw] sm:w-[360px] h-[480px] mb-3 bg-white/85 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
                     {/* Header */}
                     <div className="p-3.5 bg-primary text-on-primary flex items-center justify-between border-b border-primary-container shadow-xs">
                         <div className="flex items-center gap-2.5">
@@ -110,6 +112,7 @@ export default function QuickChatDialog() {
                             <div>
                                 <span className="font-headline-sm text-sm font-medium block leading-tight">
                                     Pusat Bantuan Kadar
+                                    Pusat Bantuan AEVYRA
                                 </span>
                                 <span className="font-label-mono text-[10px] text-primary-fixed-dim block">
                                     PWA Informasi &amp; Fitur
@@ -164,7 +167,7 @@ export default function QuickChatDialog() {
                     </div>
 
                     {/* Quick Question Selector Footer */}
-                    <div className="p-3 bg-surface border-t border-surface-container space-y-2">
+                    <div className="p-3 bg-white/95 backdrop-blur-md border-t border-primary/10 space-y-2">
                         <label className="font-label-mono text-[10px] text-primary font-semibold uppercase block">
                             Pilih Topik Pertanyaan:
                         </label>

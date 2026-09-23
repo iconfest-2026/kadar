@@ -91,8 +91,8 @@ return new class extends Migration
             $table->string('title', 200);
             $table->text('description');
             $table->string('status', 30)->default('ACTIVE'); // DRAFT, ACTIVE, IN_REVIEW, RESOLVED, CANCELLED
-            $table->timestamp('start_at');
-            $table->timestamp('due_at');
+            $table->dateTime('start_at');
+            $table->dateTime('due_at');
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
@@ -103,8 +103,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('intervention_id')->unique()->constrained('interventions')->cascadeOnDelete();
             $table->string('status', 30)->default('FINAL'); // DRAFT, FINAL
-            $table->timestamp('observation_start');
-            $table->timestamp('observation_end');
+            $table->dateTime('observation_start');
+            $table->dateTime('observation_end');
             $table->string('result_type', 30); // IMPROVING, STABLE, UNCHANGED, DECLINING, INSUFFICIENT_DATA
             $table->text('summary');
             $table->foreignId('evaluated_by')->constrained('users');
@@ -130,8 +130,8 @@ return new class extends Migration
             $table->foreignId('instructor_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('program_id')->nullable()->constrained('programs')->nullOnDelete();
             $table->string('status', 30)->default('REQUESTED'); // REQUESTED, CONFIRMED, IN_PROGRESS, COMPLETED, CANCELLED, NO_SHOW
-            $table->timestamp('scheduled_start');
-            $table->timestamp('scheduled_end');
+            $table->dateTime('scheduled_start');
+            $table->dateTime('scheduled_end');
             $table->string('purpose', 255);
             $table->string('meeting_url', 255)->nullable();
             $table->text('notes')->nullable();

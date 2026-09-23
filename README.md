@@ -1,5 +1,12 @@
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 # Kadar (AEVYRA) — Personal Preventive Health & Early Intervention Platform
 
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 [![Laravel 12](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
 [![React 19](https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Inertia.js v2](https://img.shields.io/badge/Inertia.js-v2.x-9553E9?style=for-the-badge&logo=inertia&logoColor=white)](https://inertiajs.com)
@@ -9,10 +16,19 @@
 [![Tests Passing](https://img.shields.io/badge/Tests-19%20Passed-success?style=for-the-badge&logo=githubactions&logoColor=white)]()
 [![Compliance](https://img.shields.io/badge/Compliance-UU%20PDP%20No.%2027%2F2022-00433e?style=for-the-badge)]()
 
+## About Laravel
 > **Platform PWA cerdas untuk pemantauan garis acuan biologis personal (*Personal Baseline*), deteksi dini pergeseran perilaku gaya hidup (*Health Behavior Engine*), bimbingan tenaga ahli terverifikasi, dan tanggap darurat medis SPGDT 119 mandiri.**
 
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 ---
 
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 ## 📌 Daftar Isi
 1. [Tentang Platform & Visi](#-tentang-platform--visi)
 2. [Arsitektur Inti: Health Behavior Engine (HBE)](#-arsitektur-inti-health-behavior-engine-hbe)
@@ -27,20 +43,35 @@
 11. [Design Tokens & Identitas Visual](#-design-tokens--identitas-visual)
 12. [Kepatuhan Regulasi & Perlindungan Data (UU PDP)](#-kepatuhan-regulasi--perlindungan-data-uu-pdp)
 
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 ---
 
+## Learning Laravel
 ## 📖 Tentang Platform & Visi
 
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 Mayoritas aplikasi kesehatan konvensional mengandalkan ambang batas populasi umum statis (misal: semua orang harus 10.000 langkah atau 8 jam tidur) yang kerap memicu alarm palsu atau mengabaikan deviasi halus pada individu. 
 
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 **Kadar (AEVYRA)** hadir sebagai platform kesehatan preventif berbasis perilaku dan intervensi dini yang membangun **Garis Acuan Personal (*Personal Baseline*)** berbasis jendela bergulir 14-hari data objektif pengguna. Melalui pendekatan non-diagnostik, Kadar mendeteksi pergeseran ritme biologis lebih awal, menyajikan wawasan empati yang didukung data bukti, serta menghubungkan pengguna dengan instruktur kesehatan berlisensi dan layanan ambulans gawat darurat nasional (SPGDT 119).
 
+## Laravel Sponsors
 ---
 
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 ## 🧠 Arsitektur Inti: Health Behavior Engine (HBE)
 
+### Premium Partners
 Health Behavior Engine (HBE) adalah mesin komputasi deterministik modular di namespace `App\Services\HealthBehaviorEngine`:
 
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 ```
 ┌─────────────────┐     ┌───────────────────────┐     ┌──────────────────────┐
 │  Health Record  │ ──> │ DataNormalizerService │ ──> │ DataQualityEvaluator │
@@ -60,6 +91,7 @@ Health Behavior Engine (HBE) adalah mesin komputasi deterministik modular di nam
 └──────────────────────┘     └────────────────────────┘     └──────────────────────┘
 ```
 
+## Contributing
 1. **`DataNormalizerService`**: Menormalisasi unit input mentah ke representasi kanonikal standar (contoh: jam/detik $\rightarrow$ menit, gelas/botol/liter $\rightarrow$ ml, mmol/L $\rightarrow$ mg/dL).
 2. **`DataQualityEvaluatorService`**: Evaluasi kewajaran biologis, pengecekan tanggal masa depan, pembobotan sumber data, dan kalkulasi skor komposit **DQS (*Data Quality Score*)** $0.0 - 1.0$.
 3. **`BaselineBuilderService`**: Menghitung rata-rata bergulir 14-hari (*Mean, Median, Standard Deviation, IQR*). Status otomatis bertransisi dari `COLLECTING` (<7 hari) menjadi `AVAILABLE` ($\ge 7-14$ hari).
@@ -70,25 +102,32 @@ Health Behavior Engine (HBE) adalah mesin komputasi deterministik modular di nam
 8. **`RecommendationService`**: Memetakan wawasan ke dalam rekomendasi mikro-kebiasaan bertingkat kesulitan rendah (*low-friction micro-habits*) yang dapat diaktifkan member dengan 1 ketukan.
 9. **`OutcomeEvaluatorService`**: Mengevaluasi tren pra- vs. pasca-intervensi untuk mengukur keberhasilan perubahan perilaku.
 
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 ---
 
+## Code of Conduct
 ## 🛡️ Kerangka Keselamatan Klinis & Panggilan Darurat
 
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 Platform Kadar menerapkan pembatas keselamatan berlapis (*clinical guardrails*) sesuai standar etika medis:
 
+## Security Vulnerabilities
 ### 1. Pembatas Keselamatan Klinis (`ClinicalSafetyGuardService`)
 - **Penolakan Vonis Diagnosis**: Sistem tidak pernah memberikan diagnosa penyakit medis. Permintaan diagnosis otomatis ditolak secara aman (`DIAGNOSTIC_VERDICT_REFUSAL`).
 - **Pelarangan Dosis Obat & Farmakoterapi**: Dilarang keras meresepkan, menyarankan penyesuaian dosis obat, atau mengubah rejimen farmakoterapi (`MEDICATION_DOSING_REFUSAL`).
 - **Pencegahan Injeksi Prompt**: Pertahanan terhadap teknik *jailbreak* atau instruksi pengabaian batasan etika (`PROMPT_INJECTION_DEFENSE`).
 - **Redireksi Darurat Otomatis**: Mendeteksi keluhan akut kritis (nyeri dada hebat, sesak napas berat, bibir membiru, hilang kesadaran) dan seketika menghentikan dialog AI untuk mengarahkan ke 119 (`ACUTE_EMERGENCY_REDIRECTION`).
 
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 ### 2. Kedaulatan Protokol Darurat 119 (`EmergencyService`)
 - **100% Independen dari AI**: Tombol darurat **SOS 119** merespons instan (< 200ms) tanpa menunggu respon LLM atau jaringan eksternal.
 - **Integrasi SPGDT Nasional**: Menghubungkan langsung ke Panggilan Darurat Medis **119** (Kemenkes RI), Panggilan Darurat Terpadu **112**, serta direktori hotline IGD 24 Jam rumah sakit rujukan.
 - **Pencatatan Audit Medis**: Setiap aktivasi tombol darurat mencatat log kejadian forensik (`emergency_events`) dengan izin lokasi yang diproses secara aman.
 
+## License
 ---
 
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 ## 🤖 Asisten AI Gaya Hidup (Gemini & Fallback Engine)
 
 Arsitektur AI Kadar dirancang terisolasi (*decoupled*) melalui `AiDriverInterface`:

@@ -74,8 +74,8 @@ export default function Header() {
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 isScrolled
-                    ? 'bg-surface/90 backdrop-blur-md shadow-xs py-2 border-b border-surface-container'
-                    : 'bg-surface/95 backdrop-blur-sm py-3 border-b border-surface-container-high'
+                    ? 'bg-white/80 backdrop-blur-md shadow-xs py-2 border-b border-white/60'
+                    : 'bg-white/60 backdrop-blur-sm py-3 border-b border-white/40'
             }`}
         >
             <div className="max-w-7xl mx-auto px-gutter lg:px-margin flex items-center justify-between">
@@ -84,17 +84,17 @@ export default function Header() {
                     href="/"
                     className="flex items-center gap-space-xs group transition-transform active:scale-95"
                 >
-                    <span className="font-display text-2xl md:text-3xl font-normal text-primary tracking-tight group-hover:opacity-90 transition-opacity">
-                        Kadar
+                    <span className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight group-hover:opacity-90 transition-opacity">
+                        AEVYRA
                     </span>
-                    <span className="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-primary font-medium border border-surface-variant">
+                    <span className="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-white/80 text-primary font-medium border border-primary/10 shadow-2xs">
                         PWA
                     </span>
                     <span className="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse ml-1"></span>
                 </Link>
 
                 {/* Public Feature & Promo Desktop Nav Links */}
-                <nav className="hidden lg:flex items-center gap-1 bg-surface-container-low/80 p-1 rounded-full border border-surface-container-high">
+                <nav className="hidden lg:flex items-center gap-1 bg-white/70 backdrop-blur-md p-1 rounded-full border border-white/80 shadow-xs">
                     {navLinks.map((link) => {
                         const isActive = activeSection === link.id;
                         return (
@@ -105,7 +105,7 @@ export default function Header() {
                                 className={`px-space-md py-1.5 rounded-full text-body-sm font-medium transition-all duration-200 ${
                                     isActive
                                         ? 'bg-primary text-on-primary shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/80'
                                 }`}
                             >
                                 {link.name}
@@ -157,7 +157,7 @@ export default function Header() {
 
             {/* Mobile Drawer */}
             {mobileMenuOpen && (
-                <div className="lg:hidden bg-surface border-b border-surface-container px-gutter py-space-md shadow-lg space-y-space-xs animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="lg:hidden bg-surface/95 backdrop-blur-xl border-b border-surface-container/80 px-gutter py-space-md shadow-xl space-y-space-xs animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="flex flex-col space-y-1">
                         {navLinks.map((link) => {
                             const isActive = activeSection === link.id;

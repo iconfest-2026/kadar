@@ -36,8 +36,8 @@ return new class extends Migration
             $table->string('metric_type', 50);
             $table->string('feature_type', 50); // AVERAGE, VARIABILITY, CONSISTENCY, TREND, DEVIATION, STREAK
             $table->decimal('value_numeric', 12, 4);
-            $table->timestamp('period_start');
-            $table->timestamp('period_end');
+            $table->dateTime('period_start');
+            $table->dateTime('period_end');
             $table->string('source_version', 20)->default('v1.0');
             $table->timestamps();
 

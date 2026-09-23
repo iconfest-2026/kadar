@@ -69,15 +69,16 @@ export default function MemberFeaturesSection() {
     ];
 
     return (
-        <section className="w-full bg-surface-container-low py-space-xl px-gutter lg:px-margin" id="features">
+        <section className="w-full relative py-space-xl px-gutter lg:px-margin" id="features">
             <div className="max-w-7xl mx-auto space-y-space-md">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-xs">
                     <div>
                         <span className="font-label-mono text-xs text-primary font-semibold uppercase tracking-wider block">
                             [ FITUR &amp; SOLUSI PWA KADAR ]
+                            [ FITUR &amp; SOLUSI PWA AEVYRA ]
                         </span>
-                        <h2 className="font-headline-lg text-3xl font-normal text-primary">
+                        <h2 className="font-headline-lg text-3xl sm:text-4xl font-normal text-primary">
                             8 Fitur Unggulan untuk Member
                         </h2>
                     </div>
@@ -91,20 +92,20 @@ export default function MemberFeaturesSection() {
                     {features.map((item, idx) => (
                         <div
                             key={idx}
-                            className="p-space-md bg-surface rounded-2xl border border-surface-container hover:border-primary-fixed-dim hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between space-y-space-xs"
+                            className="group p-space-md sm:p-5 bg-white/75 backdrop-blur-md rounded-2xl border border-white/80 hover:border-primary-fixed-dim/80 hover:bg-white/95 shadow-[0_4px_20px_-2px_rgba(0,67,62,0.06)] hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between space-y-space-xs"
                         >
                             <div className="space-y-space-xs">
                                 <div className="flex items-center justify-between">
-                                    <div className="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-primary">
-                                        <span className="material-symbols-outlined text-[20px]">
+                                    <div className="w-11 h-11 rounded-xl bg-primary/5 backdrop-blur-sm flex items-center justify-center text-primary border border-primary/10 group-hover:bg-primary group-hover:text-on-primary transition-all duration-300 shadow-2xs">
+                                        <span className="material-symbols-outlined text-[22px]">
                                             {item.icon}
                                         </span>
                                     </div>
-                                    <span className="font-label-mono text-[10px] text-on-surface-variant font-bold">
+                                    <span className="font-label-mono text-[10px] text-primary font-bold px-2.5 py-0.5 rounded-full bg-primary/5 border border-primary/10">
                                         #{item.num}
                                     </span>
                                 </div>
-                                <h3 className="font-headline-sm text-base font-semibold text-on-surface">
+                                <h3 className="font-headline-sm text-base font-semibold text-on-surface group-hover:text-primary transition-colors pt-1">
                                     {item.title}
                                 </h3>
                                 <span className="font-label-mono text-[10px] text-primary block">
@@ -115,7 +116,7 @@ export default function MemberFeaturesSection() {
                                 </p>
                             </div>
 
-                            <div className="pt-2 border-t border-surface-container-low flex items-center gap-1.5 font-label-mono text-[10px] text-primary font-medium">
+                            <div className="pt-2.5 border-t border-primary/10 flex items-center gap-1.5 font-label-mono text-[10px] text-primary font-medium">
                                 <span className="material-symbols-outlined text-[14px]">verified</span>
                                 <span>{item.tag}</span>
                             </div>

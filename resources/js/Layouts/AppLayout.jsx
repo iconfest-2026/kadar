@@ -33,6 +33,7 @@ export default function AppLayout({ children, title, activeTab }) {
                             </div>
                             <div>
                                 <span className="font-heading font-black text-lg text-primary tracking-tight">KADAR</span>
+                                <span className="font-heading font-black text-lg text-primary tracking-tight">AEVYRA</span>
                                 <span className="hidden sm:inline-block ml-1.5 px-1.5 py-0.5 text-[10px] font-label-mono font-bold uppercase rounded bg-surface-container text-on-surface-variant">
                                     {isAdmin ? 'Admin Panel' : isInstructor ? 'Instruktur' : 'Preventif'}
                                 </span>
@@ -261,6 +262,7 @@ export default function AppLayout({ children, title, activeTab }) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <p className="font-medium text-center sm:text-left">
                         © 2026 Kadar (AEVYRA) — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
+                        © 2026 AEVYRA — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
                     </p>
                     <div className="flex items-center gap-4 text-[11px]">
                         <span>UU PDP No. 27/2022 Patuh</span>

@@ -21,54 +21,96 @@ class InstructorCaseloadController extends Controller
         /** @var \App\Models\User $instructor */
         $instructor = Auth::user();
 
-        // 1. Get all assigned members
-        $assignments = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+        $assignedMemberIds = InstructorMemberAssignment::where('instructor_id', $instructor->id)
             ->where('status', 'ACTIVE')
-            ->with(['member.memberProfile', 'member.lifestyleProfile'])
+            ->pluck('member_id');
+
+        $assignedMembers = User::whereIn('id', $assignedMemberIds)
+            ->with(['memberProfile', 'lifestyleProfile'])
+            ->get()
+            ->map(function ($member) {
+                $latestSignal = BehaviorSignal::where('user_id', $member->id)
+                    ->latest()
+                    ->first();
+                $member->latest_signal = $latestSignal;
+                return $member;
+            });
+
+        $pendingSignals = BehaviorSignal::whereIn('user_id', $assignedMemberIds)
+            ->whereIn('severity', ['ATTENTION', 'FOLLOW_UP'])
+            ->where('status', '!=', 'RESOLVED')
+            ->with('user')
+            ->latest()
             ->get();
 
-        $caseload = $assignments->map(function ($assignment) {
-            $member = $assignment->member;
-            
-            // Latest signals for member
-            $signals = BehaviorSignal::where('user_id', $member->id)
-                ->whereIn('status', ['QUALIFIED', 'PRESENTED'])
-                ->latest()
-                ->take(3)
-                ->get();
+        $upcomingConsultations = Consultation::where('instructor_id', $instructor->id)
+            ->where('scheduled_start', '>=', now())
+            ->where('status', '!=', 'CANCELLED')
+            ->with('member')
+            ->orderBy('scheduled_start')
+            ->take(5)
+            ->get();
 
-            // Active interventions
-            $interventionsCount = Intervention::where('user_id', $member->id)
-                ->where('status', 'ACTIVE')
-                ->count();
+        $activeInterventions = Intervention::whereIn('user_id', $assignedMemberIds)
+            ->where('status', 'ACTIVE')
+            ->count();
 
-            // Last recorded activity
-            $lastRecord = HealthRecord::where('user_id', $member->id)
-                ->latest('recorded_at')
-                ->first();
-
-            return [
-                'assignment_id' => $assignment->id,
-                'member_id' => $member->id,
-                'name' => $member->name,
-                'email' => $member->email,
-                'profile' => $member->memberProfile,
-                'lifestyle' => $member->lifestyleProfile,
-                'active_signals' => $signals,
-                'active_interventions_count' => $interventionsCount,
-                'last_activity_date' => $lastRecord?->recorded_at?->diffForHumans() ?? 'Belum ada aktivitas',
-                'assigned_since' => $assignment->starts_at?->translatedFormat('d M Y'),
-                'status' => $assignment->status,
-            ];
-        });
+        $stats = [
+            'totalMembers' => $assignedMemberIds->count(),
+            'needsAttention' => $pendingSignals->count(),
+            'todayConsultations' => Consultation::where('instructor_id', $instructor->id)
+                ->whereDate('scheduled_start', today())
+                ->where('status', '!=', 'CANCELLED')
+                ->count(),
+        ];
 
         return Inertia::render('Instructor/Dashboard', [
-            'instructor' => [
-                'id' => $instructor->id,
-                'name' => $instructor->name,
-                'email' => $instructor->email,
-            ],
-            'caseload' => $caseload,
+            'assignedMembers' => $assignedMembers,
+            'pendingSignals' => $pendingSignals,
+            'upcomingConsultations' => $upcomingConsultations,
+            'activeInterventions' => $activeInterventions,
+            'stats' => $stats,
+        ]);
+    }
+
+    public function members(Request $request)
+    {
+        /** @var \App\Models\User $instructor */
+        $instructor = Auth::user();
+
+        $assignedMemberIds = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('status', 'ACTIVE')
+            ->pluck('member_id');
+
+        $query = User::whereIn('id', $assignedMemberIds)
+            ->with(['memberProfile']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $members = $query->paginate(15);
+        $members->getCollection()->transform(function ($member) {
+            $member->active_interventions_count = Intervention::where('user_id', $member->id)
+                ->where('status', 'ACTIVE')
+                ->count();
+            
+            $latestSignal = BehaviorSignal::where('user_id', $member->id)
+                ->where('status', '!=', 'RESOLVED')
+                ->latest('detected_at')
+                ->first();
+            
+            $member->latest_signal_severity = $latestSignal ? $latestSignal->severity : null;
+            return $member;
+        });
+
+        return Inertia::render('Instructor/Members', [
+            'members' => $members,
+            'filters' => $request->only('search'),
         ]);
     }
 
@@ -127,6 +169,13 @@ class InstructorCaseloadController extends Controller
     {
         /** @var \App\Models\User $instructor */
         $instructor = Auth::user();
+        $isAssigned = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('member_id', $memberId)
+            ->where('status', 'ACTIVE')
+            ->exists();
+
+        abort_unless($isAssigned, 403, 'Member ini tidak ditugaskan kepada Anda.');
+
 
         $validated = $request->validate([
             'title' => 'required|string|max:150',
@@ -156,16 +205,24 @@ class InstructorCaseloadController extends Controller
         /** @var \App\Models\User $instructor */
         $instructor = Auth::user();
 
+        $isAssigned = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('member_id', $memberId)
+            ->where('status', 'ACTIVE')
+            ->exists();
+
+        abort_unless($isAssigned, 403, 'Member ini tidak ditugaskan kepada Anda.');
+
         $validated = $request->validate([
             'notes' => 'required|string|max:2000',
-            'scheduled_at' => 'nullable|date',
         ]);
 
         Consultation::create([
             'member_id' => $memberId,
             'instructor_id' => $instructor->id,
             'status' => 'COMPLETED',
-            'scheduled_at' => $validated['scheduled_at'] ?? now(),
+            'scheduled_start' => now(),
+            'scheduled_end' => now(),
+            'purpose' => 'Catatan tindak lanjut instruktur',
             'completed_at' => now(),
             'notes' => $validated['notes'],
         ]);

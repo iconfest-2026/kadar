@@ -155,6 +155,21 @@ class User extends Authenticatable
         return $this->hasMany(Consent::class);
     }
 
+    public function instructorAssignments(): HasMany
+    {
+        return $this->hasMany(InstructorMemberAssignment::class, 'member_id');
+    }
+
+    public function assignedMembers(): HasMany
+    {
+        return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id');
+    }
+
+    public function instructorMemberAssignments(): HasMany
+    {
+        return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id');
+    }
+
     public function totalPoints(): int
     {
         return (int) $this->pointsLedger()->sum('points');

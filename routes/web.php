@@ -1,8 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminGovernanceController;
+use App\Http\Controllers\Admin\AuditController;
+use App\Http\Controllers\Admin\ChallengeController;
+use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Instructor\InstructorCaseloadController;
+use App\Http\Controllers\Instructor\ConsultationController;
+use App\Http\Controllers\Instructor\InterventionController;
 use App\Http\Controllers\Member\AiChatController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\EmergencyController;
@@ -87,11 +93,17 @@ Route::middleware(['auth'])->group(function () {
     // -------------------------------------------------------------
     // INSTRUCTOR ROUTES
     // -------------------------------------------------------------
-    Route::middleware(['role:instructor'])->prefix('instructor')->name('instructor.')->group(function () {
+    Route::middleware(['role:instructor', 'verified-instructor'])->prefix('instructor')->name('instructor.')->group(function () {
         Route::get('/dashboard', [InstructorCaseloadController::class, 'index'])->name('dashboard');
         Route::get('/members/{member}', [InstructorCaseloadController::class, 'showMember'])->name('members.show');
+        Route::get('/members', [InstructorCaseloadController::class, 'members'])->name('members.index');
         Route::post('/members/{member}/interventions', [InstructorCaseloadController::class, 'storeIntervention'])->name('members.interventions.store');
-        Route::post('/members/{member}/consultations', [InstructorCaseloadController::class, 'storeConsultationNote'])->name('members.consultations.store');
+        Route::get('/interventions', [InterventionController::class, 'index'])->name('interventions.index');
+        Route::post('/interventions', [InterventionController::class, 'store'])->name('interventions.store');
+        Route::patch('/interventions/{intervention}', [InterventionController::class, 'update'])->name('interventions.update');
+        Route::get('/consultations', [ConsultationController::class, 'index'])->name('consultations.index');
+        Route::post('/consultations', [ConsultationController::class, 'store'])->name('consultations.store');
+        Route::patch('/consultations/{consultation}/complete', [ConsultationController::class, 'complete'])->name('consultations.complete');
     });
 
     // -------------------------------------------------------------
@@ -99,6 +111,17 @@ Route::middleware(['auth'])->group(function () {
     // -------------------------------------------------------------
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminGovernanceController::class, 'index'])->name('dashboard');
-        Route::post('/users/{user}/toggle-status', [AdminGovernanceController::class, 'toggleUserStatus'])->name('users.toggle-status');
+        Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
+        Route::post('/users/{user}/toggle-status', [UserManagementController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::patch('/users/{user}/role', [UserManagementController::class, 'changeRole'])->name('users.role.update');
+        Route::get('/instructors', [AdminGovernanceController::class, 'instructors'])->name('instructors.index');
+        Route::post('/instructors/{user}/approve', [AdminGovernanceController::class, 'approveInstructor'])->name('instructors.approve');
+        Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+        Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store');
+        Route::patch('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
+        Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
+        Route::post('/challenges', [ChallengeController::class, 'store'])->name('challenges.store');
+        Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+        Route::get('/settings', [AdminGovernanceController::class, 'settings'])->name('settings');
     });
 });

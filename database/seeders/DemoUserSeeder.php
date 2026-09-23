@@ -41,6 +41,7 @@ class DemoUserSeeder extends Seeder
         // -------------------------------------------------------------
         $admin = User::firstOrCreate(
             ['email' => 'admin@kadar.id'],
+            ['email' => 'admin@aevyra.health'],
             [
                 'name' => 'Dr. Budi Pratama (Super Admin)',
                 'password' => Hash::make('password'),
@@ -49,6 +50,17 @@ class DemoUserSeeder extends Seeder
             ]
         );
         $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+
+        $adminLegacy = User::firstOrCreate(
+            ['email' => 'admin@kadar.id'],
+            [
+                'name' => 'Dr. Budi Pratama (Super Admin)',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
+                'email_verified_at' => now(),
+            ]
+        );
+        $adminLegacy->roles()->syncWithoutDetaching([$adminRole->id]);
 
         AuditLog::create([
             'actor_id' => $admin->id,
@@ -67,6 +79,7 @@ class DemoUserSeeder extends Seeder
         // -------------------------------------------------------------
         $instructor = User::firstOrCreate(
             ['email' => 'instruktur@kadar.id'],
+            ['email' => 'instruktur@aevyra.health'],
             [
                 'name' => 'Coach Nabila Sp.GK (Health Coach)',
                 'password' => Hash::make('password'),
@@ -76,11 +89,23 @@ class DemoUserSeeder extends Seeder
         );
         $instructor->roles()->syncWithoutDetaching([$instructorRole->id]);
 
+        $instructorLegacy = User::firstOrCreate(
+            ['email' => 'instruktur@kadar.id'],
+            [
+                'name' => 'Coach Nabila Sp.GK (Health Coach)',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
+                'email_verified_at' => now(),
+            ]
+        );
+        $instructorLegacy->roles()->syncWithoutDetaching([$instructorRole->id]);
+
         // -------------------------------------------------------------
         // 3. MEMBER USER
         // -------------------------------------------------------------
         $member = User::firstOrCreate(
             ['email' => 'member@kadar.id'],
+            ['email' => 'member@aevyra.health'],
             [
                 'name' => 'Reza Rahardian',
                 'password' => Hash::make('password'),
@@ -89,6 +114,17 @@ class DemoUserSeeder extends Seeder
             ]
         );
         $member->roles()->syncWithoutDetaching([$memberRole->id]);
+
+        $memberLegacy = User::firstOrCreate(
+            ['email' => 'member@kadar.id'],
+            [
+                'name' => 'Reza Rahardian',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
+                'email_verified_at' => now(),
+            ]
+        );
+        $memberLegacy->roles()->syncWithoutDetaching([$memberRole->id]);
 
         // Membership
         if ($goldTier) {

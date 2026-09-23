@@ -6,7 +6,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
-        email: 'member@kadar.id',
+        email: 'member@aevyra.health',
         password: 'password',
         remember: true,
     });
@@ -23,10 +23,10 @@ export default function Login() {
 
     return (
         <AuthLayout
-            title="Masuk ke Akun Kadar"
+            title="Masuk ke Akun AEVYRA"
             subtitle="Akses dashboard kesehatan, pemantauan baseline, dan pendampingan Anda"
         >
-            <Head title="Masuk Akun - Kadar" />
+            <Head title="Masuk Akun — AEVYRA" />
 
             {/* Quick Demo Credentials Switcher */}
             <div className="mb-5 p-3 rounded-2xl bg-surface-container-low border border-surface-container/60">
@@ -39,9 +39,9 @@ export default function Login() {
                 <div className="grid grid-cols-3 gap-1.5">
                     <button
                         type="button"
-                        onClick={() => handleRoleSelect('member@kadar.id')}
+                        onClick={() => handleRoleSelect('member@aevyra.health')}
                         className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'member@kadar.id'
+                            data.email === 'member@aevyra.health' || data.email === 'member@kadar.id'
                                 ? 'bg-primary text-on-primary border-primary shadow-xs'
                                 : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
                         }`}
@@ -50,9 +50,9 @@ export default function Login() {
                     </button>
                     <button
                         type="button"
-                        onClick={() => handleRoleSelect('instruktur@kadar.id')}
+                        onClick={() => handleRoleSelect('instruktur@aevyra.health')}
                         className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'instruktur@kadar.id'
+                            data.email === 'instruktur@aevyra.health' || data.email === 'instruktur@kadar.id'
                                 ? 'bg-primary text-on-primary border-primary shadow-xs'
                                 : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
                         }`}
@@ -61,9 +61,9 @@ export default function Login() {
                     </button>
                     <button
                         type="button"
-                        onClick={() => handleRoleSelect('admin@kadar.id')}
+                        onClick={() => handleRoleSelect('admin@aevyra.health')}
                         className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'admin@kadar.id'
+                            data.email === 'admin@aevyra.health' || data.email === 'admin@kadar.id'
                                 ? 'bg-primary text-on-primary border-primary shadow-xs'
                                 : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
                         }`}
@@ -85,7 +85,7 @@ export default function Login() {
                             required
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
-                            placeholder="user@kadar.id"
+                            placeholder="user@aevyra.health"
                             className="w-full px-3.5 py-2.5 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
                         />
                         <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">

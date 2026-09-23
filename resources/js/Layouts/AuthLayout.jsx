@@ -25,6 +25,7 @@ export default function AuthLayout({ children, title, subtitle }) {
                     <div className="text-center space-y-1">
                         <Link href="/" className="inline-flex items-center gap-2 group active:scale-95 transition-transform">
                             <span className="font-display text-3xl font-normal text-primary">Kadar</span>
+                            <span className="font-display text-3xl font-bold text-primary">AEVYRA</span>
                             <span className="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-primary font-medium border border-surface-container-high">
                                 v2.4
                             </span>
@@ -60,6 +61,7 @@ export default function AuthLayout({ children, title, subtitle }) {
             {/* Minimalist Footer */}
             <div className="py-3 text-center border-t border-surface-container font-label-mono text-[10px] text-on-surface-variant">
                 © 2025 KADAR HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
+                © 2026 AEVYRA HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
             </div>
         </div>
     );

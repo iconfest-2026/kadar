@@ -34,7 +34,7 @@ export default function Register() {
                     : 'Bergabung sebagai tenaga ahli & pendamping kesehatan terverifikasi'
             }
         >
-            <Head title="Daftar Akun - Kadar" />
+            <Head title="Daftar Akun — AEVYRA" />
 
             {/* Account Type Selector: Member vs Instruktur */}
             <div className="flex p-1 bg-surface-container-low rounded-xl border border-surface-container mb-4">
@@ -145,7 +145,7 @@ export default function Register() {
                         className="mt-0.5 rounded text-primary focus:ring-primary border-surface-container"
                     />
                     <label htmlFor="consent" className="text-[11px] text-on-surface-variant leading-snug cursor-pointer select-none">
-                        Saya menyetujui Ketentuan Layanan & Kebijakan Privasi data kesehatan pribadi Kadar.
+                        Saya menyetujui Ketentuan Layanan & Kebijakan Privasi data kesehatan pribadi AEVYRA.
                     </label>
                 </div>
                 {errors.consent && <p className="text-[11px] text-error font-medium">{errors.consent}</p>}
