@@ -50,7 +50,6 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
     return (
         <div className="min-h-screen bg-[#f0f8f4] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
-            <Head title={title ? `${title} — Instruktur Bimbingan Kadar` : 'Instruktur Panel — Kadar'} />
             <Head title={title ? `${title} — Instruktur Bimbingan AEVYRA` : 'Instruktur Panel — AEVYRA'} />
 
             {/* Ambient Background Glow Orbs (Matching Welcome.jsx) */}
@@ -83,7 +82,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="font-heading font-black text-xl tracking-tight text-primary">KADAR</span>
+                
                                 <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>
                                 <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-secondary-fixed/40 text-secondary-container border border-secondary/20">
                                     INSTRUKTUR
@@ -284,7 +283,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 <footer className="mt-auto border-t border-primary/10 py-5 bg-white/40 backdrop-blur-sm text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                         <p className="font-medium text-center sm:text-left">
-                            © 2026 Kadar (AEVYRA) — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
+                            © 2026 AEVYRA — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
                             © 2026 AEVYRA — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
                         </p>
                         <div className="flex items-center gap-3 text-[11px] font-label-mono">

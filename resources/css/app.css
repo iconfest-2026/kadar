@@ -134,6 +134,7 @@
     html {
         scroll-behavior: smooth;
         scroll-padding-top: 5.5rem;
+        -webkit-overflow-scrolling: touch;
     }
 
     body {
@@ -142,8 +143,9 @@
         background-color: #f3fbf6;
         color: #151d1a;
         font-family: 'IBM Plex Sans', sans-serif;
-        text-rendering: optimizeLegibility;
+        text-rendering: optimizeSpeed;
         -webkit-font-smoothing: antialiased;
+        overscroll-behavior-y: none;
     }
     
     ::-webkit-scrollbar {
@@ -159,5 +161,33 @@
     }
     ::-webkit-scrollbar-thumb:hover {
         background: #6f7977;
+    }
+}
+
+/* Hardware-Accelerated Performance Layer Utilities */
+@layer utilities {
+    .gpu-layer {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+        will-change: transform;
+    }
+
+    .contain-paint {
+        contain: paint;
+    }
+
+    .contain-strict {
+        contain: strict;
+    }
+
+    .content-visibility-auto {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 300px;
+    }
+
+    .smooth-scroll {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
 }

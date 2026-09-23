@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthLayout from '../../Layouts/AuthLayout';
+import { Button, Input, Textarea, Select, Checkbox, Alert } from '@/Components/UI';
 
 export default function Register() {
     const [accountType, setAccountType] = useState('member'); // 'member' | 'instructor'
-    const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -12,161 +12,253 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         role: 'member',
+        specialization: 'Dokter Spesialis Gizi Klinis (Sp.GK)',
+        str_number: '',
+        sip_number: '',
+        institution: '',
+        years_of_experience: 3,
+        bio: '',
+        proof_document: null,
         consent: false,
     });
 
     const handleAccountTypeChange = (type) => {
         setAccountType(type);
-        setData('role', type === 'member' ? 'member' : 'instructor');
+        setData((prev) => ({
+            ...prev,
+            role: type,
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/register');
+        post('/register', {
+            forceFormData: true,
+        });
     };
 
     return (
         <AuthLayout
-            title={accountType === 'member' ? 'Daftar Akun Member' : 'Pendaftaran Instruktur'}
+            title={accountType === 'member' ? 'Daftar Akun Member' : 'Pendaftaran Tenaga Medis / Instruktur'}
             subtitle={
                 accountType === 'member'
-                    ? 'Mulai pantau baseline kesehatan dan raih panduan gaya hidup preventif'
-                    : 'Bergabung sebagai tenaga ahli & pendamping kesehatan terverifikasi'
+                    ? 'Mulai pantau baseline kesehatan mandiri dan raih pendampingan gaya hidup preventif'
+                    : 'Daftarkan izin praktik dan kredensial medis Anda untuk menjadi pendamping terverifikasi'
             }
         >
             <Head title="Daftar Akun — AEVYRA" />
 
             {/* Account Type Selector: Member vs Instruktur */}
-            <div className="flex p-1 bg-surface-container-low rounded-xl border border-surface-container mb-4">
-                <button
+            <div className="flex p-1 bg-surface-container-low rounded-2xl border border-surface-container/60 mb-5">
+                <Button
                     type="button"
+                    variant={accountType === 'member' ? 'primary' : 'ghost'}
+                    size="sm"
                     onClick={() => handleAccountTypeChange('member')}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        accountType === 'member'
-                            ? 'bg-primary text-on-primary shadow-xs'
-                            : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
+                    className="flex-1 text-xs"
                 >
-                    Member (Pengguna)
-                </button>
-                <button
+                    Member (Pengguna Mandiri)
+                </Button>
+                <Button
                     type="button"
+                    variant={accountType === 'instructor' ? 'primary' : 'ghost'}
+                    size="sm"
                     onClick={() => handleAccountTypeChange('instructor')}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                        accountType === 'instructor'
-                            ? 'bg-primary text-on-primary shadow-xs'
-                            : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
+                    className="flex-1 text-xs"
                 >
-                    Instruktur (Tenaga Ahli)
-                </button>
+                    Instruktur (Tenaga Medis)
+                </Button>
             </div>
 
+            {accountType === 'instructor' && (
+                <div className="mb-4">
+                    <Alert variant="info" title="Verifikasi Kredensial Medis Diperlukan">
+                        Sesuai standar etika klinis AEVYRA, data STR/SIP dan institusi praktik Anda akan diverifikasi oleh Administrator sebelum akun diaktifkan.
+                    </Alert>
+                </div>
+            )}
+
             {/* Registration Form */}
-            <form onSubmit={handleSubmit} className="space-y-3.5">
-                <div className="space-y-1">
-                    <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                        Nama Lengkap
-                    </label>
-                    <input
-                        type="text"
-                        required
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        placeholder={accountType === 'member' ? 'Contoh: Ahmad Fadilah' : 'Contoh: Coach Nabila Sp.GK'}
-                        className="w-full px-3 py-2 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                    />
-                    {errors.name && <p className="text-[11px] text-error font-medium">{errors.name}</p>}
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <Input
+                    label={accountType === 'member' ? 'Nama Lengkap' : 'Nama Lengkap Beserta Gelar'}
+                    type="text"
+                    required
+                    value={data.name}
+                    onChange={(e) => setData('name', e.target.value)}
+                    placeholder={accountType === 'member' ? 'Contoh: Ahmad Fadilah' : 'Contoh: dr. Nabila Sarah, Sp.GK'}
+                    leftIcon="person"
+                    error={errors.name}
+                    autoComplete="name"
+                />
 
-                <div className="space-y-1">
-                    <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                        Alamat Email
-                    </label>
-                    <input
-                        type="email"
-                        required
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        placeholder="nama@email.com"
-                        className="w-full px-3 py-2 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                    />
-                    {errors.email && <p className="text-[11px] text-error font-medium">{errors.email}</p>}
-                </div>
+                <Input
+                    label="Alamat Email"
+                    type="email"
+                    required
+                    value={data.email}
+                    onChange={(e) => setData('email', e.target.value)}
+                    placeholder="nama@email.com"
+                    leftIcon="mail"
+                    error={errors.email}
+                    autoComplete="email"
+                />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div className="space-y-1">
-                        <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                            Kata Sandi
-                        </label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            required
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Min. 8 karakter"
-                            className="w-full px-3 py-2 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                        />
-                        {errors.password && <p className="text-[11px] text-error font-medium">{errors.password}</p>}
-                    </div>
-                    <div className="space-y-1">
-                        <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                            Ulangi Sandi
-                        </label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                required
-                                value={data.password_confirmation}
-                                onChange={(e) => setData('password_confirmation', e.target.value)}
-                                placeholder="Ketik ulang"
-                                className="w-full px-3 py-2 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[16px] flex items-center"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">
-                                    {showPassword ? 'visibility_off' : 'visibility'}
-                                </span>
-                            </button>
+                {/* Additional Fields for Instructor */}
+                {accountType === 'instructor' && (
+                    <div className="space-y-4 p-4 rounded-2xl bg-surface-container-low/60 border border-primary/10">
+                        <div className="flex items-center gap-2 pb-1 border-b border-primary/10">
+                            <span className="material-symbols-outlined text-[18px] text-primary">badge</span>
+                            <h4 className="font-bold text-xs text-primary uppercase tracking-wider">
+                                Kredensial & Legalitas Praktik Medis
+                            </h4>
                         </div>
+
+                        <Select
+                            label="Bidang Spesialisasi / Profesi"
+                            required
+                            value={data.specialization}
+                            onChange={(e) => setData('specialization', e.target.value)}
+                            options={[
+                                { value: 'Dokter Spesialis Gizi Klinis (Sp.GK)', label: 'Dokter Spesialis Gizi Klinis (Sp.GK)' },
+                                { value: 'Dokter Spesialis Kedokteran Olahraga (Sp.KO)', label: 'Dokter Spesialis Kedokteran Olahraga (Sp.KO)' },
+                                { value: 'Dokter Spesialis Penyakit Dalam (Sp.PD)', label: 'Dokter Spesialis Penyakit Dalam (Sp.PD)' },
+                                { value: 'Dokter Umum Terverifikasi', label: 'Dokter Umum Terverifikasi' },
+                                { value: 'Fisioterapis Klinis Berlisensi', label: 'Fisioterapis Klinis Berlisensi' },
+                                { value: 'Dietisien / Registered Dietitian (RD)', label: 'Dietisien / Registered Dietitian (RD)' },
+                                { value: 'Psikolog Kesehatan Perilaku', label: 'Psikolog Kesehatan Perilaku' },
+                            ]}
+                            error={errors.specialization}
+                        />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <Input
+                                label="Nomor STR Dokter / Tenaga Medis"
+                                required
+                                value={data.str_number}
+                                onChange={(e) => setData('str_number', e.target.value)}
+                                placeholder="Contoh: 31.1.1.100.2.21.123456"
+                                leftIcon="verified"
+                                error={errors.str_number}
+                            />
+
+                            <Input
+                                label="Nomor SIP (Surat Izin Praktik)"
+                                value={data.sip_number}
+                                onChange={(e) => setData('sip_number', e.target.value)}
+                                placeholder="Contoh: SIP.503/446/123/2024"
+                                leftIcon="assignment"
+                                error={errors.sip_number}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="sm:col-span-2">
+                                <Input
+                                    label="Institusi / Rumah Sakit / Klinik Praktik"
+                                    required
+                                    value={data.institution}
+                                    onChange={(e) => setData('institution', e.target.value)}
+                                    placeholder="Contoh: RSUPN Dr. Cipto Mangunkusumo"
+                                    leftIcon="apartment"
+                                    error={errors.institution}
+                                />
+                            </div>
+
+                            <Input
+                                label="Pengalaman (Thn)"
+                                type="number"
+                                min="0"
+                                max="60"
+                                required
+                                value={data.years_of_experience}
+                                onChange={(e) => setData('years_of_experience', parseInt(e.target.value) || 0)}
+                                error={errors.years_of_experience}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant/80 mb-1.5">
+                                Unggah Dokumen Bukti STR / SIP / Ijazah Medis (PDF/JPG/PNG, Max 10MB)
+                            </label>
+                            <input
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                onChange={(e) => setData('proof_document', e.target.files[0])}
+                                className="w-full text-xs text-on-surface file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 file:cursor-pointer bg-white p-1.5 rounded-2xl border border-primary/15"
+                            />
+                            {errors.proof_document && (
+                                <p className="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[14px]">error</span>
+                                    {errors.proof_document}
+                                </p>
+                            )}
+                        </div>
+
+                        <Textarea
+                            label="Bio Singkat & Pendekatan Klinis / Preventif"
+                            rows={2}
+                            value={data.bio}
+                            onChange={(e) => setData('bio', e.target.value)}
+                            placeholder="Jelaskan spesialisasi Anda, pendekatan pendampingan gizi/aktivitas/tidur, dan rekam jejak bimbingan pasien..."
+                            error={errors.bio}
+                        />
                     </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <Input
+                        label="Kata Sandi"
+                        type="password"
+                        required
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        placeholder="Min. 8 karakter"
+                        showPasswordToggle
+                        error={errors.password}
+                        autoComplete="new-password"
+                    />
+
+                    <Input
+                        label="Ulangi Sandi"
+                        type="password"
+                        required
+                        value={data.password_confirmation}
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
+                        placeholder="Ketik ulang"
+                        showPasswordToggle
+                        error={errors.password_confirmation}
+                        autoComplete="new-password"
+                    />
                 </div>
 
-                <div className="flex items-start gap-2 pt-1">
-                    <input
-                        type="checkbox"
+                <div className="pt-1">
+                    <Checkbox
                         id="consent"
                         required
                         checked={data.consent}
                         onChange={(e) => setData('consent', e.target.checked)}
-                        className="mt-0.5 rounded text-primary focus:ring-primary border-surface-container"
+                        label="Persetujuan Layanan & Standar Etika"
+                        description={
+                            accountType === 'instructor'
+                                ? 'Saya menyatakan bahwa data nomor STR/SIP dan dokumen bukti yang diunggah adalah asli, sah, dan dapat dipertanggungjawabkan secara hukum.'
+                                : 'Saya menyetujui Ketentuan Layanan & Kebijakan Privasi data kesehatan pribadi AEVYRA.'
+                        }
+                        error={errors.consent}
                     />
-                    <label htmlFor="consent" className="text-[11px] text-on-surface-variant leading-snug cursor-pointer select-none">
-                        Saya menyetujui Ketentuan Layanan & Kebijakan Privasi data kesehatan pribadi AEVYRA.
-                    </label>
                 </div>
-                {errors.consent && <p className="text-[11px] text-error font-medium">{errors.consent}</p>}
 
-                <button
+                <Button
                     type="submit"
-                    disabled={processing}
-                    className="w-full py-3 px-4 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all duration-200 active:scale-98 shadow-sm flex items-center justify-center gap-2 mt-2"
+                    variant="primary"
+                    size="md"
+                    loading={processing}
+                    loadingText="Mendaftarkan Akun..."
+                    rightIcon="arrow_forward"
+                    className="w-full shadow-md mt-3"
                 >
-                    {processing ? (
-                        <>
-                            <span className="w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
-                            <span>Mendaftarkan Akun...</span>
-                        </>
-                    ) : (
-                        <>
-                            <span>{accountType === 'member' ? 'Buat Akun Member' : 'Daftar Sebagai Instruktur'}</span>
-                            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                        </>
-                    )}
-                </button>
+                    {accountType === 'member' ? 'Buat Akun Member' : 'Daftarkan Kredensial Instruktur'}
+                </Button>
 
                 <div className="pt-2 text-center text-xs text-on-surface-variant">
                     Sudah memiliki akun?{' '}

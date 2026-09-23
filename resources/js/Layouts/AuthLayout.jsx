@@ -5,10 +5,10 @@ export default function AuthLayout({ children, title, subtitle }) {
     return (
         <div className="min-h-screen bg-surface flex flex-col justify-between selection:bg-primary selection:text-on-primary">
             {/* Top Clinical Docket Bar */}
-            <div className="w-full bg-surface-container-high px-gutter lg:px-margin py-1.5 border-b border-surface-container">
+            <div className="w-full bg-surface-container-high px-4 sm:px-8 py-1.5 border-b border-surface-container">
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between font-label-mono text-[11px] text-on-surface-variant uppercase tracking-wider">
                     <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" />
                         <span>DOKET AUTENTIKASI RESMI // SATUSEHAT KEMENKES RI // ENKRIPSI AES-256</span>
                     </div>
                     <div className="hidden sm:flex items-center gap-3">
@@ -24,24 +24,23 @@ export default function AuthLayout({ children, title, subtitle }) {
                     {/* Brand Header */}
                     <div className="text-center space-y-1">
                         <Link href="/" className="inline-flex items-center gap-2 group active:scale-95 transition-transform">
-                            <span className="font-display text-3xl font-normal text-primary">Kadar</span>
-                            <span className="font-display text-3xl font-bold text-primary">AEVYRA</span>
-                            <span className="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-primary font-medium border border-surface-container-high">
+                            <span className="font-display text-3xl font-black text-primary tracking-tight">AEVYRA</span>
+                            <span className="font-label-mono text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                                 v2.4
                             </span>
                         </Link>
-                        <h1 className="font-headline-sm text-xl font-semibold text-primary pt-1">
+                        <h1 className="font-headline text-xl font-bold text-on-surface pt-1">
                             {title}
                         </h1>
                         {subtitle && (
-                            <p className="text-body-sm text-xs text-on-surface-variant">
+                            <p className="text-xs text-on-surface-variant leading-relaxed">
                                 {subtitle}
                             </p>
                         )}
                     </div>
 
                     {/* Content Card */}
-                    <div className="bg-surface-container-lowest p-6 sm:p-7 rounded-3xl border border-surface-container shadow-sm">
+                    <div className="bg-white p-6 sm:p-7 rounded-3xl border border-outline-variant/60 shadow-xs">
                         {children}
                     </div>
 
@@ -60,10 +59,8 @@ export default function AuthLayout({ children, title, subtitle }) {
 
             {/* Minimalist Footer */}
             <div className="py-3 text-center border-t border-surface-container font-label-mono text-[10px] text-on-surface-variant">
-                © 2025 KADAR HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
                 © 2026 AEVYRA HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
             </div>
         </div>
     );
 }
-

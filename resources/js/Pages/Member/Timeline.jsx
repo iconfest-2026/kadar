@@ -18,6 +18,7 @@ export default function Timeline({ timelineItems, currentFilter, days }) {
 
     return (
         <AppLayout title="Timeline Riwayat Kesehatan" activeTab="timeline">
+            <Head title="Timeline Kesehatan - Kadar" />
             <Head title="Timeline Kesehatan — AEVYRA" />
 
             <div className="max-w-4xl mx-auto space-y-6">

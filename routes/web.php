@@ -13,6 +13,7 @@ use App\Http\Controllers\Member\AiChatController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\EmergencyController;
 use App\Http\Controllers\Member\InsightController;
+use App\Http\Controllers\Member\MemberInstructorController;
 use App\Http\Controllers\Member\OnboardingController;
 use App\Http\Controllers\Member\QuickLogController;
 use App\Http\Controllers\Member\TimelineController;
@@ -21,7 +22,7 @@ use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Kadar (AEVYRA) Preventive Health Platform
+| Web Routes - AEVYRA Preventive Health Platform
 |--------------------------------------------------------------------------
 */
 
@@ -77,6 +78,11 @@ Route::middleware(['auth'])->group(function () {
         // Health Timeline Feed
         Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline');
 
+        // Instructors Directory & Multi-Instructor Assignment (Max 3, Optional)
+        Route::get('/instructors', [MemberInstructorController::class, 'index'])->name('instructors.index');
+        Route::post('/instructors/{instructor}/assign', [MemberInstructorController::class, 'assign'])->name('instructors.assign');
+        Route::post('/instructors/{instructor}/release', [MemberInstructorController::class, 'release'])->name('instructors.release');
+
         // Insights & Recommendations
         Route::post('/insights/{insight}/dismiss', [InsightController::class, 'dismiss'])->name('insights.dismiss');
         Route::post('/recommendations/{recommendation}/accept', [InsightController::class, 'acceptRecommendation'])->name('recommendations.accept');
@@ -114,14 +120,32 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
         Route::post('/users/{user}/toggle-status', [UserManagementController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::patch('/users/{user}/role', [UserManagementController::class, 'changeRole'])->name('users.role.update');
+        
+        // Instructor Verification & Recommendation Desk
         Route::get('/instructors', [AdminGovernanceController::class, 'instructors'])->name('instructors.index');
         Route::post('/instructors/{user}/approve', [AdminGovernanceController::class, 'approveInstructor'])->name('instructors.approve');
+        Route::post('/instructors/{user}/reject', [AdminGovernanceController::class, 'rejectInstructor'])->name('instructors.reject');
+        Route::post('/instructors/{user}/recommend', [AdminGovernanceController::class, 'toggleRecommendInstructor'])->name('instructors.recommend');
+        
+        // 11 Core Features Governance Routes
+        Route::get('/scanner', [AdminGovernanceController::class, 'scanner'])->name('scanner');
+        Route::get('/consultations', [AdminGovernanceController::class, 'consultations'])->name('consultations');
+        Route::get('/health-tracker', [AdminGovernanceController::class, 'healthTracker'])->name('health-tracker');
+        Route::get('/recommendations', [AdminGovernanceController::class, 'recommendations'])->name('recommendations');
         Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
         Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store');
         Route::patch('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
         Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
         Route::post('/challenges', [ChallengeController::class, 'store'])->name('challenges.store');
+        Route::get('/community', [AdminGovernanceController::class, 'community'])->name('community');
+        Route::get('/gamification', [AdminGovernanceController::class, 'gamification'])->name('gamification');
+        Route::get('/reports', [AdminGovernanceController::class, 'reports'])->name('reports');
+        Route::get('/memberships', [AdminGovernanceController::class, 'memberships'])->name('memberships');
+        Route::get('/emergency', [AdminGovernanceController::class, 'emergency'])->name('emergency');
+        
+        // Audit & Settings
         Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
         Route::get('/settings', [AdminGovernanceController::class, 'settings'])->name('settings');
+        Route::post('/settings', [AdminGovernanceController::class, 'updateSettings'])->name('settings.update');
     });
 });

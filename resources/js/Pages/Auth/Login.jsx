@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AuthLayout from '../../Layouts/AuthLayout';
+import { Button, Input, Checkbox } from '@/Components/UI';
 
 export default function Login() {
-    const [showPassword, setShowPassword] = useState(false);
-
     const { data, setData, post, processing, errors } = useForm({
         email: 'member@aevyra.health',
         password: 'password',
@@ -12,8 +11,11 @@ export default function Login() {
     });
 
     const handleRoleSelect = (roleEmail) => {
-        setData('email', roleEmail);
-        setData('password', 'password');
+        setData((prev) => ({
+            ...prev,
+            email: roleEmail,
+            password: 'password',
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -37,126 +39,82 @@ export default function Login() {
                     <span className="text-[11px] text-on-surface-variant">Klik untuk mengisi:</span>
                 </div>
                 <div className="grid grid-cols-3 gap-1.5">
-                    <button
+                    <Button
                         type="button"
+                        size="xs"
+                        variant={data.email.startsWith('member') ? 'primary' : 'outline'}
                         onClick={() => handleRoleSelect('member@aevyra.health')}
-                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'member@aevyra.health' || data.email === 'member@kadar.id'
-                                ? 'bg-primary text-on-primary border-primary shadow-xs'
-                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
-                        }`}
+                        className="w-full text-xs font-semibold"
                     >
                         Member
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="button"
+                        size="xs"
+                        variant={data.email.startsWith('instruktur') ? 'primary' : 'outline'}
                         onClick={() => handleRoleSelect('instruktur@aevyra.health')}
-                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'instruktur@aevyra.health' || data.email === 'instruktur@kadar.id'
-                                ? 'bg-primary text-on-primary border-primary shadow-xs'
-                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
-                        }`}
+                        className="w-full text-xs font-semibold"
                     >
                         Instruktur
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="button"
+                        size="xs"
+                        variant={data.email.startsWith('admin') ? 'primary' : 'outline'}
                         onClick={() => handleRoleSelect('admin@aevyra.health')}
-                        className={`py-1.5 px-2 text-xs font-semibold rounded-xl border transition-all ${
-                            data.email === 'admin@aevyra.health' || data.email === 'admin@kadar.id'
-                                ? 'bg-primary text-on-primary border-primary shadow-xs'
-                                : 'bg-surface text-on-surface-variant hover:text-on-surface border-surface-container'
-                        }`}
+                        className="w-full text-xs font-semibold"
                     >
                         Admin
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-1">
-                    <label className="font-label-mono text-[11px] text-primary uppercase font-semibold block">
-                        Alamat Email
-                    </label>
-                    <div className="relative">
-                        <input
-                            type="email"
-                            required
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            placeholder="user@aevyra.health"
-                            className="w-full px-3.5 py-2.5 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                        />
-                        <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                            mail
-                        </span>
-                    </div>
-                    {errors.email && (
-                        <p className="text-[11px] text-error font-medium">{errors.email}</p>
-                    )}
-                </div>
+                <Input
+                    label="Alamat Email"
+                    type="email"
+                    required
+                    value={data.email}
+                    onChange={(e) => setData('email', e.target.value)}
+                    placeholder="user@aevyra.health"
+                    rightIcon="mail"
+                    error={errors.email}
+                    autoComplete="username"
+                />
 
-                <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                        <label className="font-label-mono text-[11px] text-primary uppercase font-semibold">
-                            Kata Sandi
-                        </label>
-                    </div>
-                    <div className="relative">
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            required
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Masukkan kata sandi"
-                            className="w-full px-3.5 py-2.5 bg-surface-container-low text-xs text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface text-[18px] flex items-center"
-                        >
-                            <span className="material-symbols-outlined text-[18px]">
-                                {showPassword ? 'visibility_off' : 'visibility'}
-                            </span>
-                        </button>
-                    </div>
-                    {errors.password && (
-                        <p className="text-[11px] text-error font-medium">{errors.password}</p>
-                    )}
-                </div>
+                <Input
+                    label="Kata Sandi"
+                    type="password"
+                    required
+                    value={data.password}
+                    onChange={(e) => setData('password', e.target.value)}
+                    placeholder="Masukkan kata sandi"
+                    showPasswordToggle
+                    error={errors.password}
+                    autoComplete="current-password"
+                />
 
-                <div className="flex items-center gap-2 pt-0.5">
-                    <input
-                        type="checkbox"
+                <div className="pt-0.5">
+                    <Checkbox
                         id="remember"
+                        label="Ingat sesi saya"
                         checked={data.remember}
                         onChange={(e) => setData('remember', e.target.checked)}
-                        className="rounded text-primary focus:ring-primary border-surface-container"
                     />
-                    <label htmlFor="remember" className="text-xs text-on-surface-variant cursor-pointer select-none">
-                        Ingat sesi saya
-                    </label>
                 </div>
 
-                <button
+                <Button
                     type="submit"
-                    disabled={processing}
-                    className="w-full py-3 px-4 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all duration-200 active:scale-98 shadow-sm flex items-center justify-center gap-2"
+                    variant="primary"
+                    size="md"
+                    loading={processing}
+                    loadingText="Memproses Masuk..."
+                    rightIcon="arrow_forward"
+                    className="w-full shadow-md mt-2"
                 >
-                    {processing ? (
-                        <>
-                            <span className="w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
-                            <span>Memproses Masuk...</span>
-                        </>
-                    ) : (
-                        <>
-                            <span>Masuk Sekarang</span>
-                            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                        </>
-                    )}
-                </button>
+                    Masuk Sekarang
+                </Button>
 
                 <div className="pt-2 text-center text-xs text-on-surface-variant">
                     Belum punya akun?{' '}

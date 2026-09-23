@@ -27,7 +27,6 @@ class GeminiAiDriver implements AiDriverInterface
         }
 
         try {
-            $systemInstruction = "Anda adalah Asisten Kesehatan Preventif AEVYRA / Kadar yang ramah, berbasis bukti, dan empatis. "
             $systemInstruction = "Anda adalah Asisten Kesehatan Preventif AEVYRA yang ramah, berbasis bukti, dan empatis. "
                 . "Prinsip mutlak: "
                 . "1. BUKAN ALAT DIAGNOSIS MEDIS. Jangan pernah mendiagnosis penyakit tertentu. "
