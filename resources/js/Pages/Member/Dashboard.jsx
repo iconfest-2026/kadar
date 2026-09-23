@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import QuickLogModal from '../../Components/QuickLogModal';
+import LiveCameraScannerModal from '../../Components/LiveCameraScannerModal';
+import MembershipTierModal from '../../Components/MembershipTierModal';
+import MenstrualTrackerCard from '../../Components/MenstrualTrackerCard';
+import MaleVitalityCard from '../../Components/MaleVitalityCard';
 import axios from 'axios';
 
 export default function Dashboard({
@@ -15,9 +19,13 @@ export default function Dashboard({
     streak,
     totalPoints,
     instructor,
+    membership,
+    achievements = [],
 }) {
     const [quickLogOpen, setQuickLogOpen] = useState(false);
     const [quickLogMetric, setQuickLogMetric] = useState('sleep_duration');
+    const [scannerModalOpen, setScannerModalOpen] = useState(false);
+    const [tierModalOpen, setTierModalOpen] = useState(false);
 
     // AI Chat modal state
     const [aiChatOpen, setAiChatOpen] = useState(false);
@@ -142,6 +150,79 @@ export default function Dashboard({
                             </button>
                         </div>
                     </div>
+                </section>
+
+                {/* Quick Feature Launch Bar */}
+                <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <button
+                        type="button"
+                        onClick={() => setScannerModalOpen(true)}
+                        className="p-4 rounded-2xl bg-white dark:bg-surface border border-primary/20 hover:border-primary shadow-xs hover:shadow-md transition-all text-left flex items-center gap-3 group cursor-pointer"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <span className="material-symbols-outlined text-[22px]">photo_camera</span>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-on-surface block group-hover:text-primary">
+                                Scanner Open Cam
+                            </span>
+                            <span className="text-[10px] text-on-surface-variant block">OCR Gizi & Obat BPOM</span>
+                        </div>
+                    </button>
+
+                    <Link
+                        href="/member/consultations-hub"
+                        className="p-4 rounded-2xl bg-white dark:bg-surface border border-primary/20 hover:border-primary shadow-xs hover:shadow-md transition-all text-left flex items-center gap-3 group"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <span className="material-symbols-outlined text-[22px]">calendar_month</span>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-on-surface block group-hover:text-primary">
+                                Booking Dokter
+                            </span>
+                            <span className="text-[10px] text-on-surface-variant block">Jadwal Spesialis Terjadwal</span>
+                        </div>
+                    </Link>
+
+                    <Link
+                        href="/member/challenges"
+                        className="p-4 rounded-2xl bg-white dark:bg-surface border border-primary/20 hover:border-primary shadow-xs hover:shadow-md transition-all text-left flex items-center gap-3 group"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <span className="material-symbols-outlined text-[22px]">emoji_events</span>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-on-surface block group-hover:text-primary">
+                                Tantangan 14-90 Hari
+                            </span>
+                            <span className="text-[10px] text-on-surface-variant block">Habit Gula & Langkah</span>
+                        </div>
+                    </Link>
+
+                    <Link
+                        href="/member/community"
+                        className="p-4 rounded-2xl bg-white dark:bg-surface border border-primary/20 hover:border-primary shadow-xs hover:shadow-md transition-all text-left flex items-center gap-3 group"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                            <span className="material-symbols-outlined text-[22px]">groups</span>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-on-surface block group-hover:text-primary">
+                                Komunitas Teman Sehat
+                            </span>
+                            <span className="text-[10px] text-on-surface-variant block">Forum Remisi & Resep</span>
+                        </div>
+                    </Link>
+                </section>
+
+                {/* Feature 12: Gender-Specific Hub (Female: Menstrual & Hormonal AI, Male: Men's Vitality) */}
+                <section>
+                    {profile?.sex === 'FEMALE' ? (
+                        <MenstrualTrackerCard />
+                    ) : (
+                        <MaleVitalityCard />
+                    )}
                 </section>
 
                 {/* 2. Personal Baseline Cards Grid */}
@@ -443,7 +524,101 @@ export default function Dashboard({
                         </button>
                     </section>
                 )}
+
+                {/* 5. Gamifikasi, Poin & Badge Showcase (Fitur 8) */}
+                <section className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-800 mb-1">
+                                <span className="material-symbols-outlined text-[14px]">military_tech</span>
+                                <span>Fitur 8: Badge & Gamifikasi Preventif</span>
+                            </div>
+                            <h2 className="font-heading font-bold text-lg text-on-surface">Pencapaian & Lencana Kesehatan</h2>
+                            <p className="text-xs text-on-surface-variant">
+                                Kumpulkan lencana konsistensi dan tukarkan poin untuk konsultasi gratis
+                            </p>
+                        </div>
+                        <div className="text-right">
+                            <span className="text-lg font-black font-mono text-primary">{totalPoints} Poin</span>
+                            <span className="text-[10px] text-on-surface-variant block">Total Akumulasi</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {achievements && achievements.length > 0 ? (
+                            achievements.map((ach) => (
+                                <div
+                                    key={ach.id}
+                                    className={`p-4 rounded-2xl border transition-all text-center space-y-2 ${
+                                        ach.is_unlocked
+                                            ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-300 shadow-xs'
+                                            : 'bg-surface-container-lowest border-surface-container opacity-60'
+                                    }`}
+                                >
+                                    <div className={`w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl ${
+                                        ach.is_unlocked ? 'bg-amber-400/20 text-amber-600' : 'bg-surface-container text-on-surface-variant'
+                                    }`}>
+                                        {ach.key === 'FIRST_LOG' ? '🌱' :
+                                         ach.key === 'STREAK_7' ? '🔥' :
+                                         ach.key === 'BASELINE_READY' ? '📊' :
+                                         ach.key === 'HYDRATION_HERO' ? '💧' : '🏅'}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-xs text-on-surface">{ach.name}</h4>
+                                        <p className="text-[10px] text-on-surface-variant line-clamp-2 mt-0.5">{ach.description}</p>
+                                    </div>
+                                    <span className={`inline-block px-2 py-0.5 rounded text-[9px] font-bold font-mono ${
+                                        ach.is_unlocked ? 'bg-emerald-100 text-emerald-800' : 'bg-surface-container text-on-surface-variant'
+                                    }`}>
+                                        {ach.is_unlocked ? `Terbuka (+${ach.points} pt)` : `Terkunci (+${ach.points} pt)`}
+                                    </span>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-4 p-4 text-center rounded-2xl bg-surface-container-lowest text-xs text-on-surface-variant">
+                                Belum ada badge tersedia.
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                {/* 6. Tingkatan Member (Fitur 10) */}
+                <section className="p-6 rounded-3xl bg-linear-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-400/25 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-amber-600 text-[20px]">workspace_premium</span>
+                            <span className="font-heading font-black text-sm uppercase tracking-wider text-amber-900 dark:text-amber-300">
+                                Tingkatan Anda: {membership?.tier || 'Gold Member'}
+                            </span>
+                        </div>
+                        <p className="text-xs text-on-surface-variant">
+                            Kuota Pindai Kamera: <strong>{membership?.scan_limit || '15 / hari'}</strong> • Kuota Konsultasi: <strong>{membership?.consultation_quota || '4 Sesi / bulan'}</strong>
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => setTierModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition-all active:scale-95 shrink-0"
+                    >
+                        <span className="material-symbols-outlined text-[16px]">compare_arrows</span>
+                        <span>Bandingkan & Tingkatkan Paket</span>
+                    </button>
+                </section>
             </div>
+
+            {/* Live Camera Scanner Modal */}
+            <LiveCameraScannerModal
+                isOpen={scannerModalOpen}
+                onClose={() => setScannerModalOpen(false)}
+            />
+
+            {/* Membership Tier Modal */}
+            <MembershipTierModal
+                isOpen={tierModalOpen}
+                onClose={() => setTierModalOpen(false)}
+                currentTier={membership?.tier || 'Gold'}
+            />
 
             {/* Quick Log Modal */}
             <QuickLogModal

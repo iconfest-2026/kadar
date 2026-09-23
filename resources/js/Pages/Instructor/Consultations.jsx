@@ -26,7 +26,6 @@ export default function Consultations({ consultations = { data: [], links: [] } 
 
     return (
         <InstructorLayout activeNav="consultations" title="Jadwal Konsultasi & Bimbingan 1-on-1">
-            <Head title="Jadwal Konsultasi — Instruktur Kadar" />
             <Head title="Jadwal Konsultasi — Instruktur AEVYRA" />
 
             <div className="space-y-6">
@@ -51,7 +50,7 @@ export default function Consultations({ consultations = { data: [], links: [] } 
                 <div className="bg-white/75 backdrop-blur-md rounded-3xl shadow-xs border border-primary/10 overflow-hidden hover:border-primary/20 transition-all">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs">
-                            <thead className="bg-primary/[0.03] text-on-surface-variant font-semibold border-b border-primary/10">
+                            <thead className="bg-primary/3 text-on-surface-variant font-semibold border-b border-primary/10">
                                 <tr>
                                     <th className="py-4 px-6">Member Binaan</th>
                                     <th className="py-4 px-6">Tujuan Konsultasi</th>
@@ -66,7 +65,7 @@ export default function Consultations({ consultations = { data: [], links: [] } 
                                     const isScheduled = cons.status === 'SCHEDULED' || cons.status === 'CONFIRMED';
 
                                     return (
-                                        <tr key={cons.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={cons.id} className="hover:bg-primary/2 transition-colors">
                                             {/* Member */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

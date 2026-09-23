@@ -5,9 +5,9 @@ import QuickChatDialog from '../Components/QuickChatDialog';
 
 export default function MarketingLayout({ children }) {
     return (
-        <div className="min-h-screen flex flex-col bg-[#f0f8f4] text-on-surface relative selection:bg-primary selection:text-on-primary">
+        <div className="min-h-screen flex flex-col bg-[#f7faf8] text-[#1c2e2a] relative selection:bg-primary selection:text-white">
             <Header />
-            <main className="w-full pt-16 md:pt-20 flex-grow relative">
+            <main className="w-full pt-14 md:pt-16 grow relative">
                 {children}
             </main>
             <Footer />

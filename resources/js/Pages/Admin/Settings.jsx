@@ -20,7 +20,6 @@ export default function Settings({ membershipTiers = [] }) {
 
     return (
         <AdminLayout activeNav="settings" title="Konfigurasi & Parameter Sistem">
-            <Head title="Pengaturan Sistem — Admin Kadar" />
             <Head title="Pengaturan Sistem — Admin AEVYRA" />
 
             <div className="space-y-6">

@@ -1,69 +1,57 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 
-export default function AuthLayout({ children, title, subtitle }) {
+export default function AuthLayout({ children }) {
     return (
-        <div className="min-h-screen bg-surface flex flex-col justify-between selection:bg-primary selection:text-on-primary">
-            {/* Top Clinical Docket Bar */}
-            <div className="w-full bg-surface-container-high px-gutter lg:px-margin py-1.5 border-b border-surface-container">
-                <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between font-label-mono text-[11px] text-on-surface-variant uppercase tracking-wider">
-                    <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
-                        <span>DOKET AUTENTIKASI RESMI // SATUSEHAT KEMENKES RI // ENKRIPSI AES-256</span>
-                    </div>
-                    <div className="hidden sm:flex items-center gap-3">
-                        <span>ISO/IEC 27001 ISMS</span>
-                        <span className="text-primary font-semibold">SSL 256-BIT SECURE</span>
+        <div className="min-h-screen bg-[#f7faf8] text-[#142320] flex flex-col justify-between font-sans selection:bg-primary/20 selection:text-primary relative overflow-x-hidden">
+            {/* Top Atmospheric Ambient Glows */}
+            <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full bg-[#e3f0e9]/60 blur-3xl pointer-events-none -z-10"></div>
+            <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full bg-[#f4ebe1]/50 blur-3xl pointer-events-none -z-10"></div>
+
+            {/* Top Header Bar */}
+            <header className="w-full bg-white/80 backdrop-blur-md border-b border-surface-container-high/60 h-14 sticky top-0 z-30">
+                <div className="h-full max-w-310 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+                    <Link href="/" className="flex items-center group active:scale-95 transition-transform">
+                        <img
+                            src="/image/Logo_AEVYRA_Horizontal.png"
+                            alt="AEVYRA — Your Health, Ahead"
+                            className="h-7 sm:h-8 w-auto object-contain"
+                        />
+                    </Link>
+
+                    <div className="flex items-center gap-3 text-xs">
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf5f0] text-[#1c6454] border border-[#d4e8dd] font-mono text-[10px]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>ENKRIPSI AES-256 • SATUSEHAT KEMENKES</span>
+                        </div>
+
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-1.5 text-xs text-[#52645f] hover:text-primary font-medium transition-colors"
+                        >
+                            <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                            <span>Beranda</span>
+                        </Link>
                     </div>
                 </div>
-            </div>
+            </header>
 
-            {/* Main Auth Container */}
-            <div className="flex-1 flex items-center justify-center px-4 py-8">
-                <div className="w-full max-w-md space-y-4 animate-in fade-in zoom-in-95 duration-200">
-                    {/* Brand Header */}
-                    <div className="text-center space-y-1">
-                        <Link href="/" className="inline-flex items-center gap-2 group active:scale-95 transition-transform">
-                            <span className="font-display text-3xl font-normal text-primary">Kadar</span>
-                            <span className="font-display text-3xl font-bold text-primary">AEVYRA</span>
-                            <span className="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-primary font-medium border border-surface-container-high">
-                                v2.4
-                            </span>
-                        </Link>
-                        <h1 className="font-headline-sm text-xl font-semibold text-primary pt-1">
-                            {title}
-                        </h1>
-                        {subtitle && (
-                            <p className="text-body-sm text-xs text-on-surface-variant">
-                                {subtitle}
-                            </p>
-                        )}
-                    </div>
+            {/* Main Content Area */}
+            <main className="flex-1 max-w-310 w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex items-center justify-center">
+                {children}
+            </main>
 
-                    {/* Content Card */}
-                    <div className="bg-surface-container-lowest p-6 sm:p-7 rounded-3xl border border-surface-container shadow-sm">
-                        {children}
-                    </div>
-
-                    {/* Bottom Accreditation & Back link */}
-                    <div className="text-center space-y-2 font-label-mono text-[11px] text-on-surface-variant">
-                        <Link href="/" className="inline-flex items-center gap-1 text-primary hover:underline font-medium">
-                            <span className="material-symbols-outlined text-[14px]">arrow_back</span>
-                            <span>Kembali ke Beranda</span>
-                        </Link>
-                        <p className="text-[10px] text-on-surface-variant/80">
-                            Terhubung langsung dengan profil SatuSehat ID & Kepatuhan UU PDP No. 27/2022
-                        </p>
-                    </div>
+            {/* Bottom Regulatory Footer */}
+            <footer className="w-full bg-white/70 backdrop-blur-xs border-t border-surface-container-high/60 py-4 text-center">
+                <div className="max-w-310 mx-auto px-4 text-center space-y-1">
+                    <p className="text-[11px] text-[#63746f]">
+                        © 2026 AEVYRA Health Platform • Kepatuhan UU Perlindungan Data Pribadi No. 27/2022
+                    </p>
+                    <p className="text-[10px] text-[#859691] font-mono">
+                        Standar Interoperabilitas HL7 FHIR • PERKENI Clinical Guidelines
+                    </p>
                 </div>
-            </div>
-
-            {/* Minimalist Footer */}
-            <div className="py-3 text-center border-t border-surface-container font-label-mono text-[10px] text-on-surface-variant">
-                © 2025 KADAR HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
-                © 2026 AEVYRA HEALTH PROTOCOL ARCHIVE. HAK CIPTA DILINDUNGI.
-            </div>
+            </footer>
         </div>
     );
 }
-

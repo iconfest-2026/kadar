@@ -53,7 +53,6 @@ export default function Programs({ programs = { data: [], links: [] } }) {
 
     return (
         <AdminLayout activeNav="programs" title="Manajemen Program Kohor">
-            <Head title="Program Kohor — Admin Kadar" />
             <Head title="Program Kohor — Admin AEVYRA" />
 
             <div className="space-y-6">

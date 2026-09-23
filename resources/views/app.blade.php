@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <title inertia>AEVYRA — Personal Preventive Health &amp; Early Intervention Platform</title>
+    <link rel="icon" type="image/png" href="/image/Logo_AEVYRA_Icon.png" />
+    <link rel="apple-touch-icon" href="/image/Logo_AEVYRA_Icon.png" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -10,14 +10,13 @@ export default function PendingVerification({ status = 'PENDING' }) {
 
     return (
         <div className="min-h-screen bg-[#f0f8f4] text-on-surface flex items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-primary selection:text-on-primary">
-            <Head title="Verifikasi Akun Instruktur — Kadar" />
             <Head title="Verifikasi Akun Instruktur — AEVYRA" />
 
             {/* Ambient Glow Orbs */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-[600px] h-[350px] bg-gradient-to-tr from-secondary-fixed/30 via-primary-fixed/20 to-transparent blur-[120px] rounded-full" />
-                <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-gradient-to-bl from-primary-fixed-dim/30 to-transparent blur-[140px] rounded-full" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-[0.035]" />
+                <div className="absolute top-1/4 left-1/4 w-150 h-87.5 bg-linear-to-tr from-secondary-fixed/30 via-primary-fixed/20 to-transparent blur-[120px] rounded-full" />
+                <div className="absolute bottom-10 right-1/4 w-125 h-100 bg-linear-to-bl from-primary-fixed-dim/30 to-transparent blur-[140px] rounded-full" />
+                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
             </div>
 
             {/* Glass Card */}
@@ -43,13 +42,12 @@ export default function PendingVerification({ status = 'PENDING' }) {
                     </p>
                 </div>
 
-                <div className="p-4 bg-primary/[0.03] rounded-2xl border border-primary/10 text-xs text-left space-y-2">
+                <div className="p-4 bg-primary/3 rounded-2xl border border-primary/10 text-xs text-left space-y-2">
                     <div className="flex items-center gap-2 font-bold text-primary">
                         <span className="material-symbols-outlined text-[18px]">verified_user</span>
                         <span>Standar Keamanan Human-in-the-Loop</span>
                     </div>
                     <p className="text-on-surface-variant leading-relaxed text-[11px]">
-                        Sesuai pedoman etika medis Kadar, hanya instruktur dengan status <strong>ACTIVE</strong> terverifikasi yang diizinkan mengakses data rekam fisiologis member.
                         Sesuai pedoman etika medis AEVYRA, hanya instruktur dengan status <strong>ACTIVE</strong> terverifikasi yang diizinkan mengakses data rekam fisiologis member.
                     </p>
                 </div>

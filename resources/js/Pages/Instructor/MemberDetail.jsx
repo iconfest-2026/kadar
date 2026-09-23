@@ -5,7 +5,6 @@ import InstructorLayout from '@/Layouts/InstructorLayout';
 export default function MemberDetail({ member, baselines = [], recentRecords = [], signals = [], interventions = [], consultations = [] }) {
     return (
         <InstructorLayout activeNav="members" title={`Profil & Rekam Binaan: ${member.name}`}>
-            <Head title={`Detail ${member.name} — Instruktur Kadar`} />
             <Head title={`Detail ${member.name} — Instruktur AEVYRA`} />
 
             <div className="space-y-6">

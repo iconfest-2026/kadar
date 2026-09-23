@@ -19,6 +19,7 @@ export default function AdminLayout({ children, title, activeNav }) {
         { key: 'instructors', label: 'Verifikasi Instruktur', icon: 'school', href: '/admin/instructors' },
         { key: 'programs', label: 'Program Kohor', icon: 'inventory_2', href: '/admin/programs' },
         { key: 'challenges', label: 'Challenge Komunitas', icon: 'emoji_events', href: '/admin/challenges' },
+        { key: 'reports', label: 'Laporan Platform & 119', icon: 'bar_chart', href: '/admin/reports' },
         { key: 'audit', label: 'Audit Trail Forensik', icon: 'shield', href: '/admin/audit' },
         { key: 'settings', label: 'Konfigurasi Sistem', icon: 'tune', href: '/admin/settings' },
     ];
@@ -57,10 +58,10 @@ export default function AdminLayout({ children, title, activeNav }) {
 
             {/* Ambient Background Glow Orbs (Matching Welcome.jsx) */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-                <div className="absolute -top-24 left-1/4 w-[650px] h-[350px] bg-gradient-to-tr from-primary-fixed-dim/30 via-primary-fixed/20 to-transparent blur-[120px] rounded-full" />
-                <div className="absolute top-[40%] -right-24 w-[500px] h-[450px] bg-gradient-to-bl from-secondary-fixed/25 via-primary-container/15 to-transparent blur-[130px] rounded-full" />
-                <div className="absolute bottom-10 left-1/3 w-[550px] h-[350px] bg-gradient-to-tr from-primary-fixed/25 to-transparent blur-[140px] rounded-full" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-[0.035]" />
+                <div className="absolute -top-24 left-1/4 w-162.5 h-87.5 bg-linear-to-tr from-primary-fixed-dim/30 via-primary-fixed/20 to-transparent blur-[120px] rounded-full" />
+                <div className="absolute top-[40%] -right-24 w-125 h-112.5 bg-linear-to-bl from-secondary-fixed/25 via-primary-container/15 to-transparent blur-[130px] rounded-full" />
+                <div className="absolute bottom-10 left-1/3 w-137.5 h-87.5 bg-linear-to-tr from-primary-fixed/25 to-transparent blur-[140px] rounded-full" />
+                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
             </div>
 
             {/* Mobile Overlay */}
@@ -80,9 +81,11 @@ export default function AdminLayout({ children, title, activeNav }) {
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/40">
                     <Link href="/admin/dashboard" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                            <span className="material-symbols-outlined text-[22px]">shield_person</span>
-                        </div>
+                        <img 
+                            src="/image/Logo_AEVYRA_Icon.png" 
+                            alt="AEVYRA Logo" 
+                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform" 
+                        />
                         <div>
                             <div className="flex items-center gap-2">
                                 <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>

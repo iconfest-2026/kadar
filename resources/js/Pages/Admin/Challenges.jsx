@@ -29,7 +29,6 @@ export default function Challenges({ challenges = { data: [], links: [] }, progr
 
     return (
         <AdminLayout activeNav="challenges" title="Tantangan & Gamifikasi Kesehatan">
-            <Head title="Challenge Komunitas — Admin Kadar" />
             <Head title="Challenge Komunitas — Admin AEVYRA" />
 
             <div className="space-y-6">

@@ -9,7 +9,6 @@ export default function QuickChatDialog() {
             id: 'init-1',
             sender: 'bot',
             time: 'Sekarang',
-            text: 'Halo! Saya Asisten Pintar Kadar. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
             text: 'Halo! Saya Asisten Pintar AEVYRA. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
         },
     ]);
@@ -44,7 +43,6 @@ export default function QuickChatDialog() {
         {
             id: 'q5',
             label: 'Apakah ini Aplikasi Gratis?',
-            question: 'Apakah aplikasi Kadar gratis digunakan?',
             question: 'Apakah aplikasi AEVYRA gratis digunakan?',
             answer: 'Ya, Anda dapat mendaftar secara gratis untuk mengakses Scanner, Tracker dasar, dan tanya jawab dengan Asisten AI. Tersedia juga paket berbayar untuk fitur konsultasi tingkat lanjut.',
         },
@@ -96,26 +94,26 @@ export default function QuickChatDialog() {
     };
 
     return (
-        <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
-            {/* Chat Popup Box */}
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
+            {/* Chat Popup Box (Adaptive to 320px - 412px Mobile Viewports) */}
             {isOpen && (
-                <div className="w-[90vw] sm:w-[360px] h-[480px] mb-3 bg-white/85 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
+                <div className="w-[calc(100vw-32px)] sm:w-90 h-120 max-h-[75vh] mb-3 bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
                     {/* Header */}
-                    <div className="p-3.5 bg-primary text-on-primary flex items-center justify-between border-b border-primary-container shadow-xs">
+                    <div className="p-3.5 bg-primary text-white flex items-center justify-between border-b border-primary-container">
                         <div className="flex items-center gap-2.5">
-                            <div className="relative">
-                                <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-primary-fixed border border-primary-fixed-dim/40">
-                                    <span className="material-symbols-outlined text-[18px]">smart_toy</span>
-                                </div>
-                                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-primary"></span>
+                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1 shrink-0 shadow-2xs">
+                                <img
+                                    src="/image/Logo_AEVYRA_Icon.png"
+                                    alt="AEVYRA"
+                                    className="w-full h-full object-contain"
+                                />
                             </div>
                             <div>
-                                <span className="font-headline-sm text-sm font-medium block leading-tight">
-                                    Pusat Bantuan Kadar
-                                    Pusat Bantuan AEVYRA
+                                <span className="font-serif text-sm font-medium block leading-tight">
+                                    Konsultasi Fitur AEVYRA
                                 </span>
-                                <span className="font-label-mono text-[10px] text-primary-fixed-dim block">
-                                    PWA Informasi &amp; Fitur
+                                <span className="text-[10px] text-[#cbe5d8] block">
+                                    Panduan Interaktif Klinis
                                 </span>
                             </div>
                         </div>
@@ -123,15 +121,15 @@ export default function QuickChatDialog() {
                         <button
                             type="button"
                             onClick={() => setIsOpen(false)}
-                            className="w-7 h-7 rounded-full bg-primary-container/80 hover:bg-primary-container text-on-primary flex items-center justify-center transition-colors active:scale-90"
+                            className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-xs"
                             aria-label="Tutup percakapan"
                         >
-                            <span className="material-symbols-outlined text-[18px]">close</span>
+                            ✕
                         </button>
                     </div>
 
                     {/* Messages Body */}
-                    <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-surface-container-low/40">
+                    <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-[#fafcfb]">
                         {messages.map((msg) => {
                             const isBot = msg.sender === 'bot';
                             return (
@@ -140,15 +138,15 @@ export default function QuickChatDialog() {
                                     className={`flex flex-col ${isBot ? 'items-start' : 'items-end'}`}
                                 >
                                     <div
-                                        className={`max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed shadow-2xs ${
+                                        className={`max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed ${
                                             isBot
-                                                ? 'bg-surface text-on-surface border border-surface-container rounded-tl-xs'
-                                                : 'bg-primary text-on-primary rounded-tr-xs'
+                                                ? 'bg-[#f0f6f3] text-[#223933] border border-[#d8e8de] rounded-tl-xs'
+                                                : 'bg-primary text-white rounded-tr-xs'
                                         }`}
                                     >
                                         <p>{msg.text}</p>
                                     </div>
-                                    <span className="font-label-mono text-[9px] text-on-surface-variant px-1 mt-0.5">
+                                    <span className="text-[10px] text-[#71857f] px-1 mt-0.5">
                                         {msg.time}
                                     </span>
                                 </div>
@@ -156,19 +154,19 @@ export default function QuickChatDialog() {
                         })}
 
                         {isTyping && (
-                            <div className="flex items-center gap-1.5 p-2.5 bg-surface rounded-xl border border-surface-container w-fit text-on-surface-variant text-xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce"></span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.15s]"></span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.3s]"></span>
-                                <span className="font-label-mono text-[10px] ml-1">Mengetik balasan...</span>
+                            <div className="flex items-center gap-1.5 p-2.5 bg-[#f0f6f3] rounded-xl border border-[#d8e8de] w-fit text-xs text-[#445b54]">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] animate-pulse"></span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] animate-pulse [animation-delay:0.2s]"></span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] animate-pulse [animation-delay:0.4s]"></span>
+                                <span className="text-[10px] ml-1">Menyiapkan jawaban...</span>
                             </div>
                         )}
                         <div ref={messagesEndRef} />
                     </div>
 
                     {/* Quick Question Selector Footer */}
-                    <div className="p-3 bg-white/95 backdrop-blur-md border-t border-primary/10 space-y-2">
-                        <label className="font-label-mono text-[10px] text-primary font-semibold uppercase block">
+                    <div className="p-3 bg-white border-t border-surface-container-high space-y-2">
+                        <label className="text-[10px] text-[#556963] font-medium uppercase tracking-wider block">
                             Pilih Topik Pertanyaan:
                         </label>
 
@@ -176,7 +174,7 @@ export default function QuickChatDialog() {
                             <select
                                 value={selectedQuestion}
                                 onChange={handleSelectQuestion}
-                                className="w-full pl-3 pr-8 py-2 text-xs bg-surface-container-low text-on-surface rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer font-medium hover:bg-surface-container transition-colors"
+                                className="w-full pl-3 pr-8 py-2 text-xs bg-[#f4f8f5] text-[#223832] rounded-xl border border-[#d6e5dc] focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer font-medium hover:bg-[#edf5f0] transition-colors"
                             >
                                 <option value="">— Pilih pertanyaan seputar fitur —</option>
                                 {presetQuestions.map((q) => (
@@ -185,8 +183,8 @@ export default function QuickChatDialog() {
                                     </option>
                                 ))}
                             </select>
-                            <span className="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-primary pointer-events-none text-[18px]">
-                                unfold_more
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none text-xs">
+                                ↓
                             </span>
                         </div>
 
@@ -196,38 +194,42 @@ export default function QuickChatDialog() {
                                     key={q.id}
                                     type="button"
                                     onClick={() => triggerQuestion(q.id)}
-                                    className="shrink-0 px-2 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-mono text-[10px] border border-surface-container-high active:scale-95 transition-all"
+                                    className="shrink-0 px-2.5 py-1 rounded-lg bg-[#f0f6f3] hover:bg-[#e4efe8] text-[#1c6454] text-[10px] font-medium border border-[#d4e6dc] active:scale-95 transition-all cursor-pointer"
                                 >
                                     {q.label}
                                 </button>
                             ))}
                         </div>
+
+                        {/* Note to login for free typing AI */}
+                        <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-[#556963]">
+                            <span>Chat bebas dengan AI?</span>
+                            <a
+                                href="/login"
+                                className="font-semibold text-primary hover:underline flex items-center gap-0.5"
+                            >
+                                <span>Masuk ke Akun</span>
+                                <span>→</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* Floating Trigger Button */}
+            {/* Floating Trigger Button (Touch Height Ergonomics 44px) */}
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`group flex items-center gap-2 px-3.5 py-2.5 rounded-full shadow-lg transition-all duration-300 active:scale-90 border ${
+                className={`group flex items-center gap-2 px-4 py-3 min-h-11 rounded-full shadow-[0_4px_20px_rgba(0,67,62,0.15)] transition-all duration-300 active:scale-95 border cursor-pointer ${
                     isOpen
-                        ? 'bg-surface text-primary border-surface-container hover:bg-surface-container'
-                        : 'bg-primary text-on-primary border-primary-container hover:bg-primary-container'
+                        ? 'bg-white text-primary border-[#d6e5dc] hover:bg-[#f3f8f5]'
+                        : 'bg-primary text-white border-primary hover:bg-primary-container'
                 }`}
                 aria-label="Tanya Asisten"
             >
-                <div className="relative flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">
-                        {isOpen ? 'chat_bubble' : 'forum'}
-                    </span>
-                    {!isOpen && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary-fixed animate-ping"></span>
-                    )}
-                </div>
-
-                <span className="text-xs font-semibold font-body-sm">
-                    {isOpen ? 'Tutup' : 'Tanya Fitur PWA'}
+                <span className="w-2 h-2 rounded-full bg-[#82d6b3]"></span>
+                <span className="text-xs font-medium">
+                    {isOpen ? 'Tutup Konseling' : 'Tanya Fitur Platform'}
                 </span>
             </button>
         </div>

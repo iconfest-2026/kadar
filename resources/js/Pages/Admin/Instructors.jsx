@@ -17,7 +17,6 @@ export default function Instructors({ instructors = { data: [], links: [] } }) {
 
     return (
         <AdminLayout activeNav="instructors" title="Verifikasi & Tata Kelola Instruktur">
-            <Head title="Manajemen Instruktur — Admin Kadar" />
             <Head title="Manajemen Instruktur — Admin AEVYRA" />
 
             <div className="space-y-6">
@@ -42,7 +41,7 @@ export default function Instructors({ instructors = { data: [], links: [] } }) {
                 <div className="bg-white/75 backdrop-blur-md rounded-3xl shadow-xs border border-primary/10 overflow-hidden hover:border-primary/20 transition-all">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs">
-                            <thead className="bg-primary/[0.03] text-on-surface-variant font-semibold border-b border-primary/10">
+                            <thead className="bg-primary/3 text-on-surface-variant font-semibold border-b border-primary/10">
                                 <tr>
                                     <th className="py-4 px-6">Identitas Instruktur</th>
                                     <th className="py-4 px-6">Spesialisasi / Gelar</th>
@@ -58,7 +57,7 @@ export default function Instructors({ instructors = { data: [], links: [] } }) {
                                     const isActive = inst.status === 'ACTIVE' || (!inst.status && !isPending);
 
                                     return (
-                                        <tr key={inst.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={inst.id} className="hover:bg-primary/2 transition-colors">
                                             {/* Instructor Info */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

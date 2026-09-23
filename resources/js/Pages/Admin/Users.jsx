@@ -57,7 +57,6 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
 
     return (
         <AdminLayout activeNav="users" title="Manajemen Pengguna & Otorisasi">
-            <Head title="Manajemen Pengguna — Admin Kadar" />
             <Head title="Manajemen Pengguna — Admin AEVYRA" />
             
             <div className="space-y-6">
@@ -105,7 +104,7 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
                 <div className="bg-white/75 backdrop-blur-md rounded-3xl shadow-xs border border-primary/10 overflow-hidden hover:border-primary/20 transition-all">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs">
-                            <thead className="bg-primary/[0.03] text-on-surface-variant font-semibold border-b border-primary/10">
+                            <thead className="bg-primary/3 text-on-surface-variant font-semibold border-b border-primary/10">
                                 <tr>
                                     <th className="py-4 px-6">Identitas Pengguna</th>
                                     <th className="py-4 px-6">Penugasan Peran</th>
@@ -120,7 +119,7 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
                                     const isSuspended = user.status === 'SUSPENDED';
 
                                     return (
-                                        <tr key={user.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={user.id} className="hover:bg-primary/2 transition-colors">
                                             {/* User Info */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

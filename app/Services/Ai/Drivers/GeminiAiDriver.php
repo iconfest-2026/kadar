@@ -9,70 +9,91 @@ use Illuminate\Support\Facades\Log;
 class GeminiAiDriver implements AiDriverInterface
 {
     protected string $apiKey;
-    protected string $model;
-    protected FallbackAiDriver $fallback;
+    protected string $primaryModel;
+    protected string $backupModel;
+    protected array $models;
 
-    public function __construct(?string $apiKey = null, string $model = 'gemini-2.5-flash')
+    public function __construct(?string $apiKey = null, ?string $primaryModel = null, ?string $backupModel = null, ?array $models = null)
     {
-        $this->apiKey = $apiKey ?? config('services.gemini.api_key', (string) env('GEMINI_API_KEY', ''));
-        $this->model = $model;
-        $this->fallback = new FallbackAiDriver();
+        $this->apiKey = $apiKey ?? (string) config('services.gemini.api_key', env('GEMINI_API_KEY', ''));
+        $this->primaryModel = $primaryModel ?? (string) config('services.gemini.model', 'gemini-3.6-flash');
+        $this->backupModel = $backupModel ?? (string) config('services.gemini.backup_model', 'gemini-3.5-flash');
+        $this->models = $models ?? (array) config('services.gemini.models', []);
     }
 
+    /**
+     * Generate response via Gemini API. Throws RuntimeException on failure/rate limit so failover chain proceeds.
+     */
     public function generateResponse(array $messages, array $context = []): string
     {
-        // If API key is empty, smoothly delegate to fallback driver
         if (empty($this->apiKey)) {
-            return $this->fallback->generateResponse($messages, $context);
+            throw new \RuntimeException('Gemini API key is not configured.');
         }
 
-        try {
-            $systemInstruction = "Anda adalah Asisten Kesehatan Preventif AEVYRA / Kadar yang ramah, berbasis bukti, dan empatis. "
-            $systemInstruction = "Anda adalah Asisten Kesehatan Preventif AEVYRA yang ramah, berbasis bukti, dan empatis. "
-                . "Prinsip mutlak: "
-                . "1. BUKAN ALAT DIAGNOSIS MEDIS. Jangan pernah mendiagnosis penyakit tertentu. "
-                . "2. JANGAN PERNAH meresepkan obat atau menganjurkan pengubahan dosis obat. "
-                . "3. Gunakan bahasa observasi terkalibrasi dan dukung otonomi pengguna. "
-                . "4. Jika ada indikasi kegawatdaruratan, arahkan segera ke 119/112.";
+        $systemInstruction = "Anda adalah Asisten Kesehatan Preventif AEVYRA yang ramah, berbasis bukti, dan empatis.\n"
+            . "Prinsip Utama:\n"
+            . "1. BUKAN ALAT DIAGNOSIS MEDIS. Jangan pernah mendiagnosis penyakit tertentu.\n"
+            . "2. JANGAN PERNAH meresepkan obat atau menganjurkan pengubahan dosis obat farmasi.\n"
+            . "3. Gunakan bahasa observasi terkalibrasi, fokus pada gaya hidup preventif (tidur, hidrasi, aktivitas, nutrisi).\n"
+            . "4. Jika ada indikasi kegawatdaruratan, arahkan segera ke Panggilan Darurat Nasional 119/112.";
 
-            $contents = [];
-            foreach ($messages as $msg) {
-                $role = $msg['role'] === 'assistant' ? 'model' : 'user';
-                $contents[] = [
-                    'role' => $role,
-                    'parts' => [['text' => $msg['content']]],
-                ];
-            }
+        $contents = [];
+        foreach ($messages as $msg) {
+            $role = ($msg['role'] ?? '') === 'assistant' ? 'model' : 'user';
+            $contents[] = [
+                'role' => $role,
+                'parts' => [['text' => (string) ($msg['content'] ?? '')]],
+            ];
+        }
 
-            $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent?key={$this->apiKey}";
+        // Try primary, backup, and all models in the pool
+        $modelsToAttempt = !empty($this->models)
+            ? array_values(array_unique(array_filter(array_merge([$this->primaryModel, $this->backupModel], $this->models))))
+            : [$this->primaryModel, $this->backupModel, 'gemini-3.1-flash-lite'];
+        $lastException = null;
 
-            $response = Http::timeout(10)->post($endpoint, [
-                'system_instruction' => [
-                    'parts' => [['text' => $systemInstruction]],
-                ],
-                'contents' => $contents,
-                'generationConfig' => [
-                    'temperature' => 0.4,
-                    'maxOutputTokens' => 800,
-                ],
-            ]);
+        foreach ($modelsToAttempt as $model) {
+            try {
+                $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($this->apiKey);
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-                if (!empty($reply)) {
-                    return trim($reply);
+                $response = Http::timeout(12)->post($endpoint, [
+                    'system_instruction' => [
+                        'parts' => [['text' => $systemInstruction]],
+                    ],
+                    'contents' => $contents,
+                    'generationConfig' => [
+                        'temperature' => 0.4,
+                        'maxOutputTokens' => 800,
+                    ],
+                ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                    if (!empty($reply)) {
+                        return trim($reply);
+                    }
+                }
+
+                $status = $response->status();
+                $body = $response->body();
+
+                // If 429 Rate Limit or Quota Exceeded
+                if ($status === 429) {
+                    throw new \RuntimeException("Gemini rate limit exceeded (HTTP 429) on model {$model}");
+                }
+
+                Log::warning("Gemini model {$model} returned status {$status}: {$body}");
+                $lastException = new \RuntimeException("Gemini model {$model} failed with HTTP {$status}");
+            } catch (\Throwable $e) {
+                Log::warning("Gemini attempt on {$model} failed: " . $e->getMessage());
+                $lastException = $e;
+                if ($e->getMessage() && str_contains(strtolower($e->getMessage()), '429')) {
+                    throw $e; // Immediately propagate 429 so failover handles cooldown
                 }
             }
-
-            Log::warning('Gemini API returned unhandled status, falling back to rule engine.', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-        } catch (\Throwable $e) {
-            Log::error('Gemini API call failed: ' . $e->getMessage());
         }
 
-        return $this->fallback->generateResponse($messages, $context);
+        throw $lastException ?? new \RuntimeException("Gemini API could not generate response.");
     }
 }

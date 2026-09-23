@@ -170,6 +170,16 @@ class User extends Authenticatable
         return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id');
     }
 
+    public function menstrualSetting(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(MenstrualSetting::class);
+    }
+
+    public function menstrualLogs(): HasMany
+    {
+        return $this->hasMany(MenstrualLog::class)->orderBy('log_date', 'desc');
+    }
+
     public function totalPoints(): int
     {
         return (int) $this->pointsLedger()->sum('points');

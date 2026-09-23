@@ -21,19 +21,17 @@ export default function Dashboard({
 
     return (
         <AdminLayout activeNav="dashboard" title="Ringkasan Tata Kelola">
-            <Head title="Admin Dashboard — Kadar" />
             <Head title="Admin Dashboard — AEVYRA" />
             
             <div className="space-y-6">
                 {/* Header Welcome Card with Glassmorphism */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-primary/90 via-primary-container/80 to-primary/95 text-white rounded-3xl p-6 sm:p-8 shadow-lg backdrop-blur-xl border border-white/20">
+                <div className="relative overflow-hidden bg-linear-to-r from-primary/90 via-primary-container/80 to-primary/95 text-white rounded-3xl p-6 sm:p-8 shadow-lg backdrop-blur-xl border border-white/20">
                     <div className="relative z-10 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-label-mono font-bold tracking-wider uppercase mb-3 border border-white/20">
                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                             Sistem Tata Kelola Operasional Aktif
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-heading font-black tracking-tight mb-2">
-                            Pusat Komando & Pengawasan Kadar
                             Pusat Komando & Pengawasan AEVYRA
                         </h2>
                         <p className="text-white/80 text-sm leading-relaxed">
@@ -109,7 +107,7 @@ export default function Dashboard({
                                     
                                     {/* Interactive Bar */}
                                     <div 
-                                        className="w-full bg-gradient-to-t from-primary to-primary-fixed-dim rounded-t-lg transition-all duration-300 group-hover:from-secondary group-hover:to-secondary-container group-hover:scale-y-105 origin-bottom shadow-xs cursor-pointer"
+                                        className="w-full bg-linear-to-t from-primary to-primary-fixed-dim rounded-t-lg transition-all duration-300 group-hover:from-secondary group-hover:to-secondary-container group-hover:scale-y-105 origin-bottom shadow-xs cursor-pointer"
                                         style={{ height: `${heightPercent}%` }}
                                     />
                                     
@@ -152,7 +150,7 @@ export default function Dashboard({
                         
                         <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left text-xs">
-                                <thead className="bg-primary/[0.02] text-on-surface-variant font-semibold border-b border-primary/10">
+                                <thead className="bg-primary/2 text-on-surface-variant font-semibold border-b border-primary/10">
                                     <tr>
                                         <th className="py-3 px-5">Nama & Profil</th>
                                         <th className="py-3 px-5">Email</th>
@@ -161,7 +159,7 @@ export default function Dashboard({
                                 </thead>
                                 <tbody className="divide-y divide-primary/5">
                                     {recentUsers.map(user => (
-                                        <tr key={user.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={user.id} className="hover:bg-primary/2 transition-colors">
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center gap-2.5">
                                                     <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary font-bold flex items-center justify-center text-[11px]">
@@ -209,7 +207,7 @@ export default function Dashboard({
                         
                         <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left text-xs">
-                                <thead className="bg-primary/[0.02] text-on-surface-variant font-semibold border-b border-primary/10">
+                                <thead className="bg-primary/2 text-on-surface-variant font-semibold border-b border-primary/10">
                                     <tr>
                                         <th className="py-3 px-5">Aksi Sistem</th>
                                         <th className="py-3 px-5">Eksekutor</th>
@@ -218,7 +216,7 @@ export default function Dashboard({
                                 </thead>
                                 <tbody className="divide-y divide-primary/5">
                                     {recentAuditLogs.map(log => (
-                                        <tr key={log.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={log.id} className="hover:bg-primary/2 transition-colors">
                                             <td className="py-3.5 px-5">
                                                 <span className="font-label-mono text-[11px] font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/15">
                                                     {log.action}
