@@ -78,10 +78,10 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/40">
                     <Link href="/instructor/dashboard" className="flex items-center gap-3 group">
-                        <img 
-                            src="/image/Logo_AEVYRA_Icon.png" 
-                            alt="AEVYRA Logo" 
-                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform" 
+                        <img
+                            src="/image/Logo_AEVYRA_Icon.png"
+                            alt="AEVYRA Logo"
+                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform"
                         />
                         <div>
                             <div className="flex items-center gap-2">

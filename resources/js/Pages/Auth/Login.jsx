@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthLayout from '../../Layouts/AuthLayout';
+import AuthLayout from '@/Layouts/AuthLayout';
+import { Button, Input, Checkbox } from '@/Components/UI';
 
 export default function Login() {
     const [selectedRole, setSelectedRole] = useState('member'); // 'member' | 'instructor' | 'admin'
-    const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         email: 'member@aevyra.health',
@@ -16,20 +16,19 @@ export default function Login() {
         member: {
             name: 'Member',
             title: 'Member Preventif',
-            subtitle: 'Pasien & Anggota Sehat',
+            subtitle: 'Pasien & Pengguna Mandiri',
             email: 'member@aevyra.health',
             icon: 'person',
-            color: 'from-primary to-primary-container',
             badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300',
             buttonText: 'Masuk sebagai Member Preventif',
-            desc: 'Akses scanner kamera makanan/obat BPOM, tracker glukosa darah, program habit 14-90 hari, dan konsultasi dokter.',
+            desc: 'Akses scanner nutrisi makanan/obat BPOM, tracker glukosa darah, habit mikro 14-90 hari, dan konsultasi dokter siaga.',
             previewBadge: 'Portal Member • HealthCheck 2026',
             previewTitle: 'Deteksi dampak nutrisi sebelum suapan pertama.',
-            previewQuote: 'Membedah komposisi gizi, gula tersembunyi, dan izin resmi BPOM dalam 0.4 detik untuk mencegah lonjakan glukosa darah.',
+            previewQuote: 'Membedah komposisi gizi, gula tersembunyi, dan izin resmi BPOM dalam hitungan detik untuk mencegah lonjakan glukosa darah.',
             previewImage: '/image/hero_lifestyle_scan.jpg',
             previewStats: [
                 { label: 'Database BPOM', val: '120.000+' },
-                { label: 'Kecepatan', val: '< 0.4 Detik' },
+                { label: 'Kecepatan Analisis', val: '< 0.4 Detik' },
                 { label: 'Akurasi OCR', val: '98.4%' },
             ],
         },
@@ -39,13 +38,12 @@ export default function Login() {
             subtitle: 'Dokter Spesialis & Dietisien',
             email: 'instruktur@aevyra.health',
             icon: 'health_and_safety',
-            color: 'from-emerald-700 to-teal-800',
             badgeBg: 'bg-teal-100 text-teal-800 border-teal-300',
             buttonText: 'Masuk Portal Dokter / Instruktur',
-            desc: 'Kelola caseload pasien binaan, verifikasi jadwal telemedisin, terbitkan intervensi diet, dan evaluasi laporan kepatuhan.',
+            desc: 'Kelola caseload pasien binaan, verifikasi jadwal telemedisin, terbitkan rencana intervensi klinis, dan evaluasi laporan kepatuhan.',
             previewBadge: 'Konsol Dokter IDI • Verifikasi STR',
             previewTitle: 'Bimbingan klinis 1-on-1 berbasis bukti ilmiah.',
-            previewQuote: 'Mendampingi pasien pra-diabetes menuju remisi glukosa menggunakan panduan PERKENI dan rekam medis terpadu.',
+            previewQuote: 'Mendampingi pasien pra-diabetes menuju remisi glukosa menggunakan panduan klinis PERKENI dan rekam medis terpadu.',
             previewImage: '/image/doctor_consultation.jpg',
             previewStats: [
                 { label: 'SLA Respon', val: '< 5 Menit' },
@@ -59,10 +57,9 @@ export default function Login() {
             subtitle: 'Tata Kelola Medis & Sistem',
             email: 'admin@aevyra.health',
             icon: 'admin_panel_settings',
-            color: 'from-slate-800 to-slate-900',
             badgeBg: 'bg-slate-100 text-slate-800 border-slate-300',
             buttonText: 'Masuk Konsol Administrator',
-            desc: 'Manajemen hak akses pengguna, persetujuan STR instruktur, audit forensik keamanan, dan pemantauan siaga ambulans 119.',
+            desc: 'Manajemen hak akses pengguna, verifikasi STR instruktur, audit forensik keamanan, pemantauan ambulans 119, dan kontrol parameter sistem.',
             previewBadge: 'Konsol Tata Kelola Medis & Audit',
             previewTitle: 'Pengawasan privasi dan keamanan sistem kesehatan.',
             previewQuote: 'Memastikan kepatuhan UU PDP No. 27/2022, audit forensik rekam medis digital, dan keandalan failover AI 24/7.',
@@ -77,8 +74,11 @@ export default function Login() {
 
     const handleRoleSelect = (roleKey) => {
         setSelectedRole(roleKey);
-        setData('email', roleConfigs[roleKey].email);
-        setData('password', 'password');
+        setData((prev) => ({
+            ...prev,
+            email: roleConfigs[roleKey].email,
+            password: 'password',
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -89,23 +89,23 @@ export default function Login() {
     const activeConfig = roleConfigs[selectedRole];
 
     return (
-        <AuthLayout>
+        <AuthLayout maxWidth="max-w-5xl">
             <Head title="Masuk Akun — AEVYRA HealthCheck" />
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch max-w-295">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
                 {/* Left Column: Form & Role Switcher */}
-                <div className="lg:col-span-7 bg-white dark:bg-surface p-6 sm:p-8 lg:p-10 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.03)] flex flex-col justify-between space-y-6">
+                <div className="lg:col-span-7 bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
                     <div>
-                        {/* Eyebrow & Headline */}
-                        <div className="space-y-1.5 pb-4 border-b border-surface-container">
-                            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#edf5f0] text-[#1c6454] text-[10px] font-semibold border border-[#d4e8dd]">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        {/* Header Badge & Title */}
+                        <div className="space-y-2 pb-4 border-b border-primary/10">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-semibold border border-primary/20">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <span>Gerbang Autentikasi Pengguna Terverifikasi</span>
                             </div>
-                            <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#122824]">
+                            <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
                                 Masuk ke Portal AEVYRA
                             </h1>
-                            <p className="text-xs text-[#52645f] leading-relaxed">
+                            <p className="text-xs text-on-surface-variant leading-relaxed">
                                 {activeConfig.desc}
                             </p>
                         </div>
@@ -126,20 +126,20 @@ export default function Login() {
                                             onClick={() => handleRoleSelect(key)}
                                             className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                                                 isSelected
-                                                    ? 'border-primary bg-primary/5 ring-1 ring-primary shadow-xs'
-                                                    : 'border-surface-container bg-surface-container-lowest hover:border-primary/30'
+                                                    ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
+                                                    : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
                                             }`}
                                         >
                                             <div className="flex items-center justify-between w-full mb-1">
                                                 <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${
-                                                    isSelected ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
+                                                    isSelected ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
                                                 }`}>
                                                     <span className="material-symbols-outlined text-[16px]">
                                                         {role.icon}
                                                     </span>
                                                 </div>
                                                 {isSelected && (
-                                                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                                    <span className="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
                                                 )}
                                             </div>
                                             <span className={`text-xs font-bold block ${isSelected ? 'text-primary' : 'text-on-surface'}`}>
@@ -156,94 +156,62 @@ export default function Login() {
 
                         {/* Login Form */}
                         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                            {/* Email */}
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-on-surface flex items-center justify-between">
-                                    <span>Alamat Email</span>
-                                    <span className="text-[10px] text-primary font-mono font-semibold">
-                                        Peran: {activeConfig.title}
-                                    </span>
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type="email"
-                                        required
-                                        value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
-                                        placeholder="nama@aevyra.health"
-                                        className="w-full pl-3.5 pr-10 py-3 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                                    />
-                                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                                        mail
-                                    </span>
-                                </div>
-                                {errors.email && (
-                                    <p className="text-[11px] text-rose-600 font-medium">{errors.email}</p>
-                                )}
-                            </div>
+                            <Input
+                                label="Alamat Email"
+                                type="email"
+                                required
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="nama@aevyra.health"
+                                leftIcon="mail"
+                                error={errors.email}
+                                autoComplete="username"
+                                helperText={`Peran aktif: ${activeConfig.title}`}
+                            />
 
-                            {/* Password */}
-                            <div className="space-y-1">
-                                <div className="flex items-center justify-between text-xs">
-                                    <label className="font-bold text-on-surface">Kata Sandi</label>
-                                    <span className="text-[10px] text-on-surface-variant font-mono">
-                                        Demo: password
-                                    </span>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        required
-                                        value={data.password}
-                                        onChange={(e) => setData('password', e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full pl-3.5 pr-10 py-3 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface cursor-pointer p-0.5"
-                                    >
-                                        <span className="material-symbols-outlined text-[18px]">
-                                            {showPassword ? 'visibility_off' : 'visibility'}
-                                        </span>
-                                    </button>
-                                </div>
-                                {errors.password && (
-                                    <p className="text-[11px] text-rose-600 font-medium">{errors.password}</p>
-                                )}
-                            </div>
+                            <Input
+                                label="Kata Sandi"
+                                type="password"
+                                required
+                                value={data.password}
+                                onChange={(e) => setData('password', e.target.value)}
+                                placeholder="••••••••"
+                                allowPasswordToggle
+                                error={errors.password}
+                                autoComplete="current-password"
+                                helperText="Demo: password"
+                            />
 
                             {/* Remember Me & Forgot Password */}
                             <div className="flex items-center justify-between text-xs pt-1">
-                                <label className="flex items-center gap-2 text-on-surface-variant cursor-pointer select-none">
-                                    <input
-                                        type="checkbox"
-                                        checked={data.remember}
-                                        onChange={(e) => setData('remember', e.target.checked)}
-                                        className="rounded border-surface-container text-primary focus:ring-primary"
-                                    />
-                                    <span>Ingat sesi saya di peramban ini</span>
-                                </label>
-                                <span className="text-primary hover:underline cursor-pointer text-[11px]">
+                                <Checkbox
+                                    id="remember"
+                                    label="Ingat sesi saya di peramban ini"
+                                    checked={data.remember}
+                                    onChange={(e) => setData('remember', e.target.checked)}
+                                />
+                                <span className="text-primary hover:underline cursor-pointer text-[11px] font-semibold">
                                     Lupa sandi?
                                 </span>
                             </div>
 
                             {/* Submit Button */}
-                            <button
+                            <Button
                                 type="submit"
-                                disabled={processing}
-                                className="w-full py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                                variant="primary"
+                                size="md"
+                                loading={processing}
+                                loadingText="Memverifikasi Akses..."
+                                leftIcon="login"
+                                className="w-full shadow-md mt-2"
                             >
-                                <span className="material-symbols-outlined text-[18px]">login</span>
-                                <span>{processing ? 'Memverifikasi Akses...' : activeConfig.buttonText}</span>
-                            </button>
+                                {activeConfig.buttonText}
+                            </Button>
                         </form>
                     </div>
 
-                    {/* Bottom Accreditation Note */}
-                    <div className="pt-4 border-t border-surface-container text-center space-y-2">
+                    {/* Bottom Links */}
+                    <div className="pt-4 border-t border-primary/10 text-center space-y-2">
                         <p className="text-xs text-on-surface-variant">
                             Belum memiliki akun?{' '}
                             <Link href="/register" className="text-primary font-bold hover:underline">
@@ -260,37 +228,37 @@ export default function Login() {
                     </div>
                 </div>
 
-                {/* Right Column: Dynamic Role Showcase (Theme Aligned with Landing Page) */}
-                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-[#f2f7f4] border border-[#d6e7dd] relative overflow-hidden shadow-xs">
+                {/* Right Column: Dynamic Role Showcase */}
+                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-surface-container-low border border-primary/15 shadow-sm relative overflow-hidden">
                     {/* Top Role Badge */}
                     <div className="space-y-4 relative z-10">
                         <div className="flex items-center justify-between">
                             <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${activeConfig.badgeBg}`}>
                                 {activeConfig.previewBadge}
                             </span>
-                            <span className="font-mono text-[10px] text-[#48635c]">
+                            <span className="font-mono text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
                                 Lingkungan Aman
                             </span>
                         </div>
 
                         <div className="space-y-2">
-                            <h2 className="font-serif text-2xl font-normal text-[#122824] leading-snug">
+                            <h2 className="font-heading font-bold text-xl text-primary leading-snug">
                                 {activeConfig.previewTitle}
                             </h2>
-                            <p className="text-xs text-[#48635c] leading-relaxed">
+                            <p className="text-xs text-on-surface-variant leading-relaxed">
                                 {activeConfig.previewQuote}
                             </p>
                         </div>
 
                         {/* Image Frame */}
-                        <div className="h-48 rounded-2xl overflow-hidden border border-[#cfe1d7] shadow-inner relative group">
+                        <div className="h-44 rounded-2xl overflow-hidden border border-primary/15 shadow-inner relative group bg-white">
                             <img
                                 src={activeConfig.previewImage}
                                 alt={activeConfig.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
-                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
+                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg border border-white/20">
                                     {activeConfig.title}
                                 </span>
                             </div>
@@ -299,11 +267,11 @@ export default function Login() {
                         {/* Dynamic Metrics */}
                         <div className="grid grid-cols-3 gap-2 pt-2">
                             {activeConfig.previewStats.map((s, idx) => (
-                                <div key={idx} className="p-2.5 rounded-xl bg-white/90 border border-[#cfe1d7] text-center">
-                                    <span className="font-serif text-sm font-bold text-primary block leading-tight">
+                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-primary/15 text-center shadow-2xs">
+                                    <span className="font-heading font-black text-xs sm:text-sm text-primary block leading-tight">
                                         {s.val}
                                     </span>
-                                    <span className="text-[10px] text-[#556e67] block mt-0.5">
+                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant block mt-0.5 font-medium">
                                         {s.label}
                                     </span>
                                 </div>
@@ -312,17 +280,17 @@ export default function Login() {
                     </div>
 
                     {/* Medical Advisor Quote */}
-                    <div className="pt-4 border-t border-[#d6e7dd] relative z-10 flex items-center gap-3">
+                    <div className="pt-4 border-t border-primary/10 relative z-10 flex items-center gap-3">
                         <img
                             src="/image/doctor_bramantyo.jpg"
                             alt="dr. Bramantyo"
-                            className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-xs shrink-0"
+                            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 shadow-xs shrink-0"
                         />
                         <div className="text-xs leading-tight">
-                            <span className="font-serif font-bold text-[#142622] block">
+                            <span className="font-heading font-bold text-primary block">
                                 dr. H. Bramantyo, Sp.PD
                             </span>
-                            <span className="text-[10px] text-[#637d76]">
+                            <span className="text-[10px] text-on-surface-variant">
                                 Dewan Penasihat Medis AEVYRA
                             </span>
                         </div>

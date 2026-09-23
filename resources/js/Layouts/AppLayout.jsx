@@ -120,6 +120,16 @@ export default function AppLayout({ children, title, activeTab }) {
                                     >
                                         Riwayat
                                     </Link>
+                                    <Link
+                                        href="/member/instructors"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'instructors'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Tim Pendamping
+                                    </Link>
                                 </>
                             )}
                             {isInstructor && (
@@ -349,6 +359,13 @@ export default function AppLayout({ children, title, activeTab }) {
                                     onClick={() => setMobileNavOpen(false)}
                                 >
                                     Timeline Riwayat
+                                </Link>
+                                <Link
+                                    href="/member/instructors"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Tim Pendamping
                                 </Link>
                                 <button
                                     type="button"

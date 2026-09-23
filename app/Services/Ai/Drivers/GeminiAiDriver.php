@@ -16,8 +16,8 @@ class GeminiAiDriver implements AiDriverInterface
     public function __construct(?string $apiKey = null, ?string $primaryModel = null, ?string $backupModel = null, ?array $models = null)
     {
         $this->apiKey = $apiKey ?? (string) config('services.gemini.api_key', env('GEMINI_API_KEY', ''));
-        $this->primaryModel = $primaryModel ?? (string) config('services.gemini.model', 'gemini-3.6-flash');
-        $this->backupModel = $backupModel ?? (string) config('services.gemini.backup_model', 'gemini-3.5-flash');
+        $this->primaryModel = $primaryModel ?? (string) config('services.gemini.model', 'gemini-2.5-flash');
+        $this->backupModel = $backupModel ?? (string) config('services.gemini.backup_model', 'gemini-1.5-flash');
         $this->models = $models ?? (array) config('services.gemini.models', []);
     }
 
@@ -49,7 +49,7 @@ class GeminiAiDriver implements AiDriverInterface
         // Try primary, backup, and all models in the pool
         $modelsToAttempt = !empty($this->models)
             ? array_values(array_unique(array_filter(array_merge([$this->primaryModel, $this->backupModel], $this->models))))
-            : [$this->primaryModel, $this->backupModel, 'gemini-3.1-flash-lite'];
+            : [$this->primaryModel, $this->backupModel, 'gemini-1.5-flash-8b'];
         $lastException = null;
 
         foreach ($modelsToAttempt as $model) {

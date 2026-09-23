@@ -1,6 +1,75 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
-import confetti from 'canvas-confetti';
+
+// Lightweight standalone zero-dependency confetti effect
+const triggerConfetti = () => {
+    if (typeof window === 'undefined') return;
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '99999';
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const pieces = [];
+        const colors = ['#00695c', '#00897b', '#4db6ac', '#f59e0b', '#10b981', '#3b82f6', '#ec4899'];
+        for (let i = 0; i < 60; i++) {
+            pieces.push({
+                x: canvas.width / 2 + (Math.random() - 0.5) * 100,
+                y: canvas.height * 0.5,
+                w: Math.random() * 8 + 4,
+                h: Math.random() * 6 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 14,
+                vy: (Math.random() - 0.8) * 14,
+                gravity: 0.35,
+                rot: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 10,
+                alpha: 1,
+            });
+        }
+
+        const render = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            for (const p of pieces) {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.rot += p.rotSpeed;
+                p.alpha -= 0.015;
+
+                if (p.alpha > 0) {
+                    active = true;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rot * Math.PI) / 180);
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                }
+            }
+
+            if (active) {
+                requestAnimationFrame(render);
+            } else {
+                canvas.remove();
+            }
+        };
+        render();
+    } catch (e) {
+        // Fallback gracefully
+    }
+};
 
 export default function MetabolicArcadeModal({ isOpen, onClose }) {
     if (!isOpen) return null;
@@ -285,11 +354,7 @@ export default function MetabolicArcadeModal({ isOpen, onClose }) {
             setLastSelectedChoice(null);
         } else {
             // Trigger confetti if good score
-            confetti({
-                particleCount: 80,
-                spread: 70,
-                origin: { y: 0.6 },
-            });
+            triggerConfetti();
             setStage('REPORT');
         }
     };

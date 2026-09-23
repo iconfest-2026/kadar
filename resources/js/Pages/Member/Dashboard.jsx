@@ -32,6 +32,7 @@ export default function Dashboard({
     const [chatMessages, setChatMessages] = useState([
         {
             role: 'assistant',
+            content: `Halo ${user?.name || 'Kawan'}! Saya asisten gaya hidup preventif Kadar. Saya dapat membantu Anda mendiskusikan pola istirahat, hidrasi, atau kebiasaan harian berdasarkan baseline Anda tanpa memberikan diagnosa medis. Apa yang ingin Anda diskusikan hari ini?`,
             content: `Halo ${user?.name || 'Kawan'}! Saya asisten gaya hidup preventif AEVYRA. Saya dapat membantu Anda mendiskusikan pola istirahat, hidrasi, atau kebiasaan harian berdasarkan baseline Anda tanpa memberikan diagnosa medis. Apa yang ingin Anda diskusikan hari ini?`,
         },
     ]);
@@ -85,6 +86,7 @@ export default function Dashboard({
 
     return (
         <AppLayout title="Dashboard Member" activeTab="dashboard">
+            <Head title="Ringkasan Baseline - Kadar" />
             <Head title="Ringkasan Baseline — AEVYRA" />
 
             <div className="space-y-6">
@@ -146,6 +148,7 @@ export default function Dashboard({
                                 className="px-4 py-3 rounded-2xl bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 text-xs font-semibold flex items-center gap-2 transition-all shadow-xs"
                             >
                                 <span className="material-symbols-outlined text-[20px]">smart_toy</span>
+                                <span>Tanya AI Kadar</span>
                                 <span>Tanya AI AEVYRA</span>
                             </button>
                         </div>
@@ -638,6 +641,7 @@ export default function Dashboard({
                                     <span className="material-symbols-outlined text-[18px]">smart_toy</span>
                                 </div>
                                 <div>
+                                    <h3 className="font-heading font-bold text-sm text-on-surface">Asisten Gaya Hidup Kadar</h3>
                                     <h3 className="font-heading font-bold text-sm text-on-surface">Asisten Gaya Hidup AEVYRA</h3>
                                     <p className="text-[10px] text-on-surface-variant font-label-mono">
                                         Non-Diagnostik • Terpandu Batas Klinis

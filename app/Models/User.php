@@ -80,6 +80,18 @@ class User extends Authenticatable
         return $this->hasOne(LifestyleProfile::class);
     }
 
+    public function instructorProfile(): HasOne
+    {
+        return $this->hasOne(InstructorProfile::class);
+    }
+
+    public function isVerifiedInstructor(): bool
+    {
+        return $this->hasRole('instructor') &&
+            $this->status === 'ACTIVE' &&
+            ($this->instructorProfile?->is_verified ?? false);
+    }
+
     public function goals(): HasMany
     {
         return $this->hasMany(Goal::class);
@@ -155,19 +167,52 @@ class User extends Authenticatable
         return $this->hasMany(Consent::class);
     }
 
+    /**
+     * Active assignments from this member to their chosen instructors
+     */
     public function instructorAssignments(): HasMany
     {
         return $this->hasMany(InstructorMemberAssignment::class, 'member_id');
     }
 
+    public function activeInstructorAssignments(): HasMany
+    {
+        return $this->hasMany(InstructorMemberAssignment::class, 'member_id')->where('status', 'ACTIVE');
+    }
+
+    /**
+     * Instructors currently assigned to this member
+     */
+    public function assignedInstructors(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'instructor_member_assignments', 'member_id', 'instructor_id')
+            ->wherePivot('status', 'ACTIVE')
+            ->withPivot(['id', 'status', 'starts_at', 'program_id', 'assigned_by'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Members assigned to this instructor
+     */
     public function assignedMembers(): HasMany
     {
         return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id');
     }
 
-    public function instructorMemberAssignments(): HasMany
+    public function activeAssignedMembers(): HasMany
     {
-        return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id');
+        return $this->hasMany(InstructorMemberAssignment::class, 'instructor_id')->where('status', 'ACTIVE');
+    }
+
+    public function activeInstructorCount(): int
+    {
+        return $this->activeInstructorAssignments()->count();
+    }
+
+    public function canAssignMoreInstructors(): bool
+    {
+        $maxLimit = (int) SystemSetting::get('max_instructors_per_member', 3);
+        return $this->activeInstructorCount() < $maxLimit;
     }
 
     public function menstrualSetting(): \Illuminate\Database\Eloquent\Relations\HasOne

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthLayout from '../../Layouts/AuthLayout';
+import AuthLayout from '@/Layouts/AuthLayout';
+import { Button, Input, Textarea, Select, Checkbox, Alert } from '@/Components/UI';
 
 export default function Register() {
     const [accountType, setAccountType] = useState('member'); // 'member' | 'instructor'
-    const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -12,17 +12,29 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         role: 'member',
+        specialization: 'Dokter Spesialis Gizi Klinis (Sp.GK)',
+        str_number: '',
+        sip_number: '',
+        institution: '',
+        years_of_experience: 3,
+        bio: '',
+        proof_document: null,
         consent: false,
     });
 
     const handleAccountTypeChange = (type) => {
         setAccountType(type);
-        setData('role', type === 'member' ? 'member' : 'instructor');
+        setData((prev) => ({
+            ...prev,
+            role: type,
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/register');
+        post('/register', {
+            forceFormData: true,
+        });
     };
 
     const roleConfigs = {
@@ -42,7 +54,7 @@ export default function Register() {
         instructor: {
             title: 'Instruktur & Tenaga Medis',
             badge: 'Portal Mitra Klinis Terdaftar',
-            desc: 'Kelola caseload pasien pra-diabetes, terbitkan intervensi gizi terstandar, dan berikan telekonsultasi terjadwal.',
+            desc: 'Kelola caseload pasien pra-diabetes, terbitkan intervensi gizi terstandar, dan berikan bimbingan telemedisin terarah.',
             image: '/image/doctor_consultation.jpg',
             highlightTitle: 'Dampingi pasien dengan rekam medis digital terpadu.',
             highlightQuote: 'Platform telemedisin preventif yang terhubung langsung dengan sistem SATUSEHAT Kemenkes RI.',
@@ -57,23 +69,23 @@ export default function Register() {
     const currentConfig = roleConfigs[accountType];
 
     return (
-        <AuthLayout>
+        <AuthLayout maxWidth="max-w-5xl">
             <Head title="Daftar Akun Baru — AEVYRA HealthCheck" />
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch max-w-295">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
                 {/* Left Column: Registration Form */}
-                <div className="lg:col-span-7 bg-white dark:bg-surface p-6 sm:p-8 lg:p-10 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.03)] flex flex-col justify-between space-y-6">
+                <div className="lg:col-span-7 bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
                     <div>
                         {/* Eyebrow & Headline */}
-                        <div className="space-y-1.5 pb-4 border-b border-surface-container">
-                            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#edf5f0] text-[#1c6454] text-[10px] font-semibold border border-[#d4e8dd]">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <div className="space-y-2 pb-4 border-b border-primary/10">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-semibold border border-primary/20">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <span>Pendaftaran Pengguna Baru Terverifikasi</span>
                             </div>
-                            <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#122824]">
+                            <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
                                 Buat Akun AEVYRA
                             </h1>
-                            <p className="text-xs text-[#52645f] leading-relaxed">
+                            <p className="text-xs text-on-surface-variant leading-relaxed">
                                 {currentConfig.desc}
                             </p>
                         </div>
@@ -89,12 +101,12 @@ export default function Register() {
                                     onClick={() => handleAccountTypeChange('member')}
                                     className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
                                         accountType === 'member'
-                                            ? 'border-primary bg-primary/5 ring-1 ring-primary shadow-xs'
-                                            : 'border-surface-container bg-surface-container-lowest hover:border-primary/30'
+                                            ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
+                                            : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
                                     }`}
                                 >
                                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                                        accountType === 'member' ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
+                                        accountType === 'member' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
                                     }`}>
                                         <span className="material-symbols-outlined text-[18px]">person</span>
                                     </div>
@@ -113,12 +125,12 @@ export default function Register() {
                                     onClick={() => handleAccountTypeChange('instructor')}
                                     className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
                                         accountType === 'instructor'
-                                            ? 'border-primary bg-primary/5 ring-1 ring-primary shadow-xs'
-                                            : 'border-surface-container bg-surface-container-lowest hover:border-primary/30'
+                                            ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
+                                            : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
                                     }`}
                                 >
                                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                                        accountType === 'instructor' ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
+                                        accountType === 'instructor' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
                                     }`}>
                                         <span className="material-symbols-outlined text-[18px]">health_and_safety</span>
                                     </div>
@@ -134,115 +146,203 @@ export default function Register() {
                             </div>
                         </div>
 
+                        {accountType === 'instructor' && (
+                            <div className="mt-4">
+                                <Alert variant="info" title="Verifikasi Kredensial Medis Diperlukan">
+                                    Sesuai standar etika klinis AEVYRA, data STR/SIP dan institusi praktik Anda akan diverifikasi oleh Administrator sebelum akun diaktifkan untuk mendampingi member.
+                                </Alert>
+                            </div>
+                        )}
+
                         {/* Registration Form */}
                         <form onSubmit={handleSubmit} className="mt-5 space-y-3.5">
-                            {/* Full Name */}
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-on-surface">Nama Lengkap</label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        required
-                                        value={data.name}
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        placeholder={accountType === 'member' ? 'Contoh: Ahmad Fadilah' : 'Contoh: dr. Nabila Putri, Sp.GK'}
-                                        className="w-full pl-3.5 pr-10 py-2.5 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                                    />
-                                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                                        badge
-                                    </span>
-                                </div>
-                                {errors.name && <p className="text-[11px] text-rose-600 font-medium">{errors.name}</p>}
-                            </div>
+                            <Input
+                                label={accountType === 'member' ? 'Nama Lengkap' : 'Nama Lengkap Beserta Gelar'}
+                                type="text"
+                                required
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                placeholder={accountType === 'member' ? 'Contoh: Ahmad Fadilah' : 'Contoh: dr. Nabila Putri, Sp.GK'}
+                                leftIcon="badge"
+                                error={errors.name}
+                                autoComplete="name"
+                            />
 
-                            {/* Email */}
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-on-surface">Alamat Email</label>
-                                <div className="relative">
-                                    <input
-                                        type="email"
+                            <Input
+                                label="Alamat Email"
+                                type="email"
+                                required
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="nama@email.com"
+                                leftIcon="mail"
+                                error={errors.email}
+                                autoComplete="email"
+                            />
+
+                            {/* Additional Fields for Instructor */}
+                            {accountType === 'instructor' && (
+                                <div className="space-y-3.5 p-4 rounded-2xl bg-surface-container-low border border-primary/15">
+                                    <div className="flex items-center gap-2 pb-1.5 border-b border-primary/10">
+                                        <span className="material-symbols-outlined text-[18px] text-primary">verified_user</span>
+                                        <h4 className="font-bold text-xs text-primary uppercase tracking-wider">
+                                            Kredensial & Legalitas Praktik Medis
+                                        </h4>
+                                    </div>
+
+                                    <Select
+                                        label="Bidang Spesialisasi / Profesi"
                                         required
-                                        value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
-                                        placeholder="nama@email.com"
-                                        className="w-full pl-3.5 pr-10 py-2.5 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+                                        value={data.specialization}
+                                        onChange={(e) => setData('specialization', e.target.value)}
+                                        options={[
+                                            { value: 'Dokter Spesialis Gizi Klinis (Sp.GK)', label: 'Dokter Spesialis Gizi Klinis (Sp.GK)' },
+                                            { value: 'Dokter Spesialis Kedokteran Olahraga (Sp.KO)', label: 'Dokter Spesialis Kedokteran Olahraga (Sp.KO)' },
+                                            { value: 'Dokter Spesialis Penyakit Dalam (Sp.PD)', label: 'Dokter Spesialis Penyakit Dalam (Sp.PD)' },
+                                            { value: 'Dokter Umum Terverifikasi', label: 'Dokter Umum Terverifikasi' },
+                                            { value: 'Fisioterapis Klinis Berlisensi', label: 'Fisioterapis Klinis Berlisensi' },
+                                            { value: 'Dietisien / Registered Dietitian (RD)', label: 'Dietisien / Registered Dietitian (RD)' },
+                                            { value: 'Psikolog Kesehatan Perilaku', label: 'Psikolog Kesehatan Perilaku' },
+                                        ]}
+                                        error={errors.specialization}
                                     />
-                                    <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                                        mail
-                                    </span>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <Input
+                                            label="Nomor STR Tenaga Medis"
+                                            required
+                                            value={data.str_number}
+                                            onChange={(e) => setData('str_number', e.target.value)}
+                                            placeholder="Contoh: 31.1.1.100.2.21.123456"
+                                            leftIcon="verified"
+                                            error={errors.str_number}
+                                        />
+
+                                        <Input
+                                            label="Nomor SIP (Surat Izin Praktik)"
+                                            value={data.sip_number}
+                                            onChange={(e) => setData('sip_number', e.target.value)}
+                                            placeholder="Contoh: SIP.503/446/123/2024"
+                                            leftIcon="assignment"
+                                            error={errors.sip_number}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                        <div className="sm:col-span-2">
+                                            <Input
+                                                label="Institusi / RS / Klinik Praktik"
+                                                required
+                                                value={data.institution}
+                                                onChange={(e) => setData('institution', e.target.value)}
+                                                placeholder="Contoh: RSUPN Dr. Cipto Mangunkusumo"
+                                                leftIcon="apartment"
+                                                error={errors.institution}
+                                            />
+                                        </div>
+
+                                        <Input
+                                            label="Pengalaman (Thn)"
+                                            type="number"
+                                            min="0"
+                                            max="60"
+                                            required
+                                            value={data.years_of_experience}
+                                            onChange={(e) => setData('years_of_experience', parseInt(e.target.value) || 0)}
+                                            error={errors.years_of_experience}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="block text-xs font-bold text-on-surface">
+                                            Unggah Dokumen Bukti STR / SIP / Ijazah Medis (PDF/JPG/PNG, Max 10MB)
+                                        </label>
+                                        <input
+                                            type="file"
+                                            accept=".pdf,.jpg,.jpeg,.png"
+                                            onChange={(e) => setData('proof_document', e.target.files[0])}
+                                            className="w-full text-xs text-on-surface file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:bg-primary-container file:cursor-pointer bg-white p-2 rounded-2xl border border-primary/15"
+                                        />
+                                        {errors.proof_document && (
+                                            <p className="mt-1 text-xs text-rose-600 font-medium flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-[14px]">error</span>
+                                                {errors.proof_document}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <Textarea
+                                        label="Bio Singkat & Pendekatan Klinis"
+                                        rows={2}
+                                        value={data.bio}
+                                        onChange={(e) => setData('bio', e.target.value)}
+                                        placeholder="Jelaskan spesialisasi Anda, pendekatan pendampingan gizi/metabolik, dan pengalaman bimbingan..."
+                                        error={errors.bio}
+                                    />
                                 </div>
-                                {errors.email && <p className="text-[11px] text-rose-600 font-medium">{errors.email}</p>}
-                            </div>
+                            )}
 
                             {/* Password & Confirm */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-on-surface">Kata Sandi</label>
-                                    <div className="relative">
-                                        <input
-                                            type={showPassword ? 'text' : 'password'}
-                                            required
-                                            value={data.password}
-                                            onChange={(e) => setData('password', e.target.value)}
-                                            placeholder="Min. 8 karakter"
-                                            className="w-full pl-3.5 pr-10 py-2.5 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface p-0.5"
-                                        >
-                                            <span className="material-symbols-outlined text-[16px]">
-                                                {showPassword ? 'visibility_off' : 'visibility'}
-                                            </span>
-                                        </button>
-                                    </div>
-                                    {errors.password && <p className="text-[11px] text-rose-600 font-medium">{errors.password}</p>}
-                                </div>
+                                <Input
+                                    label="Kata Sandi"
+                                    type="password"
+                                    required
+                                    value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    placeholder="Min. 8 karakter"
+                                    allowPasswordToggle
+                                    error={errors.password}
+                                    autoComplete="new-password"
+                                />
 
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-on-surface">Ulangi Sandi</label>
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        required
-                                        value={data.password_confirmation}
-                                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                                        placeholder="Ketik ulang"
-                                        className="w-full px-3.5 py-2.5 bg-surface-container-lowest text-xs text-on-surface rounded-xl border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary font-medium"
-                                    />
-                                </div>
+                                <Input
+                                    label="Ulangi Sandi"
+                                    type="password"
+                                    required
+                                    value={data.password_confirmation}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    placeholder="Ketik ulang"
+                                    allowPasswordToggle
+                                    error={errors.password_confirmation}
+                                    autoComplete="new-password"
+                                />
                             </div>
 
                             {/* Consent Checkbox */}
-                            <div className="flex items-start gap-2 pt-2">
-                                <input
-                                    type="checkbox"
+                            <div className="pt-1">
+                                <Checkbox
                                     id="consent"
                                     required
                                     checked={data.consent}
                                     onChange={(e) => setData('consent', e.target.checked)}
-                                    className="mt-0.5 rounded border-surface-container text-primary focus:ring-primary"
+                                    label="Persetujuan Layanan & Standar Etika"
+                                    description={
+                                        accountType === 'instructor'
+                                            ? 'Saya menyatakan bahwa nomor STR/SIP dan dokumen bukti yang diunggah adalah asli, sah, dan dapat dipertanggungjawabkan secara hukum.'
+                                            : 'Saya menyetujui Ketentuan Layanan, Kebijakan Privasi data kesehatan pribadi AEVYRA, serta kepatuhan UU PDP No. 27/2022.'
+                                    }
+                                    error={errors.consent}
                                 />
-                                <label htmlFor="consent" className="text-xs text-on-surface-variant leading-snug cursor-pointer select-none">
-                                    Saya menyetujui Ketentuan Layanan, Kebijakan Privasi data kesehatan pribadi AEVYRA, serta kepatuhan UU PDP No. 27/2022.
-                                </label>
                             </div>
-                            {errors.consent && <p className="text-[11px] text-rose-600 font-medium">{errors.consent}</p>}
 
                             {/* Submit Button */}
-                            <button
+                            <Button
                                 type="submit"
-                                disabled={processing}
-                                className="w-full py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer mt-3"
+                                variant="primary"
+                                size="md"
+                                loading={processing}
+                                loadingText="Mendaftarkan Akun..."
+                                rightIcon="arrow_forward"
+                                className="w-full shadow-md mt-3"
                             >
-                                <span className="material-symbols-outlined text-[18px]">how_to_reg</span>
-                                <span>{processing ? 'Memproses Pendaftaran...' : accountType === 'member' ? 'Buat Akun Member Preventif' : 'Ajukan Akun Instruktur Medis'}</span>
-                            </button>
+                                {accountType === 'member' ? 'Buat Akun Member Preventif' : 'Ajukan Akun Instruktur Medis'}
+                            </Button>
                         </form>
                     </div>
 
                     {/* Bottom Accreditations */}
-                    <div className="pt-4 border-t border-surface-container text-center space-y-2">
+                    <div className="pt-4 border-t border-primary/10 text-center space-y-2">
                         <p className="text-xs text-on-surface-variant">
                             Sudah memiliki akun terdaftar?{' '}
                             <Link href="/login" className="text-primary font-bold hover:underline">
@@ -260,36 +360,36 @@ export default function Register() {
                 </div>
 
                 {/* Right Column: Dynamic Editorial Showcase */}
-                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-[#f2f7f4] border border-[#d6e7dd] relative overflow-hidden shadow-xs">
+                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-surface-container-low border border-primary/15 shadow-sm relative overflow-hidden">
                     {/* Top Role Badge */}
                     <div className="space-y-4 relative z-10">
                         <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full border bg-emerald-100 text-emerald-800 border-emerald-300">
+                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${currentConfig.badge ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-teal-100 text-teal-800 border-teal-300'}`}>
                                 {currentConfig.badge}
                             </span>
-                            <span className="font-mono text-[10px] text-[#48635c]">
+                            <span className="font-mono text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
                                 Skrining Mandiri
                             </span>
                         </div>
 
                         <div className="space-y-2">
-                            <h2 className="font-serif text-2xl font-normal text-[#122824] leading-snug">
+                            <h2 className="font-heading font-bold text-xl text-primary leading-snug">
                                 {currentConfig.highlightTitle}
                             </h2>
-                            <p className="text-xs text-[#48635c] leading-relaxed">
+                            <p className="text-xs text-on-surface-variant leading-relaxed">
                                 {currentConfig.highlightQuote}
                             </p>
                         </div>
 
                         {/* Image Frame */}
-                        <div className="h-48 rounded-2xl overflow-hidden border border-[#cfe1d7] shadow-inner relative group">
+                        <div className="h-44 rounded-2xl overflow-hidden border border-primary/15 shadow-inner relative group bg-white">
                             <img
                                 src={currentConfig.image}
                                 alt={currentConfig.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
-                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
+                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg border border-white/20">
                                     {currentConfig.title}
                                 </span>
                             </div>
@@ -298,11 +398,11 @@ export default function Register() {
                         {/* Dynamic Metrics */}
                         <div className="grid grid-cols-3 gap-2 pt-2">
                             {currentConfig.stats.map((s, idx) => (
-                                <div key={idx} className="p-2.5 rounded-xl bg-white/90 border border-[#cfe1d7] text-center">
-                                    <span className="font-serif text-sm font-bold text-primary block leading-tight">
+                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-primary/15 text-center shadow-2xs">
+                                    <span className="font-heading font-black text-xs sm:text-sm text-primary block leading-tight">
                                         {s.val}
                                     </span>
-                                    <span className="text-[10px] text-[#556e67] block mt-0.5">
+                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant block mt-0.5 font-medium">
                                         {s.label}
                                     </span>
                                 </div>
@@ -311,17 +411,17 @@ export default function Register() {
                     </div>
 
                     {/* Medical Advisor Quote */}
-                    <div className="pt-4 border-t border-[#d6e7dd] relative z-10 flex items-center gap-3">
+                    <div className="pt-4 border-t border-primary/10 relative z-10 flex items-center gap-3">
                         <img
                             src="/image/doctor_bramantyo.jpg"
                             alt="dr. Bramantyo"
-                            className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-xs shrink-0"
+                            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 shadow-xs shrink-0"
                         />
                         <div className="text-xs leading-tight">
-                            <span className="font-serif font-bold text-[#142622] block">
+                            <span className="font-heading font-bold text-primary block">
                                 dr. H. Bramantyo, Sp.PD
                             </span>
-                            <span className="text-[10px] text-[#637d76]">
+                            <span className="text-[10px] text-on-surface-variant">
                                 Dewan Penasihat Medis AEVYRA
                             </span>
                         </div>
