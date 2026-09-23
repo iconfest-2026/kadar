@@ -45,13 +45,13 @@ Instruksi arsitektural ini merangkum 45 bagian direktif rekayasa yang dikelompok
 
 | Klaster | Cakupan Bagian | Domain Fokus Arsitektural | Dokumen Terkait |
 | :--- | :--- | :--- | :--- |
-| **Klaster 1** | Bagian 1 – 6 | Peran & Mandat Inti, Sumber Kebenaran Otoritatif, Prinsip Utama Pencegahan, Kompas Bintang Utara Arsitektur, Model Domain Inti, dan Tanggung Jawab Entitas. | `docs/01-product-vision.md`, `docs/10-system-architecture.md` |
-| **Klaster 2** | Bagian 7 – 10 | Arsitektur Inteligensi Perilaku (*HBE*), Prinsip Garis Pangkal Personal Dinamis, Arsitektur Sinyal Deviasi, dan Persyaratan Keterbukaan Bukti Transparan. | `docs/05-health-behavior-engine.md`, `docs/08-data-model.md` |
-| **Klaster 3** | Bagian 11 – 14 | Arsitektur Kecerdasan Buatan Terpandu, Batasan Wewenang AI, Arsitektur Konteks Masukan, dan Keterlibatan Manusia (*Human-in-the-Loop*). | `docs/06-ai-assistant.md`, `docs/rules/03-health-safety.md` |
-| **Klaster 4** | Bagian 15 – 20 | Arsitektur Otorisasi Peladen (RBAC), Kepatuhan Privasi UU PDP No. 27/2022, Kontrak RESTful API, Skema Basis Data Relasional, Transaksi ACID, dan Abstraksi Provider. | `docs/rules/02-security.md`, `docs/rules/07-api.md`, `docs/06-database.md` |
-| **Klaster 5** | Bagian 21 – 24 | Arsitektur Ketahanan & Pemulihan Galat, Arsitektur PWA Luring, Sistem Notifikasi Terpandu, dan Gamifikasi Motivasi Kebiasaan Etis. | `docs/rules/09-pwa.md`, `docs/13-gamification-membership.md` |
-| **Klaster 6** | Bagian 25 – 28 | Matriks Prioritas Fitur (P0–P3), Alur Kerja Perancangan Fitur, Format Standar Desain Fitur 17 Dimensi, dan Daftar Periksa Tinjauan Arsitektural. | `docs/03-features.md`, `docs/14-mvp-roadmap.md` |
-| **Klaster 7** | Bagian 29 – 35 | Persyaratan Kualitas Non-Fungsional, Penegakan Modular Monolith, Batas Kepemilikan Kode, Arsitektur Pengujian, Kesiapan Demo, Keunggulan Kompetisi, dan Anti-Pola. | `docs/rules/01-architecture.md`, `docs/rules/08-testing.md` |
+| **Klaster 1** | Bagian 1 – 6 | Peran & Mandat Inti, Sumber Kebenaran Otoritatif, Prinsip Utama Pencegahan, Kompas Bintang Utara Arsitektur, Model Domain Inti, dan Tanggung Jawab Entitas. | `docs/docs/01-product-vision.md`, `docs/docs/08-data-model.md` |
+| **Klaster 2** | Bagian 7 – 10 | Arsitektur Inteligensi Perilaku (*HBE*), Prinsip Garis Pangkal Personal Dinamis, Arsitektur Sinyal Deviasi, dan Persyaratan Keterbukaan Bukti Transparan. | `docs/docs/05-health-behavior-engine.md`, `docs/docs/08-data-model.md` |
+| **Klaster 3** | Bagian 11 – 14 | Arsitektur Kecerdasan Buatan Terpandu, Batasan Wewenang AI, Arsitektur Konteks Masukan, dan Keterlibatan Manusia (*Human-in-the-Loop*). | `docs/docs/06-ai-assistant.md`, `docs/docs/11-health-safety.md` |
+| **Klaster 4** | Bagian 15 – 20 | Arsitektur Otorisasi Peladen (RBAC), Kepatuhan Privasi UU PDP No. 27/2022, Kontrak RESTful API, Skema Basis Data Relasional, Transaksi ACID, dan Abstraksi Provider. | `docs/docs/10-security-privacy.md`, `docs/docs/09-api-contracts.md` |
+| **Klaster 5** | Bagian 21 – 24 | Arsitektur Ketahanan & Pemulihan Galat, Arsitektur PWA Luring, Sistem Notifikasi Terpandu, dan Gamifikasi Motivasi Kebiasaan Etis. | `docs/docs/12-ux-ui.md`, `docs/docs/13-gamification-membership.md` |
+| **Klaster 6** | Bagian 25 – 28 | Matriks Prioritas Fitur (P0–P3), Alur Kerja Perancangan Fitur, Format Standar Desain Fitur 17 Dimensi, dan Daftar Periksa Tinjauan Arsitektural. | `docs/docs/03-core-features.md`, `docs/docs/14-mvp-roadmap.md` |
+| **Klaster 7** | Bagian 29 – 35 | Persyaratan Kualitas Non-Fungsional, Penegakan Modular Monolith, Batas Kepemilikan Kode, Arsitektur Pengujian, Kesiapan Demo, Keunggulan Kompetisi, dan Anti-Pola. | `docs/docs/15-testing-acceptance.md`, `docs/rules/*` |
 | **Klaster 8** | Bagian 36 – 45 | Analisis Dampak Perubahan, Dokumen Keputusan Arsitektur (ADR), Protokol Klarifikasi/Asumsi, Serah-Terima Implementasi, Kolaborasi Multi-Agen, dan Prinsip Pamungkas. | `docs/AGENTS.md`, Seluruh Dokumen Kanonikal |
 
 ---
@@ -173,8 +173,10 @@ Kompas pemandu (*North Star*) dari seluruh rekayasa sistem AEVYRA adalah kelanca
 ```text
 +-----------------------------------------------------------------------------------------+
 | 1. LAPISAN PRESENTASI & KANAL PENGGUNA                                                  |
-|    - Member PWA (Blade + Alpine.js + IndexedDB Offline Queue + Service Worker)          |
-|    - Instructor Dashboard & Admin Command Center                                        |
+|    - Member PWA & SPA (Laravel 12 + Inertia.js v2 + React 19 + Tailwind CSS v4)        |
+|    - Doctor / Clinical Instructor Portal & Admin Governance Command Center              |
+|    - Viewport Standards: Desktop (1140-1200px) & Mobile (360-412px, Touch Target 48px) |
+|    - Offline-Resilient Queue (IndexedDB) & Service Worker PWA Caching                   |
 +-----------------------------------------------------------------------------------------+
                                              │
                                              ▼
@@ -203,28 +205,37 @@ Kompas pemandu (*North Star*) dari seluruh rekayasa sistem AEVYRA adalah kelanca
 
 ## 5. Model Domain Inti Sistem (Core Domain Model)
 
-Model domain AEVYRA dirancang secara terstruktur untuk mencerminkan proses pencegahan kesehatan personal yang utuh. Hubungan antarentitas domain diatur sebagai berikut:
+Model domain AEVYRA dirancang secara terstruktur untuk mencerminkan proses pencegahan kesehatan personal yang utuh, mulai dari pemantauan biometrik, pemindaian nutrisi Vision AI dengan verifikasi BPOM, sinkronisasi rekam medis SatuSehat, hingga triase kegawatdaruratan medis. Hubungan antarentitas domain diatur sebagai berikut:
 
 ```text
 [ User ] ─────── (1:1) ───────> [ HealthProfile ]
    │
-   ├──────────── (1:N) ───────> [ HealthMetric ] (Deret Waktu: Tidur, Langkah, Air)
+   ├──────────── (1:1) ───────> [ MembershipTier ] (Silver, Gold, Platinum)
    │
-   ├──────────── (1:N) ───────> [ FoodLog ] <── (1:1) ── [ ScanResult ] <── [ Scan ]
+   ├──────────── (1:N) ───────> [ HealthMetric ] (Deret Waktu: Glukosa, Tidur, Langkah, Air)
    │
-   ├──────────── (1:1) ───────> [ BehaviorBaseline ] (Rata-rata 7-30 hari)
+   ├──────────── (1:N) ───────> [ FoodLog ] <── (1:1) ── [ ScanResult ] <── [ Scan (Vision AI) ]
+   │                                                             │
+   │                                                             └── [ BpomValidation ]
+   │
+   ├──────────── (1:1) ───────> [ BehaviorBaseline ] (Rata-rata bergerak 7-30 hari)
    │                                  │
    │                                  ▼
    ├──────────── (1:N) ───────> [ BehaviorSignal ] (Sinyal Deviasi Terkualifikasi)
    │                                  │
    │                                  ▼
-   ├──────────── (1:N) ───────> [ HealthInsight ] (Wawasan Berbasis Bukti)
+   ├──────────── (1:N) ───────> [ HealthInsight ] (Wawasan Berbasis Bukti Medis)
    │                                  │
    │                                  ▼
-   ├──────────── (1:N) ───────> [ InterventionPlan ] (Rencana Aksi Mikro Aktif)
+   ├──────────── (1:N) ───────> [ InterventionPlan ] (Program Kebiasaan 14-90 Hari PERKENI)
    │
-   └──────────── (1:N) ───────> [ Consultation ] ──────> [ Instructor ]
+   ├──────────── (1:N) ───────> [ Consultation ] ──────> [ MedicalInstructor ]
+   │
+   ├──────────── (1:N) ───────> [ SatuSehatRecord ] (HL7 FHIR Kemenkes RI, AES-256)
+   │
+   └──────────── (1:N) ───────> [ EmergencyTriage ] (Protokol 119 + Geolocation Lock)
 ```
+
 
 ---
 
@@ -232,35 +243,42 @@ Model domain AEVYRA dirancang secara terstruktur untuk mencerminkan proses pence
 
 Setiap entitas dalam model domain memiliki batasan tanggung jawab tunggal (*Single Responsibility*) yang tegas:
 
-### 1. User
-Entitas akun pusat yang mengelola identitas otentikasi, peran RBAC (`Member`, `Instructor`, `Admin`), status keanggotaan, dan preferensi akun.
+### 1. User & MembershipTier
+Entitas akun pusat yang mengelola identitas otentikasi, peran RBAC (`Member`, `Instructor`, `Admin`), tingkatan membership (`Silver`, `Gold`, `Platinum`), preferensi akun, dan hak akses fitur preventif.
 
 ### 2. HealthProfile
-Menyimpan data demografis, riwayat penyakit keluarga, alergi, target kebugaran, dan preferensi diet yang mendasari personalisasi analitik.
+Menyimpan data demografis, riwayat penyakit keluarga, alergi pangan (misal: gluten, laktosa), target glukosa/kebugaran, dan preferensi diet yang mendasari personalisasi analitik.
 
 ### 3. HealthMetric
-Mencatat observasi metrik biometrik kuantitatif (durasi tidur, jumlah langkah, denyut nadi, hidrasi) lengkap dengan satuan baku, stempel waktu pengukuran, dan asal sumber data.
+Mencatat observasi metrik biometrik kuantitatif (kadar glukosa darah puasa/postprandial, durasi tidur, jumlah langkah, denyut nadi, hidrasi) lengkap dengan satuan baku, stempel waktu pengukuran, dan asal sumber data.
 
 ### 4. FoodLog
-Mencatat asupan nutrisi harian (kalori, makronutrien) yang diverifikasi pengguna, baik melalui masukan manual maupun hasil pemindaian kamera.
+Mencatat asupan nutrisi harian (kalori, karbohidrat, protein, lemak jenuh, sukrosa, natrium) yang diverifikasi pengguna, baik melalui masukan manual maupun hasil pemindaian kamera.
 
-### 5. Scan & ScanResult
-*Scan* merekam metadata berkas citra label makanan, sedangkan *ScanResult* menyimpan teks ekstraksi OCR sementara sebelum dikonfirmasi oleh pengguna.
+### 5. Scan, ScanResult & BpomValidation
+*Scan* merekam metadata berkas citra label kemasan pangan/obat. *ScanResult* menyimpan ekstraksi OCR dan estimasi beban glikemik sementara. *BpomValidation* memverifikasi nomor registrasi resmi (MD/ML/DBL) terhadap basis data BPOM RI.
 
 ### 6. BehaviorBaseline
 Menyimpan parameter garis pangkal personal dinamis (rata-rata bergerak, median, varians) yang dihitung deterministik selama jendela pengamatan 7 hingga 30 hari.
 
 ### 7. BehaviorSignal
-Entitas penanda terjadinya pergeseran tren perilaku yang bermakna, memuat tingkat keparahan (*info, warning, action_required*) dan referensi deviasi.
+Entitas penanda terjadinya pergeseran tren perilaku yang bermakna, memuat tingkat keparahan (*info, warning, action_required*) dan referensi deviasi glikemik/gaya hidup.
 
 ### 8. HealthInsight
-Wawasan naratif terstruktur yang menguraikan alasan terjadinya deviasi perilaku lengkap dengan bukti pendukung (*supporting evidence*) transparan.
+Wawasan naratif terstruktur berbasis bukti medis (misal: panduan klinis PERKENI) yang menguraikan alasan terjadinya deviasi perilaku lengkap dengan bukti pendukung (*supporting evidence*) transparan.
 
 ### 9. InterventionPlan
-Rencana tindakan preventif kebiasaan mikro dengan mesin status terbatas (*Draft, Active, Completed, Cancelled*) dan pelacak kepatuhan harian.
+Rencana tindakan kebiasaan mikro terukur 14–90 hari (misal: eliminasi pemanis cair 14 hari, jalan aerobik 30 hari, remisi HbA1c 90 hari) dengan mesin status terbatas (*Draft, Active, Completed, Cancelled*) dan pelacak kepatuhan harian.
 
-### 10. Consultation
-Sesi bimbingan interaktif antara anggota dan instruktur berlisensi, memuat jadwal terverifikasi, catatan bimbingan profesional, dan tautan panggilan.
+### 10. Consultation & MedicalInstructor
+Sesi bimbingan interaktif 1-on-1 antara anggota dan dokter konsultan berlisensi IDI, memuat jadwal terverifikasi, catatan bimbingan profesional, resume laboratorium, dan tautan konsultasi.
+
+### 11. SatuSehatRecord
+Mengelola sinkronisasi rekam medis digital berbasis standar HL7 FHIR (profil *Observation* dan *Condition*) terhubung ke ekosistem SatuSehat Kemenkes RI dengan enkripsi AES-256 bit sesuai UU PDP No. 27/2022.
+
+### 12. EmergencyTriage
+Protokol penanganan kegawatdaruratan medis mandiri (misal: hipoglikemia berat < 55 mg/dL atau nyeri dada akut), mengunci koordinat GPS perangkat secara *real-time* dan menghubungkan panggilan cepat ke Posko Darurat 119 serta faskes rujukan terdekat.
+
 
 ---
 
@@ -475,16 +493,17 @@ Platform AEVYRA tunduk sepenuhnya pada mandat **Undang-Undang Perlindungan Data 
 Kontrak antarmuka pemrograman aplikasi (API) dirancang mengadopsi prinsip RESTful berorientasi sumber daya dengan penataan versi jalur seragam (`/api/v1/...`):
 
 ```text
-/api/v1/profile          --> Pengelolaan profil kesehatan & preferensi onboarding
-/api/v1/health-metrics   --> Pencatatan dan kueri deret waktu metrik biologis harian
-/api/v1/food-logs        --> Pencatatan asupan nutrisi dan riwayat kalori harian
-/api/v1/scanner          --> Pengunggahan gambar label makanan & ekstraksi teks OCR
-/api/v1/baseline         --> Pengambilan parameter garis pangkal personal dinamis
-/api/v1/signals          --> Pengambilan daftar sinyal deviasi tren perilaku aktif
-/api/v1/insights         --> Pengambilan kartu wawasan kesehatan berbasis bukti
-/api/v1/interventions    --> Pengelolaan siklus hidup rencana aksi mikro terukur
-/api/v1/consultations    --> Reservasi jadwal konsultasi bimbingan instruktur ahli
-/api/v1/emergency        --> Akses cepat direktori IGD dan pintasan panggilan darurat 119
+/api/v1/profile          --> Pengelolaan profil kesehatan, alergi pangan & target kebugaran
+/api/v1/health-metrics   --> Pencatatan dan kueri deret waktu glukosa puasa/postprandial & biometrik
+/api/v1/food-logs        --> Pencatatan asupan nutrisi makro/mikro dan riwayat kalori harian
+/api/v1/scanner          --> Vision AI OCR label kemasan pangan, verifikasi izin BPOM & beban glikemik
+/api/v1/baseline         --> Pengambilan parameter garis pangkal personal dinamis (7-30 hari)
+/api/v1/signals          --> Pengambilan daftar sinyal deviasi tren perilaku aktif & lonjakan glukosa
+/api/v1/insights         --> Pengambilan kartu wawasan kesehatan berbasis bukti klinis PERKENI
+/api/v1/interventions    --> Pengelolaan siklus hidup rencana aksi mikro terukur 14–90 hari
+/api/v1/consultations    --> Reservasi bimbingan 1-on-1 bersama dokter spesialis IDI terverifikasi
+/api/v1/satusehat        --> Sinkronisasi rekam medis digital HL7 FHIR (Observation/Condition)
+/api/v1/emergency        --> Protokol triase darurat mandiri, GPS lock & integrasi Siaga 119 Kemenkes
 ```
 
 ### Standar Amplop Respons JSON Tunggal (*Unified Response Envelope*)
@@ -583,7 +602,7 @@ AEVYRA dirancang sebagai **Progressive Web App (PWA) Berbasis Ketahanan Luring (
 | • App Shell Caching       --> Kerangka antarmuka HTML/CSS/JS dimuat instan (< 800ms)    |
 | • IndexedDB Offline Queue --> Draf pencatatan metrik disimpan lokal saat nir-koneksi    |
 | • Idempotent Background Sync-> Data disinkronkan otomatis saat sinyal internet pulih    |
-| • Web App Manifest Standar--> Ikon maskable, tema #0F172A, dan mode tampilan standalone |
+| • Web App Manifest Standar--> Ikon maskable, tema #00433e, dan mode tampilan standalone |
 +-----------------------------------------------------------------------------------------+
 ```
 
@@ -630,26 +649,27 @@ Gamifikasi pada AEVYRA dirancang untuk membangun kebiasaan hidup sehat yang berk
 Untuk menjaga ketertiban rekayasa dan efisiensi alokasi sumber daya pengembang, seluruh inisiatif fitur diklasifikasikan ke dalam 4 tingkatan prioritas arsitektural:
 
 ### P0 — Fondasi Inti Produk (Kritis & Non-Negosiasi)
-* Otentikasi sesi aman Sanctum dan otorisasi peladen berbasis peran (RBAC).
-* Validasi dan persistensi pencatatan metrik kesehatan harian (tidur, langkah, air).
-* Algoritma kalibrasi garis pangkal personal dinamis 7 hari (*Health Behavior Engine*).
-* Mesin deteksi sinyal perubahan tren perilaku dan konstruktor bukti eksplisit.
-* Rencana intervensi mikro aktif dengan pelacakan kepatuhan harian.
-* Akses instan bebas hambatan ke pintasan panggilan darurat 119 dan direktori IGD.
+* **Otentikasi & Akses Aman**: Otentikasi sesi aman Laravel Sanctum dan otorisasi peladen berbasis peran (`Member`, `Instructor`, `Admin`).
+* **Pencatatan Biometrik Kuantitatif**: Validasi dan persistensi kadar glukosa darah (puasa & postprandial), durasi tidur, langkah, dan hidrasi.
+* **Health Behavior Engine (HBE)**: Algoritma kalibrasi garis pangkal personal dinamis 7–30 hari dan deteksi sinyal deviasi lonjakan glukosa.
+* **Vision AI Nutrition Scanner**: Pemindaian kamera OCR tabel informasi nilai gizi instan (< 0.4 detik), deteksi gramatur sukrosa cair, natrium, dan verifikasi izin edar BPOM RI.
+* **Program Kebiasaan Mikro 14–90 Hari**: Rencana aksi mikro bertahap berbasis panduan klinis PERKENI dengan pelacak kepatuhan harian.
+* **Triase Darurat Mandiri & Ambulan 119**: Penguncian koordinat GPS real-time dan akses cepat panggilan darurat 119 Kemenkes RI serta faskes rujukan terdekat.
 
 ### P1 — Kapabilitas Penguat Siklus Preventif (Tinggi)
-* Asisten cerdas AI terpandu dengan isolasi konteks dan pagar pembatas medis.
-* Portal instruktur terverifikasi dan reservasi jadwal konsultasi bebas konflik waktu.
-* Pemindai kamera OCR informasi nilai gizi pada kemasan makanan dengan konfirmasi pengguna.
+* **Pendampingan Klinis 1-on-1**: Bimbingan terstruktur bersama tim dokter konsultan berlisensi IDI (Sp.PD, Sp.GK) lengkap dengan resume medis digital.
+* **Interoperabilitas SatuSehat Kemenkes RI**: Sinkronisasi data berbasis standar HL7 FHIR (profil *Observation* dan *Condition*) dengan enkripsi AES-256 bit sesuai UU PDP No. 27/2022.
+* **Asisten Cerdas AI Terpandu**: Konsultasi gaya hidup preventif dengan isolasi konteks aman dan pagar pembatas medis ketat (*strict medical guardrails*).
+* **Tingkatan Keanggotaan Berjenjang**: Manajemen membership transparan (*Silver*, *Gold*, *Platinum*) dengan kuota konsultasi dokter terdedikasi.
 
 ### P2 — Peningkatan Keterlibatan & Retensi (Menengah)
-* Poin apresiasi kepatuhan berturut-turut (*streaks*) dan lencana tantangan preventif.
-* Forum komunitas saling dukung pola hidup sehat dengan sistem moderasi aktif.
-* Tingkatan keanggotaan (Free vs Premium) dengan kuota konsultasi tambahan.
+* **Gamifikasi Kebiasaan Positif**: Poin apresiasi kepatuhan berturut-turut (*streaks*) dan lencana pembalikan risiko tanpa glorifikasi defisit kalori ekstrem.
+* **Forum Komunitas Saling Dukung**: Ruang interaksi sesama pejuang pra-diabetes dengan sistem moderasi aktif dokter konsultan.
+* **Simulator Kurva Respons Glikemik**: Visualisasi interaktif estimasi kurva glukosa postprandial sebelum dan sesudah makan.
 
 ### P3 — Visi Skalabilitas Masa Depan (Jangka Panjang)
-* Integrasi sinkronisasi data otomatis dengan perangkat *wearable* (Apple Health, Garmin).
-* Portal korporat untuk program kesehatan karyawan terpadu (*Corporate Wellness*).
+* **Integrasi Perangkat Wearable & CGM**: Sinkronisasi otomatis continuous glucose monitor (CGM) via Bluetooth Low Energy (BLE) & HealthKit/Google Health Connect.
+* **Portal Layanan Korporat**: Dashboard analitik kesehatan preventif agregat untuk program wellness karyawan perusahaan (*B2B Corporate Wellness*).
 
 ---
 
@@ -709,7 +729,7 @@ Rincian migrasi skema tabel baru, kolom tambahan, tipe data, indeks, dan aturan 
 Daftar endpoint RESTful baru, metode HTTP, format parameter request, dan amplop JSON response.
 
 ### 10. Perubahan Lapisan Antarmuka (Frontend Changes)
-Komponen Blade dan interaktivitas Alpine.js yang menangani 5 status UI (Loading, Success, Error, Empty, Offline).
+Komponen React 19 via Inertia.js v2 dan utilitas Tailwind CSS v4 yang menangani 5 status UI (Loading, Success, Error, Empty, Offline) dengan batas kontainer utama 1140–1200px dan target sentuh ergonomis gawai 44–48px.
 
 ### 11. Kebijakan Otorisasi (Authorization)
 Pemeriksaan Policy dan Gate yang memastikan tidak ada celah akses lintas akun (IDOR).
@@ -769,7 +789,7 @@ Setiap solusi arsitektural wajib memenuhi 5 pilar persyaratan kualitas non-fungs
 
 ## 30. Penegakan Arsitektur Modular Monolith (Modular Monolith Preference)
 
-AEVYRA secara sadar memilih arsitektur **Modular Monolith** di atas framework Laravel 11.x daripada arsitektur *Microservices*:
+AEVYRA secara sadar memilih arsitektur **Modular Monolith** di atas framework Laravel 12.x + Inertia.js v2 + React 19 daripada arsitektur *Microservices*:
 
 ```text
 +-----------------------------------------------------------------------------------------+

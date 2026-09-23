@@ -82,9 +82,11 @@ export default function AdminLayout({ children, title, activeNav }) {
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/60">
                     <Link href="/admin/dashboard" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                            <span className="material-symbols-outlined text-[22px]">shield_person</span>
-                        </div>
+                        <img
+                            src="/image/Logo_AEVYRA_Icon.png"
+                            alt="AEVYRA Logo"
+                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform"
+                        />
                         <div>
                             <div className="flex items-center gap-2">
                                 <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>

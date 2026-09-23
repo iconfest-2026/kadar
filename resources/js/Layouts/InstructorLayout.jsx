@@ -18,6 +18,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
         { id: 'members', name: 'Member Binaan', href: '/instructor/members', icon: 'groups' },
         { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes' },
         { id: 'consultations', name: 'Jadwal Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
+        { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring' },
     ];
 
     const renderStatusBadge = (status) => {
@@ -54,10 +55,10 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
             {/* Ambient Background Glow Orbs (Matching Welcome.jsx) */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-                <div className="absolute -top-20 left-1/3 w-[600px] h-[350px] bg-gradient-to-tr from-primary-fixed-dim/35 via-primary-fixed/25 to-transparent blur-[120px] rounded-full" />
-                <div className="absolute top-[45%] -left-20 w-[550px] h-[450px] bg-gradient-to-br from-secondary-fixed/30 via-primary-fixed/15 to-transparent blur-[130px] rounded-full" />
-                <div className="absolute bottom-5 right-10 w-[500px] h-[350px] bg-gradient-to-bl from-primary-container/20 to-transparent blur-[140px] rounded-full" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-[0.035]" />
+                <div className="absolute -top-20 left-1/3 w-150 h-87.5 bg-linear-to-tr from-primary-fixed-dim/35 via-primary-fixed/25 to-transparent blur-[120px] rounded-full" />
+                <div className="absolute top-[45%] -left-20 w-137.5 h-112.5 bg-linear-to-br from-secondary-fixed/30 via-primary-fixed/15 to-transparent blur-[130px] rounded-full" />
+                <div className="absolute bottom-5 right-10 w-125 h-87.5 bg-linear-to-bl from-primary-container/20 to-transparent blur-[140px] rounded-full" />
+                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
             </div>
 
             {/* Mobile Overlay */}
@@ -77,12 +78,13 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/40">
                     <Link href="/instructor/dashboard" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                            <span className="material-symbols-outlined text-[22px]">health_and_safety</span>
-                        </div>
+                        <img
+                            src="/image/Logo_AEVYRA_Icon.png"
+                            alt="AEVYRA Logo"
+                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform"
+                        />
                         <div>
                             <div className="flex items-center gap-2">
-                
                                 <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>
                                 <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-secondary-fixed/40 text-secondary-container border border-secondary/20">
                                     INSTRUKTUR
@@ -283,7 +285,6 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 <footer className="mt-auto border-t border-primary/10 py-5 bg-white/40 backdrop-blur-sm text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                         <p className="font-medium text-center sm:text-left">
-                            © 2026 AEVYRA — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
                             © 2026 AEVYRA — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
                         </p>
                         <div className="flex items-center gap-3 text-[11px] font-label-mono">

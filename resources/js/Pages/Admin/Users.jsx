@@ -108,8 +108,8 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
     const activeFilterCount = (search ? 1 : 0) + (role ? 1 : 0);
 
     return (
-        <AdminLayout activeNav="users" title="Pengguna & Peran">
-            <Head title="Pengguna & Peran — AEVYRA" />
+        <AdminLayout activeNav="users" title="Manajemen Pengguna & Otorisasi">
+            <Head title="Manajemen Pengguna & Otorisasi — Admin AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

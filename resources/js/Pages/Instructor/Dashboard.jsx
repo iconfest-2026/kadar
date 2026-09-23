@@ -5,12 +5,11 @@ import InstructorLayout from '@/Layouts/InstructorLayout';
 export default function Dashboard({ assignedMembers = [], pendingSignals = [], upcomingConsultations = [], stats = {} }) {
     return (
         <InstructorLayout activeNav="dashboard" title="Dashboard Pendampingan">
-            <Head title="Instruktur Dashboard — Kadar" />
             <Head title="Instruktur Dashboard — AEVYRA" />
             
             <div className="space-y-6">
                 {/* Header Welcome Card with Glassmorphism */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-primary/90 via-primary-container/80 to-secondary/70 text-white rounded-3xl p-6 sm:p-8 shadow-lg backdrop-blur-xl border border-white/20">
+                <div className="relative overflow-hidden bg-linear-to-r from-primary/90 via-primary-container/80 to-secondary/70 text-white rounded-3xl p-6 sm:p-8 shadow-lg backdrop-blur-xl border border-white/20">
                     <div className="relative z-10 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-label-mono font-bold tracking-wider uppercase mb-3 border border-white/20">
                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -99,7 +98,7 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
 
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs">
-                            <thead className="bg-primary/[0.02] text-on-surface-variant font-semibold border-b border-primary/10">
+                            <thead className="bg-primary/2 text-on-surface-variant font-semibold border-b border-primary/10">
                                 <tr>
                                     <th className="py-3.5 px-6">Member Binaan</th>
                                     <th className="py-3.5 px-6">Tingkat Urgensi</th>
@@ -114,7 +113,7 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                                     const isNotice = signal.severity === 'NOTICE';
 
                                     return (
-                                        <tr key={signal.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={signal.id} className="hover:bg-primary/2 transition-colors">
                                             <td className="py-4 px-6 font-bold text-on-surface text-sm">
                                                 {signal.member_name || 'Member Terbina'}
                                             </td>

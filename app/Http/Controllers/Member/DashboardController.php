@@ -79,6 +79,38 @@ class DashboardController extends Controller
             ->with('instructor')
             ->first();
 
+        // 8. Membership Tier & Quota info
+        $activeMembership = \App\Models\Membership::where('user_id', $user->id)
+            ->where('status', 'ACTIVE')
+            ->with('tier')
+            ->first();
+
+        $tierSlug = strtolower($activeMembership?->tier?->slug ?? 'silver');
+        $allTiers = \App\Models\MembershipTier::all()->map(function ($t) use ($tierSlug) {
+            return [
+                'id' => $t->id,
+                'name' => $t->name,
+                'slug' => $t->slug,
+                'price' => (float) $t->price,
+                'description' => $t->description,
+                'is_current' => strtolower($t->slug) === $tierSlug,
+            ];
+        });
+
+        // 9. Achievements & Badges
+        $userEarnedIds = $user->achievements()->pluck('achievements.id')->toArray();
+        $achievements = \App\Models\Achievement::where('status', 'ACTIVE')->get()->map(function ($ach) use ($userEarnedIds) {
+            return [
+                'id' => $ach->id,
+                'key' => $ach->key,
+                'name' => $ach->name,
+                'description' => $ach->description,
+                'category' => $ach->category,
+                'is_unlocked' => in_array($ach->id, $userEarnedIds) || $ach->key === 'FIRST_LOG',
+                'points' => $ach->rules_config['points'] ?? 20,
+            ];
+        });
+
         return Inertia::render('Member/Dashboard', [
             'user' => [
                 'id' => $user->id,
@@ -97,11 +129,39 @@ class DashboardController extends Controller
                 'last_activity' => $streak->last_activity_at?->toDateString(),
             ] : ['current' => 1, 'best' => 1, 'last_activity' => $today->toDateString()],
             'totalPoints' => $totalPoints,
+            'membership' => [
+                'tier' => $activeMembership?->tier?->name ?? 'Silver',
+                'tier_slug' => $tierSlug,
+                'all_tiers' => $allTiers,
+                'scan_limit' => $tierSlug === 'platinum' ? 'Unlimited' : ($tierSlug === 'gold' ? '15 / hari' : '3 / hari'),
+                'consultation_quota' => $tierSlug === 'platinum' ? '8 Sesi / bulan' : ($tierSlug === 'gold' ? '4 Sesi / bulan' : '1 Sesi / bulan'),
+            ],
+            'achievements' => $achievements,
             'instructor' => $activeAssignment ? [
                 'id' => $activeAssignment->instructor->id,
                 'name' => $activeAssignment->instructor->name,
                 'status' => $activeAssignment->status,
             ] : null,
         ]);
+    }
+
+    public function toggleSex(\Illuminate\Http\Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $profile = $user->memberProfile;
+
+        if ($profile) {
+            $newSex = $profile->sex === 'FEMALE' ? 'MALE' : 'FEMALE';
+            $profile->update(['sex' => $newSex]);
+
+            $label = $newSex === 'FEMALE' 
+                ? 'Profil dialihkan ke Akun Wanita (Catatan Haid & Prediksi Hormonal AI aktif)' 
+                : 'Profil dialihkan ke Akun Pria (Modul Vitalitas & Skrining Sindrom Metabolik aktif)';
+
+            return back()->with('success', $label);
+        }
+
+        return back();
     }
 }

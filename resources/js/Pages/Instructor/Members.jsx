@@ -12,7 +12,6 @@ export default function Members({ members = { data: [], links: [] } }) {
 
     return (
         <InstructorLayout activeNav="members" title="Daftar Member Binaan">
-            <Head title="Member Binaan — Instruktur Kadar" />
             <Head title="Member Binaan — Instruktur AEVYRA" />
             
             <div className="space-y-6">
@@ -43,7 +42,7 @@ export default function Members({ members = { data: [], links: [] } }) {
                 <div className="bg-white/75 backdrop-blur-md rounded-3xl shadow-xs border border-primary/10 overflow-hidden hover:border-primary/20 transition-all">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs">
-                            <thead className="bg-primary/[0.03] text-on-surface-variant font-semibold border-b border-primary/10">
+                            <thead className="bg-primary/3 text-on-surface-variant font-semibold border-b border-primary/10">
                                 <tr>
                                     <th className="py-4 px-6">Identitas Member</th>
                                     <th className="py-4 px-6">Status Sinyal Terkini</th>
@@ -59,7 +58,7 @@ export default function Members({ members = { data: [], links: [] } }) {
                                     const isNotice = severity === 'NOTICE';
 
                                     return (
-                                        <tr key={member.id} className="hover:bg-primary/[0.02] transition-colors">
+                                        <tr key={member.id} className="hover:bg-primary/2 transition-colors">
                                             {/* Member Profile */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

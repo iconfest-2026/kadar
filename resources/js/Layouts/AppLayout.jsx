@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import EmergencyModal from '../Components/EmergencyModal';
 import QuickLogModal from '../Components/QuickLogModal';
+import LiveCameraScannerModal from '../Components/LiveCameraScannerModal';
+import MembershipTierModal from '../Components/MembershipTierModal';
+import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 
 export default function AppLayout({ children, title, activeTab }) {
     const { auth, flash } = usePage().props;
@@ -13,6 +16,8 @@ export default function AppLayout({ children, title, activeTab }) {
 
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
     const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
+    const [isScannerOpen, setIsScannerOpen] = useState(false);
+    const [isTierModalOpen, setIsTierModalOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -26,13 +31,14 @@ export default function AppLayout({ children, title, activeTab }) {
             <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur-md border-b border-surface-container">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
                     {/* Brand */}
-                    <div className="flex items-center gap-6">
-                        <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-xs group-hover:scale-105 transition-transform">
-                                <span className="material-symbols-outlined text-[20px]">monitor_heart</span>
-                            </div>
+                    <div className="flex items-center gap-5">
+                        <Link href="/dashboard" className="flex items-center gap-2.5 group shrink-0">
+                            <img 
+                                src="/image/Logo_AEVYRA_Icon.png" 
+                                alt="AEVYRA Logo" 
+                                className="w-8 h-8 rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform" 
+                            />
                             <div>
-                                <span className="font-heading font-black text-lg text-primary tracking-tight">KADAR</span>
                                 <span className="font-heading font-black text-lg text-primary tracking-tight">AEVYRA</span>
                                 <span className="hidden sm:inline-block ml-1.5 px-1.5 py-0.5 text-[10px] font-label-mono font-bold uppercase rounded bg-surface-container text-on-surface-variant">
                                     {isAdmin ? 'Admin Panel' : isInstructor ? 'Instruktur' : 'Preventif'}
@@ -41,7 +47,7 @@ export default function AppLayout({ children, title, activeTab }) {
                         </Link>
 
                         {/* Desktop Nav Links */}
-                        <nav className="hidden md:flex items-center gap-1 text-xs font-semibold">
+                        <nav className="hidden lg:flex items-center gap-0.5 text-xs font-semibold">
                             {isMember && (
                                 <>
                                     <Link
@@ -52,7 +58,57 @@ export default function AppLayout({ children, title, activeTab }) {
                                                 : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
                                         }`}
                                     >
-                                        Ringkasan Baseline
+                                        Baseline
+                                    </Link>
+                                    <Link
+                                        href="/member/scanner"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'scanner'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Scanner
+                                    </Link>
+                                    <Link
+                                        href="/member/consultations-hub"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'consultations'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Konsultasi
+                                    </Link>
+                                    <Link
+                                        href="/member/challenges"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'challenges'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Tantangan
+                                    </Link>
+                                    <Link
+                                        href="/member/community"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'community'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Komunitas
+                                    </Link>
+                                    <Link
+                                        href="/arcade"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'arcade'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Game 2D
                                     </Link>
                                     <Link
                                         href="/member/timeline"
@@ -62,7 +118,7 @@ export default function AppLayout({ children, title, activeTab }) {
                                                 : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
                                         }`}
                                     >
-                                        Timeline Kesehatan
+                                        Riwayat
                                     </Link>
                                     <Link
                                         href="/member/instructors"
@@ -77,43 +133,93 @@ export default function AppLayout({ children, title, activeTab }) {
                                 </>
                             )}
                             {isInstructor && (
-                                <Link
-                                    href="/instructor/dashboard"
-                                    className={`px-3 py-2 rounded-xl transition-all ${
-                                        activeTab === 'caseload'
-                                            ? 'bg-primary/10 text-primary font-bold'
-                                            : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
-                                    }`}
-                                >
-                                    Caseload Member & Sinyal
-                                </Link>
+                                <>
+                                    <Link
+                                        href="/instructor/dashboard"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'caseload'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Caseload Member
+                                    </Link>
+                                    <Link
+                                        href="/instructor/reports"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'reports'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Laporan Klinis
+                                    </Link>
+                                </>
                             )}
                             {isAdmin && (
-                                <Link
-                                    href="/admin/dashboard"
-                                    className={`px-3 py-2 rounded-xl transition-all ${
-                                        activeTab === 'admin'
-                                            ? 'bg-primary/10 text-primary font-bold'
-                                            : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
-                                    }`}
-                                >
-                                    Tata Kelola & Audit Forensik
-                                </Link>
+                                <>
+                                    <Link
+                                        href="/admin/dashboard"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'admin'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Tata Kelola
+                                    </Link>
+                                    <Link
+                                        href="/admin/reports"
+                                        className={`px-3 py-2 rounded-xl transition-all ${
+                                            activeTab === 'reports'
+                                                ? 'bg-primary/10 text-primary font-bold'
+                                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                    >
+                                        Laporan Platform
+                                    </Link>
+                                </>
                             )}
                         </nav>
                     </div>
 
                     {/* Right Utilities */}
-                    <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                        {/* Member Tier Pill (Clickable to open comparison) */}
+                        {isMember && (
+                            <button
+                                type="button"
+                                onClick={() => setIsTierModalOpen(true)}
+                                className="hidden sm:inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-800 text-[11px] font-bold hover:bg-amber-500/20 transition-all"
+                                title="Lihat Kuota & Tingkatan Member"
+                            >
+                                <span className="material-symbols-outlined text-[15px] text-amber-600">workspace_premium</span>
+                                <span>Gold Member</span>
+                            </button>
+                        )}
+
+                        {/* Scanner Open Cam Button (Member only) */}
+                        {isMember && (
+                            <button
+                                type="button"
+                                onClick={() => setIsScannerOpen(true)}
+                                className="inline-flex items-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary text-xs font-bold transition-all shadow-xs"
+                                title="Buka Kamera Pindai Cepat"
+                            >
+                                <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                                <span className="hidden sm:inline">Pindai Gizi</span>
+                            </button>
+                        )}
+
                         {/* Quick Log Action (Member only) */}
                         {isMember && (
                             <button
                                 type="button"
                                 onClick={() => setIsQuickLogOpen(true)}
-                                className="hidden sm:flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all shadow-xs"
+                                className="hidden md:flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all shadow-xs"
                             >
-                                <span className="material-symbols-outlined text-[18px]">add</span>
-                                <span>Catat Metrik</span>
+                                <span className="material-symbols-outlined text-[17px]">add</span>
+                                <span>Catat</span>
                             </button>
                         )}
 
@@ -121,7 +227,7 @@ export default function AppLayout({ children, title, activeTab }) {
                         <button
                             type="button"
                             onClick={() => setIsEmergencyOpen(true)}
-                            className="flex items-center gap-1 py-1.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition-transform active:scale-95 animate-pulse"
+                            className="flex items-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition-transform active:scale-95 animate-pulse"
                             title="Akses Darurat 119 Tanpa AI"
                         >
                             <span className="material-symbols-outlined text-[16px]">e911_emergency</span>
@@ -133,37 +239,54 @@ export default function AppLayout({ children, title, activeTab }) {
                             <button
                                 type="button"
                                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-surface-container transition-all"
+                                className="flex items-center gap-1.5 p-1 rounded-xl hover:bg-surface-container transition-all"
                             >
                                 <div className="w-8 h-8 rounded-full bg-surface-container-high border border-surface-container flex items-center justify-center font-bold text-xs text-primary">
                                     {user?.name?.charAt(0) || 'U'}
                                 </div>
-                                <span className="hidden lg:inline text-xs font-semibold text-on-surface truncate max-w-30">
-                                    {user?.name}
-                                </span>
                                 <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
                                     expand_more
                                 </span>
                             </button>
 
                             {userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-52 bg-surface rounded-2xl shadow-xl border border-surface-container py-2 z-50 animate-scale-up">
+                                <div className="absolute right-0 mt-2 w-56 bg-surface rounded-2xl shadow-xl border border-surface-container py-2 z-50 animate-scale-up">
                                     <div className="px-4 py-2 border-b border-surface-container">
                                         <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
                                         <p className="text-[11px] text-on-surface-variant truncate">{user?.email}</p>
-                                        <span className="inline-block mt-1 px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary">
-                                            {roles[0] || 'Member'}
-                                        </span>
+                                        <div className="flex items-center gap-1.5 mt-1">
+                                            <span className="inline-block px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary">
+                                                {roles[0] || 'Member'}
+                                            </span>
+                                            {isMember && (
+                                                <span className="inline-block px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-amber-100 text-amber-900">
+                                                    Tier: Gold
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     {isMember && (
-                                        <Link
-                                            href="/member/onboarding"
-                                            className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
-                                            onClick={() => setUserMenuOpen(false)}
-                                        >
-                                            <span className="material-symbols-outlined text-[16px]">tune</span>
-                                            <span>Atur Profil & Gaya Hidup</span>
-                                        </Link>
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setUserMenuOpen(false);
+                                                    setIsTierModalOpen(true);
+                                                }}
+                                                className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px] text-amber-500">workspace_premium</span>
+                                                <span>Kelola Paket (Silver/Gold/Platinum)</span>
+                                            </button>
+                                            <Link
+                                                href="/member/onboarding"
+                                                className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
+                                                onClick={() => setUserMenuOpen(false)}
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">tune</span>
+                                                <span>Atur Profil & Gaya Hidup</span>
+                                            </Link>
+                                        </>
                                     )}
                                     <button
                                         type="button"
@@ -181,7 +304,7 @@ export default function AppLayout({ children, title, activeTab }) {
                         <button
                             type="button"
                             onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                            className="md:hidden p-2 text-on-surface-variant hover:text-on-surface"
+                            className="lg:hidden p-1.5 text-on-surface-variant hover:text-on-surface"
                         >
                             <span className="material-symbols-outlined text-[22px]">
                                 {mobileNavOpen ? 'close' : 'menu'}
@@ -192,7 +315,7 @@ export default function AppLayout({ children, title, activeTab }) {
 
                 {/* Mobile Navigation Drawer */}
                 {mobileNavOpen && (
-                    <div className="md:hidden border-t border-surface-container px-4 py-3 space-y-2 bg-surface">
+                    <div className="lg:hidden border-t border-surface-container px-4 py-3 space-y-1.5 bg-surface">
                         {isMember && (
                             <>
                                 <Link
@@ -203,11 +326,39 @@ export default function AppLayout({ children, title, activeTab }) {
                                     Ringkasan Baseline
                                 </Link>
                                 <Link
+                                    href="/member/scanner"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Scanner Open Cam Gizi
+                                </Link>
+                                <Link
+                                    href="/member/consultations-hub"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Pusat Konsultasi & Booking Dokter
+                                </Link>
+                                <Link
+                                    href="/member/challenges"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Program Tantangan Sehat
+                                </Link>
+                                <Link
+                                    href="/member/community"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Komunitas & Forum Diskusi
+                                </Link>
+                                <Link
                                     href="/member/timeline"
                                     className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
                                     onClick={() => setMobileNavOpen(false)}
                                 >
-                                    Timeline Kesehatan
+                                    Timeline Riwayat
                                 </Link>
                                 <Link
                                     href="/member/instructors"
@@ -220,32 +371,61 @@ export default function AppLayout({ children, title, activeTab }) {
                                     type="button"
                                     onClick={() => {
                                         setMobileNavOpen(false);
-                                        setIsQuickLogOpen(true);
+                                        setIsScannerOpen(true);
                                     }}
                                     className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-primary hover:bg-primary/10 flex items-center gap-2"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">add_circle</span>
-                                    <span>Catat Metrik Sekarang</span>
+                                    <span className="material-symbols-outlined text-[18px]">photo_camera</span>
+                                    <span>Buka Kamera Langsung (Open Cam)</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMobileNavOpen(false);
+                                        setIsTierModalOpen(true);
+                                    }}
+                                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-amber-700 hover:bg-amber-50 flex items-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
+                                    <span>Tingkatan Member (Silver / Gold / Platinum)</span>
                                 </button>
                             </>
                         )}
                         {isInstructor && (
-                            <Link
-                                href="/instructor/dashboard"
-                                className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
-                                onClick={() => setMobileNavOpen(false)}
-                            >
-                                Caseload Member & Sinyal
-                            </Link>
+                            <>
+                                <Link
+                                    href="/instructor/dashboard"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Caseload Member & Sinyal
+                                </Link>
+                                <Link
+                                    href="/instructor/reports"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Laporan Klinis
+                                </Link>
+                            </>
                         )}
                         {isAdmin && (
-                            <Link
-                                href="/admin/dashboard"
-                                className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
-                                onClick={() => setMobileNavOpen(false)}
-                            >
-                                Tata Kelola & Audit Forensik
-                            </Link>
+                            <>
+                                <Link
+                                    href="/admin/dashboard"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Tata Kelola & Audit
+                                </Link>
+                                <Link
+                                    href="/admin/reports"
+                                    className="block px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-low"
+                                    onClick={() => setMobileNavOpen(false)}
+                                >
+                                    Laporan Platform & Ambulans
+                                </Link>
+                            </>
                         )}
                     </div>
                 )}
@@ -278,7 +458,6 @@ export default function AppLayout({ children, title, activeTab }) {
             <footer className="border-t border-surface-container py-6 bg-surface/50 text-xs text-on-surface-variant">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <p className="font-medium text-center sm:text-left">
-                        © 2026 Kadar (AEVYRA) — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
                         © 2026 AEVYRA — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
                     </p>
                     <div className="flex items-center gap-4 text-[11px]">
@@ -286,7 +465,7 @@ export default function AppLayout({ children, title, activeTab }) {
                         <span>•</span>
                         <span>Non-Diagnostik</span>
                         <span>•</span>
-                        <span>SPGDT 119 Mandiri</span>
+                        <span>SPGDT 119 Terhubung</span>
                     </div>
                 </div>
             </footer>
@@ -302,6 +481,22 @@ export default function AppLayout({ children, title, activeTab }) {
                 isOpen={isQuickLogOpen}
                 onClose={() => setIsQuickLogOpen(false)}
             />
+
+            {/* Scanner Open Cam Modal */}
+            <LiveCameraScannerModal
+                isOpen={isScannerOpen}
+                onClose={() => setIsScannerOpen(false)}
+            />
+
+            {/* Membership Tier Modal */}
+            <MembershipTierModal
+                isOpen={isTierModalOpen}
+                onClose={() => setIsTierModalOpen(false)}
+                currentTier="Gold"
+            />
+
+            {/* Authenticated Member Floating AI Chat (Free-form typing & real-time response) */}
+            {isMember && <MemberFloatingAiChat />}
         </div>
     );
 }

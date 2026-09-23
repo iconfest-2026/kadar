@@ -6,242 +6,360 @@ export default function HeroSection() {
 
     const scanSamples = {
         drink: {
-            title: 'Minuman Soda / Boba Kemasan',
-            subtitle: 'Pemindaian Label Informasi Nilai Gizi',
+            title: 'Teh Manis Kemasan Botol (250ml)',
+            subtitle: 'Kategori: Minuman Ringan Tinggi Sukrosa Bebas',
+            image: '/image/scan_tea_drink.jpg',
+            sensorTag: 'LABEL INFORMASI GIZI',
+            ocrLabel: 'GULA TOTAL: 20g / BOTOL',
+            focusArea: 'Tabel Informasi Nilai Gizi',
             metrics: [
-                { label: 'Kandungan Gula', value: '28 gram', status: 'warning', note: '112% batas harian' },
-                { label: 'Kalori Total', value: '160 kkal', status: 'normal', note: '8% kebutuhan harian' },
-                { label: 'Natrium', value: '35 mg', status: 'safe', note: 'Kategori rendah' },
+                { label: 'Gula Tambahan', value: '20 gram', level: 'high', note: '80% batas harian' },
+                { label: 'Beban Glikemik', value: 'Tinggi (GL 20)', level: 'high', note: 'Respon lonjakan cepat' },
+                { label: 'Kalori Bebas', value: '90 kkal', level: 'medium', note: 'Energi cair' },
             ],
-            verdictBadge: '⚠️ PERINGATAN GULA TINGGI',
-            verdictBg: 'bg-tertiary-fixed text-on-tertiary-fixed-variant',
-            aiRecommendation: 'Mengandung gula tambahan melebihi rekomendasi Kemenkes (25g/hari). Disarankan batasi konsumsi untuk cegah lonjakan glukosa darah.',
+            statusTag: 'Beban Glikemik Tinggi',
+            statusTagStyle: 'bg-[#fdf3f0] text-[#a13b2c] border-[#f5d9d2]',
+            curveColor: '#a13b2c',
+            curvePeak: '172 mg/dL',
+            curvePeakTime: 'Menit ke-45',
+            clinicalObservation: 'Kandungan 20g sukrosa cair diserap cepat oleh usus halus dalam 15–30 menit, memicu lonjakan glukosa darah postprandial yang membebani sel beta pankreas. Disarankan beralih ke teh tawar atau infused water beraroma herbal.',
+            physician: 'dr. H. Bramantyo, Sp.PD',
+            physicianRole: 'Konsultan Endokrinologi & Metabolik',
         },
         food: {
-            title: 'Mie Instan / Camilan Gurih',
-            subtitle: 'Pemindaian Kadar Natrium & Lemak',
+            title: 'Oat Crunch Biskuit Gandum Utuh (30g)',
+            subtitle: 'Kategori: Pangan Olahan Rendah Gula & Tinggi Serat',
+            image: '/image/scan_oat_food.jpg',
+            sensorTag: 'BARCODE & SERAT PANGAN',
+            ocrLabel: 'SERAT: 5g • GULA: 3g',
+            focusArea: 'Takaran Saji & Komposisi',
             metrics: [
-                { label: 'Kandungan Natrium', value: '1.080 mg', status: 'warning', note: '54% batas aman harian' },
-                { label: 'Lemak Jenuh', value: '6 gram', status: 'warning', note: '30% batas harian' },
-                { label: 'Karbohidrat', value: '44 gram', status: 'normal', note: 'Porsi sedang' },
+                { label: 'Serat Pangan', value: '5 gram', level: 'normal', note: '17% kebutuhan harian' },
+                { label: 'Gula Bebas', value: '3 gram', level: 'normal', note: 'Rendah gula (<5g)' },
+                { label: 'Karbohidrat Kompleks', value: '21 gram', level: 'normal', note: 'Pelepasan lambat' },
             ],
-            verdictBadge: '⚠️ WASPADA NATRIUM TINGGI',
-            verdictBg: 'bg-secondary-fixed text-on-secondary-fixed-variant',
-            aiRecommendation: 'Tinggi garam (natrium). Berisiko menaikkan tekanan darah bagi penderita hipertensi atau pra-diabetes.',
+            statusTag: 'Ramah Metabolisme',
+            statusTagStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
+            curveColor: '#1c6454',
+            curvePeak: '118 mg/dL',
+            curvePeakTime: 'Kenaikan Bertahap',
+            clinicalObservation: 'Tingginya serat beta-glukan memperlambat laju absorpsi glukosa sehingga kurva energi tetap stabil tanpa rasa lemas setelah makan. Sangat baik sebagai camilan pencegah resistensi insulin.',
+            physician: 'dr. Sarah N., M.Gizi, Sp.GK',
+            physicianRole: 'Spesialis Gizi Klinis',
         },
         medicine: {
-            title: 'Obat Sakit Kepala / Paracetamol 500mg',
-            subtitle: 'Pemindaian Barcode & Dosis Obat',
+            title: 'Aprena Film-Coated Tablet 10 mg',
+            subtitle: 'Kategori: Sediaan Farmasi Terdaftar Resmi BPOM',
+            image: '/image/scan_pharma_med.jpg',
+            sensorTag: 'NOMOR REGISTRASI BPOM',
+            ocrLabel: 'POM DKL2345678910A1',
+            focusArea: 'Kode Izin Edar & Zat Aktif',
             metrics: [
-                { label: 'Zat Aktif', value: 'Paracetamol 500mg', status: 'safe', note: 'Analgesik & Antipiretik' },
-                { label: 'Status BPOM', value: 'Terdaftar Resmi', status: 'safe', note: 'No: DBL7612502204A1' },
-                { label: 'Aturan Pakai', value: '1 Tab / 6-8 Jam', status: 'safe', note: 'Maks. 4.000mg/hari' },
+                { label: 'Zat Aktif', value: 'Amorfenic Acid 10mg', level: 'normal', note: 'Murni terstandar' },
+                { label: 'Nomor Registrasi', value: 'POM DKL2345678910A1', level: 'normal', note: 'Aktif terverifikasi' },
+                { label: 'Masa Berlaku', value: 'Mei 2027', level: 'normal', note: 'Batch No: A24301' },
             ],
-            verdictBadge: '✅ TERVERIFIKASI BPOM RI',
-            verdictBg: 'bg-primary-fixed text-on-primary-fixed-variant',
-            aiRecommendation: 'Obat bebas resmi. Minum setelah makan. Hindari penggunaan berlebih bersamaan dengan obat pereda nyeri lain.',
+            statusTag: 'Terverifikasi BPOM RI',
+            statusTagStyle: 'bg-[#f0f7f3] text-[#1c6454] border-[#d4e9df]',
+            curveColor: '#1c6454',
+            curvePeak: 'Efektif 4–6 Jam',
+            curvePeakTime: 'Puncak 90 menit',
+            clinicalObservation: 'Tercatat valid dalam basis data registrasi BPOM RI. Patuhi anjuran waktu konsumsi sesudah makan sesuai arahan dokter Anda untuk menjaga kenyamanan saluran pencernaan.',
+            physician: 'apt. Rian Pratama, S.Farm',
+            physicianRole: 'Verifikator Farmasi Medis',
         },
     };
 
-    const currentSample = scanSamples[activeScanSample];
+    const current = scanSamples[activeScanSample];
 
-    const scrollToId = (e, id) => {
+    const scrollToDemo = (e) => {
         e.preventDefault();
-        const target = document.getElementById(id);
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const el = document.getElementById('scanner-demo');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     return (
-        <section className="w-full relative pt-space-md sm:pt-space-lg pb-space-xl px-gutter lg:px-margin" id="about">
-            <div className="max-w-7xl mx-auto space-y-space-lg">
-                {/* Hero Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                    {/* Left: Punchy Promo & Headline */}
-                    <div className="lg:col-span-6 space-y-space-md">
-                        {/* Promo Badge */}
-                        <div className="inline-flex items-center gap-space-xs px-3.5 py-1.5 bg-white/80 backdrop-blur-md text-secondary font-label-mono text-xs rounded-full border border-secondary-container/80 font-semibold shadow-xs hover:bg-white/95 transition-all">
-                            <span className="material-symbols-outlined text-[15px] animate-pulse text-secondary">local_fire_department</span>
-                            <span>PROMO PELUNCURAN // AKSES SCANNER &amp; CHAT AI 100% GRATIS</span>
-                        </div>
+        <section className="w-full pt-8 sm:pt-14 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                {/* Left: Editorial Authority & Gentle Typography */}
+                <div className="lg:col-span-6 space-y-6">
+                    {/* Soft Pill Tag */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
+                        <span>Pencegahan Dini &amp; Skrining Nutrisi Mandiri</span>
+                    </div>
 
-                        {/* Direct Headline */}
-                        <h1 className="font-display text-4xl sm:text-5xl font-normal text-primary tracking-tight leading-[1.15]">
-                            Scan Makanan &amp; Obat dalam 0.4 Detik. Jaga Sehat Tanpa Ribet.
+                    {/* Headline */}
+                    <div className="space-y-3">
+                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#142320] leading-[1.18] tracking-tight">
+                            Pahami dampak makanan pada glukosa Anda, <span className="italic text-primary">sebelum suapan pertama.</span>
                         </h1>
-
-                        <p className="text-body-md sm:text-body-lg text-on-surface-variant leading-relaxed">
-                            Cukup arahkan kamera HP untuk mengetahui kandungan gula, natrium, alergen, dan info dosis obat seketika. Dilengkapi konsultasi chat AI, bimbingan instruktur, dan panggilan darurat ambulan 1-tap.
+                        <p className="text-sm sm:text-base text-[#4a5a55] leading-relaxed max-w-xl">
+                            Arahkan kamera smartphone ke label kemasan makanan atau obat. Algoritma kami menganalisis beban glikemik, takaran gula tersembunyi, dan izin resmi BPOM seketika — didampingi tim dokter untuk pencegahan pra-diabetes.
                         </p>
+                    </div>
 
-                        {/* 3 Quick Value Highlights - True Glassmorphic Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-space-xs">
-                            <div className="p-3.5 bg-white/75 backdrop-blur-md rounded-2xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(0,67,62,0.06)] hover:bg-white/95 hover:border-primary-fixed-dim hover:-translate-y-1 transition-all duration-300">
-                                <span className="material-symbols-outlined text-primary text-[22px] mb-1 block">photo_camera</span>
-                                <span className="font-headline-sm text-xs font-semibold text-primary block">Open Cam Scanner</span>
-                                <p className="text-body-sm text-on-surface-variant text-[11px] mt-0.5">Analisis gula, natrium &amp; obat cepat</p>
+                    {/* Primary Action Buttons (Touch Ergonomics 48px) */}
+                    <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <Link
+                            href="/member/scanner"
+                            className="inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
+                        >
+                            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                            <span>Buka Scanner Kamera Langsung</span>
+                        </Link>
+                        <Link
+                            href="/member/consultations-hub"
+                            className="inline-flex items-center justify-center min-h-12 px-5 py-3 rounded-full bg-white/80 text-[#31433f] text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
+                        >
+                            <span className="material-symbols-outlined text-[17px] text-emerald-700">health_and_safety</span>
+                            <span>Konsultasi &amp; Jadwal Dokter</span>
+                        </Link>
+                    </div>
+
+                    {/* Editorial Clinical Endorsement Badge */}
+                    <div className="flex items-center gap-3 pt-1">
+                        <div className="flex -space-x-2 shrink-0">
+                            <img
+                                src="/image/doctor_bramantyo.jpg"
+                                alt="dr. H. Bramantyo, Sp.PD"
+                                className="w-9 h-9 rounded-full ring-2 ring-white object-cover shadow-xs"
+                            />
+                            <img
+                                src="/image/doctor_consultation.jpg"
+                                alt="Konsultasi Klinis AEVYRA"
+                                className="w-9 h-9 rounded-full ring-2 ring-white object-cover shadow-xs"
+                            />
+                        </div>
+                        <div className="text-xs text-[#4b5d58] leading-tight">
+                            <span className="font-medium text-[#142622] block">
+                                Didampingi Dewan Dokter Spesialis IDI
+                            </span>
+                            <span className="text-[11px] text-[#6b7d78]">
+                                Protokol klinis PERKENI &amp; standar SatuSehat Kemenkes RI
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Quiet, Harmonious Stats Strip */}
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-surface-container-high">
+                        <div>
+                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">120.000+</span>
+                            <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Produk BPOM Terindeks</span>
+                        </div>
+                        <div>
+                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">&lt; 0.4 Detik</span>
+                            <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Kecepatan Analisis</span>
+                        </div>
+                        <div>
+                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">98.4%</span>
+                            <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Akurasi Pembacaan</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right: Sleek, High-End Medical Viewfinder Interface */}
+                <div className="lg:col-span-6 bg-white/90 backdrop-blur-xl p-4 sm:p-6 lg:p-7 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.04)]" id="scanner-demo">
+                    {/* Viewfinder Header */}
+                    <div className="flex items-center justify-between pb-3.5 border-b border-[#edf4f0]">
+                        <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#1c6454]"></span>
+                            <span className="text-xs font-medium text-[#2d3f3b] tracking-wide">
+                                Simulasi Pemindai Label Nutrisi
+                            </span>
+                        </div>
+                        <span className="text-[11px] text-[#5e716c] font-mono">
+                            Moda Sensor Aktif
+                        </span>
+                    </div>
+
+                    {/* Minimalist Sample Selector Tabs */}
+                    <div className="grid grid-cols-3 gap-1 my-3.5 p-1 bg-[#f3f7f5] rounded-xl border border-[#e4ede8]">
+                        <button
+                            type="button"
+                            onClick={() => setActiveScanSample('drink')}
+                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                activeScanSample === 'drink'
+                                    ? 'bg-white text-primary shadow-xs'
+                                    : 'text-[#566863] hover:text-primary'
+                            }`}
+                        >
+                            Minuman Kemasan
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setActiveScanSample('food')}
+                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                activeScanSample === 'food'
+                                    ? 'bg-white text-primary shadow-xs'
+                                    : 'text-[#566863] hover:text-primary'
+                            }`}
+                        >
+                            Pangan Olahan
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setActiveScanSample('medicine')}
+                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                activeScanSample === 'medicine'
+                                    ? 'bg-white text-primary shadow-xs'
+                                    : 'text-[#566863] hover:text-primary'
+                            }`}
+                        >
+                            Label Farmasi
+                        </button>
+                    </div>
+
+                    {/* Clean Scan Card Body */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-4">
+                        {/* Sample Title & Status Pill */}
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                            <div>
+                                <h3 className="font-serif text-base sm:text-lg font-medium text-[#182926]">
+                                    {current.title}
+                                </h3>
+                                <span className="text-xs text-[#63746f] block mt-0.5">
+                                    {current.subtitle}
+                                </span>
                             </div>
-                            <div className="p-3.5 bg-white/75 backdrop-blur-md rounded-2xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(0,67,62,0.06)] hover:bg-white/95 hover:border-primary-fixed-dim hover:-translate-y-1 transition-all duration-300">
-                                <span className="material-symbols-outlined text-primary text-[22px] mb-1 block">forum</span>
-                                <span className="font-headline-sm text-xs font-semibold text-primary block">Chat AI &amp; Instruktur</span>
-                                <p className="text-body-sm text-on-surface-variant text-[11px] mt-0.5">Tanya jawab cepat tanpa antre RS</p>
-                            </div>
-                            <div className="p-3.5 bg-white/75 backdrop-blur-md rounded-2xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(0,67,62,0.06)] hover:bg-white/95 hover:border-primary-fixed-dim hover:-translate-y-1 transition-all duration-300">
-                                <span className="material-symbols-outlined text-primary text-[22px] mb-1 block">emergency</span>
-                                <span className="font-headline-sm text-xs font-semibold text-primary block">Ambulan 1-Tap</span>
-                                <p className="text-body-sm text-on-surface-variant text-[11px] mt-0.5">Panggilan darurat berbasis lokasi GPS</p>
+                            <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-medium ${current.statusTagStyle}`}>
+                                {current.statusTag}
+                            </span>
+                        </div>
+
+                        {/* Interactive Optical Viewfinder Frame with Real Scanned Product Photo */}
+                        <div className="relative w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-[#121c19] border border-[#d8e6df] shadow-inner group">
+                            <img
+                                key={current.image}
+                                src={current.image}
+                                alt={current.title}
+                                className="w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105"
+                            />
+                            {/* Scanning HUD Overlay */}
+                            <div className="absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/35 pointer-events-none flex flex-col justify-between p-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-mono tracking-wider border border-white/10">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>AI SENSOR: {current.sensorTag}</span>
+                                    </span>
+                                    <span className="text-[10px] text-white/95 font-mono bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
+                                        AKURASI 98.4%
+                                    </span>
+                                </div>
+
+                                {/* OCR Focus Target Box */}
+                                <div className="self-center w-52 sm:w-60 h-20 sm:h-24 border border-white/50 rounded-lg relative flex items-center justify-center backdrop-brightness-110">
+                                    <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-emerald-400 -mt-0.5 -ml-0.5"></span>
+                                    <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-emerald-400 -mt-0.5 -mr-0.5"></span>
+                                    <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-emerald-400 -mb-0.5 -ml-0.5"></span>
+                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-emerald-400 -mb-0.5 -mr-0.5"></span>
+                                    
+                                    <div className="px-2.5 py-1 bg-black/75 rounded-md border border-white/15 backdrop-blur-xs text-center shadow-lg">
+                                        <span className="text-[10px] text-emerald-300 font-mono block tracking-wide font-medium">
+                                            {current.ocrLabel}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between text-white/80 text-[10px] font-sans">
+                                    <span>Area Fokus: {current.focusArea}</span>
+                                    <span>Moda: Vision OCR Terenkripsi</span>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Dual Direct CTAs */}
-                        <div className="pt-space-xs flex flex-wrap items-center gap-space-sm">
-                            <Link
-                                href="/register"
-                                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-primary text-on-primary text-body-sm font-bold hover:bg-primary-container transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg hover:shadow-primary/20"
-                            >
-                                Coba Scanner Gratis Sekarang &rarr;
-                            </Link>
-                            <a
-                                href="#tiers"
-                                onClick={(e) => scrollToId(e, 'tiers')}
-                                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-transparent text-primary text-body-sm font-bold hover:bg-primary/5 transition-all duration-200 active:scale-95 border border-primary shadow-xs"
-                            >
-                                Lihat Paket Member
-                            </a>
+                        {/* Minimalist Glycemic Curve Visualization (Clean SVG) */}
+                        <div className="p-3 bg-white rounded-xl border border-[#e8f0ec] space-y-2">
+                            <div className="flex justify-between items-center text-[11px]">
+                                <span className="text-[#596d67]">Estimasi Respons Glukosa Darah:</span>
+                                <span className="font-medium text-[#182926]">
+                                    Puncak {current.curvePeak} ({current.curvePeakTime})
+                                </span>
+                            </div>
+                            {/* Serene SVG Curve */}
+                            <div className="h-14 w-full relative">
+                                <svg viewBox="0 0 300 50" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor={current.curveColor} stopOpacity="0.15" />
+                                            <stop offset="100%" stopColor={current.curveColor} stopOpacity="0.0" />
+                                        </linearGradient>
+                                    </defs>
+                                    {/* Normal baseline zone band */}
+                                    <rect x="0" y="30" width="300" height="18" fill="#eaf3ee" opacity="0.6" rx="2" />
+                                    {/* Curve path */}
+                                    {activeScanSample === 'drink' && (
+                                        <>
+                                            <path d="M 0 36 Q 60 36, 100 8 T 200 36 L 300 36 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
+                                            <path d="M 0 36 Q 60 36, 100 8 T 200 36 L 300 36" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                            <circle cx="100" cy="8" r="3.5" fill={current.curveColor} />
+                                        </>
+                                    )}
+                                    {activeScanSample === 'food' && (
+                                        <>
+                                            <path d="M 0 36 Q 80 36, 140 16 T 250 36 L 300 36 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
+                                            <path d="M 0 36 Q 80 36, 140 16 T 250 36 L 300 36" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                            <circle cx="140" cy="16" r="3.5" fill={current.curveColor} />
+                                        </>
+                                    )}
+                                    {activeScanSample === 'medicine' && (
+                                        <>
+                                            <path d="M 0 36 Q 90 34, 150 24 T 300 34 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
+                                            <path d="M 0 36 Q 90 34, 150 24 T 300 34" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                            <circle cx="150" cy="24" r="3.5" fill={current.curveColor} />
+                                        </>
+                                    )}
+                                </svg>
+                            </div>
+                            <div className="flex justify-between text-[10px] text-[#71827e] font-sans">
+                                <span>Saat Makan</span>
+                                <span>Zona Normal Terkendali (70–120 mg/dL)</span>
+                                <span>2 Jam Pasca Makan</span>
+                            </div>
                         </div>
 
-                        {/* Social Proof Badges */}
-                        <div className="grid grid-cols-3 gap-2 pt-space-xs border-t border-primary/10">
-                            <div>
-                                <span className="font-data-lg text-xl font-bold text-primary block">120.000+</span>
-                                <span className="font-label-mono text-[10px] text-on-surface-variant uppercase">Produk BPOM</span>
-                            </div>
-                            <div>
-                                <span className="font-data-lg text-xl font-bold text-primary block">&lt;0.4 Detik</span>
-                                <span className="font-label-mono text-[10px] text-on-surface-variant uppercase">Respon AI Scanner</span>
-                            </div>
-                            <div>
-                                <span className="font-data-lg text-xl font-bold text-secondary block">100% Gratis</span>
-                                <span className="font-label-mono text-[10px] text-on-surface-variant uppercase">Member Silver PWA</span>
+                        {/* 3 Metrics in Soft Porcelain Cards */}
+                        <div className="grid grid-cols-3 gap-2">
+                            {current.metrics.map((m, idx) => (
+                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-[#e8f0ec] text-center">
+                                    <span className="text-[10px] text-[#697c76] block truncate">
+                                        {m.label}
+                                    </span>
+                                    <span className="font-serif text-sm font-medium text-[#182926] block mt-0.5">
+                                        {m.value}
+                                    </span>
+                                    <span className="text-[10px] text-[#7d8f89] block mt-0.5">
+                                        {m.note}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Observation from Doctor */}
+                        <div className="p-3.5 bg-white rounded-xl border border-[#e8f0ec] space-y-1.5 text-xs">
+                            <span className="text-[10px] text-[#5e716c] uppercase tracking-wider font-medium block">
+                                Catatan Klinis Edukasi:
+                            </span>
+                            <p className="text-[#3c4f4a] leading-relaxed text-[11px]">
+                                {current.clinicalObservation}
+                            </p>
+                            <div className="pt-1.5 border-t border-[#edf4f0] flex items-center justify-between text-[10px] text-[#637671]">
+                                <span className="font-serif text-xs text-[#1c6454] font-medium">{current.physician}</span>
+                                <span>{current.physicianRole}</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Right: Interactive Live Open Cam Scanner Simulator - Frosted Glass Container */}
-                    <div className="lg:col-span-6 bg-white/80 backdrop-blur-xl p-space-md sm:p-space-lg rounded-3xl border border-white/90 shadow-2xl shadow-primary/10 hover:border-primary-fixed-dim/60 transition-all duration-300" id="scanner-demo">
-                        <div className="flex items-center justify-between pb-3 border-b border-primary/10">
-                            <div className="flex items-center gap-2">
-                                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
-                                <span className="font-label-mono text-xs font-bold text-primary uppercase tracking-wide">
-                                    LIVE SIMULASI OPEN CAM SCANNER
-                                </span>
-                            </div>
-                            <span className="font-label-mono text-[10px] px-2.5 py-0.5 rounded-full bg-white/90 text-primary font-semibold border border-primary/10 shadow-2xs">
-                                AI VISION ACTIVE
-                            </span>
-                        </div>
-
-                        {/* 3 Sample Selector Pills */}
-                        <div className="grid grid-cols-3 gap-1.5 my-3 p-1.5 bg-primary/5 backdrop-blur-sm rounded-xl border border-primary/10">
-                            <button
-                                type="button"
-                                onClick={() => setActiveScanSample('drink')}
-                                className={`py-2 text-xs font-semibold rounded-lg transition-all active:scale-95 ${
-                                    activeScanSample === 'drink'
-                                        ? 'bg-primary text-on-primary shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/60'
-                                }`}
-                            >
-                                🧃 Minuman
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setActiveScanSample('food')}
-                                className={`py-2 text-xs font-semibold rounded-lg transition-all active:scale-95 ${
-                                    activeScanSample === 'food'
-                                        ? 'bg-primary text-on-primary shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/60'
-                                }`}
-                            >
-                                🍜 Makanan
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setActiveScanSample('medicine')}
-                                className={`py-2 text-xs font-semibold rounded-lg transition-all active:scale-95 ${
-                                    activeScanSample === 'medicine'
-                                        ? 'bg-primary text-on-primary shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/60'
-                                }`}
-                            >
-                                💊 Obat / Dosis
-                            </button>
-                        </div>
-
-                        {/* Scanner Viewfinder Box */}
-                        <div className="relative rounded-2xl bg-white/50 backdrop-blur-md p-4 border border-white/70 overflow-hidden space-y-3 shadow-inner">
-                            {/* Simulated Camera Viewfinder Corner Guides */}
-                            <div className="absolute top-2.5 left-2.5 w-3.5 h-3.5 border-t-2 border-l-2 border-primary rounded-tl-sm"></div>
-                            <div className="absolute top-2.5 right-2.5 w-3.5 h-3.5 border-t-2 border-r-2 border-primary rounded-tr-sm"></div>
-                            <div className="absolute bottom-2.5 left-2.5 w-3.5 h-3.5 border-b-2 border-l-2 border-primary rounded-bl-sm"></div>
-                            <div className="absolute bottom-2.5 right-2.5 w-3.5 h-3.5 border-b-2 border-r-2 border-primary rounded-br-sm"></div>
-
-                            {/* Header scanned info */}
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                                <div>
-                                    <h4 className="font-headline-sm text-sm font-bold text-primary">
-                                        {currentSample.title}
-                                    </h4>
-                                    <span className="text-[11px] font-label-mono text-on-surface-variant">
-                                        {currentSample.subtitle}
-                                    </span>
-                                </div>
-                                <span className={`font-label-mono text-[10px] px-2.5 py-1 rounded-full font-bold shadow-2xs ${currentSample.verdictBg}`}>
-                                    {currentSample.verdictBadge}
-                                </span>
-                            </div>
-
-                            {/* Nutrition / Dosis Metrics Grid */}
-                            <div className="grid grid-cols-3 gap-2">
-                                {currentSample.metrics.map((m, idx) => (
-                                    <div key={idx} className="p-2.5 bg-white/85 backdrop-blur-sm rounded-xl border border-white/90 text-center shadow-xs hover:border-primary-fixed-dim transition-all">
-                                        <span className="font-label-mono text-[10px] text-on-surface-variant block">
-                                            {m.label}
-                                        </span>
-                                        <span className="font-data-md text-xs font-bold text-primary block mt-0.5">
-                                            {m.value}
-                                        </span>
-                                        <span className="text-[9px] text-on-surface-variant/80 block mt-0.5">
-                                            {m.note}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* AI Clinical Verdict Note */}
-                            <div className="p-3 bg-white/90 backdrop-blur-sm rounded-xl border border-white/90 text-xs text-on-surface space-y-1 shadow-xs">
-                                <div className="flex items-center gap-1 font-label-mono text-[10px] text-primary font-bold">
-                                    <span className="material-symbols-outlined text-[14px]">psychology</span>
-                                    <span>KESIMPULAN &amp; REKOMENDASI PRIBADI:</span>
-                                </div>
-                                <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                                    {currentSample.aiRecommendation}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Scanner Action Bar */}
-                        <div className="mt-3 flex items-center justify-between text-xs text-on-surface-variant font-label-mono">
-                            <span className="flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-primary text-[16px]">qr_code_scanner</span>
-                                Mendukung Barcode, QR, &amp; Teks OCR
-                            </span>
-                            <Link href="/register" className="text-primary font-bold hover:underline inline-flex items-center gap-0.5">
-                                <span>Buka Kamera HP</span>
-                                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                            </Link>
-                        </div>
+                    {/* Bottom Link */}
+                    <div className="mt-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#637671]">
+                        <span>Mendukung kamera smartphone, deteksi barcode &amp; tabel gizi BPOM</span>
+                        <Link
+                            href="/member/scanner"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary text-white text-xs font-bold shadow-xs hover:bg-primary-container transition-all active:scale-95"
+                        >
+                            <span>Buka Kamera Sekarang</span>
+                            <span className="material-symbols-outlined text-[15px]">photo_camera</span>
+                        </Link>
                     </div>
                 </div>
             </div>

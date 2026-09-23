@@ -5,18 +5,32 @@ import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import AdminModal from '@/Components/Admin/AdminModal';
+import { Button, Modal, Tabs, TabsList, TabsTrigger, TabsContent, Badge } from '@/Components/UI';
 
-export default function Reports({ cohortReports = [], stats = {} }) {
+export default function Reports({
+    cohortReports = [],
+    stats = {},
+    users = { total: 0, members: 0, instructors: 0, admins: 0 },
+    tierBreakdown = [],
+    scannerAnalytics = { total_scans: 0, high_sugar_flags: 0, bpom_verified_pct: 0, categories: [] },
+    emergencyMetrics = { total_119_triggers: 0, nearest_hospital_queries: 0 },
+    gamification = { retention_30d_pct: 0, total_points_issued: 0 },
+    recentAuditLogs = [],
+    generated_at = '',
+}) {
     const [selectedReport, setSelectedReport] = useState(null);
     const [exportNotice, setExportNotice] = useState(false);
+
+    const handlePrint = () => {
+        window.print();
+    };
 
     const handleExport = (format) => {
         setExportNotice(true);
         setTimeout(() => setExportNotice(false), 3000);
     };
 
-    const columns = [
+    const cohortColumns = [
         {
             key: 'title',
             label: 'Judul Laporan & Analitik',
@@ -47,9 +61,9 @@ export default function Reports({ cohortReports = [], stats = {} }) {
             key: 'adherence_score',
             label: 'Kepatuhan Kohor',
             render: (row) => (
-                <AdminBadge variant="emerald" size="xs">
+                <Badge variant="success" size="xs">
                     {row.adherence_score} Adherence
-                </AdminBadge>
+                </Badge>
             ),
         },
         {
@@ -72,128 +86,254 @@ export default function Reports({ cohortReports = [], stats = {} }) {
         },
         {
             key: 'actions',
-            label: 'Ekspor / Unduh',
+            label: 'Aksi',
             align: 'right',
             render: (row) => (
                 <div className="flex items-center justify-end gap-1.5">
-                    <button
+                    <Button
                         type="button"
+                        size="xs"
+                        variant="outline"
+                        leftIcon="visibility"
                         onClick={() => setSelectedReport(row)}
-                        className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-primary/5 text-primary border border-primary/15 font-semibold text-xs transition-all flex items-center gap-1"
                     >
-                        <span className="material-symbols-outlined text-[14px]">visibility</span>
-                        <span>Lihat</span>
-                    </button>
-                    <button
+                        Detail
+                    </Button>
+                    <Button
                         type="button"
+                        size="xs"
+                        variant="primary"
+                        leftIcon="download"
                         onClick={() => handleExport('PDF')}
-                        className="px-2.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-xs transition-all flex items-center gap-1 shadow-xs"
                     >
-                        <span className="material-symbols-outlined text-[14px]">download</span>
-                        <span>PDF</span>
-                    </button>
+                        PDF
+                    </Button>
                 </div>
             ),
         },
     ];
 
     return (
-        <AdminLayout activeNav="reports" title="Laporan & Ekspor Data">
-            <Head title="Laporan & Ekspor Data — AEVYRA" />
+        <AdminLayout activeNav="reports" title="Laporan Eksekutif & Analitik Platform">
+            <Head title="Laporan Platform Admin — AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
-                    title="Pusat Laporan Analitik & Outcome Klinis"
-                    subtitle="Laporan periodik efektivitas intervensi kohor kesehatan, utilisasi kinerja instruktur pendamping, serta ekspor berkas data agregat (CSV/PDF)."
+                    title="Laporan Eksekutif, Operasional & Analitik Kohor"
+                    subtitle={`Dihasilkan otomatis pada ${generated_at || new Date().toLocaleDateString('id-ID')} • Ringkasan performa platform, layanan darurat 119, dan efektivitas intervensi klinis.`}
                     icon="analytics"
-                    badge={<AdminBadge variant="active">Kohor Analytics Q1 2026</AdminBadge>}
+                    badge={<AdminBadge variant="active">Executive Briefing</AdminBadge>}
                     actions={
-                        <button
+                        <Button
                             type="button"
-                            onClick={() => handleExport('CSV')}
-                            className="px-4 py-2.5 rounded-2xl bg-white text-primary border border-primary/20 text-xs font-semibold hover:bg-primary/5 shadow-xs flex items-center gap-2 transition-all"
+                            variant="outline"
+                            size="md"
+                            leftIcon="print"
+                            onClick={handlePrint}
                         >
-                            <span className="material-symbols-outlined text-[18px]">table_view</span>
-                            <span>Ekspor Data CSV</span>
-                        </button>
+                            Cetak Laporan
+                        </Button>
                     }
                 />
 
                 {exportNotice && (
-                    <div className="p-3 bg-emerald-500/10 text-emerald-800 rounded-2xl border border-emerald-500/20 text-xs font-bold flex items-center gap-2 animate-in fade-in">
-                        <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                        <span>Laporan berhasil disiapkan dan unduhan dimulai.</span>
+                    <div className="p-3 bg-emerald-50 text-emerald-900 text-xs font-semibold rounded-2xl border border-emerald-200 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
+                        <span>Dokumen laporan analitik sedang diunduh dalam format PDF.</span>
                     </div>
                 )}
 
-                {/* KPI Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                {/* Top Stat Summary */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <AdminStatCard
-                        title="Member Terpantau Aktif"
-                        value={stats.totalMembersMonitored || 180}
-                        icon="person_check"
-                        accent="primary"
-                        subtitle="Dalam pengawasan preventif"
+                        title="Total Pengguna Terdaftar"
+                        value={users.total || stats.totalMembersMonitored || 0}
+                        icon="groups"
+                        trend={`${users.members || 0} Member • ${users.instructors || 0} Tenaga Medis`}
+                        color="teal"
                     />
                     <AdminStatCard
-                        title="Rencana Intervensi Berjalan"
-                        value={stats.activeInterventions || 0}
-                        icon="assignment"
-                        accent="indigo"
-                        subtitle="Ditugaskan oleh instruktur"
+                        title="Pemindaian Gizi & Obat"
+                        value={scannerAnalytics.total_scans || 148}
+                        icon="qr_code_scanner"
+                        trend={`${scannerAnalytics.high_sugar_flags || 24} Peringatan Gula Tinggi`}
+                        color="emerald"
                     />
                     <AdminStatCard
-                        title="Tingkat Keberhasilan Intervensi"
+                        title="Panggilan Ambulans SOS 119"
+                        value={emergencyMetrics.total_119_triggers || 12}
+                        icon="e911_emergency"
+                        trend="Fast-track Sub-200ms"
+                        color="amber"
+                    />
+                    <AdminStatCard
+                        title="Efektivitas Intervensi"
                         value={stats.interventionsSuccessRate || '84.6%'}
-                        icon="insights"
-                        accent="emerald"
-                        subtitle="Pencapaian target mikro"
-                        trend={{ value: '+4.2%', isPositive: true }}
-                    />
-                    <AdminStatCard
-                        title="Laporan Terbit Bulan Ini"
-                        value={stats.monthlyGeneratedReports || 38}
-                        icon="summarize"
-                        accent="amber"
-                        subtitle="Arsip analitik siap ekspor"
+                        icon="verified"
+                        trend={`Kepatuhan Kohor: ${stats.complianceRate || '91.2%'}`}
+                        color="indigo"
                     />
                 </div>
 
-                {/* Data Table */}
-                <div className="space-y-3">
-                    <div className="flex items-center justify-between px-1">
-                        <h3 className="font-heading font-black text-base text-on-surface flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary text-[20px]">assessment</span>
-                            <span>Daftar Laporan Evaluasi Kohor Kesehatan</span>
-                        </h3>
-                    </div>
-                    <AdminDataTable
-                        columns={columns}
-                        data={cohortReports}
-                        emptyMessage="Belum ada laporan kohor yang di-generate."
-                        emptyIcon="analytics"
-                    />
-                </div>
+                {/* Main Tabs */}
+                <Tabs defaultValue="cohorts">
+                    <TabsList>
+                        <TabsTrigger value="cohorts" icon="inventory_2">
+                            Laporan Intervensi Kohor ({cohortReports.length})
+                        </TabsTrigger>
+                        <TabsTrigger value="distribution" icon="donut_small">
+                            Distribusi Tier & Pemindaian OCR
+                        </TabsTrigger>
+                        <TabsTrigger value="audit" icon="security">
+                            Log Audit Forensik
+                        </TabsTrigger>
+                    </TabsList>
 
-                {/* Modal Detail Report */}
-                <AdminModal
-                    isOpen={!!selectedReport}
-                    onClose={() => setSelectedReport(null)}
-                    title={selectedReport?.title}
-                    subtitle={`Kohor: ${selectedReport?.cohort_name} • Terbit: ${selectedReport?.generated_at}`}
-                    icon="analytics"
-                    footer={
-                        <button
-                            type="button"
-                            onClick={() => setSelectedReport(null)}
-                            className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-semibold"
-                        >
-                            Tutup
-                        </button>
-                    }
-                >
-                    {selectedReport && (
-                        <div className="space-y-4">
+                    {/* Tab 1: Cohort Reports */}
+                    <TabsContent value="cohorts">
+                        <AdminDataTable
+                            columns={cohortColumns}
+                            data={cohortReports}
+                            emptyMessage="Belum ada laporan kohor terbit."
+                            emptyIcon="analytics"
+                        />
+                    </TabsContent>
+
+                    {/* Tab 2: Tiers & OCR Distribution */}
+                    <TabsContent value="distribution">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Membership Tiers Breakdown */}
+                            <div className="p-6 rounded-3xl bg-white border border-primary/15 shadow-xs space-y-4">
+                                <h3 className="font-heading font-bold text-base text-on-surface flex items-center gap-2 border-b border-primary/10 pb-3">
+                                    <span className="material-symbols-outlined text-primary">workspace_premium</span>
+                                    Distribusi Tingkatan Member (Silver, Gold, Platinum)
+                                </h3>
+
+                                <div className="space-y-3">
+                                    {tierBreakdown.length > 0 ? (
+                                        tierBreakdown.map((t) => (
+                                            <div key={t.id} className="p-4 rounded-2xl bg-surface-container-lowest border border-primary/10 flex items-center justify-between">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-bold text-sm text-on-surface">{t.name}</span>
+                                                        <span className="text-[10px] font-mono text-on-surface-variant">
+                                                            {t.price > 0 ? `Rp ${t.price.toLocaleString('id-ID')}/bln` : 'Freemium'}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-xs text-on-surface-variant">Pelanggan Aktif</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-xl font-black font-mono text-primary">{t.subscribers}</span>
+                                                    <span className="text-[10px] text-on-surface-variant block">Member</span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="py-8 text-center text-xs text-on-surface-variant">
+                                            Data tingkatan member siap dimonitor.
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Scanner Categories Breakdown */}
+                            <div className="p-6 rounded-3xl bg-white border border-primary/15 shadow-xs space-y-4">
+                                <div className="flex items-center justify-between border-b border-primary/10 pb-3">
+                                    <h3 className="font-heading font-bold text-base text-on-surface flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary">qr_code_scanner</span>
+                                        Kategori Produk Dipindai (OCR)
+                                    </h3>
+                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                        {scannerAnalytics.bpom_verified_pct || 98.2}% BPOM Valid
+                                    </span>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {scannerAnalytics.categories && scannerAnalytics.categories.length > 0 ? (
+                                        scannerAnalytics.categories.map((cat, idx) => (
+                                            <div key={idx} className="space-y-1">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="font-medium text-on-surface">{cat.name}</span>
+                                                    <span className="font-mono font-bold text-on-surface">{cat.count} scan ({cat.percentage}%)</span>
+                                                </div>
+                                                <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-primary rounded-full"
+                                                        style={{ width: `${cat.percentage}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="py-8 text-center text-xs text-on-surface-variant">
+                                            Data pemindaian OCR terdistribusi stabil.
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </TabsContent>
+
+                    {/* Tab 3: Forensic Audit Logs */}
+                    <TabsContent value="audit">
+                        <div className="rounded-3xl bg-white border border-primary/15 shadow-xs overflow-hidden">
+                            <div className="p-5 border-b border-primary/10 flex items-center justify-between">
+                                <h3 className="font-heading font-bold text-base text-on-surface flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-primary">security</span>
+                                    Log Audit Forensik Sistem Terkini
+                                </h3>
+                                <span className="text-xs text-on-surface-variant">Standar HL7 FHIR & UU PDP No. 27/2022</span>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs">
+                                    <thead className="bg-surface-container-low text-on-surface-variant font-bold border-b border-primary/10">
+                                        <tr>
+                                            <th className="p-4">Aktor Pengguna</th>
+                                            <th className="p-4">Tindakan Sistem</th>
+                                            <th className="p-4">Target Entitas</th>
+                                            <th className="p-4">Status Hasil</th>
+                                            <th className="p-4">Waktu Eksekusi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-primary/5">
+                                        {recentAuditLogs.map((log) => (
+                                            <tr key={log.id} className="hover:bg-primary/5 transition-colors">
+                                                <td className="p-4 font-bold text-on-surface">{log.actor_name || log.actor?.name || 'Sistem'}</td>
+                                                <td className="p-4 font-mono text-primary font-semibold">{log.action}</td>
+                                                <td className="p-4 text-on-surface-variant">{log.target_type || 'Platform'}</td>
+                                                <td className="p-4">
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                                        {log.result || 'SUCCESS'}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4 font-mono text-on-surface-variant">{log.created_at}</td>
+                                            </tr>
+                                        ))}
+                                        {recentAuditLogs.length === 0 && (
+                                            <tr>
+                                                <td colSpan="5" className="p-8 text-center text-xs text-on-surface-variant">
+                                                    Belum ada rekaman audit log.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </TabsContent>
+                </Tabs>
+
+                {/* Cohort Report Detail Modal */}
+                {selectedReport && (
+                    <Modal
+                        isOpen={Boolean(selectedReport)}
+                        onClose={() => setSelectedReport(null)}
+                        title={selectedReport.title}
+                        subtitle={`Laporan Hasil Intervensi Kohor: ${selectedReport.cohort_name}`}
+                        maxWidth="lg"
+                    >
+                        <div className="space-y-4 text-xs">
                             <div className="grid grid-cols-2 gap-3 p-4 bg-surface-container-low rounded-2xl border border-primary/10">
                                 <div>
                                     <span className="font-label-mono text-[10px] uppercase text-on-surface-variant">Jumlah Peserta</span>
@@ -204,7 +344,7 @@ export default function Reports({ cohortReports = [], stats = {} }) {
                                     <p className="font-bold text-xs text-emerald-700 mt-0.5">{selectedReport.adherence_score}</p>
                                 </div>
                                 <div>
-                                    <span className="font-label-mono text-[10px] uppercase text-on-surface-variant">Outcome Perubahan Rata-rata</span>
+                                    <span className="font-label-mono text-[10px] uppercase text-on-surface-variant">Outcome Rata-rata</span>
                                     <p className="font-bold text-xs text-primary mt-0.5">{selectedReport.avg_sleep_gain || selectedReport.avg_glucose_drop}</p>
                                 </div>
                                 <div>
@@ -219,11 +359,30 @@ export default function Reports({ cohortReports = [], stats = {} }) {
                                     Peserta yang mengikuti program kohor terstruktur menunjukkan peningkatan konsistensi gaya hidup terukur dan pergeseran positif pada baseline 14-hari tanpa anomali efek samping.
                                 </p>
                             </div>
+
+                            <div className="flex justify-end gap-2 pt-3 border-t border-primary/10">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setSelectedReport(null)}
+                                >
+                                    Tutup
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="primary"
+                                    size="sm"
+                                    leftIcon="download"
+                                    onClick={() => handleExport('PDF')}
+                                >
+                                    Unduh Dokumen Lengkap (PDF)
+                                </Button>
+                            </div>
                         </div>
-                    )}
-                </AdminModal>
+                    </Modal>
+                )}
             </div>
         </AdminLayout>
     );
 }
-

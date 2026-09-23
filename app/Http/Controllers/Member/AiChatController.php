@@ -55,4 +55,16 @@ class AiChatController extends Controller
 
         return response()->json($result);
     }
+
+    /**
+     * Get real-time status and rate-limiting telemetry of all AI providers.
+     */
+    public function getProviderStatus()
+    {
+        return response()->json([
+            'providers' => $this->aiService->getDiagnostics(),
+            'active_chain' => ['gemini', 'groq', 'cloudflare', 'fallback'],
+            'timestamp' => now()->toIso8601String(),
+        ]);
+    }
 }

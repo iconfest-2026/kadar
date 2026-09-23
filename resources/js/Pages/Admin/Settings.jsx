@@ -33,8 +33,8 @@ export default function Settings({ featureFlags: initialFlags = [], systemRules 
     };
 
     return (
-        <AdminLayout activeNav="settings" title="Konfigurasi Sistem">
-            <Head title="Konfigurasi Sistem & Aturan Kuota — AEVYRA" />
+        <AdminLayout activeNav="settings" title="Konfigurasi & Parameter Sistem">
+            <Head title="Pengaturan Sistem — Admin AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
