@@ -103,7 +103,6 @@ export default function Members({ members = { data: [], links: [] }, filters = {
                                                     <span className={`w-1.5 h-1.5 rounded-full ${
                                                         isAttention ? 'bg-rose-500' : isNotice ? 'bg-amber-500' : 'bg-emerald-500'
                                                     }`} />
-                                                    <span>{severity}</span>
                                                     <span>{SEVERITY_LABELS[severity] || severity}</span>
                                                 </span>
                                             </td>

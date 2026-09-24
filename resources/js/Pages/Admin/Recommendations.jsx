@@ -90,7 +90,6 @@ export default function Recommendations({ insights = { data: [], links: [] }, si
             render: (row) => (
                 <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-amber-500 text-[18px]">warning</span>
-                    <span className="font-bold text-xs text-on-surface">{row.signal_type}</span>
                     <span className="font-bold text-xs text-on-surface">
                         {signalMap[row.signal_type] || (row.signal_type ? row.signal_type.replace(/_/g, ' ') : 'Anomali Perilaku')}
                     </span>
@@ -101,8 +100,6 @@ export default function Recommendations({ insights = { data: [], links: [] }, si
             key: 'severity',
             label: 'Tingkat Urgensi',
             render: (row) => (
-                <AdminBadge variant={row.severity.toLowerCase()}>
-                    {row.severity}
                 <AdminBadge variant={row.severity?.toLowerCase() === 'attention' ? 'attention' : row.severity?.toLowerCase() === 'critical' ? 'suspended' : 'active'}>
                     {severityMap[row.severity] || row.severity || 'Normal'}
                 </AdminBadge>

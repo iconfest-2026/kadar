@@ -73,7 +73,6 @@ export default function HealthTracker({ records = { data: [], links: [] }, stats
                             {metricIcons[row.metric_type] || 'vital_signs'}
                         </span>
                         <span className="font-semibold text-xs text-on-surface">
-                            {row.metric_type}
                             {metricLabels[row.metric_type] || (row.metric_type ? row.metric_type.replace(/_/g, ' ') : 'Biomarker')}
                         </span>
                     </div>
