@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from '@inertiajs/react';
 
 export default function FaqSection() {
-    const [openIndex, setOpenIndex] = useState(0);
+    const [openIndex, setOpenIndex] = useState(null);
     const [activeCategory, setActiveCategory] = useState('all');
 
     const toggleFaq = (index) => {
         setOpenIndex(openIndex === index ? null : index);
+    };
+
+    const handleCategoryChange = (cat) => {
+        setActiveCategory(cat);
+        setOpenIndex(null);
     };
 
     const faqs = [
@@ -17,12 +23,12 @@ export default function FaqSection() {
         {
             category: 'ai',
             q: 'Seberapa akurat pemindai kamera membaca label informasi gizi kemasan?',
-            a: 'Sistem visi komputer AEVYRA dikalibrasi menggunakan basis data lebih dari 120.000 produk pangan dan farmasi yang terdaftar resmi di BPOM RI, dengan tingkat akurasi pemetaan mencapai 98.4%. Sistem membedah kadar sukrosa bebas, natrium, dan beban glikemik dalam hitungan <0.4 detik.',
+            a: 'Sistem visi komputer AEVYRA dikalibrasi menggunakan basis data produk pangan dan farmasi yang terdaftar resmi di BPOM RI, dengan tingkat akurasi pemetaan mencapai 98.4%. Sistem membedah kadar sukrosa bebas, natrium, dan beban glikemik dalam hitungan <0.4 detik.',
         },
         {
             category: 'security',
             q: 'Bagaimana keamanan data pribadi dan catatan biomarker kesehatan saya?',
-            a: 'Seluruh data kesehatan dienkripsi end-to-end menggunakan standar militer AES-256 bit dan mematuhi amanat UU Perlindungan Data Pribadi (UU No. 27/2022). Hanya tenaga medis berlisensi yang Anda beri otorisasi yang dapat meninjau buku harian glukosa Anda.',
+            a: 'Seluruh data kesehatan akun dienkripsi menggunakan protokol keamanan standar industri dan mematuhi amanat UU Perlindungan Data Pribadi (UU No. 27/2022). Hanya Anda dan tenaga medis berlisensi yang Anda beri otorisasi yang dapat meninjau buku harian glukosa Anda.',
         },
         {
             category: 'medical',
@@ -31,8 +37,8 @@ export default function FaqSection() {
         },
         {
             category: 'security',
-            q: 'Apakah resume medis dapat diekspor untuk BPJS Kesehatan dan SatuSehat?',
-            a: 'Ya. AEVYRA mengadopsi standar interoperabilitas HL7 FHIR Kemenkes RI SatuSehat. Anda dapat mengekspor resume riwayat biomarker terstandar resmi dalam format PDF untuk dibawa saat rujukan ke Puskesmas, Klinik Prolanis, atau rumah sakit keluarga Anda.',
+            q: 'Apakah resume medis dapat diekspor untuk BPJS Kesehatan dan dokter keluarga?',
+            a: 'Ya. AEVYRA mengadopsi standar format pelaporan ringkasan klinis yang dapat Anda ekspor sebagai PDF resmi untuk dibawa saat rujukan ke Puskesmas, Klinik Prolanis, atau rumah sakit keluarga Anda.',
         },
         {
             category: 'billing',
@@ -46,130 +52,155 @@ export default function FaqSection() {
         return item.category === activeCategory;
     });
 
+    // Limit to 5 questions on landing page, rest accessed via dedicated /faq page
+    const displayedFaqs = filteredFaqs.slice(0, 5);
+
     return (
         <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="faq">
             <div className="space-y-5">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-container-high">
-                    <div className="space-y-2">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
+                    <div className="space-y-1">
                         <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
                             FAQ • Transparansi &amp; Standar Medis
                         </span>
-                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#142320]">
+                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#142320]">
                             Jawaban seputar pemindai, data klinis, dan privasi.
                         </h2>
                     </div>
                     <p className="text-xs sm:text-sm text-[#546661] max-w-sm leading-relaxed">
-                        Ketahui cara kerja algoritma visi gizi, keabsahan data laboratorium, interoperabilitas SatuSehat, dan ketentuan paket keanggotaan.
+                        Ketahui cara kerja algoritma visi gizi, keabsahan data laboratorium, perlindungan data privasi, dan ketentuan paket keanggotaan.
                     </p>
                 </div>
 
-                {/* Category Filters (Clean, No Emojis, Standard 42px Touch Target) */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                {/* Category Filters (Clean, No Emojis, Standard Touch Target) */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                     <button
                         type="button"
-                        onClick={() => setActiveCategory('all')}
-                        className={`min-h-10.5 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+                        onClick={() => handleCategoryChange('all')}
+                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'all'
-                                ? 'bg-primary text-white shadow-xs'
-                                : 'text-[#4e605b] hover:text-primary hover:bg-white'
+                                ? 'bg-primary text-white shadow-2xs'
+                                : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
                         }`}
                     >
                         Semua Pertanyaan
                     </button>
                     <button
                         type="button"
-                        onClick={() => setActiveCategory('medical')}
-                        className={`min-h-10.5 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+                        onClick={() => handleCategoryChange('medical')}
+                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'medical'
-                                ? 'bg-primary text-white shadow-xs'
-                                : 'text-[#4e605b] hover:text-primary hover:bg-white'
+                                ? 'bg-primary text-white shadow-2xs'
+                                : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
                         }`}
                     >
                         Protokol Medis
                     </button>
                     <button
                         type="button"
-                        onClick={() => setActiveCategory('ai')}
-                        className={`min-h-10.5 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+                        onClick={() => handleCategoryChange('ai')}
+                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'ai'
-                                ? 'bg-primary text-white shadow-xs'
-                                : 'text-[#4e605b] hover:text-primary hover:bg-white'
+                                ? 'bg-primary text-white shadow-2xs'
+                                : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
                         }`}
                     >
                         Akurasi Pemindai
                     </button>
                     <button
                         type="button"
-                        onClick={() => setActiveCategory('security')}
-                        className={`min-h-10.5 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+                        onClick={() => handleCategoryChange('security')}
+                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'security'
-                                ? 'bg-primary text-white shadow-xs'
-                                : 'text-[#4e605b] hover:text-primary hover:bg-white'
+                                ? 'bg-primary text-white shadow-2xs'
+                                : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
                         }`}
                     >
-                        Keamanan &amp; SatuSehat
+                        Keamanan &amp; Privasi
                     </button>
                     <button
                         type="button"
-                        onClick={() => setActiveCategory('billing')}
-                        className={`min-h-10.5 px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+                        onClick={() => handleCategoryChange('billing')}
+                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'billing'
-                                ? 'bg-primary text-white shadow-xs'
-                                : 'text-[#4e605b] hover:text-primary hover:bg-white'
+                                ? 'bg-primary text-white shadow-2xs'
+                                : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
                         }`}
                     >
                         Biaya &amp; Akses
                     </button>
                 </div>
 
-                {/* Harmonious Accordions */}
-                <div className="space-y-3 pt-1">
-                    {filteredFaqs.map((item, idx) => {
+                {/* Harmonious Accordions with Smooth Expand/Collapse Animation (Max 5 on Landing) */}
+                <div className="space-y-2.5 pt-0.5">
+                    {displayedFaqs.map((item, idx) => {
                         const isOpen = openIndex === idx;
                         return (
                             <div
                                 key={idx}
-                                className={`rounded-2xl border transition-all ${
+                                className={`rounded-2xl border transition-all duration-300 ease-in-out ${
                                     isOpen
-                                        ? 'bg-white border-[#1c6454]/40 shadow-[0_4px_20px_rgba(0,40,36,0.03)]'
-                                        : 'bg-white/70 border-surface-container-high hover:border-[#cfe0d6]'
+                                        ? 'bg-white border-[#1c6454]/40 shadow-[0_4px_20px_rgba(0,40,36,0.04)]'
+                                        : 'bg-white/70 border-surface-container-high hover:border-[#cfe0d6] hover:bg-white'
                                 }`}
                             >
                                 <button
                                     type="button"
                                     onClick={() => toggleFaq(idx)}
-                                    className="w-full p-4 sm:p-5 flex items-center justify-between text-left text-sm sm:text-base font-serif text-[#182926] cursor-pointer gap-4"
+                                    className="w-full p-3.5 sm:p-4.5 flex items-center justify-between text-left text-sm sm:text-base font-serif text-[#182926] cursor-pointer gap-4"
+                                    aria-expanded={isOpen}
                                 >
                                     <span className="flex items-center gap-3">
-                                        <span className="text-xs font-mono text-[#1c6454]">
+                                        <span className="text-xs font-mono text-[#1c6454] font-semibold">
                                             0{idx + 1}.
                                         </span>
-                                        <span>{item.q}</span>
+                                        <span className="font-medium text-[#182926]">{item.q}</span>
                                     </span>
                                     <span
-                                        className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs transition-transform ${
+                                        className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ease-in-out ${
                                             isOpen
-                                                ? 'bg-[#edf5f0] text-[#1c6454] rotate-180'
-                                                : 'bg-[#f4f7f5] text-[#5e716c]'
+                                                ? 'bg-primary text-white rotate-180 shadow-2xs'
+                                                : 'bg-[#edf5f0] text-[#1c6454] rotate-0'
                                         }`}
                                     >
-                                        ↓
+                                        <span className="material-symbols-outlined text-[18px] leading-none">
+                                            expand_more
+                                        </span>
                                     </span>
                                 </button>
-                                {isOpen && (
-                                    <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-[#4d605a] leading-relaxed border-t border-[#f0f5f2] pt-3.5">
-                                        {item.a}
+                                
+                                {/* Smooth Animated Accordion Drawer */}
+                                <div
+                                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                                        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                                    }`}
+                                >
+                                    <div className="overflow-hidden">
+                                        <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#4d605a] leading-relaxed border-t border-[#f0f5f2] pt-3">
+                                            {item.a}
+                                        </div>
                                     </div>
-                                )}
+                                </div>
                             </div>
                         );
                     })}
                 </div>
 
+                {/* View Full FAQ Page Link */}
+                <div className="pt-2 flex justify-center">
+                    <Link
+                        href="/faq"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-primary text-xs font-semibold hover:bg-[#edf5f0] border border-[#d6e7dd] transition-all shadow-2xs hover:shadow-xs active:scale-98"
+                    >
+                        <span>Lihat Selengkapnya (Total 20 Pertanyaan FAQ)</span>
+                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </Link>
+                </div>
+
                 {/* Direct Medical Counseling Support Card */}
-                <div className="p-5 sm:p-6 bg-[#f0f6f3] rounded-2xl border border-[#d6e7dd] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-                    <div className="space-y-1">
+                <div className="p-4 sm:p-5 bg-[#f0f6f3] rounded-2xl border border-[#d6e7dd] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+                    <div className="space-y-0.5">
                         <span className="font-serif text-sm sm:text-base font-medium text-[#182926] block">
                             Punya pertanyaan klinis khusus seputar kondisi Anda?
                         </span>
@@ -179,7 +210,7 @@ export default function FaqSection() {
                     </div>
                     <a
                         href="mailto:care@aevyra.health"
-                        className="px-5 py-2.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 whitespace-nowrap shadow-xs"
+                        className="px-4.5 py-2 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 whitespace-nowrap shadow-xs"
                     >
                         Tanya Tim Dokter
                     </a>

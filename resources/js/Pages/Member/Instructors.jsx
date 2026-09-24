@@ -69,7 +69,7 @@ export default function Instructors({
 
     return (
         <AppLayout activeTab="instructors" title="Tim Instruktur Medis">
-            <Head title="Tim Dokter & Instruktur Pendamping — AEVYRA" />
+            <Head title="Tim Dokter & Instruktur Pendamping - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 {/* Header & Quota Status Banner */}

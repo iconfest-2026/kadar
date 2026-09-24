@@ -28,7 +28,7 @@ const SEVERITY_MAP = {
 export default function Dashboard({ assignedMembers = [], pendingSignals = [], upcomingConsultations = [], stats = {} }) {
     return (
         <InstructorLayout activeNav="dashboard" title="Dashboard Pendampingan">
-            <Head title="Instruktur Dashboard — AEVYRA" />
+            <Head title="Instruktur Dashboard - AEVYRA" />
             
             <div className="space-y-6">
                 {/* Header Welcome Card */}

@@ -28,7 +28,7 @@ export default function Members({ members = { data: [], links: [] }, filters = {
 
     return (
         <InstructorLayout activeNav="members" title="Daftar Member Binaan">
-            <Head title="Member Binaan — Instruktur AEVYRA" />
+            <Head title="Member Binaan - Instruktur AEVYRA" />
             
             <div className="space-y-6">
                 {/* Header & Search Bar */}

@@ -109,7 +109,7 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
 
     return (
         <AdminLayout activeNav="users" title="Manajemen Pengguna & Otorisasi">
-            <Head title="Manajemen Pengguna & Otorisasi — Admin AEVYRA" />
+            <Head title="Manajemen Pengguna & Otorisasi - Admin AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

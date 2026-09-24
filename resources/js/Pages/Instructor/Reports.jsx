@@ -20,7 +20,7 @@ export default function Reports({ overview = {}, membersRoster = [], generated_a
 
     return (
         <InstructorLayout title="Laporan Klinis & Kohort Caseload" activeNav="reports">
-            <Head title="Laporan Klinis Instruktur — AEVYRA" />
+            <Head title="Laporan Klinis Instruktur - AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header Banner */}

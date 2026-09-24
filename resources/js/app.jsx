@@ -3,7 +3,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
 
 createInertiaApp({
-    title: (title) => (title ? `${title}` : 'AEVYRA — Personal Preventive Health & Early Intervention Platform'),
+    title: (title) => (title ? `${title}` : 'AEVYRA - Personal Preventive Health & Early Intervention Platform'),
     resolve: (name) => {
         const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
         const page = pages[`./Pages/${name}.jsx`];

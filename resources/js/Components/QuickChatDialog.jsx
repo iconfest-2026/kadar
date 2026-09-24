@@ -3,7 +3,9 @@ import React, { useState, useRef, useEffect } from 'react';
 export default function QuickChatDialog() {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    const [isAtFooter, setIsAtFooter] = useState(false);
     const [messages, setMessages] = useState([
         {
             id: 'init-1',
@@ -14,6 +16,41 @@ export default function QuickChatDialog() {
     ]);
 
     const messagesEndRef = useRef(null);
+    const customDropdownRef = useRef(null);
+
+    // Hide floating widget when user scrolls down to footer
+    useEffect(() => {
+        const handleScrollOrResize = () => {
+            const footer = document.getElementById('site-footer') || document.querySelector('footer');
+            if (!footer) return;
+
+            const rect = footer.getBoundingClientRect();
+            // When the top of the footer has entered the visible viewport
+            const atFooter = rect.top <= window.innerHeight - 30;
+            setIsAtFooter(atFooter);
+        };
+
+        window.addEventListener('scroll', handleScrollOrResize, { passive: true });
+        window.addEventListener('resize', handleScrollOrResize, { passive: true });
+        handleScrollOrResize();
+
+        return () => {
+            window.removeEventListener('scroll', handleScrollOrResize);
+            window.removeEventListener('resize', handleScrollOrResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (customDropdownRef.current && !customDropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false);
+            }
+        };
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [dropdownOpen]);
 
     const presetQuestions = [
         {
@@ -94,7 +131,13 @@ export default function QuickChatDialog() {
     };
 
     return (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
+        <div
+            className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end transition-all duration-300 ease-out ${
+                isAtFooter
+                    ? 'opacity-0 pointer-events-none translate-y-8 scale-90'
+                    : 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+            }`}
+        >
             {/* Chat Popup Box (Adaptive to 320px - 412px Mobile Viewports) */}
             {isOpen && (
                 <div className="w-[calc(100vw-32px)] sm:w-90 h-120 max-h-[75vh] mb-3 bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
@@ -170,22 +213,50 @@ export default function QuickChatDialog() {
                             Pilih Topik Pertanyaan:
                         </label>
 
-                        <div className="relative">
-                            <select
-                                value={selectedQuestion}
-                                onChange={handleSelectQuestion}
-                                className="w-full pl-3 pr-8 py-2 text-xs bg-[#f4f8f5] text-[#223832] rounded-xl border border-[#d6e5dc] focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer font-medium hover:bg-[#edf5f0] transition-colors"
+                        {/* Custom Medical Dropdown (Eliminates Native OS Blue Window Select) */}
+                        <div className="relative" ref={customDropdownRef}>
+                            <button
+                                type="button"
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                                className="w-full px-3 py-2 text-xs bg-[#f4f8f5] text-[#223832] rounded-xl border border-[#d6e5dc] focus:outline-none focus:ring-1 focus:ring-primary flex items-center justify-between font-medium hover:bg-[#edf5f0] transition-colors cursor-pointer"
                             >
-                                <option value="">— Pilih pertanyaan seputar fitur —</option>
-                                {presetQuestions.map((q) => (
-                                    <option key={q.id} value={q.id}>
-                                        {q.label}
-                                    </option>
-                                ))}
-                            </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none text-xs">
-                                ↓
-                            </span>
+                                <span className="truncate">
+                                    {selectedQuestion
+                                        ? presetQuestions.find((q) => q.id === selectedQuestion)?.label
+                                        : '— Pilih pertanyaan seputar fitur —'}
+                                </span>
+                                <span
+                                    className={`material-symbols-outlined text-[16px] text-primary transition-transform duration-200 shrink-0 ${
+                                        dropdownOpen ? 'rotate-180' : ''
+                                    }`}
+                                >
+                                    expand_more
+                                </span>
+                            </button>
+
+                            {/* Custom Dropdown Popover (Opens upward) */}
+                            {dropdownOpen && (
+                                <div className="absolute bottom-full left-0 right-0 mb-1.5 bg-white rounded-2xl border border-[#d6e7dc] shadow-xl overflow-hidden z-50 divide-y divide-[#f2f7f4] max-h-56 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+                                    {presetQuestions.map((q) => (
+                                        <button
+                                            key={q.id}
+                                            type="button"
+                                            onClick={() => {
+                                                triggerQuestion(q.id);
+                                                setDropdownOpen(false);
+                                            }}
+                                            className="w-full px-3.5 py-2.5 text-left text-xs text-[#283d37] hover:bg-[#f0f6f3] hover:text-[#1c6454] flex items-center justify-between gap-2 transition-colors cursor-pointer group"
+                                        >
+                                            <span className="font-medium group-hover:translate-x-0.5 transition-transform leading-snug">
+                                                {q.label}
+                                            </span>
+                                            <span className="material-symbols-outlined text-[14px] text-[#9cb1a7] group-hover:text-primary shrink-0">
+                                                arrow_forward
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">

@@ -170,7 +170,7 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
 
     return (
         <AppLayout title="Pusat Konsultasi Terjadwal & AI" activeTab="consultations">
-            <Head title="Pusat Konsultasi Medis & AI Assistant — AEVYRA" />
+            <Head title="Pusat Konsultasi Medis & AI Assistant - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 

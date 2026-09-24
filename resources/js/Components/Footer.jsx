@@ -1,13 +1,24 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function Footer() {
+    let authUser = null;
+    try {
+        const page = usePage();
+        authUser = page?.props?.auth?.user || null;
+    } catch {
+        authUser = null;
+    }
+
     const navFeatures = [
-        { name: 'Simulasi Pemindai Kamera', href: '#scanner-demo' },
-        { name: 'Arsitektur Ekosistem 6 Pilar', href: '#features' },
-        { name: 'Bukti Klinis Remisi 90 Hari', href: '#promo' },
-        { name: 'Pilihan Paket Keanggotaan', href: '#tiers' },
-        { name: 'Tanya Jawab & Standar Medis', href: '#faq' },
+        { name: 'Pemindai Kamera Label & Obat BPOM', href: '/member/scanner', requiresAuth: true },
+        { name: 'Tracker & Metrik Kesehatan (HBE)', href: '/member/dashboard', requiresAuth: true },
+        { name: 'Program Tantangan Remisi 90 Hari', href: '/member/challenges', requiresAuth: true },
+        { name: 'Hub Konsultasi Dokter Spesialis & AI', href: '/member/consultations-hub', requiresAuth: true },
+        { name: 'Komunitas & Forum Diskusi Pasien', href: '/member/community', requiresAuth: true },
+        { name: 'Gim Glucose Dash Arcade', href: '/arcade', requiresAuth: false },
+        { name: 'Pilihan Paket Keanggotaan', href: '/paket', requiresAuth: false },
+        { name: 'Pusat Tanya Jawab Klinis (FAQ)', href: '/faq', requiresAuth: false },
     ];
 
     return (
@@ -16,32 +27,36 @@ export default function Footer() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-4">
                     {/* Brand & Mission Statement */}
                     <div className="lg:col-span-5 space-y-4">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center">
                             <img
                                 src="/image/Logo_AEVYRA_Horizontal.png"
                                 alt="AEVYRA — Your Health, Ahead"
                                 className="h-8 w-auto object-contain"
                             />
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white text-[#1c6454] border border-[#d6e7dd] font-mono">
-                                Ekosistem Medis 2026
-                            </span>
                         </div>
 
                         <p className="text-xs text-[#52655f] max-w-sm leading-relaxed">
                             Platform intervensi dini pra-diabetes dan pemindai nutrisi preventif berbasis visi komputer, interoperabilitas SatuSehat Kemenkes RI, dan pendampingan dokter spesialis terverifikasi.
                         </p>
 
-                        {/* Serene Operational Status Indicator */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-[#d6e7dd] text-[11px] text-[#1c6454]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                            <span>Sistem Operasional Aktif (99.98%)</span>
-                        </div>
-
                         <div className="pt-1">
-                            <Link href="/login" className="text-xs text-primary font-medium hover:underline inline-flex items-center gap-1">
-                                <span>Masuk ke Portal Pasien</span>
-                                <span>→</span>
-                            </Link>
+                            {authUser ? (
+                                <Link 
+                                    href="/member/dashboard" 
+                                    className="text-xs text-primary font-medium hover:underline inline-flex items-center gap-1"
+                                >
+                                    <span>Buka Dashboard Pasien</span>
+                                    <span>→</span>
+                                </Link>
+                            ) : (
+                                <Link 
+                                    href="/login" 
+                                    className="text-xs text-primary font-medium hover:underline inline-flex items-center gap-1"
+                                >
+                                    <span>Masuk ke Portal Pasien</span>
+                                    <span>→</span>
+                                </Link>
+                            )}
                         </div>
                     </div>
 
@@ -53,38 +68,34 @@ export default function Footer() {
                         <ul className="space-y-2 text-xs text-[#52655f]">
                             {navFeatures.map((item, idx) => (
                                 <li key={idx}>
-                                    <a href={item.href} className="hover:text-primary hover:underline transition-colors">
-                                        {item.name}
-                                    </a>
+                                    <Link 
+                                        href={item.href} 
+                                        className="hover:text-primary hover:underline transition-colors flex items-center justify-between group"
+                                    >
+                                        <span className="group-hover:translate-x-0.5 transition-transform">
+                                            {item.name}
+                                        </span>
+                                        {item.requiresAuth && !authUser && (
+                                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#e4ede7] text-[#1c6454] font-mono group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+                                                Login
+                                            </span>
+                                        )}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Legal, Support & Emergency */}
+                    {/* Legal & Support */}
                     <div className="lg:col-span-3 space-y-3">
                         <span className="text-[11px] uppercase tracking-wider text-primary font-medium block">
                             Regulasi &amp; Bantuan
                         </span>
-                        <ul className="space-y-1.5 text-xs text-[#52655f] pb-1">
+                        <ul className="space-y-1.5 text-xs text-[#52655f]">
                             <li><Link href="/privacy" className="hover:text-primary hover:underline">Kebijakan Privasi (UU PDP)</Link></li>
                             <li><Link href="/terms" className="hover:text-primary hover:underline">Syarat &amp; Ketentuan Layanan</Link></li>
                             <li><a href="mailto:care@aevyra.health" className="hover:text-primary hover:underline">care@aevyra.health</a></li>
                         </ul>
-
-                        {/* Dignified Emergency Hotline Box */}
-                        <a
-                            href="tel:119"
-                            className="mt-3 p-3.5 rounded-2xl bg-[#faf5f3] text-[#2c1e1c] block hover:bg-[#f5edea] transition-all border border-[#ebd8d2]"
-                        >
-                            <div className="flex items-center justify-between text-[10px] text-[#8e483b] uppercase font-medium">
-                                <span>Siaga Medis Kemenkes</span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#9c5243]"></span>
-                            </div>
-                            <span className="font-serif text-sm font-medium text-[#2c1e1c] block mt-0.5">
-                                Hotline Darurat 119
-                            </span>
-                        </a>
                     </div>
                 </div>
 

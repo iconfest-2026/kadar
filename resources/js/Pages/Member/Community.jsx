@@ -81,7 +81,7 @@ export default function Community({ profile, posts, activeCategory = 'all' }) {
 
     return (
         <AppLayout title="Komunitas & Forum Diskusi" activeTab="community">
-            <Head title="Komunitas Sehat & Forum Diskusi — AEVYRA" />
+            <Head title="Komunitas Sehat & Forum Diskusi - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 

@@ -78,7 +78,7 @@ export default function HeroSection() {
                 {/* Left: Editorial Authority & Value Proposition */}
                 <div className="lg:col-span-6 space-y-5">
                     {/* Soft Pill Tag */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide shadow-2xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] animate-pulse"></span>
                         <span>Pencegahan Dini &amp; Skrining Nutrisi Mandiri</span>
                     </div>
@@ -93,7 +93,7 @@ export default function HeroSection() {
                         </p>
                     </div>
 
-                    {/* Core Feature Bullet Highlights (Balances vertical height with right scanner) */}
+                    {/* Core Feature Bullet Highlights */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#354843] pt-1">
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
@@ -113,7 +113,7 @@ export default function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Primary Action Buttons (Touch Ergonomics 48px) */}
+                    {/* Primary Action Buttons */}
                     <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                         <Link
                             href="/demo/scanner"
@@ -131,7 +131,7 @@ export default function HeroSection() {
                         </Link>
                     </div>
 
-                    {/* Editorial Clinical Endorsement Badge & Stats Strip */}
+                    {/* Endorsement Badge & Stats Strip */}
                     <div className="pt-2 border-t border-surface-container-high space-y-3">
                         <div className="flex items-center gap-3">
                             <div className="flex -space-x-2 shrink-0">
@@ -156,7 +156,7 @@ export default function HeroSection() {
                             </div>
                         </div>
 
-                        {/* Quiet, Harmonious Stats Strip */}
+                        {/* Stats Strip */}
                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-surface-container-high/60">
                             <div>
                                 <span className="font-serif text-base sm:text-xl text-primary block leading-tight">120.000+</span>
@@ -174,7 +174,7 @@ export default function HeroSection() {
                     </div>
                 </div>
 
-                {/* Right: Compact, Balanced Medical Viewfinder Interface */}
+                {/* Right: Viewfinder Simulation */}
                 <div className="lg:col-span-6 bg-white/95 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.04)]" id="scanner-demo">
                     {/* Viewfinder Header */}
                     <div className="flex items-center justify-between pb-2.5 border-b border-[#edf4f0]">
@@ -243,7 +243,7 @@ export default function HeroSection() {
                             </span>
                         </div>
 
-                        {/* Interactive Optical Viewfinder Frame with Real Scanned Product Photo */}
+                        {/* Interactive Optical Viewfinder Frame */}
                         <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden bg-[#121c19] border border-[#d8e6df] shadow-inner group">
                             <img
                                 key={current.image}
@@ -264,7 +264,7 @@ export default function HeroSection() {
                                 </div>
 
                                 {/* OCR Focus Target Box */}
-                                <div className="self-center w-48 sm:w-56 h-16 sm:h-18 border border-white/50 rounded-lg relative flex items-center justify-center backdrop-brightness-110">
+                                <div className="self-center w-48 sm:w-56 h-14 sm:h-16 border border-white/50 rounded-lg relative flex items-center justify-center backdrop-brightness-110">
                                     <span className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-emerald-400 -mt-0.5 -ml-0.5"></span>
                                     <span className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-emerald-400 -mt-0.5 -mr-0.5"></span>
                                     <span className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-emerald-400 -mb-0.5 -ml-0.5"></span>
@@ -301,7 +301,7 @@ export default function HeroSection() {
                             ))}
                         </div>
 
-                        {/* Minimalist Glycemic Curve & Observation Compact Row */}
+                        {/* Glycemic Curve Row */}
                         <div className="p-2.5 bg-white rounded-xl border border-[#e8f0ec] space-y-1.5">
                             <div className="flex justify-between items-center text-[10px]">
                                 <span className="text-[#596d67]">Estimasi Respons Glukosa Darah:</span>
@@ -309,7 +309,6 @@ export default function HeroSection() {
                                     Puncak {current.curvePeak} ({current.curvePeakTime})
                                 </span>
                             </div>
-                            {/* Serene SVG Curve Sparkline */}
                             <div className="h-9 w-full relative">
                                 <svg viewBox="0 0 300 40" className="w-full h-full overflow-visible" preserveAspectRatio="none">
                                     <defs>
@@ -318,9 +317,7 @@ export default function HeroSection() {
                                             <stop offset="100%" stopColor={current.curveColor} stopOpacity="0.0" />
                                         </linearGradient>
                                     </defs>
-                                    {/* Normal baseline zone band */}
                                     <rect x="0" y="24" width="300" height="14" fill="#eaf3ee" opacity="0.6" rx="2" />
-                                    {/* Curve path */}
                                     {activeScanSample === 'drink' && (
                                         <>
                                             <path d="M 0 30 Q 60 30, 100 6 T 200 30 L 300 30 L 300 38 L 0 38 Z" fill="url(#heroCurveGradient)" />

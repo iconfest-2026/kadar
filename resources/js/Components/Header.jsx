@@ -2,11 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 
 export default function Header() {
-    const { auth } = usePage().props;
-    const user = auth?.user;
+    let authUser = null;
+    try {
+        const page = usePage();
+        authUser = page?.props?.auth?.user || null;
+    } catch {
+        authUser = null;
+    }
+
+    const user = authUser;
     const roles = user?.roles || [];
-    const isAdmin = roles.includes('admin');
-    const isInstructor = roles.includes('instructor');
+    const isAdmin = roles.includes('admin') || user?.role === 'admin';
+    const isInstructor = roles.includes('instructor') || user?.role === 'instructor';
     const isMember = roles.includes('member') || (!isAdmin && !isInstructor && !!user);
 
     let dashboardHref = '/member/dashboard';
@@ -27,12 +34,29 @@ export default function Header() {
     }
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [featuresDropdownOpen, setFeaturesDropdownOpen] = useState(false);
+    const [clinicalDropdownOpen, setClinicalDropdownOpen] = useState(false);
     const [reportsDropdownOpen, setReportsDropdownOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
-    const dropdownRef = useRef(null);
+    let currentPath = '';
+    try {
+        const page = usePage();
+        currentPath = page?.url || '';
+    } catch {
+        currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+    }
+
+    const isActive = (path) => {
+        if (!currentPath) return false;
+        const cleanCurrent = currentPath.split('?')[0].split('#')[0];
+        if (path === '/') {
+            return cleanCurrent === '/' || cleanCurrent === '';
+        }
+        return cleanCurrent === path || cleanCurrent.startsWith(`${path}/`);
+    };
+
+    const clinicalRef = useRef(null);
     const reportsRef = useRef(null);
     const userDropdownRef = useRef(null);
 
@@ -40,54 +64,54 @@ export default function Header() {
         router.post('/logout');
     };
 
-    // Core Features List with Direct Links to Public Interactive Demo Showcase
+    // Core Features List with Direct Links for Quick Testing/Checking
     const featureItems = [
         {
             name: 'Scanner Open Cam & BPOM',
             desc: 'Analisis label makanan, minuman, dan izin obat',
-            href: '/demo/scanner',
+            href: user ? '/member/scanner' : '/demo/scanner',
             icon: 'document_scanner',
-            badge: 'Demo Scanner',
+            badge: 'Kamera Live',
             color: 'text-primary bg-primary/10',
         },
         {
             name: 'Konsultasi & Booking Dokter',
             desc: 'Asisten AI 24/7 dan jadwal telemedisin dokter IDI',
-            href: '/demo/consultations',
+            href: user ? '/member/consultations-hub' : '/demo/consultations',
             icon: 'video_camera_front',
-            badge: 'Demo Konsultasi',
+            badge: 'Dokter IDI',
             color: 'text-emerald-700 bg-emerald-100',
         },
         {
             name: 'Tracker & Metrik Kesehatan',
             desc: 'Glukosa darah, tensi, hidrasi, tidur, dan langkah',
-            href: '/demo/tracker',
+            href: user ? '/member/dashboard' : '/demo/tracker',
             icon: 'monitoring',
-            badge: 'Demo Baselines',
+            badge: 'Baseline HBE',
             color: 'text-blue-700 bg-blue-100',
         },
         {
             name: 'Program Tantangan Sehat',
             desc: 'Misi 14–90 hari remisi glukosa dan habit booster',
-            href: '/demo/challenges',
+            href: user ? '/member/challenges' : '/demo/challenges',
             icon: 'military_tech',
-            badge: 'Demo Tantangan',
+            badge: '+Poin Reward',
             color: 'text-amber-700 bg-amber-100',
         },
         {
             name: 'Komunitas & Forum Diskusi',
             desc: 'Berbagi pengalaman, tanya ahli, dan motivasi',
-            href: '/demo/community',
+            href: user ? '/member/community' : '/demo/community',
             icon: 'forum',
-            badge: 'Demo Forum',
+            badge: 'Interaktif',
             color: 'text-teal-700 bg-teal-100',
         },
         {
             name: 'Siklus Haid & Vitalitas Pria',
             desc: 'Prediksi fase hormonal wanita & skrining kardiometabolik pria',
-            href: '/demo/gender-vitality',
+            href: user ? '/member/dashboard' : '/demo/gender-vitality',
             icon: 'vital_signs',
-            badge: 'Demo Hormon',
+            badge: 'Personalisasi AI',
             color: 'text-rose-700 bg-rose-100',
         },
         {
@@ -95,15 +119,15 @@ export default function Header() {
             desc: 'Game 2D Glucose Dash & Simulasi Kasus Interaktif',
             href: '/arcade',
             icon: 'sports_esports',
-            badge: 'Game 2D',
-            color: 'text-emerald-700 bg-emerald-100',
+            badge: 'Play',
+            color: 'text-purple-700 bg-purple-100',
         },
         {
             name: 'Siaga Ambulan 119 Lokasi GPS',
             desc: 'Hotline darurat nasional 1-klik dan IGD faskes terdekat',
-            href: '/demo/emergency',
+            href: user ? '/member/dashboard#ambulance' : '/demo/emergency',
             icon: 'emergency',
-            badge: 'Demo Darurat',
+            badge: 'Triage Cepat',
             color: 'text-red-700 bg-red-100',
         },
     ];
@@ -111,14 +135,14 @@ export default function Header() {
     const reportItems = [
         {
             name: 'Laporan Instruktur',
-            desc: 'Metrik kepatuhan member, caseload, dan efektivitas intervensi',
+            desc: 'Metrik kepatuhan member, caseload, dan efektivitas intervensi klinis',
             href: '/instructor/reports',
             icon: 'assignment_turned_in',
             role: 'Instruktur',
         },
         {
             name: 'Laporan Admin',
-            desc: 'Tata kelola platform, audit sistem, dan statistik pemindaian',
+            desc: 'Tata kelola platform, audit sistem, dan statistik pemindaian terpadu',
             href: '/admin/reports',
             icon: 'admin_panel_settings',
             role: 'Admin',
@@ -128,8 +152,8 @@ export default function Header() {
     // Close dropdowns on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-                setFeaturesDropdownOpen(false);
+            if (clinicalRef.current && !clinicalRef.current.contains(e.target)) {
+                setClinicalDropdownOpen(false);
             }
             if (reportsRef.current && !reportsRef.current.contains(e.target)) {
                 setReportsDropdownOpen(false);
@@ -159,68 +183,73 @@ export default function Header() {
                         : 'bg-[#f7faf8]/85 backdrop-blur-sm border-b border-surface-container-high/60'
                 }`}
             >
-                <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 min-w-0 w-full">
+                <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
                     {/* Official AEVYRA Brand Logo */}
                     <Link
                         href="/"
-                        className="flex items-center group shrink-0 select-none transition-transform active:scale-95"
+                        className="flex items-center shrink-0 select-none cursor-pointer"
+                        title="AEVYRA Healthcare"
                     >
                         <img
                             src="/image/Logo_AEVYRA_Horizontal.png"
-                            alt="AEVYRA — Your Health, Ahead"
+                            alt="AEVYRA - Your Health, Ahead"
                             className="h-7 sm:h-8 w-auto object-contain shrink-0"
                         />
                     </Link>
 
-                    {/* Desktop Rich Navigation Menu */}
-                    <nav className="hidden lg:flex items-center gap-1 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-surface-container-high shadow-2xs">
-                        {/* 1. Pemindai Kamera Quick Link */}
+                    {/* Desktop Clean Navigation */}
+                    <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+                        {/* 1. Beranda */}
                         <Link
-                            href="/demo/scanner"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
+                            href="/"
+                            className={`px-3 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${
+                                isActive('/')
+                                    ? 'bg-primary text-white font-bold shadow-2xs'
+                                    : 'font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
+                            }`}
                         >
-                            Pemindai
+                            Beranda
                         </Link>
 
-                        {/* 2. Interactive Feature Mega/Dropdown Menu */}
-                        <div className="relative" ref={dropdownRef}>
+                        {/* 2. Layanan Klinis & Modul */}
+                        <div className="relative" ref={clinicalRef}>
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setFeaturesDropdownOpen(!featuresDropdownOpen);
+                                    setClinicalDropdownOpen(!clinicalDropdownOpen);
                                     setReportsDropdownOpen(false);
                                     setUserDropdownOpen(false);
                                 }}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
-                                    featuresDropdownOpen
+                                    clinicalDropdownOpen || isActive('/member/scanner') || isActive('/demo/scanner')
                                         ? 'bg-primary text-white shadow-2xs'
                                         : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
                                 }`}
                             >
-                                <span>Fitur</span>
-                                <span className="material-symbols-outlined text-[14px]">
-                                    {featuresDropdownOpen ? 'expand_less' : 'expand_more'}
+                                <span>Layanan &amp; Fitur</span>
+                                <span className="material-symbols-outlined text-[15px] transition-transform duration-200">
+                                    {clinicalDropdownOpen ? 'expand_less' : 'expand_more'}
                                 </span>
                             </button>
 
                             {/* Dropdown Panel */}
-                            {featuresDropdownOpen && (
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[540px] max-w-[90vw] bg-white dark:bg-surface border border-surface-container-high rounded-3xl p-3.5 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
+                            {clinicalDropdownOpen && (
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-135 bg-white dark:bg-surface border border-surface-container-high rounded-3xl p-3.5 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
                                     <div className="px-3 py-2 border-b border-surface-container flex items-center justify-between">
                                         <span className="text-[11px] font-bold text-on-surface uppercase tracking-wider">
-                                            Modul Fitur &amp; Simulasi AEVYRA
+                                            Modul Fitur &amp; Eksplorasi AEVYRA
                                         </span>
                                         <span className="text-[10px] text-primary font-mono font-semibold">
                                             Akses Cepat 1-Klik
                                         </span>
                                     </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2">
+                                    <div className="grid grid-cols-2 gap-1.5 pt-2">
                                         {featureItems.map((item, idx) => (
                                             <Link
                                                 key={idx}
                                                 href={item.href}
-                                                onClick={() => setFeaturesDropdownOpen(false)}
-                                                className={`p-2.5 rounded-2xl transition-all flex items-start gap-2.5 group border min-w-0 ${
+                                                onClick={() => setClinicalDropdownOpen(false)}
+                                                className={`p-2.5 rounded-2xl transition-all flex items-start gap-2.5 group border ${
                                                     item.href === '/arcade'
                                                         ? 'bg-emerald-50/70 border-emerald-200/80 hover:bg-emerald-100/60'
                                                         : 'hover:bg-[#edf5f0]/70 border-transparent hover:border-surface-container'
@@ -231,7 +260,7 @@ export default function Header() {
                                                         {item.icon}
                                                     </span>
                                                 </div>
-                                                <div className="space-y-0.5 overflow-hidden min-w-0 flex-1">
+                                                <div className="space-y-0.5 overflow-hidden">
                                                     <div className="flex items-center gap-1.5">
                                                         <h4 className="text-xs font-bold text-on-surface truncate group-hover:text-primary">
                                                             {item.name}
@@ -250,37 +279,50 @@ export default function Header() {
 
                         {/* 3. Konsultasi */}
                         <Link
-                            href="/demo/consultations"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
+                            href={user ? '/member/consultations-hub' : '/demo/consultations'}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                                isActive('/member/consultations-hub') || isActive('/demo/consultations')
+                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
+                                    : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
+                            }`}
                         >
                             Konsultasi
                         </Link>
 
                         {/* 4. Tantangan Program */}
                         <Link
-                            href="/demo/challenges"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
+                            href={user ? '/member/challenges' : '/demo/challenges'}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                                isActive('/member/challenges') || isActive('/demo/challenges')
+                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
+                                    : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
+                            }`}
                         >
                             Tantangan
                         </Link>
 
-                        {/* 5. Forum Komunitas */}
+                        {/* 5. Paket Keanggotaan */}
                         <Link
-                            href="/demo/community"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
+                            href="/paket"
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                                isActive('/paket')
+                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
+                                    : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
+                            }`}
                         >
-                            Komunitas
+                            Paket
                         </Link>
 
-                        {/* 6. Arena Gamifikasi 2D (Dedicated Page) */}
+                        {/* 6. FAQ */}
                         <Link
-                            href="/arcade"
-                            className="px-3 py-1.5 rounded-full text-xs font-semibold text-primary bg-[#edf5f0] hover:bg-[#e1eee6] border border-[#d2e5da] transition-all flex items-center gap-1.5 whitespace-nowrap active:scale-95 shadow-2xs"
+                            href="/faq"
+                            className={`px-3 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${
+                                isActive('/faq')
+                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
+                                    : 'font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
+                            }`}
                         >
-                            <span>Game 2D</span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-primary text-white font-mono font-bold">
-                                Play
-                            </span>
+                            FAQ
                         </Link>
 
                         {/* 7. Laporan Dropdown */}
@@ -289,11 +331,11 @@ export default function Header() {
                                 type="button"
                                 onClick={() => {
                                     setReportsDropdownOpen(!reportsDropdownOpen);
-                                    setFeaturesDropdownOpen(false);
+                                    setClinicalDropdownOpen(false);
                                     setUserDropdownOpen(false);
                                 }}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
-                                    reportsDropdownOpen
+                                className={`px-2.5 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
+                                    reportsDropdownOpen || isActive('/instructor/reports') || isActive('/admin/reports')
                                         ? 'bg-primary text-white shadow-2xs'
                                         : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
                                 }`}
@@ -305,7 +347,12 @@ export default function Header() {
                             </button>
 
                             {reportsDropdownOpen && (
-                                <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-surface border border-surface-container-high rounded-2xl p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
+                                <div className="absolute top-full right-0 mt-2 w-72 bg-white border border-surface-container-high rounded-2xl p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
+                                    <div className="px-2.5 py-1.5 border-b border-surface-container flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+                                            Tata Kelola &amp; Audit
+                                        </span>
+                                    </div>
                                     {reportItems.map((r, idx) => (
                                         <Link
                                             key={idx}
@@ -329,22 +376,6 @@ export default function Header() {
                                 </div>
                             )}
                         </div>
-
-                        {/* 8. Paket Keanggotaan */}
-                        <a
-                            href="#tiers"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
-                        >
-                            Paket
-                        </a>
-
-                        {/* 9. FAQ */}
-                        <a
-                            href="#faq"
-                            className="px-3 py-1.5 rounded-full text-xs font-medium text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80 transition-all whitespace-nowrap"
-                        >
-                            FAQ
-                        </a>
                     </nav>
 
                     {/* Right Actions: Authenticated vs Guest */}
@@ -369,7 +400,7 @@ export default function Header() {
                                         type="button"
                                         onClick={() => {
                                             setUserDropdownOpen(!userDropdownOpen);
-                                            setFeaturesDropdownOpen(false);
+                                            setClinicalDropdownOpen(false);
                                             setReportsDropdownOpen(false);
                                         }}
                                         className="flex items-center gap-1.5 p-1 rounded-full hover:bg-surface-container-low transition-all cursor-pointer border border-surface-container bg-white/80"
@@ -540,143 +571,103 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* Mobile Drawer with Comprehensive Categorized Menus */}
+                {/* Mobile Drawer */}
                 {mobileMenuOpen && (
                     <div className="lg:hidden bg-white/98 backdrop-blur-xl border-b border-surface-container-high px-4 sm:px-6 py-4 space-y-4 animate-in fade-in duration-200 shadow-xl max-h-[85vh] overflow-y-auto">
-                        {/* User Profile Card for Authenticated User */}
-                        {user && (
-                            <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container space-y-3">
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <div className="w-10 h-10 rounded-xl bg-primary text-white font-bold flex items-center justify-center text-sm shadow-2xs shrink-0">
-                                            {user.name?.charAt(0) || 'U'}
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="text-xs font-bold text-on-surface truncate">{user.name}</p>
-                                            <p className="text-[10px] text-on-surface-variant font-mono truncate">{user.email}</p>
-                                        </div>
-                                    </div>
-                                    <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase border shrink-0 ${roleColor}`}>
-                                        {roleBadge}
-                                    </span>
-                                </div>
-
-                                <Link
-                                    href={dashboardHref}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="w-full min-h-10 flex items-center justify-center gap-2 rounded-xl bg-primary text-white text-xs font-bold shadow-2xs hover:bg-primary-container transition-all"
-                                >
-                                    <span className="material-symbols-outlined text-[18px]">
-                                        {isAdmin ? 'admin_panel_settings' : isInstructor ? 'clinical_notes' : 'space_dashboard'}
-                                    </span>
-                                    <span>Buka {dashboardLabel}</span>
-                                </Link>
-                            </div>
-                        )}
-
                         {/* Group 1: Member Health Features */}
                         <div className="space-y-1">
                             <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                Fitur Utama Member
+                                Fitur &amp; Layanan Utama
                             </span>
                             {featureItems.map((item, idx) => (
                                 <Link
                                     key={idx}
                                     href={item.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className={`px-3 py-2.5 min-h-11 flex items-center justify-between gap-2 rounded-xl text-xs transition-all min-w-0 ${
+                                    className={`px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs transition-all ${
                                         item.href === '/arcade'
                                             ? 'font-bold text-emerald-900 bg-[#edf5f0] hover:bg-[#e2efe8]'
                                             : 'font-medium text-[#445652] hover:bg-[#edf5f0]'
                                     }`}
                                 >
-                                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                        <span className="material-symbols-outlined text-[18px] text-primary shrink-0">
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="material-symbols-outlined text-[18px] text-primary">
                                             {item.icon}
                                         </span>
-                                        <span className="truncate">{item.name}</span>
+                                        <span>{item.name}</span>
                                     </div>
-                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-[#cfe2d7] text-primary font-mono font-bold shrink-0">
+                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-[#cfe2d7] text-primary font-mono font-bold">
                                         {item.badge}
                                     </span>
                                 </Link>
                             ))}
                         </div>
 
-                        {/* Group 2: Reports & Governance */}
+                        {/* Group 2: Public Navigation */}
                         <div className="pt-2 border-t border-surface-container space-y-1">
                             <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                Portal Laporan &amp; Keanggotaan
+                                Navigasi Platform
+                            </span>
+                            <Link
+                                href="/paket"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                            >
+                                <span className="material-symbols-outlined text-[18px] text-primary">card_membership</span>
+                                <span>Paket Keanggotaan (Silver, Gold, Platinum)</span>
+                            </Link>
+                            <Link
+                                href="/faq"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                            >
+                                <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
+                                <span>Pusat Tanya Jawab (FAQ)</span>
+                            </Link>
+                        </div>
+
+                        {/* Group 3: Reports & Governance */}
+                        <div className="pt-2 border-t border-surface-container space-y-1">
+                            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
+                                Portal Laporan &amp; Governance
                             </span>
                             {reportItems.map((r, idx) => (
                                 <Link
                                     key={idx}
                                     href={r.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="px-3 py-2.5 min-h-11 flex items-center justify-between gap-2 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all min-w-0"
+                                    className="px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
                                 >
-                                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                        <span className="material-symbols-outlined text-[18px] text-primary shrink-0">
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="material-symbols-outlined text-[18px] text-primary">
                                             {r.icon}
                                         </span>
-                                        <span className="truncate">{r.name}</span>
+                                        <span>{r.name}</span>
                                     </div>
-                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold shrink-0">
+                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold">
                                         {r.role}
                                     </span>
                                 </Link>
                             ))}
-                            <a
-                                href="#tiers"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all min-w-0"
-                            >
-                                <span className="material-symbols-outlined text-[18px] text-primary shrink-0">card_membership</span>
-                                <span className="truncate">Paket Tingkatan Member (Silver, Gold, Platinum)</span>
-                            </a>
-                            <a
-                                href="#faq"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all min-w-0"
-                            >
-                                <span className="material-symbols-outlined text-[18px] text-primary shrink-0">quiz</span>
-                                <span className="truncate">Tanya Jawab (FAQ)</span>
-                            </a>
                         </div>
 
-                        {/* Group 3: Auth Buttons / Logout */}
-                        <div className="pt-3 border-t border-surface-container-high">
-                            {user ? (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        handleLogout();
-                                    }}
-                                    className="w-full min-h-11 flex items-center justify-center gap-2 rounded-xl border border-rose-200 text-xs text-rose-700 font-bold hover:bg-rose-50 transition-all cursor-pointer"
+                        {/* Group 4: Auth Buttons (if guest) */}
+                        {!user && (
+                            <div className="pt-3 border-t border-surface-container-high grid grid-cols-2 gap-3">
+                                <Link
+                                    href="/login"
+                                    className="w-full min-h-11 flex items-center justify-center rounded-xl border border-surface-container-high text-xs text-[#52645f] font-medium hover:bg-[#edf5f0]"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">logout</span>
-                                    <span>Keluar Akun ({user.name})</span>
-                                </button>
-                            ) : (
-                                <div className="grid grid-cols-2 gap-3">
-                                    <Link
-                                        href="/login"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="w-full min-h-11 flex items-center justify-center rounded-xl border border-surface-container-high text-xs text-[#52645f] font-medium hover:bg-[#edf5f0]"
-                                    >
-                                        Masuk Akun
-                                    </Link>
-                                    <Link
-                                        href="/register"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="w-full min-h-11 flex items-center justify-center rounded-xl bg-primary text-white text-xs font-medium shadow-xs"
-                                    >
-                                        Mulai Skrining
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                                    Masuk Akun
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    className="w-full min-h-11 flex items-center justify-center rounded-xl bg-primary text-white text-xs font-medium shadow-xs"
+                                >
+                                    Mulai Skrining
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 )}
             </header>
