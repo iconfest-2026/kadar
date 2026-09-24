@@ -29,7 +29,7 @@ export default function Welcome(props) {
                     className="pointer-events-none absolute top-[58%] -right-32 w-120 max-w-[80vw] h-95 bg-[#e7f1ec]/55 blur-3xl rounded-full"
                 />
 
-                {/* Main Page Flow - Dense & Content-Rich */}
+                {/* Main Page Flow */}
                 <div className="relative z-10 flex flex-col w-full space-y-4 sm:space-y-6">
                     <HeroSection />
                     <MemberFeaturesSection />

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function MemberFeaturesSection() {
+    let authUser = null;
+    try {
+        const page = usePage();
+        authUser = page?.props?.auth?.user || null;
+    } catch {
+        authUser = null;
+    }
+
     const [activeCategory, setActiveCategory] = useState('all');
 
     const featureModules = [
@@ -13,8 +21,8 @@ export default function MemberFeaturesSection() {
             summary: 'Arahkan kamera ke label makanan atau obat untuk deteksi seketika kadar gula bebas, sodium, kalori, dan izin edar BPOM RI.',
             badge: 'Kamera Live 0.4s',
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
-            href: '/member/scanner',
-            btnText: 'Buka Scanner',
+            href: authUser ? '/member/scanner' : '/demo/scanner',
+            btnText: authUser ? 'Buka Scanner' : 'Buka Demo Scanner',
             statusNote: 'Database 120k+ BPOM RI',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 rounded-2xl overflow-hidden border border-[#e2ece6] relative group">
@@ -38,8 +46,8 @@ export default function MemberFeaturesSection() {
             summary: 'Tanya jawab kesehatan preventif kapan saja dengan AI medis, atau jadwalkan telekonsultasi dokter spesialis berlisensi STR/SIP.',
             badge: 'Siaga 24 Jam',
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
-            href: '/member/consultations-hub',
-            btnText: 'Konsultasi',
+            href: authUser ? '/member/consultations-hub' : '/demo/consultations',
+            btnText: authUser ? 'Hub Konsultasi' : 'Buka Demo Konsultasi',
             statusNote: 'Dokter Spesialis Terdaftar',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 rounded-2xl overflow-hidden border border-[#e5eee9] relative group">
@@ -63,8 +71,8 @@ export default function MemberFeaturesSection() {
             summary: 'Catat glukosa harian, tensi darah, hidrasi, dan durasi tidur untuk memantau variabilitas metabolisme personal Anda.',
             badge: 'Analisis Deviasi',
             badgeStyle: 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]',
-            href: '/member/dashboard',
-            btnText: 'Buka Tracker',
+            href: authUser ? '/member/dashboard' : '/demo/tracker',
+            btnText: authUser ? 'Buka Tracker' : 'Buka Demo Tracker',
             statusNote: 'Biomarker HBE Terintegrasi',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 p-3.5 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] flex flex-col justify-between">
@@ -90,8 +98,8 @@ export default function MemberFeaturesSection() {
             summary: 'Bimbingan aksi mikro terarah: 14 hari kurangi pemanis cair, 30 hari jalan 10.000 langkah, hingga target remisi glukosa 90 hari.',
             badge: 'Program Remisi',
             badgeStyle: 'bg-[#fcf7ee] text-[#8e6018] border-[#f2e6cf]',
-            href: '/member/challenges',
-            btnText: 'Tantangan',
+            href: authUser ? '/member/challenges' : '/demo/challenges',
+            btnText: authUser ? 'Lihat Tantangan' : 'Buka Demo Tantangan',
             statusNote: 'Tingkat Kepatuhan 88%',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 rounded-2xl overflow-hidden border border-[#e5eee9] relative group">
@@ -115,8 +123,8 @@ export default function MemberFeaturesSection() {
             summary: 'Ruang interaksi terarah untuk berbagi pengalaman remisi, tips menu rendah gula, dan inspirasi hidup sehat bersama.',
             badge: 'Forum Terbuka',
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
-            href: '/member/community',
-            btnText: 'Forum Sehat',
+            href: authUser ? '/member/community' : '/demo/community',
+            btnText: authUser ? 'Forum Sehat' : 'Buka Demo Forum',
             statusNote: 'Diskusi Aktif 24 Jam',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 p-3 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] flex flex-col justify-between">
@@ -142,8 +150,8 @@ export default function MemberFeaturesSection() {
             summary: 'Pelacakan fase hormonal wanita terhadap sensitivitas insulin serta evaluasi rasio lemak viseral dan risiko kardiometabolik pria.',
             badge: 'Personalisasi Gender',
             badgeStyle: 'bg-[#fdf2f4] text-[#a0344d] border-[#fad5dc]',
-            href: '/member/dashboard',
-            btnText: 'Modul Vitalitas',
+            href: authUser ? '/member/dashboard' : '/demo/gender-vitality',
+            btnText: authUser ? 'Modul Vitalitas' : 'Buka Demo Vitalitas',
             statusNote: 'Prediksi AI Terkalibrasi',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 p-2.5 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] grid grid-cols-2 gap-2 text-center text-xs">
@@ -229,7 +237,7 @@ export default function MemberFeaturesSection() {
     });
 
     return (
-        <section className="w-full py-6 sm:py-9 px-4 sm:px-6 lg:px-8 max-w-310 mx-auto" id="features">
+        <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="features">
             <div className="space-y-5 sm:space-y-6">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
@@ -264,7 +272,7 @@ export default function MemberFeaturesSection() {
                     ))}
                 </div>
 
-                {/* Symmetrical 2-Column Grid (100% Simetris Kiri & Kanan) */}
+                {/* Symmetrical 2-Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                     {filtered.map(item => (
                         <div
@@ -297,7 +305,7 @@ export default function MemberFeaturesSection() {
                                 {item.visual}
                             </div>
 
-                            {/* Proportional Action Footer (Button Ramping & Proporsional) */}
+                            {/* Proportional Action Footer */}
                             <div className="pt-3.5 mt-3.5 border-t border-surface-container/70 flex items-center justify-between text-xs">
                                 <span className="text-[11px] text-[#6d807b] flex items-center gap-1.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>

@@ -541,26 +541,26 @@ export default function MetabolicArcadeModal({ isOpen, onClose }) {
                                 </div>
 
                                 {/* Dynamic Bio-Markers HUD */}
-                                <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-                                    <div className="p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-27.5">
-                                        <span className="text-[10px] text-[#556e67] block uppercase font-mono font-semibold">Gula Darah</span>
-                                        <span className={`font-serif text-lg font-bold block ${
+                                <div className="grid grid-cols-3 gap-2 w-full md:w-auto">
+                                    <div className="p-2 sm:p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-0">
+                                        <span className="text-[9px] sm:text-[10px] text-[#556e67] block uppercase font-mono font-semibold truncate">Gula Darah</span>
+                                        <span className={`font-serif text-base sm:text-lg font-bold block ${
                                             currentMetrics.glucose > 140 ? 'text-rose-600' : currentMetrics.glucose > 115 ? 'text-amber-600' : 'text-emerald-700'
                                         }`}>
-                                            {currentMetrics.glucose} <span className="text-[10px] font-sans font-normal">mg/dL</span>
+                                            {currentMetrics.glucose} <span className="text-[9px] sm:text-[10px] font-sans font-normal">mg/dL</span>
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-27.5">
-                                        <span className="text-[10px] text-[#556e67] block uppercase font-mono font-semibold">Beban Insulin</span>
-                                        <span className="font-sans text-xs font-bold text-on-surface block mt-1">
+                                    <div className="p-2 sm:p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-0">
+                                        <span className="text-[9px] sm:text-[10px] text-[#556e67] block uppercase font-mono font-semibold truncate">Beban Insulin</span>
+                                        <span className="font-sans text-[11px] sm:text-xs font-bold text-on-surface block mt-1 truncate">
                                             {currentMetrics.insulinStrain}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-22.5">
-                                        <span className="text-[10px] text-[#556e67] block uppercase font-mono font-semibold">Fokus Energi</span>
-                                        <span className="font-sans text-xs font-bold text-primary block mt-1">
+                                    <div className="p-2 sm:p-2.5 rounded-2xl bg-white border border-[#cfe1d7] text-center min-w-0">
+                                        <span className="text-[9px] sm:text-[10px] text-[#556e67] block uppercase font-mono font-semibold truncate">Fokus Energi</span>
+                                        <span className="font-sans text-[11px] sm:text-xs font-bold text-primary block mt-1">
                                             {currentMetrics.energy}%
                                         </span>
                                     </div>

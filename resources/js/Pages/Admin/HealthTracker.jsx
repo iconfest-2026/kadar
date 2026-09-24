@@ -41,11 +41,31 @@ export default function HealthTracker({ records = { data: [], links: [] }, stats
             key: 'metric_type',
             label: 'Tipe Metrik',
             render: (row) => {
+                const metricLabels = {
+                    sleep_duration: 'Durasi Tidur',
+                    water_intake: 'Asupan Air Minum',
+                    steps: 'Langkah Kaki',
+                    blood_glucose: 'Gula Darah Puasa',
+                    mood_score: 'Kesejahteraan Mental (Mood)',
+                    heart_rate: 'Denyut Jantung',
+                    blood_pressure_systolic: 'Tekanan Darah Sistolik',
+                    blood_pressure_diastolic: 'Tekanan Darah Diastolik',
+                    weight: 'Berat Badan',
+                    body_weight: 'Berat Badan',
+                    calories: 'Asupan Kalori',
+                };
                 const metricIcons = {
                     sleep_duration: 'bedtime',
                     water_intake: 'water_drop',
                     steps: 'directions_walk',
                     blood_glucose: 'bloodtype',
+                    mood_score: 'sentiment_satisfied',
+                    heart_rate: 'favorite',
+                    blood_pressure_systolic: 'speed',
+                    blood_pressure_diastolic: 'speed',
+                    weight: 'scale',
+                    body_weight: 'scale',
+                    calories: 'restaurant',
                 };
                 return (
                     <div className="flex items-center gap-1.5">
@@ -54,6 +74,7 @@ export default function HealthTracker({ records = { data: [], links: [] }, stats
                         </span>
                         <span className="font-semibold text-xs text-on-surface">
                             {row.metric_type}
+                            {metricLabels[row.metric_type] || (row.metric_type ? row.metric_type.replace(/_/g, ' ') : 'Biomarker')}
                         </span>
                     </div>
                 );

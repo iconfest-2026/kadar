@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Consultation;
 use App\Models\InstructorMemberAssignment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,13 +17,22 @@ class ConsultationController extends Controller
     {
         $instructor = Auth::user();
 
+        $assignedMemberIds = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('status', 'ACTIVE')
+            ->pluck('member_id');
+
+        $assignedMembers = User::whereIn('id', $assignedMemberIds)
+            ->select('id', 'name', 'email')
+            ->get();
+
         $consultations = Consultation::where('instructor_id', $instructor->id)
             ->with('member')
-            ->orderBy('scheduled_start')
+            ->orderBy('scheduled_start', 'desc')
             ->paginate(15);
 
         return Inertia::render('Instructor/Consultations', [
             'consultations' => $consultations,
+            'assignedMembers' => $assignedMembers,
         ]);
     }
 

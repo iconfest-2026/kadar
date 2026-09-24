@@ -64,6 +64,25 @@ export default function Recommendations({ insights = { data: [], links: [] }, si
         },
     ];
 
+    const signalMap = {
+        SLEEP_DEFICIT: 'Defisit Durasi Tidur',
+        GLUCOSE_SPIKE: 'Lonjakan Glukosa Postprandial',
+        HYDRATION_LOW: 'Asupan Cairan Kurang',
+        SEDENTARY_STREAK: 'Kurang Aktivitas Fisik',
+        GLYCEMIC_VARIABILITY_HIGH: 'Variabilitas Glikemik Tinggi',
+        LATE_NIGHT_MEAL: 'Pola Makan Larut Malam',
+        VITALITY_DROP: 'Penurunan Indikator Vitalitas',
+    };
+
+    const severityMap = {
+        ATTENTION: 'Perlu Perhatian',
+        CRITICAL: 'Kritis',
+        NOTICE: 'Pemberitahuan',
+        FOLLOW_UP: 'Tindak Lanjut',
+        INFO: 'Informasi',
+        STABLE: 'Stabil',
+    };
+
     const signalColumns = [
         {
             key: 'signal_type',
@@ -72,6 +91,9 @@ export default function Recommendations({ insights = { data: [], links: [] }, si
                 <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-amber-500 text-[18px]">warning</span>
                     <span className="font-bold text-xs text-on-surface">{row.signal_type}</span>
+                    <span className="font-bold text-xs text-on-surface">
+                        {signalMap[row.signal_type] || (row.signal_type ? row.signal_type.replace(/_/g, ' ') : 'Anomali Perilaku')}
+                    </span>
                 </div>
             ),
         },
@@ -81,6 +103,8 @@ export default function Recommendations({ insights = { data: [], links: [] }, si
             render: (row) => (
                 <AdminBadge variant={row.severity.toLowerCase()}>
                     {row.severity}
+                <AdminBadge variant={row.severity?.toLowerCase() === 'attention' ? 'attention' : row.severity?.toLowerCase() === 'critical' ? 'suspended' : 'active'}>
+                    {severityMap[row.severity] || row.severity || 'Normal'}
                 </AdminBadge>
             ),
         },

@@ -1,7 +1,16 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function CtaBanner() {
+    const { auth } = usePage().props;
+    const user = auth?.user;
+    const roles = user?.roles || [];
+    const isAdmin = roles.includes('admin');
+    const isInstructor = roles.includes('instructor');
+
+    const dashboardHref = isAdmin ? '/admin/dashboard' : isInstructor ? '/instructor/dashboard' : '/member/dashboard';
+    const dashboardLabel = isAdmin ? 'Buka Panel Admin' : isInstructor ? 'Buka Portal Instruktur' : 'Buka Dashboard Saya';
+
     return (
         <section className="w-full pb-8 sm:pb-12 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="auth-portal">
             <div className="relative overflow-hidden p-5 sm:p-8 lg:p-10 bg-primary text-white rounded-2xl sm:rounded-3xl space-y-4 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
@@ -26,15 +35,28 @@ export default function CtaBanner() {
                         Arahkan kamera ke label kemasan makanan Anda. Dapatkan pemetaan beban glikemik seketika, rekomendasi gizi dari dokter konsultan, dan panduan remisi bertahap.
                     </p>
 
-                    {/* Action Buttons (Standard 48px Touch Ergonomics) */}
+                    {/* Action Buttons */}
                     <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-                        <Link
-                            href="/register"
-                            className="inline-flex items-center justify-center min-h-12 px-7 py-3.5 rounded-full bg-white text-primary text-xs font-medium hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-sm text-center"
-                        >
-                            <span>Mulai Skrining Mandiri Bebas Biaya</span>
-                            <span className="ml-1 text-xs">→</span>
-                        </Link>
+                        {user ? (
+                            <Link
+                                href={dashboardHref}
+                                className="inline-flex items-center justify-center min-h-12 px-7 py-3.5 rounded-full bg-white text-primary text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-sm text-center gap-2"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    {isAdmin ? 'admin_panel_settings' : isInstructor ? 'clinical_notes' : 'space_dashboard'}
+                                </span>
+                                <span>{dashboardLabel}</span>
+                                <span className="ml-1 text-xs">→</span>
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center justify-center min-h-12 px-7 py-3.5 rounded-full bg-white text-primary text-xs font-medium hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-sm text-center"
+                            >
+                                <span>Mulai Skrining Mandiri Bebas Biaya</span>
+                                <span className="ml-1 text-xs">→</span>
+                            </Link>
+                        )}
                         <a
                             href="mailto:care@aevyra.health"
                             className="inline-flex items-center justify-center min-h-12 px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-sm text-white text-xs font-medium hover:bg-white/15 transition-all active:scale-95 border border-white/20 text-center"
@@ -56,4 +78,3 @@ export default function CtaBanner() {
         </section>
     );
 }
-

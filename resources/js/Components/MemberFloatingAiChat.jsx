@@ -192,7 +192,7 @@ export default function MemberFloatingAiChat() {
     };
 
     return (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end print:hidden">
+        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end print:hidden">
             {/* Chat Box Popup */}
             {isOpen && (
                 <div className="w-[calc(100vw-32px)] sm:w-96 h-135 max-h-[82vh] mb-3 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/80 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">

@@ -71,7 +71,7 @@ export default function Users({ users = { data: [], links: [] }, filters = {} })
             label: 'Status Akun',
             render: (row) => (
                 <AdminBadge variant={row.status || 'ACTIVE'} pulse={row.status === 'ACTIVE'}>
-                    {row.status || 'ACTIVE'}
+                    {row.status === 'ACTIVE' ? 'Aktif' : row.status === 'SUSPENDED' ? 'Dibekukan' : (row.status ? row.status.replace(/_/g, ' ') : 'Aktif')}
                 </AdminBadge>
             ),
         },

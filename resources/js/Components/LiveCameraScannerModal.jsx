@@ -228,10 +228,10 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-surface-container px-4 bg-surface-container-lowest/50">
+                <div className="flex border-b border-surface-container px-4 bg-surface-container-lowest/50 overflow-x-auto no-scrollbar">
                     <button
                         onClick={() => setActiveTab('camera')}
-                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors ${
+                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
                             activeTab === 'camera'
                                 ? 'border-primary text-primary'
                                 : 'border-transparent text-on-surface-variant hover:text-on-surface'
@@ -242,7 +242,7 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                     </button>
                     <button
                         onClick={() => setActiveTab('presets')}
-                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors ${
+                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
                             activeTab === 'presets'
                                 ? 'border-primary text-primary'
                                 : 'border-transparent text-on-surface-variant hover:text-on-surface'
@@ -253,7 +253,7 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                     </button>
                     <button
                         onClick={() => setActiveTab('upload')}
-                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors ${
+                        className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
                             activeTab === 'upload'
                                 ? 'border-primary text-primary'
                                 : 'border-transparent text-on-surface-variant hover:text-on-surface'

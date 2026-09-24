@@ -38,6 +38,35 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+// Interactive Feature Demo / Showcase Pages (Public Access)
+Route::get('/demo/scanner', function () {
+    return Inertia::render('Demo/ScannerDemo');
+})->name('demo.scanner');
+
+Route::get('/demo/consultations', function () {
+    return Inertia::render('Demo/ConsultationsDemo');
+})->name('demo.consultations');
+
+Route::get('/demo/tracker', function () {
+    return Inertia::render('Demo/TrackerDemo');
+})->name('demo.tracker');
+
+Route::get('/demo/challenges', function () {
+    return Inertia::render('Demo/ChallengesDemo');
+})->name('demo.challenges');
+
+Route::get('/demo/community', function () {
+    return Inertia::render('Demo/CommunityDemo');
+})->name('demo.community');
+
+Route::get('/demo/gender-vitality', function () {
+    return Inertia::render('Demo/GenderVitalityDemo');
+})->name('demo.gender-vitality');
+
+Route::get('/demo/emergency', function () {
+    return Inertia::render('Demo/EmergencyDemo');
+})->name('demo.emergency');
+
 // Public FAQ Page (20 Comprehensive Medical & Platform Questions)
 Route::get('/faq', function () {
     return Inertia::render('Faq');
@@ -52,11 +81,6 @@ Route::get('/pricing', function () {
     return redirect()->route('paket');
 });
 
-// Itch.io Style Interactive Metabolic Mini-Game
-Route::get('/arcade', function () {
-    return Inertia::render('Arcade');
-})->name('arcade');
-
 // Legal & Compliance Dedicated Pages
 Route::get('/privacy', function () {
     return Inertia::render('Privacy');
@@ -66,6 +90,19 @@ Route::get('/terms', function () {
     return Inertia::render('Terms');
 })->name('terms');
 
+// Itch.io Style Interactive Metabolic Mini-Game
+Route::get('/arcade', function () {
+    return Inertia::render('Arcade');
+})->name('arcade');
+
+// Error Page Testing & Verification Route
+Route::get('/error/{code?}', function (?int $code = 404) {
+    $validCodes = [403, 404, 419, 429, 500, 503];
+    $status = in_array((int)$code, $validCodes) ? (int)$code : 404;
+    return Inertia::render('Error', [
+        'status' => $status,
+    ]);
+})->name('error');
 
 // Guest / Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -169,6 +206,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/members/{member}', [InstructorCaseloadController::class, 'showMember'])->name('members.show');
         Route::get('/members', [InstructorCaseloadController::class, 'members'])->name('members.index');
         Route::post('/members/{member}/interventions', [InstructorCaseloadController::class, 'storeIntervention'])->name('members.interventions.store');
+        Route::post('/members/{member}/consultations/note', [InstructorCaseloadController::class, 'storeConsultationNote'])->name('members.consultations.note');
         Route::get('/interventions', [InterventionController::class, 'index'])->name('interventions.index');
         Route::post('/interventions', [InterventionController::class, 'store'])->name('interventions.store');
         Route::patch('/interventions/{intervention}', [InterventionController::class, 'update'])->name('interventions.update');

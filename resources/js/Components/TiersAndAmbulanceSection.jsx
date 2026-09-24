@@ -95,7 +95,7 @@ export default function TiersAndAmbulanceSection() {
     };
 
     return (
-        <section className="w-full py-6 sm:py-9 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="tiers">
+        <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="tiers">
             <div className="space-y-8 sm:space-y-10">
                 {/* 1. Membership Tiers Section */}
                 <div className="space-y-5 sm:space-y-6">
@@ -282,15 +282,22 @@ export default function TiersAndAmbulanceSection() {
                                     </span>
                                     <span>{ambulanceCalling ? 'Memverifikasi Koordinat...' : 'Hubungi Ambulan Siaga 119'}</span>
                                 </button>
-                                <div className="flex flex-col justify-center">
+                                <div className="flex flex-col justify-center gap-1">
                                     <span className="text-xs font-semibold text-[#182926] flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                        Bebas Pulsa 24 Jam
+                                        Bebas Pulsa 24 Jam • Command Center 119
                                     </span>
                                     <span className="text-[11px] text-[#697c77]">
-                                        Terhubung langsung ke Command Center 119 Kemenkes RI
+                                        Terhubung langsung ke Posko Siaga Darurat Kemenkes RI
                                     </span>
                                 </div>
+                                <Link
+                                    href="/demo/emergency"
+                                    className="min-h-12 px-5 py-3 rounded-full bg-white/80 border border-[#ebdcd6] text-[#4d3d39] text-xs font-bold hover:bg-white transition-all active:scale-95 text-center flex items-center justify-center gap-1.5 shrink-0"
+                                >
+                                    <span className="material-symbols-outlined text-[16px] text-rose-600">emergency</span>
+                                    <span>Buka Demo 119</span>
+                                </Link>
                             </div>
                         </div>
 
