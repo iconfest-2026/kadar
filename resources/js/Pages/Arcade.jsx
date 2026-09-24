@@ -75,28 +75,28 @@ export default function Arcade() {
                     </p>
 
                     {/* Mode Selector Tabs */}
-                    <div className="pt-3 flex justify-center">
-                        <div className="p-1.5 bg-surface-container-low rounded-2xl border border-surface-container flex items-center gap-1.5 shadow-2xs">
+                    <div className="pt-3 flex justify-center w-full">
+                        <div className="p-1.5 bg-surface-container-low rounded-2xl border border-surface-container flex flex-col sm:flex-row items-center gap-1.5 shadow-2xs w-full sm:w-auto">
                             <button
                                 type="button"
                                 onClick={() => setActiveView('story')}
-                                className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                                     activeView === 'story'
                                         ? 'bg-primary text-white shadow-xs'
                                         : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
                                 }`}
                             >
                                 <span className="material-symbols-outlined text-[17px]">auto_stories</span>
-                                <span>Story Game 24 Jam (Visual Novel Timeline)</span>
+                                <span>Story Game 24 Jam</span>
                                 <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-800 text-[9px] font-mono">
-                                    Story Mode
+                                    Visual Novel
                                 </span>
                             </button>
 
                             <button
                                 type="button"
                                 onClick={() => setActiveView('runner')}
-                                className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                                     activeView === 'runner'
                                         ? 'bg-primary text-white shadow-xs'
                                         : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
