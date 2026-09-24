@@ -58,7 +58,7 @@ export default function Arcade() {
             <Head title="Arena Gamifikasi 2D — Glucose Dash & Edukasi Metabolik | AEVYRA" />
             <Header />
 
-            <main className="flex-1 max-w-300 mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 w-full space-y-10">
+            <main className="flex-1 max-w-7xl min-w-0 mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 w-full space-y-10">
                 {/* Hero Header */}
                 <div className="space-y-3 text-center max-w-3xl mx-auto pt-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-xs font-mono font-bold border border-[#cfe1d7]">

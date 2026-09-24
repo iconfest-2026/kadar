@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\InstructorMemberAssignment;
 use App\Models\Intervention;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,6 +16,14 @@ class InterventionController extends Controller
     public function index(Request $request)
     {
         $instructor = Auth::user();
+
+        $assignedMemberIds = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('status', 'ACTIVE')
+            ->pluck('member_id');
+
+        $assignedMembers = User::whereIn('id', $assignedMemberIds)
+            ->select('id', 'name', 'email')
+            ->get();
 
         $query = Intervention::where('created_by', $instructor->id)
             ->with('user');
@@ -27,6 +36,7 @@ class InterventionController extends Controller
 
         return Inertia::render('Instructor/Interventions', [
             'interventions' => $interventions,
+            'assignedMembers' => $assignedMembers,
             'filters' => $request->only('status'),
         ]);
     }

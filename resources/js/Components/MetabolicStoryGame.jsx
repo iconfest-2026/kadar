@@ -1868,7 +1868,7 @@ export default function MetabolicStoryGame() {
         <div
             ref={gameContainerRef}
             className={`w-full bg-[#121917] text-white rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex flex-col select-none transition-all ${
-                isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'max-w-300 mx-auto'
+                isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'max-w-7xl min-w-0 mx-auto'
             }`}
         >
             {/* Top Retro WebGL Bar */}

@@ -11,8 +11,8 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="w-full bg-[#f2f7f4] text-[#2c3d38] pt-14 pb-10 border-t border-[#e0ece5]">
-            <div className="max-w-300 mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <footer className="w-full bg-[#f2f7f4] text-[#2c3d38] pt-8 pb-6 border-t border-[#e0ece5]">
+            <div className="max-w-7xl min-w-0 mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-4">
                     {/* Brand & Mission Statement */}
                     <div className="lg:col-span-5 space-y-4">

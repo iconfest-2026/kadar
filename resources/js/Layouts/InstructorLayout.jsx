@@ -13,241 +13,275 @@ export default function InstructorLayout({ children, title, activeNav }) {
         router.post('/logout');
     };
 
-    const navItems = [
-        { id: 'dashboard', name: 'Dashboard Caseload', href: '/instructor/dashboard', icon: 'dashboard' },
-        { id: 'members', name: 'Member Binaan', href: '/instructor/members', icon: 'groups' },
-        { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes' },
-        { id: 'consultations', name: 'Jadwal Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
-        { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring' },
+    const navSections = [
+        {
+            title: 'Pengawasan Caseload & Sinyal',
+            items: [
+                { id: 'dashboard', name: 'Dashboard Caseload', href: '/instructor/dashboard', icon: 'dashboard' },
+                { id: 'members', name: 'Member Binaan', href: '/instructor/members', icon: 'groups', badge: 'Kohor' },
+            ],
+        },
+        {
+            title: 'Tindakan Klinis & Intervensi',
+            items: [
+                { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes', badge: 'HBE' },
+                { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
+            ],
+        },
+        {
+            title: 'Evaluasi & Laporan',
+            items: [
+                { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
+            ],
+        },
     ];
 
     const renderStatusBadge = (status) => {
         if (status === 'ACTIVE') {
             return (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-emerald-500/10 text-emerald-800 border border-emerald-500/20">
-                    <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    TERVERIFIKASI
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>TERVERIFIKASI IDI</span>
                 </span>
             );
         }
         if (status === 'PENDING') {
             return (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-amber-500/10 text-amber-800 border border-amber-500/20">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                    MENUNGGU REVIEW
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    <span>MENUNGGU REVIEW STR</span>
                 </span>
             );
         }
         return (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-rose-500/10 text-rose-800 border border-rose-500/20">
-                <span className="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
-                DITANGGUHKAN
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-rose-500/10 text-rose-800 dark:text-rose-300 border border-rose-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>DITANGGUHKAN</span>
             </span>
         );
     };
 
     return (
-        <div className="min-h-screen bg-[#f0f8f4] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
-            <Head title={title ? `${title} — Instruktur Bimbingan AEVYRA` : 'Instruktur Panel — AEVYRA'} />
+        <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
+            <Head title={title ? `${title} — Panel Instruktur AEVYRA` : 'Instruktur Panel — AEVYRA'} />
 
-            {/* Ambient Background Glow Orbs (Matching Welcome.jsx) */}
-            <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-                <div className="absolute -top-20 left-1/3 w-150 h-87.5 bg-linear-to-tr from-primary-fixed-dim/35 via-primary-fixed/25 to-transparent blur-[120px] rounded-full" />
-                <div className="absolute top-[45%] -left-20 w-137.5 h-112.5 bg-linear-to-br from-secondary-fixed/30 via-primary-fixed/15 to-transparent blur-[130px] rounded-full" />
-                <div className="absolute bottom-5 right-10 w-125 h-87.5 bg-linear-to-bl from-primary-container/20 to-transparent blur-[140px] rounded-full" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
+            {/* Ambient Background Soft Blobs */}
+            <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-paint">
+                <div className="absolute -top-32 left-1/4 w-150 h-80 bg-gradient-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute top-1/2 -right-20 w-120 h-100 bg-[#f4ebe1]/30 blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-gradient-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
             </div>
 
             {/* Mobile Overlay */}
             {mobileMenuOpen && (
                 <div 
-                    className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                 />
             )}
 
-            {/* Frosted Glass Sidebar */}
+            {/* Sidebar Navigation */}
             <aside 
-                className={`fixed inset-y-0 left-0 z-50 w-72 bg-white/80 backdrop-blur-xl border-r border-primary/10 flex flex-col transition-all duration-300 shadow-[0_4px_30px_rgba(0,67,62,0.04)] lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-3rem)] bg-white dark:bg-surface border-r border-surface-container flex flex-col transition-transform duration-300 shadow-sm lg:translate-x-0 ${
                     mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
                 {/* Brand Header */}
-                <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/40">
-                    <Link href="/instructor/dashboard" className="flex items-center gap-3 group">
+                <div className="h-16 flex items-center justify-between px-5 border-b border-surface-container shrink-0">
+                    <Link href="/instructor/dashboard" className="flex items-center gap-2.5 group min-w-0">
                         <img
                             src="/image/Logo_AEVYRA_Icon.png"
                             alt="AEVYRA Logo"
-                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform"
+                            className="w-8 h-8 rounded-xl object-contain shadow-2xs group-hover:scale-105 transition-transform shrink-0"
                         />
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>
-                                <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-secondary-fixed/40 text-secondary-container border border-secondary/20">
+                        <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <span className="font-heading font-black text-lg text-primary tracking-tight">AEVYRA</span>
+                                <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
                                     INSTRUKTUR
                                 </span>
                             </div>
-                            <p className="text-[11px] text-on-surface-variant font-medium">Bimbingan & Intervensi</p>
                         </div>
                     </Link>
+
                     <button 
-                        className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors"
+                        type="button"
+                        className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
                         onClick={() => setMobileMenuOpen(false)}
+                        aria-label="Tutup Menu"
                     >
                         <span className="material-symbols-outlined text-[20px]">close</span>
                     </button>
                 </div>
 
-                {/* Navigation Menu */}
-                <div className="px-6 pt-5 pb-2">
-                    <span className="text-[10px] font-label-mono font-bold uppercase tracking-wider text-on-surface-variant/70">
-                        Workspace Pendampingan
-                    </span>
-                </div>
-                <nav className="flex-1 overflow-y-auto px-4 space-y-1.5 scrollbar-thin">
-                    {navItems.map((item) => {
-                        const isActive = activeNav === item.id;
-                        return (
-                            <Link
-                                key={item.id}
-                                href={item.href}
-                                className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl transition-all duration-200 text-sm font-medium ${
-                                    isActive 
-                                    ? 'bg-primary text-white font-semibold shadow-xs shadow-primary/25 translate-x-1' 
-                                    : 'text-on-surface-variant hover:text-primary hover:bg-white/80 hover:translate-x-1 border border-transparent hover:border-primary/10'
-                                }`}
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                <span className={`material-symbols-outlined text-[20px] ${isActive ? 'text-white' : 'text-primary/70'}`}>
-                                    {item.icon}
-                                </span>
-                                <span>{item.name}</span>
-                                {isActive && (
-                                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                )}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Elevated Status Profile Card in Sidebar */}
-                <div className="p-4 border-t border-primary/10 shrink-0 bg-white/40">
-                    <div className="bg-white/85 backdrop-blur-md rounded-2xl p-3.5 border border-primary/10 shadow-xs">
-                        <div className="flex items-center gap-3 mb-2.5">
-                            <div className="relative">
-                                <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center font-heading font-black text-secondary text-base">
-                                    {user?.name?.charAt(0) || 'I'}
-                                </div>
-                                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-on-surface truncate">{user?.name}</p>
-                                <p className="text-[11px] text-on-surface-variant truncate">{user?.email}</p>
-                            </div>
+                {/* Instructor Profile Card in Sidebar */}
+                <div className="p-4 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2.5 shrink-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
+                            {user?.name?.charAt(0) || 'D'}
                         </div>
-
-                        {/* Status pill & role indicator */}
-                        <div className="flex items-center justify-between pt-2 border-t border-primary/5">
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-on-surface-variant font-medium">Status:</span>
-                                {renderStatusBadge(userStatus)}
-                            </div>
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                                className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
-                                title="Keluar dari sesi Instruktur"
-                            >
-                                <span className="material-symbols-outlined text-[18px]">logout</span>
-                            </button>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-on-surface truncate">{user?.name || 'Dokter Pendamping'}</p>
+                            <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
                         </div>
                     </div>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-surface-container/80 text-[10px]">
+                        <span className="text-on-surface-variant font-medium">Status Akun:</span>
+                        {renderStatusBadge(userStatus)}
+                    </div>
+                </div>
+
+                {/* Categorized Nav Links */}
+                <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5 no-scrollbar">
+                    {navSections.map((sec, idx) => (
+                        <div key={idx} className="space-y-1">
+                            <span className="px-3 text-[10px] font-label-mono font-bold uppercase tracking-wider text-on-surface-variant block">
+                                {sec.title}
+                            </span>
+                            <div className="space-y-0.5">
+                                {sec.items.map((item) => {
+                                    const isActive = activeNav === item.id;
+                                    return (
+                                        <Link
+                                            key={item.id}
+                                            href={item.href}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all min-w-0 ${
+                                                isActive
+                                                    ? 'bg-primary text-white font-bold shadow-2xs'
+                                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                                <span className={`material-symbols-outlined text-[18px] shrink-0 ${
+                                                    isActive ? 'text-white' : 'text-primary'
+                                                }`}>
+                                                    {item.icon}
+                                                </span>
+                                                <span className="truncate">{item.name}</span>
+                                            </div>
+
+                                            {item.badge && (
+                                                <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 ${
+                                                    isActive
+                                                        ? 'bg-white/20 text-white'
+                                                        : 'bg-surface-container text-on-surface-variant'
+                                                }`}>
+                                                    {item.badge}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Clinical Responsibility Guide Callout */}
+                    <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container space-y-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+                            <span className="font-heading font-black text-xs text-on-surface">
+                                Panduan Etik Medis
+                            </span>
+                        </div>
+                        <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                            Intervensi bersifat bimbingan perilaku preventif. Sesuai UU PDP 27/2022, jaga kerahasiaan riwayat biologis member.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Sidebar Footer Utilities */}
+                <div className="p-3 border-t border-surface-container space-y-2 shrink-0 bg-white dark:bg-surface">
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full py-2 px-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-700 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-[16px]">logout</span>
+                        <span>Keluar Akun</span>
+                    </button>
                 </div>
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 lg:ml-72 relative z-10">
-                {/* Frosted Glass Topbar */}
-                <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-md border-b border-primary/10 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-all">
-                    <div className="flex items-center gap-3">
+            <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
+                
+                {/* Top Header Bar */}
+                <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-surface/80 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-6 lg:px-8 min-w-0 w-full">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 mr-2">
                         <button
                             type="button"
                             onClick={() => setMobileMenuOpen(true)}
-                            className="lg:hidden p-2 rounded-xl text-on-surface-variant hover:bg-white/80 hover:text-primary transition-colors border border-primary/10"
+                            className="lg:hidden p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                            aria-label="Buka Menu Sidebar"
                         >
-                            <span className="material-symbols-outlined text-[22px]">menu</span>
+                            <span className="material-symbols-outlined text-[24px]">menu</span>
                         </button>
-                        <div>
-                            <span className="text-[10px] font-label-mono uppercase tracking-wider text-on-surface-variant/80 font-bold block">
-                                Portal Instruktur Binaan
+                        <div className="min-w-0">
+                            <span className="text-[10px] font-label-mono font-bold uppercase text-primary tracking-wider hidden sm:block truncate">
+                                Portal Tenaga Medis Pendamping
                             </span>
-                            <h1 className="text-xl font-heading font-bold text-primary tracking-tight">
+                            <h2 className="font-heading font-black text-sm sm:text-base md:text-lg text-on-surface leading-tight truncate">
                                 {title || 'Caseload & Bimbingan'}
-                            </h1>
+                            </h2>
                         </div>
                     </div>
                     
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                         {/* Status Pill in Topbar */}
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/75 backdrop-blur-md rounded-full border border-primary/10 shadow-xs">
-                            <span className="text-[11px] font-medium text-on-surface-variant">Kredensial:</span>
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded-xl border border-surface-container text-xs shrink-0">
+                            <span className="text-[11px] font-medium text-on-surface-variant">Kredensial STR:</span>
                             {renderStatusBadge(userStatus)}
                         </div>
 
-                        {/* Notifications */}
-                        <button className="p-2.5 rounded-xl bg-white/75 backdrop-blur-md text-on-surface-variant hover:text-primary hover:bg-white border border-primary/10 shadow-xs transition-all relative">
-                            <span className="material-symbols-outlined text-[20px]">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full ring-2 ring-white"></span>
-                        </button>
-                        
                         {/* User Dropdown */}
-                        <div className="relative">
+                        <div className="relative shrink-0">
                             <button
                                 type="button"
                                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center gap-2.5 p-1.5 pr-3 rounded-2xl bg-white/75 backdrop-blur-md border border-primary/10 hover:border-primary/20 shadow-xs transition-all"
+                                className="flex items-center gap-1.5 p-1 rounded-xl hover:bg-surface-container transition-all cursor-pointer"
                             >
-                                <div className="w-8 h-8 rounded-xl bg-secondary text-white flex items-center justify-center font-heading font-bold text-xs shadow-xs">
-                                    {user?.name?.charAt(0) || 'I'}
+                                <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary">
+                                    {user?.name?.charAt(0) || 'D'}
                                 </div>
-                                <div className="hidden md:flex flex-col text-left">
-                                    <span className="text-xs font-bold text-on-surface truncate max-w-28 leading-tight">
-                                        {user?.name}
-                                    </span>
-                                    <span className="text-[10px] font-label-mono text-secondary font-semibold leading-tight">
-                                        Tenaga Ahli
-                                    </span>
-                                </div>
-                                <span className="material-symbols-outlined text-[16px] text-on-surface-variant ml-0.5">
+                                <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
                                     expand_more
                                 </span>
                             </button>
 
                             {userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-primary/10 py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                                    <div className="px-4 py-2.5 border-b border-primary/10 mb-1">
+                                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-surface rounded-2xl shadow-xl border border-surface-container py-2 z-50 animate-scale-up">
+                                    <div className="px-4 py-2 border-b border-surface-container">
                                         <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
                                         <p className="text-[11px] text-on-surface-variant truncate">{user?.email}</p>
-                                        <div className="mt-2 flex items-center justify-between">
-                                            <span className="text-[10px] text-on-surface-variant">Status Lisensi:</span>
-                                            {renderStatusBadge(userStatus)}
+                                        <div className="flex items-center gap-1.5 mt-1">
+                                            <span className="inline-block px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary">
+                                                Instruktur Medis
+                                            </span>
                                         </div>
                                     </div>
                                     <Link
                                         href="/instructor/consultations"
-                                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-primary/5 flex items-center gap-2 transition-colors"
+                                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
                                         onClick={() => setUserMenuOpen(false)}
                                     >
                                         <span className="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
-                                        <span>Kelola Jadwal Bimbingan</span>
+                                        <span>Jadwal Konsultasi Saya</span>
+                                    </Link>
+                                    <Link
+                                        href="/instructor/reports"
+                                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
+                                        onClick={() => setUserMenuOpen(false)}
+                                    >
+                                        <span className="material-symbols-outlined text-[16px] text-primary">monitoring</span>
+                                        <span>Laporan Klinis Kohort</span>
                                     </Link>
                                     <button
                                         type="button"
                                         onClick={handleLogout}
-                                        className="w-full text-left px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors mt-1 border-t border-primary/5 pt-2"
+                                        className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 flex items-center gap-2 cursor-pointer border-t border-surface-container mt-1 pt-2"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">logout</span>
                                         <span>Keluar Akun</span>
@@ -258,43 +292,129 @@ export default function InstructorLayout({ children, title, activeNav }) {
                     </div>
                 </header>
 
-                {/* Main Body */}
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6">
-                    {/* Flash Messages with Frosted Glass Styling */}
-                    {flash?.success && (
-                        <div className="p-4 bg-emerald-50/90 backdrop-blur-md text-emerald-900 text-xs font-semibold rounded-2xl border border-emerald-200/80 flex items-center gap-3 shadow-xs animate-in slide-in-from-top duration-200">
-                            <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
-                                <span className="material-symbols-outlined text-[20px]">check_circle</span>
-                            </div>
-                            <span className="flex-1">{flash.success}</span>
+                {/* Flash Messages */}
+                {flash?.success && (
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+                        <div className="p-3.5 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 text-xs font-semibold rounded-2xl border border-emerald-500/30 flex items-center gap-2 shadow-2xs">
+                            <span className="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
+                            <span>{flash.success}</span>
                         </div>
-                    )}
-                    {flash?.error && (
-                        <div className="p-4 bg-rose-50/90 backdrop-blur-md text-rose-900 text-xs font-semibold rounded-2xl border border-rose-200/80 flex items-center gap-3 shadow-xs animate-in slide-in-from-top duration-200">
-                            <div className="w-8 h-8 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
-                                <span className="material-symbols-outlined text-[20px]">error</span>
-                            </div>
-                            <span className="flex-1">{flash.error}</span>
+                    </div>
+                )}
+                {flash?.error && (
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+                        <div className="p-3.5 bg-rose-500/10 text-rose-900 dark:text-rose-200 text-xs font-semibold rounded-2xl border border-rose-500/30 flex items-center gap-2 shadow-2xs">
+                            <span className="material-symbols-outlined text-[18px] text-rose-600">error</span>
+                            <span>{flash.error}</span>
                         </div>
-                    )}
+                    </div>
+                )}
 
+                {/* Main Body */}
+                <main className="flex-1 w-full p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto pb-24 lg:pb-8">
                     {children}
                 </main>
 
-                {/* Minimalist Glassmorphic Footer */}
-                <footer className="mt-auto border-t border-primary/10 py-5 bg-white/40 backdrop-blur-sm text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+                {/* Footer */}
+                <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="font-medium text-center sm:text-left">
-                            © 2026 AEVYRA — Standar Intervensi Non-Alarmist & Human-in-the-Loop.
+                            © 2026 AEVYRA — Ruang Bimbingan Klinis & Human-in-the-Loop.
                         </p>
-                        <div className="flex items-center gap-3 text-[11px] font-label-mono">
-                            <span className="px-2 py-0.5 rounded bg-white/80 border border-primary/10">Batas Yuridis Terisolasi</span>
+                        <div className="flex items-center gap-4 text-[11px]">
+                            <span>Batas Yuridis Terisolasi</span>
                             <span>•</span>
                             <span>UU PDP No. 27/2022</span>
+                            <span>•</span>
+                            <span>Pedoman PERKENI</span>
                         </div>
                     </div>
                 </footer>
             </div>
+
+            {/* Native Mobile Bottom Navigation Bar (Visible on < lg screens) */}
+            <nav 
+                className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-surface/95 backdrop-blur-xl border-t border-surface-container shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
+                aria-label="Navigasi Bawah Instruktur"
+            >
+                <div className="flex items-center justify-around max-w-lg mx-auto">
+                    <Link
+                        href="/instructor/dashboard"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'dashboard' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">dashboard</span>
+                            {activeNav === 'dashboard' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Caseload</span>
+                    </Link>
+
+                    <Link
+                        href="/instructor/members"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'members' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">groups</span>
+                            {activeNav === 'members' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Member</span>
+                    </Link>
+
+                    {/* Center Elevated Action: Rencana Intervensi */}
+                    <div className="flex flex-col items-center justify-center flex-1 -mt-6">
+                        <Link
+                            href="/instructor/interventions"
+                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
+                                activeNav === 'interventions' ? 'ring-2 ring-primary ring-offset-1' : ''
+                            }`}
+                            title="Rencana Intervensi Klinis"
+                        >
+                            <span className="material-symbols-outlined text-[24px]">clinical_notes</span>
+                        </Link>
+                        <span className="text-[10px] mt-1 font-bold text-primary">Intervensi</span>
+                    </div>
+
+                    <Link
+                        href="/instructor/consultations"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'consultations' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">calendar_month</span>
+                            {activeNav === 'consultations' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Jadwal</span>
+                    </Link>
+
+                    <button
+                        type="button"
+                        onClick={() => setMobileMenuOpen(true)}
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all cursor-pointer ${
+                            mobileMenuOpen || activeNav === 'reports' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                        aria-label="Buka Menu Lengkap"
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">grid_view</span>
+                            {activeNav === 'reports' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
+                    </button>
+                </div>
+            </nav>
         </div>
     );
 }

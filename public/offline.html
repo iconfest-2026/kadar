@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="title" content="AEVYRA — Offline">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEVYRA — Anda Sedang Offline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f7faf8;
+            color: #1a2e2b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .offline-card {
+            background: #ffffff;
+            border: 1px solid #dce5e2;
+            border-radius: 20px;
+            padding: 40px 32px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(0, 67, 62, 0.05), 0 8px 10px -6px rgba(0, 67, 62, 0.05);
+        }
+        .logo-wrap {
+            margin-bottom: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: #e6f4f1;
+        }
+        .logo-wrap img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+        .badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00433e;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        p {
+            font-size: 14px;
+            color: #4a635f;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+        .btn-reload {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 24px;
+            background: #00433e;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+        .btn-reload:hover {
+            background: #005a54;
+        }
+        .btn-reload:active {
+            transform: scale(0.98);
+        }
+        .tip-box {
+            margin-top: 24px;
+            padding: 14px;
+            background: #f1f7f5;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #3b5753;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-card">
+        <div class="logo-wrap">
+            <img src="/image/Logo_AEVYRA_Icon.png" alt="AEVYRA Logo" onerror="this.style.display='none'">
+        </div>
+        <div>
+            <span class="badge">Mode Offline</span>
+        </div>
+        <h1>Koneksi Internet Terputus</h1>
+        <p>
+            Anda sedang berada di luar jangkauan jaringan. Beberapa fitur online seperti konsultasi live dan sinkronisasi real-time akan dijeda hingga internet kembali terhubung.
+        </p>
+        <button class="btn-reload" onclick="window.location.reload();">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            Muat Ulang Halaman
+        </button>
+        <div class="tip-box">
+            💡 <strong>Info:</strong> Data pelacakan offline Anda akan disinkronkan secara otomatis begitu perangkat Anda terhubung kembali dengan internet.
+        </div>
+    </div>
+</body>
+</html>

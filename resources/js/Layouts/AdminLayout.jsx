@@ -75,31 +75,32 @@ export default function AdminLayout({ children, title, activeNav }) {
 
             {/* Frosted Glass Sidebar (GPU Layer Promoted) */}
             <aside 
-                className={`fixed inset-y-0 left-0 z-50 w-72 bg-white/90 backdrop-blur-md border-r border-primary/10 flex flex-col transition-transform duration-300 shadow-[0_4px_30px_rgba(0,67,62,0.04)] lg:translate-x-0 gpu-layer ${
+                className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-3rem)] bg-white/90 backdrop-blur-md border-r border-primary/10 flex flex-col transition-transform duration-300 shadow-[0_4px_30px_rgba(0,67,62,0.04)] lg:translate-x-0 gpu-layer ${
                     mobileNavOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
                 {/* Brand Header */}
                 <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/60">
-                    <Link href="/admin/dashboard" className="flex items-center gap-3 group">
+                    <Link href="/admin/dashboard" className="flex items-center gap-3 group min-w-0">
                         <img
                             src="/image/Logo_AEVYRA_Icon.png"
                             alt="AEVYRA Logo"
-                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform"
+                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform shrink-0"
                         />
-                        <div>
+                        <div className="min-w-0">
                             <div className="flex items-center gap-2">
                                 <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>
-                                <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-primary/10 text-primary border border-primary/15">
+                                <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-primary/10 text-primary border border-primary/15 shrink-0">
                                     ADMIN
                                 </span>
                             </div>
-                            <p className="text-[11px] text-on-surface-variant font-medium">Tata Kelola & 11 Modul</p>
+                            <p className="text-[11px] text-on-surface-variant font-medium truncate">Tata Kelola & 11 Modul</p>
                         </div>
                     </Link>
                     <button 
-                        className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors"
+                        className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors shrink-0"
                         onClick={() => setMobileNavOpen(false)}
+                        aria-label="Tutup Menu"
                     >
                         <span className="material-symbols-outlined text-[20px]">close</span>
                     </button>
@@ -121,14 +122,14 @@ export default function AdminLayout({ children, title, activeNav }) {
                                         <Link
                                             key={item.key}
                                             href={item.href}
-                                            className={`flex items-center gap-3 px-3 py-2 rounded-2xl transition-all duration-200 text-xs font-medium ${
+                                            className={`flex items-center gap-3 px-3 py-2 rounded-2xl transition-all duration-200 text-xs font-medium min-w-0 ${
                                                 isActive 
                                                 ? 'bg-primary text-white font-semibold shadow-xs shadow-primary/25 translate-x-1' 
                                                 : 'text-on-surface-variant hover:text-primary hover:bg-white/80 hover:translate-x-1 border border-transparent hover:border-primary/10'
                                             }`}
                                             onClick={() => setMobileNavOpen(false)}
                                         >
-                                            <span className={`material-symbols-outlined text-[18px] ${isActive ? 'text-white' : 'text-primary/70'}`}>
+                                            <span className={`material-symbols-outlined text-[18px] shrink-0 ${isActive ? 'text-white' : 'text-primary/70'}`}>
                                                 {item.icon}
                                             </span>
                                             <span className="truncate">{item.label}</span>
@@ -146,8 +147,8 @@ export default function AdminLayout({ children, title, activeNav }) {
                 {/* Status Profile Card in Sidebar */}
                 <div className="p-4 border-t border-primary/10 shrink-0 bg-white/60">
                     <div className="bg-white/90 rounded-2xl p-3 border border-primary/10 shadow-xs">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="relative">
+                        <div className="flex items-center gap-3 mb-2 min-w-0">
+                            <div className="relative shrink-0">
                                 <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center font-heading font-black text-primary text-sm">
                                     {user?.name?.charAt(0) || 'A'}
                                 </div>
@@ -161,8 +162,8 @@ export default function AdminLayout({ children, title, activeNav }) {
 
                         {/* Status pill & role indicator */}
                         <div className="flex items-center justify-between pt-2 border-t border-primary/5">
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-on-surface-variant font-medium">Status:</span>
+                            <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-[10px] text-on-surface-variant font-medium shrink-0">Status:</span>
                                 <AdminBadge variant={userStatus} size="xs" pulse={userStatus === 'ACTIVE'}>
                                     {userStatus}
                                 </AdminBadge>
@@ -170,7 +171,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                             <button
                                 type="button"
                                 onClick={handleLogout}
-                                className="p-1 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors"
+                                className="p-1 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors shrink-0"
                                 title="Keluar dari sesi Admin"
                             >
                                 <span className="material-symbols-outlined text-[16px]">logout</span>
@@ -181,28 +182,43 @@ export default function AdminLayout({ children, title, activeNav }) {
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 lg:ml-72 relative z-10">
+            <div className="flex-1 flex flex-col min-w-0 w-full max-w-full lg:ml-72 relative z-10">
                 {/* Optimized Topbar */}
-                <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-primary/10 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-all gpu-layer">
-                    <div className="flex items-center gap-3">
+                <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-primary/10 h-20 flex items-center justify-between px-3 sm:px-6 lg:px-8 transition-all gpu-layer min-w-0 w-full">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 mr-2">
                         <button
                             type="button"
                             onClick={() => setMobileNavOpen(true)}
-                            className="lg:hidden p-2 rounded-xl text-on-surface-variant hover:bg-white/80 hover:text-primary transition-colors border border-primary/10"
+                            className="lg:hidden p-2 rounded-xl text-on-surface-variant hover:bg-white/80 hover:text-primary transition-colors border border-primary/10 shrink-0"
                         >
                             <span className="material-symbols-outlined text-[22px]">menu</span>
                         </button>
-                        <div>
-                            <span className="text-[10px] font-label-mono uppercase tracking-wider text-on-surface-variant/80 font-bold block">
+                        <div className="min-w-0">
+                            <span className="text-[10px] font-label-mono uppercase tracking-wider text-on-surface-variant/80 font-bold block truncate">
                                 Panel Administrator AEVYRA
                             </span>
-                            <h1 className="text-lg sm:text-xl font-heading font-bold text-primary tracking-tight">
+                            <h1 className="text-base sm:text-xl font-heading font-bold text-primary tracking-tight truncate">
                                 {title || 'Dashboard Tata Kelola'}
                             </h1>
                         </div>
                     </div>
                     
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                        {/* Status Pill in Topbar */}
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-full border border-primary/10 shadow-xs shrink-0">
+                            <span className="text-[11px] font-medium text-on-surface-variant">Sistem:</span>
+                            <AdminBadge variant={userStatus} size="xs" pulse={userStatus === 'ACTIVE'}>
+                                {userStatus}
+                            </AdminBadge>
+                        </div>
+
+                        {/* Notifications */}
+                        <button className="p-2 sm:p-2.5 rounded-xl bg-white/90 text-on-surface-variant hover:text-primary hover:bg-white border border-primary/10 shadow-xs transition-all relative shrink-0">
+                            <span className="material-symbols-outlined text-[20px]">notifications</span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full ring-2 ring-white"></span>
+                        </button>
+                        
+                        {/* User Dropdown */}
                         {/* Status Pill in Topbar */}
                         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-full border border-primary/10 shadow-xs">
                             <span className="text-[11px] font-medium text-on-surface-variant">Sistem:</span>
@@ -275,7 +291,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                 </header>
 
                 {/* Main Body with Optimized Rendering */}
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 content-visibility-auto">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 content-visibility-auto pb-24 lg:pb-8">
                     {/* Flash Messages */}
                     {flash?.success && (
                         <div className="p-4 bg-emerald-50 text-emerald-900 text-xs font-semibold rounded-2xl border border-emerald-200 flex items-center gap-3 shadow-xs animate-in slide-in-from-top duration-200">
@@ -298,7 +314,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                 </main>
 
                 {/* Footer */}
-                <footer className="mt-auto border-t border-primary/10 py-5 bg-white/60 text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
+                <footer className="mt-auto border-t border-primary/10 py-5 mb-16 lg:mb-0 bg-white/60 text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                         <p className="font-medium text-center sm:text-left">
                             © 2026 AEVYRA — Sistem Tata Kelola Kesehatan Preventif & Medis.
@@ -311,6 +327,87 @@ export default function AdminLayout({ children, title, activeNav }) {
                     </div>
                 </footer>
             </div>
+
+            {/* Native Mobile Bottom Navigation Bar (Visible on < lg screens) */}
+            <nav 
+                className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-xl border-t border-primary/10 shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
+                aria-label="Navigasi Bawah Admin"
+            >
+                <div className="flex items-center justify-around max-w-lg mx-auto">
+                    <Link
+                        href="/admin/dashboard"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'dashboard' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">dashboard</span>
+                            {activeNav === 'dashboard' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Dashboard</span>
+                    </Link>
+
+                    <Link
+                        href="/admin/users"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'users' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">group</span>
+                            {activeNav === 'users' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Users</span>
+                    </Link>
+
+                    {/* Center Elevated Action: Scanner Monitoring */}
+                    <div className="flex flex-col items-center justify-center flex-1 -mt-6">
+                        <Link
+                            href="/admin/scanner"
+                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white active:scale-90 transition-transform ${
+                                activeNav === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
+                            }`}
+                            title="Monitor OCR Scanner"
+                        >
+                            <span className="material-symbols-outlined text-[24px]">document_scanner</span>
+                        </Link>
+                        <span className="text-[10px] mt-1 font-bold text-primary">Scanner</span>
+                    </div>
+
+                    <Link
+                        href="/admin/reports"
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                            activeNav === 'reports' ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">analytics</span>
+                            {activeNav === 'reports' && (
+                                <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                            )}
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Laporan</span>
+                    </Link>
+
+                    <button
+                        type="button"
+                        onClick={() => setMobileNavOpen(true)}
+                        className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all cursor-pointer ${
+                            mobileNavOpen ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                        aria-label="Buka Menu Lengkap"
+                    >
+                        <div className="relative flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[22px]">grid_view</span>
+                        </div>
+                        <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
+                    </button>
+                </div>
+            </nav>
         </div>
     );
 }

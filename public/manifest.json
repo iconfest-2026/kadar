@@ -1,0 +1,83 @@
+{
+    "name": "AEVYRA — Preventive Health Platform",
+    "short_name": "AEVYRA",
+    "start_url": "/",
+    "background_color": "#f7faf8",
+    "description": "Personal Preventive Health & Early Intervention Platform",
+    "display": "standalone",
+    "theme_color": "#00433e",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "description": "Buka Dashboard Utama AEVYRA",
+            "url": "/member/dashboard",
+            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "AI Health Scanner",
+            "short_name": "Scanner",
+            "description": "Pindai nutrisi & label obat",
+            "url": "/member/scanner",
+            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Konsultasi Klinis",
+            "short_name": "Konsultasi",
+            "description": "Konsultasi dengan dokter dan instruktur",
+            "url": "/member/consultations-hub",
+            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+        }
+    ]
+}

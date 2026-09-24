@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
-import { Button, Badge, Alert, Avatar, Modal, Select } from '@/Components/UI';
+import AppLayout from '../../Layouts/AppLayout';
+import { Button, Badge, Avatar, Modal } from '../../Components/UI';
 
 export default function Instructors({
     instructors = { data: [], links: [] },
@@ -71,16 +71,17 @@ export default function Instructors({
         <AppLayout activeTab="instructors" title="Tim Instruktur Medis">
             <Head title="Tim Dokter & Instruktur Pendamping — AEVYRA" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 {/* Header & Quota Status Banner */}
-                <div className="bg-gradient-to-r from-primary to-primary-container text-white p-6 sm:p-8 rounded-3xl shadow-md relative overflow-hidden">
+                <div className="relative rounded-3xl bg-linear-to-r from-primary via-[#005a54] to-primary-container p-6 sm:p-8 text-white overflow-hidden shadow-xs">
+                    <div className="absolute -right-8 -top-8 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div className="max-w-2xl space-y-2">
+                        <div className="max-w-2xl space-y-3">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
                                 <span className="material-symbols-outlined text-[14px]">medical_services</span>
                                 <span>Human-in-the-Loop Clinical Guidance</span>
                             </div>
-                            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight">
+                            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight leading-tight">
                                 Tim Dokter & Instruktur Medis Pendamping
                             </h1>
                             <p className="text-xs sm:text-sm text-white/85 leading-relaxed font-normal">
@@ -90,13 +91,13 @@ export default function Instructors({
                         </div>
 
                         {/* Quota Counter Card */}
-                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 min-w-[240px] text-center space-y-2 shrink-0">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
+                        <div className="bg-black/25 backdrop-blur-md p-5 rounded-2xl border border-white/20 w-full sm:w-auto sm:min-w-[220px] max-w-full text-center space-y-2 shrink-0">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-white/80 block font-label-mono">
                                 Kuota Pendamping Aktif
                             </span>
                             <div className="flex items-baseline justify-center gap-1">
-                                <span className="font-heading font-black text-4xl text-white">{quota.current}</span>
-                                <span className="font-heading font-bold text-xl text-white/70">/ {quota.max}</span>
+                                <span className="font-heading font-black text-4xl text-white font-mono">{quota.current}</span>
+                                <span className="font-heading font-bold text-xl text-white/70 font-mono">/ {quota.max}</span>
                             </div>
 
                             {/* Progress bar */}
@@ -107,7 +108,7 @@ export default function Instructors({
                                 />
                             </div>
 
-                            <p className="text-[11px] text-white/80 font-medium">
+                            <p className="text-[11px] text-white/90 font-medium">
                                 {quota.canAssignMore
                                     ? `Tersedia ${quota.remaining} slot tambahan`
                                     : 'Batas maksimal 3 kuota telah tercapai'}
@@ -118,7 +119,7 @@ export default function Instructors({
 
                 {/* My Active Instructors Section (if any) */}
                 {assignedInstructors.length > 0 && (
-                    <div className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-xs space-y-4">
+                    <div className="bg-white dark:bg-surface rounded-3xl p-6 border border-surface-container shadow-xs space-y-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-primary text-[22px]">verified_user</span>
@@ -133,7 +134,7 @@ export default function Instructors({
                             {assignedInstructors.map((inst) => (
                                 <div
                                     key={inst.id}
-                                    className="p-4 rounded-2xl bg-surface-container-low border border-primary/15 flex flex-col justify-between space-y-3"
+                                    className="p-5 rounded-2xl bg-surface-container-low border border-surface-container flex flex-col justify-between space-y-3"
                                 >
                                     <div className="flex items-start gap-3">
                                         <Avatar name={inst.name} size="md" />
@@ -150,7 +151,7 @@ export default function Instructors({
                                         </div>
                                     </div>
 
-                                    <div className="pt-2 border-t border-primary/10 flex items-center justify-between gap-2">
+                                    <div className="pt-2 border-t border-surface-container flex items-center justify-between gap-2">
                                         <Button
                                             type="button"
                                             size="xs"
@@ -176,14 +177,14 @@ export default function Instructors({
                 )}
 
                 {/* Filter & Search Bar */}
-                <div className="bg-white p-4 rounded-2xl border border-outline-variant/60 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="bg-white dark:bg-surface p-4 rounded-2xl border border-surface-container shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="relative w-full sm:w-80">
                         <input
                             type="text"
                             placeholder="Cari dokter, spesialisasi, atau rumah sakit..."
                             value={search}
                             onChange={handleSearchChange}
-                            className="w-full pl-10 pr-4 py-2 text-xs bg-surface-container-low rounded-xl border border-outline-variant/60 focus:outline-none focus:border-primary font-medium"
+                            className="w-full pl-10 pr-4 py-2.5 text-xs bg-surface-container-low rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium text-on-surface"
                         />
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
                             search
@@ -194,7 +195,7 @@ export default function Instructors({
                         <select
                             value={specialization}
                             onChange={handleSpecChange}
-                            className="w-full px-3 py-2 text-xs bg-surface-container-low rounded-xl border border-outline-variant/60 focus:outline-none focus:border-primary font-medium cursor-pointer"
+                            className="w-full px-3 py-2.5 text-xs bg-surface-container-low rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary font-medium text-on-surface cursor-pointer"
                         >
                             <option value="">Semua Spesialisasi Medis</option>
                             <option value="Dokter Spesialis Gizi Klinis (Sp.GK)">Dokter Spesialis Gizi Klinis (Sp.GK)</option>
@@ -217,19 +218,19 @@ export default function Instructors({
                         return (
                             <div
                                 key={inst.id}
-                                className={`rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between shadow-2xs hover:shadow-md ${
+                                className={`rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between shadow-xs hover:shadow-sm ${
                                     isRecommended
-                                        ? 'bg-gradient-to-b from-amber-50/40 via-white to-white border-amber-300/80 ring-1 ring-amber-300/40'
-                                        : 'bg-white border-outline-variant/60 hover:border-primary/30'
+                                        ? 'bg-white dark:bg-surface border-amber-300/80 ring-1 ring-amber-300/30'
+                                        : 'bg-white dark:bg-surface border-surface-container hover:border-primary/40'
                                 }`}
                             >
                                 <div>
                                     {/* Top Badges */}
                                     <div className="flex items-start justify-between gap-2 mb-3">
                                         {isRecommended ? (
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs">
+                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-300/40 shadow-2xs">
                                                 <span className="material-symbols-outlined text-[13px] text-amber-600">star</span>
-                                                Rekomendasi AEVYRA
+                                                <span>Rekomendasi AEVYRA</span>
                                             </span>
                                         ) : (
                                             <Badge variant="success" size="xs" dot>
@@ -248,32 +249,32 @@ export default function Instructors({
                                     <div className="flex items-center gap-3.5 mb-3">
                                         <Avatar name={inst.name} size="lg" />
                                         <div>
-                                            <h3 className="font-heading font-bold text-base text-primary leading-tight">
+                                            <h3 className="font-heading font-bold text-base text-on-surface leading-tight">
                                                 {inst.name}
                                             </h3>
-                                            <p className="text-xs font-semibold text-on-surface-variant mt-0.5">
+                                            <p className="text-xs font-semibold text-primary mt-0.5">
                                                 {inst.instructor_profile?.specialization || 'Dokter Umum'}
                                             </p>
-                                            <p className="text-[11px] text-on-surface-variant/80 flex items-center gap-1 mt-0.5">
+                                            <p className="text-[11px] text-on-surface-variant flex items-center gap-1 mt-0.5">
                                                 <span className="material-symbols-outlined text-[13px] text-primary">apartment</span>
-                                                {inst.instructor_profile?.institution || 'Faskes Terdaftar'}
+                                                <span>{inst.instructor_profile?.institution || 'Faskes Terdaftar'}</span>
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Bio excerpt */}
-                                    <p className="text-xs text-on-surface-variant line-clamp-3 leading-relaxed mb-4 bg-surface-container-low/50 p-3 rounded-2xl border border-outline-variant/40">
+                                    <p className="text-xs text-on-surface-variant line-clamp-3 leading-relaxed mb-4 bg-surface-container-low p-3 rounded-2xl border border-surface-container">
                                         {inst.instructor_profile?.bio ||
                                             'Tenaga ahli berlisensi yang fokus pada optimalisasi gaya hidup sehat, pencegahan penyakit kronis, dan pemantauan baseline metabolik.'}
                                     </p>
                                 </div>
 
                                 {/* Footer & Action */}
-                                <div className="pt-3 border-t border-outline-variant/40 space-y-3">
+                                <div className="pt-3 border-t border-surface-container space-y-3">
                                     <div className="flex items-center justify-between text-xs text-on-surface-variant">
                                         <span className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-[15px] text-teal-600">workspace_premium</span>
-                                            Pengalaman:
+                                            <span className="material-symbols-outlined text-[15px] text-primary">workspace_premium</span>
+                                            <span>Pengalaman:</span>
                                         </span>
                                         <span className="font-bold text-primary font-mono">
                                             {inst.instructor_profile?.years_of_experience || 1} Tahun
@@ -321,7 +322,7 @@ export default function Instructors({
                     })}
 
                     {instructors.data.length === 0 && (
-                        <div className="col-span-full py-16 text-center text-on-surface-variant bg-white rounded-3xl border border-outline-variant/60">
+                        <div className="col-span-full py-16 text-center text-on-surface-variant bg-white dark:bg-surface rounded-3xl border border-surface-container">
                             <span className="material-symbols-outlined text-4xl text-primary/30 mb-2">medical_services</span>
                             <p className="text-sm font-semibold text-on-surface">Tidak ada dokter / instruktur yang cocok.</p>
                             <p className="text-xs text-on-surface-variant mt-1">
@@ -341,7 +342,7 @@ export default function Instructors({
                         maxWidth="lg"
                     >
                         <div className="space-y-4 text-xs">
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-surface-container-low border border-primary/10">
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-surface-container-low border border-surface-container">
                                 <Avatar name={selectedInstructor.name} size="lg" />
                                 <div>
                                     <h4 className="font-bold text-base text-primary">{selectedInstructor.name}</h4>
@@ -362,25 +363,25 @@ export default function Instructors({
                             </div>
 
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="p-3 bg-white rounded-2xl border border-outline-variant/60">
-                                    <span className="text-[10px] uppercase font-bold text-on-surface-variant block">
+                                <div className="p-3 bg-surface-container-low rounded-2xl border border-surface-container">
+                                    <span className="text-[10px] uppercase font-bold text-on-surface-variant block font-label-mono">
                                         Institusi / Faskes Praktik
                                     </span>
                                     <p className="font-semibold text-xs text-on-surface mt-0.5">
                                         {selectedInstructor.instructor_profile?.institution || 'RS Terdaftar'}
                                     </p>
                                 </div>
-                                <div className="p-3 bg-white rounded-2xl border border-outline-variant/60">
-                                    <span className="text-[10px] uppercase font-bold text-on-surface-variant block">
+                                <div className="p-3 bg-surface-container-low rounded-2xl border border-surface-container">
+                                    <span className="text-[10px] uppercase font-bold text-on-surface-variant block font-label-mono">
                                         Pengalaman Klinis
                                     </span>
-                                    <p className="font-bold text-xs text-primary mt-0.5">
+                                    <p className="font-bold text-xs text-primary mt-0.5 font-mono">
                                         {selectedInstructor.instructor_profile?.years_of_experience || 1} Tahun Praktik
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="p-4 bg-surface-container-low rounded-2xl border border-primary/10 space-y-1">
+                            <div className="p-4 bg-surface-container-low rounded-2xl border border-surface-container space-y-1">
                                 <span className="font-bold text-xs text-primary block">
                                     Pendekatan Klinis & Filosofi Pencegahan:
                                 </span>
@@ -390,7 +391,7 @@ export default function Instructors({
                                 </p>
                             </div>
 
-                            <div className="flex justify-end gap-2 pt-3 border-t border-primary/10">
+                            <div className="flex justify-end gap-2 pt-3 border-t border-surface-container">
                                 <Button
                                     type="button"
                                     variant="outline"
@@ -430,4 +431,3 @@ export default function Instructors({
         </AppLayout>
     );
 }
-

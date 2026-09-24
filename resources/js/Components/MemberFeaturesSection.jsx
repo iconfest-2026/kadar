@@ -13,9 +13,12 @@ export default function MemberFeaturesSection() {
             title: 'Scanner Open Cam & Validasi BPOM',
             summary: 'Arahkan kamera smartphone ke label makanan, minuman, atau obat. Deteksi seketika gramatur gula, natrium, beban glikemik, dan nomor izin edar BPOM RI.',
             badge: 'Kamera Live 0.4s',
+            badge: 'Demo Scanner 0.4s',
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
             href: '/member/scanner',
             btnText: 'Buka Pemindai Kamera',
+            href: '/demo/scanner',
+            btnText: 'Buka Demo Pemindai',
             visual: (
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
                     <div className="sm:col-span-7 space-y-2.5">
@@ -53,6 +56,8 @@ export default function MemberFeaturesSection() {
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
             href: '/member/consultations-hub',
             btnText: 'Buka Hub Konsultasi',
+            href: '/demo/consultations',
+            btnText: 'Buka Demo Konsultasi',
             visual: (
                 <div className="mt-4 rounded-2xl overflow-hidden border border-[#e5eee9] bg-[#fafcfb]">
                     <div className="h-28 w-full relative overflow-hidden">
@@ -79,6 +84,8 @@ export default function MemberFeaturesSection() {
             badgeStyle: 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]',
             href: '/member/dashboard',
             btnText: 'Buka Tracker Metrik',
+            href: '/demo/tracker',
+            btnText: 'Buka Demo Tracker',
             visual: (
                 <div className="mt-4 p-3 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-2">
                     <div className="flex justify-between items-center text-xs">
@@ -105,6 +112,8 @@ export default function MemberFeaturesSection() {
             badgeStyle: 'bg-[#fcf7ee] text-[#8e6018] border-[#f2e6cf]',
             href: '/member/challenges',
             btnText: 'Lihat Program Tantangan',
+            href: '/demo/challenges',
+            btnText: 'Buka Demo Tantangan',
             visual: (
                 <div className="mt-4 rounded-2xl overflow-hidden border border-[#e5eee9] bg-[#fafcfb]">
                     <div className="h-28 w-full relative overflow-hidden">
@@ -131,6 +140,8 @@ export default function MemberFeaturesSection() {
             badgeStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
             href: '/member/community',
             btnText: 'Masuk Forum Komunitas',
+            href: '/demo/community',
+            btnText: 'Buka Demo Forum',
             visual: (
                 <div className="mt-4 p-3 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-2">
                     <div className="flex items-center gap-2 text-xs">
@@ -154,6 +165,8 @@ export default function MemberFeaturesSection() {
             badgeStyle: 'bg-[#fdf2f4] text-[#a0344d] border-[#fad5dc]',
             href: '/member/dashboard',
             btnText: 'Lihat Modul Hormonal & Vitalitas',
+            href: '/demo/gender-vitality',
+            btnText: 'Buka Demo Hormon & Vitalitas',
             visual: (
                 <div className="mt-3.5 p-3 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] grid grid-cols-2 gap-2 text-center text-xs">
                     <div className="p-2 rounded-xl bg-rose-50 border border-rose-100">
@@ -210,8 +223,8 @@ export default function MemberFeaturesSection() {
     });
 
     return (
-        <section className="w-full py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-310 mx-auto" id="features">
-            <div className="space-y-8">
+        <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="features">
+            <div className="space-y-5">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-container-high">
                     <div className="space-y-1.5">

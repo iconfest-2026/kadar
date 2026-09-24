@@ -29,8 +29,8 @@ export default function Welcome(props) {
                     className="pointer-events-none absolute top-[58%] -right-32 w-[480px] max-w-[80vw] h-[380px] bg-[#e7f1ec]/55 blur-3xl rounded-full"
                 />
 
-                {/* Main Page Flow with Breathing Space */}
-                <div className="relative z-10 flex flex-col w-full space-y-8 sm:space-y-16">
+                {/* Main Page Flow with Balanced, Compact Spacing */}
+                <div className="relative z-10 flex flex-col w-full space-y-2 sm:space-y-4">
                     <HeroSection />
                     <MemberFeaturesSection />
                     <PublicPromoSection />

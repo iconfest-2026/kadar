@@ -95,10 +95,10 @@ export default function TiersAndAmbulanceSection() {
     };
 
     return (
-        <section className="w-full py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="tiers">
-            <div className="space-y-16">
+        <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="tiers">
+            <div className="space-y-8">
                 {/* 1. Membership Tiers Section */}
-                <div className="space-y-10">
+                <div className="space-y-5">
                     <div className="text-center max-w-2xl mx-auto space-y-3">
                         <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
                             Pilihan Keanggotaan Transparan
@@ -259,6 +259,13 @@ export default function TiersAndAmbulanceSection() {
                                 <span className="text-[11px] text-[#7d6c68]">
                                     Terhubung ke Posko Siaga Darurat Kemenkes RI
                                 </span>
+                                <Link
+                                    href="/demo/emergency"
+                                    className="min-h-12 px-6 py-3.5 rounded-full bg-white/80 border border-[#ebdcd6] text-[#4d3d39] text-xs font-bold hover:bg-white transition-all active:scale-95 text-center flex items-center justify-center gap-1.5"
+                                >
+                                    <span className="material-symbols-outlined text-[16px] text-rose-600">emergency</span>
+                                    <span>Buka Demo Siaga 119</span>
+                                </Link>
                             </div>
                         </div>
 
