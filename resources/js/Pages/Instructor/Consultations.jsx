@@ -26,7 +26,7 @@ export default function Consultations({ consultations = { data: [], links: [] } 
 
     return (
         <InstructorLayout activeNav="consultations" title="Jadwal Konsultasi & Bimbingan 1-on-1">
-            <Head title="Jadwal Konsultasi — Instruktur AEVYRA" />
+            <Head title="Jadwal Konsultasi - Instruktur AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header Card */}

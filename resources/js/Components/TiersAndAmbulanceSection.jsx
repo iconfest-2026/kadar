@@ -95,11 +95,11 @@ export default function TiersAndAmbulanceSection() {
     };
 
     return (
-        <section className="w-full py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="tiers">
-            <div className="space-y-16">
+        <section className="w-full py-6 sm:py-9 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="tiers">
+            <div className="space-y-8 sm:space-y-10">
                 {/* 1. Membership Tiers Section */}
-                <div className="space-y-10">
-                    <div className="text-center max-w-2xl mx-auto space-y-3">
+                <div className="space-y-5 sm:space-y-6">
+                    <div className="text-center max-w-2xl mx-auto space-y-2">
                         <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
                             Pilihan Keanggotaan Transparan
                         </span>
@@ -143,13 +143,13 @@ export default function TiersAndAmbulanceSection() {
                     </div>
 
                     {/* Tier Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch pt-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch pt-1">
                         {tiers.map((t, idx) => (
                             <div
                                 key={idx}
-                                className={`p-5 sm:p-6 lg:p-7 rounded-3xl border flex flex-col justify-between space-y-6 transition-all ${
+                                className={`p-4 sm:p-5 lg:p-6 rounded-2xl border flex flex-col justify-between space-y-4 transition-all ${
                                     t.isPopular
-                                        ? 'bg-[#f0f7f3] border-2 border-[#1c6454] shadow-[0_8px_30px_rgba(0,67,62,0.06)] relative -translate-y-1 sm:-translate-y-2'
+                                        ? 'bg-[#f0f7f3] border-2 border-[#1c6454] shadow-[0_8px_30px_rgba(0,67,62,0.06)] relative -translate-y-1 sm:-translate-y-1.5'
                                         : 'bg-white/80 border-surface-container-high hover:border-[#cfe0d6] shadow-[0_4px_20px_rgba(0,40,36,0.02)]'
                                 }`}
                             >
@@ -217,69 +217,116 @@ export default function TiersAndAmbulanceSection() {
                     </div>
                 </div>
 
-                {/* 2. Emergency Response 119 - Dignified Medical Triage (Calm Warm Terracotta / Sandstone) */}
-                <div className="p-5 sm:p-7 lg:p-9 bg-[#faf6f4] rounded-3xl border border-[#eadcd6] relative overflow-hidden" id="ambulance">
-                    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div className="lg:col-span-7 space-y-3.5">
-                            <div className="inline-flex items-center gap-2 text-[11px] font-medium text-[#8f4a3c] uppercase tracking-wider">
-                                <span className="w-2 h-2 rounded-full bg-[#9c5243]"></span>
-                                <span>Akses Siaga Darurat 24 Jam • Integrasi Call Center 119</span>
+                {/* 2. Emergency Response 119 - Crisp Clinical Telemetry (AEVYRA Theme Aligned) */}
+                <div className="p-5 sm:p-7 lg:p-8 bg-white/95 rounded-3xl border border-surface-container-high shadow-[0_8px_32px_rgba(0,40,36,0.04)] relative overflow-hidden backdrop-blur-sm" id="ambulance">
+                    {/* Ambient subtle glow */}
+                    <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+                        <div className="lg:col-span-7 space-y-4">
+                            {/* Live Clinical Beacon Header */}
+                            <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#edf5f0] border border-[#d2e5da] text-[#1c6454] text-[11px] font-medium tracking-wide">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                                </span>
+                                <span>Akses Siaga Darurat 24 Jam • Integrasi Posko 119 Kemenkes RI</span>
                             </div>
-                            <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#271d1b]">
-                                Panggilan darurat ambulan berbasis koordinat GPS.
+
+                            <h3 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-normal text-[#142320] leading-tight">
+                                Panggilan darurat ambulan berbasis koordinat GPS faskes.
                             </h3>
-                            <p className="text-xs sm:text-sm leading-relaxed max-w-xl text-[#60504c]">
-                                Saat terjadi penurunan glukosa drastis (hipoglikemia), nyeri dada mendadak, atau keluhan akut di rumah, sistem mendeteksi titik koordinat Anda untuk mempercepat penjemputan ambulan faskes terdekat tanpa kendala birokrasi.
+
+                            <p className="text-xs sm:text-sm leading-relaxed max-w-xl text-[#52645f]">
+                                Saat terjadi penurunan glukosa drastis (hipoglikemia akut), nyeri dada mendadak, atau keluhan darurat di rumah, transmisi koordinat otomatis mempercepat kedatangan armada ambulan faskes terdekat tanpa kendala birokrasi.
                             </p>
 
-                            {/* Medical Emergency Passport Chips */}
-                            <div className="pt-2 flex flex-wrap gap-2 text-[11px]">
-                                <span className="px-3 py-1 rounded-full bg-white/80 border border-[#ebdcd6] text-[#4d3d39]">
-                                    Paspor Medis Siaga Terhubung
-                                </span>
-                                <span className="px-3 py-1 rounded-full bg-white/80 border border-[#ebdcd6] text-[#4d3d39]">
-                                    Faskes Rujukan Terdekat (~1.4 km)
-                                </span>
-                                {coords && (
-                                    <span className="px-3 py-1 rounded-full bg-[#edf5f0] border border-[#d4e8dd] text-[#1c6454] font-mono">
-                                        GPS Terkunci: {coords.lat}, {coords.lng}
-                                    </span>
-                                )}
+                            {/* Medical Telemetry & Readiness Cards */}
+                            <div className="pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                <div className="p-2.5 rounded-2xl bg-[#edf5f0]/80 border border-[#cfe1d7] flex items-center gap-2.5 text-[#1c6454]">
+                                    <div className="w-7 h-7 rounded-xl bg-white text-[#1c6454] flex items-center justify-center shrink-0 shadow-2xs">
+                                        <span className="material-symbols-outlined text-[16px]">location_on</span>
+                                    </div>
+                                    <div className="overflow-hidden">
+                                        <span className="font-bold block text-[11px]">Telemetri GPS Terkunci</span>
+                                        <span className="text-[10px] text-[#4d665f] block truncate">
+                                            {coords ? `Lat: ${coords.lat}, Lng: ${coords.lng}` : 'Siaga otomatis saat tombol ditekan'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-2.5 rounded-2xl bg-[#f8faf9] border border-surface-container-high flex items-center gap-2.5 text-[#2c3f3a]">
+                                    <div className="w-7 h-7 rounded-xl bg-white text-primary flex items-center justify-center shrink-0 border border-surface-container shadow-2xs">
+                                        <span className="material-symbols-outlined text-[16px]">local_hospital</span>
+                                    </div>
+                                    <div className="overflow-hidden">
+                                        <span className="font-bold block text-[11px]">Faskes &amp; IGD Terdekat</span>
+                                        <span className="text-[10px] text-[#697d76] block truncate">
+                                            Jejaring RS Rujukan (~1.4 km)
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            {/* Call Action Button & Live Status */}
+                            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                                 <button
                                     type="button"
                                     onClick={handleCallAmbulance}
                                     disabled={ambulanceCalling}
-                                    className="min-h-12 px-7 py-3.5 rounded-full bg-[#964a3b] text-white text-xs font-medium hover:bg-[#803d2f] transition-all active:scale-95 shadow-[0_2px_12px_rgba(150,74,59,0.18)] cursor-pointer flex items-center justify-center text-center"
+                                    className="min-h-12 px-7 py-3.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-all active:scale-95 shadow-[0_4px_18px_rgba(225,29,72,0.28)] hover:shadow-[0_6px_22px_rgba(225,29,72,0.36)] cursor-pointer flex items-center justify-center gap-2 shrink-0"
                                 >
+                                    <span className="material-symbols-outlined text-[18px]">
+                                        call
+                                    </span>
                                     <span>{ambulanceCalling ? 'Memverifikasi Koordinat...' : 'Hubungi Ambulan Siaga 119'}</span>
                                 </button>
-                                <span className="text-[11px] text-[#7d6c68]">
-                                    Terhubung ke Posko Siaga Darurat Kemenkes RI
-                                </span>
+                                <div className="flex flex-col justify-center">
+                                    <span className="text-xs font-semibold text-[#182926] flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        Bebas Pulsa 24 Jam
+                                    </span>
+                                    <span className="text-[11px] text-[#697c77]">
+                                        Terhubung langsung ke Command Center 119 Kemenkes RI
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Right: Real Emergency Care & Ambulance Team Visual */}
-                        <div className="lg:col-span-5 relative rounded-2xl overflow-hidden border border-[#e2d2ca] shadow-md group">
-                            <div className="h-52 sm:h-60 w-full overflow-hidden">
+                        {/* Right: Emergency Vehicle & Paramedic Visual with Live HUD Badges */}
+                        <div className="lg:col-span-5 relative rounded-3xl overflow-hidden border border-surface-container-high shadow-lg group bg-surface">
+                            <div className="h-56 sm:h-64 lg:h-72 w-full overflow-hidden">
                                 <img
                                     src="/image/emergency_ambulance_119.jpg"
                                     alt="Tim Paramedis dan Ambulan Siaga 119"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                             </div>
-                            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-3.5 text-white">
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="font-medium text-white/95">Unit Medis Reaksi Cepat</span>
-                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-xs font-mono">
-                                        SIAGA 24/7
+
+                            {/* Top HUD Floating Status Badges */}
+                            <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
+                                <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-xs flex items-center gap-1.5 text-[10px] font-bold text-[#182926]">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span>Unit Siaga Aktif</span>
+                                </div>
+                                <span className="text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-white backdrop-blur-md font-mono font-bold tracking-wider">
+                                    RESPON &lt; 8 MENIT
+                                </span>
+                            </div>
+
+                            {/* Bottom Glassmorphic Overlay */}
+                            <div className="absolute inset-x-0 bottom-0 p-4 bg-linear-to-t from-black/85 via-black/50 to-transparent backdrop-blur-[2px] text-white">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-xs sm:text-sm text-white">
+                                        Unit Reaksi Cepat 119
+                                    </span>
+                                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 font-medium">
+                                        SatuSehat Ready
                                     </span>
                                 </div>
-                                <span className="text-[11px] text-white/80 mt-0.5">
-                                    Terhubung jejaring IGD rumah sakit rujukan terdekat
+                                <span className="text-[11px] text-white/80 block mt-1 leading-snug">
+                                    Terhubung langsung jejaring IGD rumah sakit rujukan terdekat
                                 </span>
                             </div>
                         </div>

@@ -70,7 +70,7 @@ export default function Register() {
 
     return (
         <AuthLayout maxWidth="max-w-5xl">
-            <Head title="Daftar Akun Baru — AEVYRA HealthCheck" />
+            <Head title="Daftar Akun Baru - AEVYRA HealthCheck" />
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
                 {/* Left Column: Registration Form */}
@@ -388,7 +388,7 @@ export default function Register() {
                                 alt={currentConfig.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
+                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
                                 <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg border border-white/20">
                                     {currentConfig.title}
                                 </span>

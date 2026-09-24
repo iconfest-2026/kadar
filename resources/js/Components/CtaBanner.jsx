@@ -3,8 +3,8 @@ import { Link } from '@inertiajs/react';
 
 export default function CtaBanner() {
     return (
-        <section className="w-full pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="auth-portal">
-            <div className="relative overflow-hidden p-6 sm:p-10 lg:p-14 bg-primary text-white rounded-3xl space-y-6 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
+        <section className="w-full pb-8 sm:pb-12 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto" id="auth-portal">
+            <div className="relative overflow-hidden p-5 sm:p-8 lg:p-10 bg-primary text-white rounded-2xl sm:rounded-3xl space-y-4 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
                 {/* Subtle Restorative Ambient Glow */}
                 <div
                     aria-hidden="true"
@@ -16,13 +16,7 @@ export default function CtaBanner() {
                 />
 
                 {/* Content */}
-                <div className="relative z-10 space-y-5 max-w-2xl mx-auto">
-                    {/* Live Pilot Program Pill */}
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-white/10 backdrop-blur-md rounded-full text-[11px] text-[#e0f2e8] border border-white/15">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#7dd4b3]"></span>
-                        <span>Program Intervensi Glikemik • Kuota Peserta Terbimbing</span>
-                    </div>
-
+                <div className="relative z-10 space-y-3.5 max-w-2xl mx-auto">
                     {/* Editorial Headline */}
                     <h3 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-[1.2] font-normal text-white">
                         Kendalikan glukosa darah &amp; lindungi metabolisme Anda hari ini.
@@ -49,13 +43,13 @@ export default function CtaBanner() {
                         </a>
                     </div>
 
-                    {/* Trust Footnote */}
+                    {/* Factual Trust Footnote */}
                     <div className="pt-5 text-[11px] text-[#b3dac8] border-t border-white/10 flex flex-wrap items-center justify-center gap-3 sm:gap-5">
-                        <span>Terintegrasi SatuSehat Kemenkes</span>
+                        <span>Pedoman Klinis PERKENI</span>
                         <span>•</span>
-                        <span>Standar Enkripsi Medis AES-256</span>
+                        <span>Verifikasi Mandiri Label BPOM</span>
                         <span>•</span>
-                        <span>Kepatuhan UU PDP No. 27/2022</span>
+                        <span>Akses Skrining Dasar 100% Gratis</span>
                     </div>
                 </div>
             </div>

@@ -79,287 +79,353 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="w-full pt-8 sm:pt-14 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-                {/* Left: Editorial Authority & Gentle Typography */}
-                <div className="lg:col-span-6 space-y-6">
-                    {/* Soft Pill Tag */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                        <span>Pencegahan Dini &amp; Skrining Nutrisi Mandiri</span>
-                    </div>
-
-                    {/* Headline */}
-                    <div className="space-y-3">
-                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#142320] leading-[1.18] tracking-tight">
-                            Pahami dampak makanan pada glukosa Anda, <span className="italic text-primary">sebelum suapan pertama.</span>
-                        </h1>
-                        <p className="text-sm sm:text-base text-[#4a5a55] leading-relaxed max-w-xl">
-                            Arahkan kamera smartphone ke label kemasan makanan atau obat. Algoritma kami menganalisis beban glikemik, takaran gula tersembunyi, dan izin resmi BPOM seketika — didampingi tim dokter untuk pencegahan pra-diabetes.
-                        </p>
-                    </div>
-
-                    {/* Primary Action Buttons (Touch Ergonomics 48px) */}
-                    <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        <Link
-                            href="/member/scanner"
-                            className="inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
-                        >
-                            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
-                            <span>Buka Scanner Kamera Langsung</span>
-                        </Link>
-                        <Link
-                            href="/member/consultations-hub"
-                            className="inline-flex items-center justify-center min-h-12 px-5 py-3 rounded-full bg-white/80 text-[#31433f] text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
-                        >
-                            <span className="material-symbols-outlined text-[17px] text-emerald-700">health_and_safety</span>
-                            <span>Konsultasi &amp; Jadwal Dokter</span>
-                        </Link>
-                    </div>
-
-                    {/* Editorial Clinical Endorsement Badge */}
-                    <div className="flex items-center gap-3 pt-1">
-                        <div className="flex -space-x-2 shrink-0">
-                            <img
-                                src="/image/doctor_bramantyo.jpg"
-                                alt="dr. H. Bramantyo, Sp.PD"
-                                className="w-9 h-9 rounded-full ring-2 ring-white object-cover shadow-xs"
-                            />
-                            <img
-                                src="/image/doctor_consultation.jpg"
-                                alt="Konsultasi Klinis AEVYRA"
-                                className="w-9 h-9 rounded-full ring-2 ring-white object-cover shadow-xs"
-                            />
+        <section className="w-full pt-4 sm:pt-6 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-8 max-w-300 mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+                {/* Left: Editorial Authority & Balanced Medical Layout */}
+                <div className="lg:col-span-6 flex flex-col justify-between h-full py-1 gap-3 sm:gap-3.5">
+                    {/* Top Group: Value Proposition & Action Buttons */}
+                    <div className="space-y-3 sm:space-y-3.5">
+                        {/* Soft Pill Tag */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide w-fit">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
+                            <span>Pencegahan Dini &amp; Skrining Nutrisi Mandiri</span>
                         </div>
-                        <div className="text-xs text-[#4b5d58] leading-tight">
-                            <span className="font-medium text-[#142622] block">
-                                Didampingi Dewan Dokter Spesialis IDI
-                            </span>
-                            <span className="text-[11px] text-[#6b7d78]">
-                                Protokol klinis PERKENI &amp; standar SatuSehat Kemenkes RI
-                            </span>
+
+                        {/* Headline */}
+                        <div className="space-y-1.5">
+                            <h1 className="font-serif text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#142320] leading-[1.18] tracking-tight">
+                                Pahami dampak makanan pada glukosa Anda, <span className="italic text-primary">sebelum suapan pertama.</span>
+                            </h1>
+                            <p className="text-xs sm:text-sm text-[#4a5a55] leading-relaxed max-w-xl">
+                                Arahkan kamera smartphone ke label kemasan makanan atau obat. Algoritma kami menganalisis beban glikemik, takaran gula tersembunyi, dan izin resmi BPOM seketika — didampingi tim dokter untuk pencegahan pra-diabetes.
+                            </p>
+                        </div>
+
+                        {/* Primary Action Buttons (Touch Ergonomics 48px) */}
+                        <div className="pt-0.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                            <Link
+                                href="/member/scanner"
+                                className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
+                            >
+                                <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                                <span>Buka Scanner Kamera Langsung</span>
+                            </Link>
+                            <Link
+                                href="/member/consultations-hub"
+                                className="inline-flex items-center justify-center min-h-11 px-4.5 py-2.5 rounded-full bg-white/80 text-[#31433f] text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
+                            >
+                                <span className="material-symbols-outlined text-[17px] text-emerald-700">health_and_safety</span>
+                                <span>Konsultasi &amp; Jadwal Dokter</span>
+                            </Link>
                         </div>
                     </div>
 
-                    {/* Quiet, Harmonious Stats Strip */}
-                    <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-surface-container-high">
-                        <div>
-                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">120.000+</span>
+                    {/* Middle Group: Clinical Quality, Highlights & Assurance (Tightly Fills Space) */}
+                    <div className="space-y-2 sm:space-y-2.5">
+                        {/* Editorial Clinical Endorsement Badge */}
+                        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-white/70 border border-[#e2eee7] shadow-2xs">
+                            <div className="flex items-center gap-3">
+                                <div className="flex -space-x-2 shrink-0">
+                                    <img
+                                        src="/image/doctor_bramantyo.jpg"
+                                        alt="dr. H. Bramantyo, Sp.PD"
+                                        className="w-8 h-8 rounded-full ring-2 ring-white object-cover shadow-xs"
+                                    />
+                                    <img
+                                        src="/image/doctor_consultation.jpg"
+                                        alt="Konsultasi Klinis AEVYRA"
+                                        className="w-8 h-8 rounded-full ring-2 ring-white object-cover shadow-xs"
+                                    />
+                                </div>
+                                <div className="text-xs text-[#4b5d58] leading-tight">
+                                    <span className="font-semibold text-[#142622] block">
+                                        Didampingi Dewan Dokter Spesialis IDI
+                                    </span>
+                                    <span className="text-[11px] text-[#6b7d78]">
+                                        Protokol klinis PERKENI &amp; standar SatuSehat Kemenkes RI
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 shrink-0">
+                                <span className="material-symbols-outlined text-[13px] text-emerald-700">verified</span>
+                                <span>Terstandarisasi</span>
+                            </span>
+                        </div>
+
+                        {/* 3 Clinical Feature Highlights */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div className="p-2 sm:p-2.5 rounded-xl bg-white/75 border border-[#e2eee7] shadow-2xs">
+                                <div className="flex items-center gap-1.5 text-primary font-semibold text-[11px]">
+                                    <span className="material-symbols-outlined text-[15px] text-[#1c6454]">document_scanner</span>
+                                    <span>Deteksi Gula</span>
+                                </div>
+                                <p className="text-[10px] text-[#556963] mt-1 leading-snug">
+                                    Bongkar takaran sukrosa &amp; sirup fruktosa tersembunyi.
+                                </p>
+                            </div>
+                            <div className="p-2 sm:p-2.5 rounded-xl bg-white/75 border border-[#e2eee7] shadow-2xs">
+                                <div className="flex items-center gap-1.5 text-primary font-semibold text-[11px]">
+                                    <span className="material-symbols-outlined text-[15px] text-[#1c6454]">monitoring</span>
+                                    <span>Beban Glikemik</span>
+                                </div>
+                                <p className="text-[10px] text-[#556963] mt-1 leading-snug">
+                                    Prediksi lonjakan glukosa 2 jam pasca konsumsi.
+                                </p>
+                            </div>
+                            <div className="p-2 sm:p-2.5 rounded-xl bg-white/75 border border-[#e2eee7] shadow-2xs">
+                                <div className="flex items-center gap-1.5 text-primary font-semibold text-[11px]">
+                                    <span className="material-symbols-outlined text-[15px] text-[#1c6454]">verified</span>
+                                    <span>Izin BPOM RI</span>
+                                </div>
+                                <p className="text-[10px] text-[#556963] mt-1 leading-snug">
+                                    Validasi nomor edar resmi sediaan makanan &amp; obat.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Clinical Standards & Diagnostic Trust Bar (Eliminates Lower-Left Void) */}
+                        <div className="p-2.5 sm:p-3 rounded-2xl bg-white/80 border border-[#e2eee7] shadow-2xs flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2.5">
+                                <span className="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-200">
+                                    <span className="material-symbols-outlined text-[16px]">health_and_safety</span>
+                                </span>
+                                <div className="text-xs leading-tight">
+                                    <span className="font-semibold text-[#142622] block text-[11px] sm:text-xs">
+                                        Standar Klinis PERKENI &amp; Verifikasi Resmi BPOM
+                                    </span>
+                                    <span className="text-[10px] sm:text-[11px] text-[#637671] block mt-0.5">
+                                        Panduan intervensi beban glikemik terkalibrasi untuk pencegahan pra-diabetes
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-emerald-800 bg-emerald-50/80 px-2 py-0.5 rounded-full border border-emerald-200 shrink-0 font-medium">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Tervalidasi</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Bottom Group: Quiet, Harmonious Stats Strip (Anchored Bottom for Perfect Fit) */}
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 border-t border-[#d8e6df]">
+                        <div className="p-2 sm:p-2.5 rounded-2xl bg-white/70 border border-[#e2eee7] text-center">
+                            <span className="font-serif text-lg sm:text-2xl text-primary font-bold block leading-tight">120.000+</span>
                             <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Produk BPOM Terindeks</span>
                         </div>
-                        <div>
-                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">&lt; 0.4 Detik</span>
+                        <div className="p-2 sm:p-2.5 rounded-2xl bg-white/70 border border-[#e2eee7] text-center">
+                            <span className="font-serif text-lg sm:text-2xl text-primary font-bold block leading-tight">&lt; 0.4 Detik</span>
                             <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Kecepatan Analisis</span>
                         </div>
-                        <div>
-                            <span className="font-serif text-lg sm:text-2xl text-primary block leading-tight">98.4%</span>
+                        <div className="p-2 sm:p-2.5 rounded-2xl bg-white/70 border border-[#e2eee7] text-center">
+                            <span className="font-serif text-lg sm:text-2xl text-primary font-bold block leading-tight">98.4%</span>
                             <span className="text-[10px] sm:text-[11px] text-[#63746f] block mt-0.5 leading-tight">Akurasi Pembacaan</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Right: Sleek, High-End Medical Viewfinder Interface */}
-                <div className="lg:col-span-6 bg-white/90 backdrop-blur-xl p-4 sm:p-6 lg:p-7 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.04)]" id="scanner-demo">
-                    {/* Viewfinder Header */}
-                    <div className="flex items-center justify-between pb-3.5 border-b border-[#edf4f0]">
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-[#1c6454]"></span>
-                            <span className="text-xs font-medium text-[#2d3f3b] tracking-wide">
-                                Simulasi Pemindai Label Nutrisi
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-[#5e716c] font-mono">
-                            Moda Sensor Aktif
-                        </span>
-                    </div>
-
-                    {/* Minimalist Sample Selector Tabs */}
-                    <div className="grid grid-cols-3 gap-1 my-3.5 p-1 bg-[#f3f7f5] rounded-xl border border-[#e4ede8]">
-                        <button
-                            type="button"
-                            onClick={() => setActiveScanSample('drink')}
-                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
-                                activeScanSample === 'drink'
-                                    ? 'bg-white text-primary shadow-xs'
-                                    : 'text-[#566863] hover:text-primary'
-                            }`}
-                        >
-                            Minuman Kemasan
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setActiveScanSample('food')}
-                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
-                                activeScanSample === 'food'
-                                    ? 'bg-white text-primary shadow-xs'
-                                    : 'text-[#566863] hover:text-primary'
-                            }`}
-                        >
-                            Pangan Olahan
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setActiveScanSample('medicine')}
-                            className={`min-h-10.5 py-1 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
-                                activeScanSample === 'medicine'
-                                    ? 'bg-white text-primary shadow-xs'
-                                    : 'text-[#566863] hover:text-primary'
-                            }`}
-                        >
-                            Label Farmasi
-                        </button>
-                    </div>
-
-                    {/* Clean Scan Card Body */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-4">
-                        {/* Sample Title & Status Pill */}
-                        <div className="flex flex-wrap items-start justify-between gap-2">
-                            <div>
-                                <h3 className="font-serif text-base sm:text-lg font-medium text-[#182926]">
-                                    {current.title}
-                                </h3>
-                                <span className="text-xs text-[#63746f] block mt-0.5">
-                                    {current.subtitle}
+                <div className="lg:col-span-6 bg-white/95 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.04)] flex flex-col justify-between h-full" id="scanner-demo">
+                    <div>
+                        {/* Viewfinder Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-[#edf4f0]">
+                            <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-[#1c6454] animate-pulse"></span>
+                                <span className="text-xs font-semibold text-[#2d3f3b] tracking-wide">
+                                    Simulasi Pemindai Label Nutrisi
                                 </span>
                             </div>
-                            <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-medium ${current.statusTagStyle}`}>
-                                {current.statusTag}
+                            <span className="text-[11px] text-[#5e716c] font-mono">
+                                Moda Sensor Aktif
                             </span>
                         </div>
 
-                        {/* Interactive Optical Viewfinder Frame with Real Scanned Product Photo */}
-                        <div className="relative w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-[#121c19] border border-[#d8e6df] shadow-inner group">
-                            <img
-                                key={current.image}
-                                src={current.image}
-                                alt={current.title}
-                                className="w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105"
-                            />
-                            {/* Scanning HUD Overlay */}
-                            <div className="absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/35 pointer-events-none flex flex-col justify-between p-3">
-                                <div className="flex items-center justify-between">
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-mono tracking-wider border border-white/10">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                        <span>AI SENSOR: {current.sensorTag}</span>
-                                    </span>
-                                    <span className="text-[10px] text-white/95 font-mono bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
-                                        AKURASI 98.4%
+                        {/* Minimalist Sample Selector Tabs */}
+                        <div className="grid grid-cols-3 gap-1 my-2.5 p-1 bg-[#f3f7f5] rounded-xl border border-[#e4ede8]">
+                            <button
+                                type="button"
+                                onClick={() => setActiveScanSample('drink')}
+                                className={`py-1.5 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                    activeScanSample === 'drink'
+                                        ? 'bg-white text-primary shadow-xs'
+                                        : 'text-[#566863] hover:text-primary'
+                                }`}
+                            >
+                                Minuman Kemasan
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setActiveScanSample('food')}
+                                className={`py-1.5 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                    activeScanSample === 'food'
+                                        ? 'bg-white text-primary shadow-xs'
+                                        : 'text-[#566863] hover:text-primary'
+                                }`}
+                            >
+                                Pangan Olahan
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setActiveScanSample('medicine')}
+                                className={`py-1.5 px-1.5 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all ${
+                                    activeScanSample === 'medicine'
+                                        ? 'bg-white text-primary shadow-xs'
+                                        : 'text-[#566863] hover:text-primary'
+                                }`}
+                            >
+                                Label Farmasi
+                            </button>
+                        </div>
+
+                        {/* Clean Scan Card Body */}
+                        <div className="p-3 sm:p-3.5 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-2.5">
+                            {/* Sample Title & Status Pill */}
+                            <div className="flex flex-wrap items-start justify-between gap-2">
+                                <div>
+                                    <h3 className="font-serif text-sm sm:text-base font-semibold text-[#182926]">
+                                        {current.title}
+                                    </h3>
+                                    <span className="text-[11px] text-[#63746f] block mt-0.5">
+                                        {current.subtitle}
                                     </span>
                                 </div>
+                                <span className={`text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full border font-medium ${current.statusTagStyle}`}>
+                                    {current.statusTag}
+                                </span>
+                            </div>
 
-                                {/* OCR Focus Target Box */}
-                                <div className="self-center w-52 sm:w-60 h-20 sm:h-24 border border-white/50 rounded-lg relative flex items-center justify-center backdrop-brightness-110">
-                                    <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-emerald-400 -mt-0.5 -ml-0.5"></span>
-                                    <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-emerald-400 -mt-0.5 -mr-0.5"></span>
-                                    <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-emerald-400 -mb-0.5 -ml-0.5"></span>
-                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-emerald-400 -mb-0.5 -mr-0.5"></span>
-                                    
-                                    <div className="px-2.5 py-1 bg-black/75 rounded-md border border-white/15 backdrop-blur-xs text-center shadow-lg">
-                                        <span className="text-[10px] text-emerald-300 font-mono block tracking-wide font-medium">
-                                            {current.ocrLabel}
+                            {/* Interactive Optical Viewfinder Frame with Real Scanned Product Photo */}
+                            <div className="relative w-full h-28 sm:h-32 rounded-xl overflow-hidden bg-[#121c19] border border-[#d8e6df] shadow-inner group">
+                                <img
+                                    key={current.image}
+                                    src={current.image}
+                                    alt={current.title}
+                                    className="w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105"
+                                />
+                                {/* Scanning HUD Overlay */}
+                                <div className="absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/35 pointer-events-none flex flex-col justify-between p-2.5">
+                                    <div className="flex items-center justify-between">
+                                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-mono tracking-wider border border-white/10">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                            <span>AI SENSOR: {current.sensorTag}</span>
+                                        </span>
+                                        <span className="text-[9px] sm:text-[10px] text-white/95 font-mono bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
+                                            AKURASI 98.4%
                                         </span>
                                     </div>
-                                </div>
 
-                                <div className="flex items-center justify-between text-white/80 text-[10px] font-sans">
-                                    <span>Area Fokus: {current.focusArea}</span>
-                                    <span>Moda: Vision OCR Terenkripsi</span>
+                                    {/* OCR Focus Target Box */}
+                                    <div className="self-center w-48 sm:w-56 h-14 sm:h-16 border border-white/50 rounded-lg relative flex items-center justify-center backdrop-brightness-110">
+                                        <span className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-emerald-400 -mt-0.5 -ml-0.5"></span>
+                                        <span className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-emerald-400 -mt-0.5 -mr-0.5"></span>
+                                        <span className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-emerald-400 -mb-0.5 -ml-0.5"></span>
+                                        <span className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-emerald-400 -mb-0.5 -mr-0.5"></span>
+                                        
+                                        <div className="px-2 py-0.5 bg-black/75 rounded-md border border-white/15 backdrop-blur-xs text-center shadow-lg">
+                                            <span className="text-[9px] sm:text-[10px] text-emerald-300 font-mono block tracking-wide font-medium">
+                                                {current.ocrLabel}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-white/80 text-[9px] sm:text-[10px] font-sans">
+                                        <span>Area Fokus: {current.focusArea}</span>
+                                        <span>Moda: Vision OCR Terenkripsi</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Minimalist Glycemic Curve Visualization (Clean SVG) */}
-                        <div className="p-3 bg-white rounded-xl border border-[#e8f0ec] space-y-2">
-                            <div className="flex justify-between items-center text-[11px]">
-                                <span className="text-[#596d67]">Estimasi Respons Glukosa Darah:</span>
-                                <span className="font-medium text-[#182926]">
-                                    Puncak {current.curvePeak} ({current.curvePeakTime})
+                            {/* Minimalist Glycemic Curve Visualization (Clean SVG) */}
+                            <div className="p-2 sm:p-2.5 bg-white rounded-xl border border-[#e8f0ec] space-y-1">
+                                <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
+                                    <span className="text-[#596d67]">Estimasi Respons Glukosa Darah:</span>
+                                    <span className="font-semibold text-[#182926]">
+                                        Puncak {current.curvePeak} ({current.curvePeakTime})
+                                    </span>
+                                </div>
+                                {/* Serene SVG Curve */}
+                                <div className="h-10 w-full relative">
+                                    <svg viewBox="0 0 300 45" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                                        <defs>
+                                            <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor={current.curveColor} stopOpacity="0.15" />
+                                                <stop offset="100%" stopColor={current.curveColor} stopOpacity="0.0" />
+                                            </linearGradient>
+                                        </defs>
+                                        {/* Normal baseline zone band */}
+                                        <rect x="0" y="28" width="300" height="15" fill="#eaf3ee" opacity="0.6" rx="2" />
+                                        {/* Curve path */}
+                                        {activeScanSample === 'drink' && (
+                                            <>
+                                                <path d="M 0 34 Q 60 34, 100 8 T 200 34 L 300 34 L 300 45 L 0 45 Z" fill="url(#curveGradient)" />
+                                                <path d="M 0 34 Q 60 34, 100 8 T 200 34 L 300 34" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                                <circle cx="100" cy="8" r="3.5" fill={current.curveColor} />
+                                            </>
+                                        )}
+                                        {activeScanSample === 'food' && (
+                                            <>
+                                                <path d="M 0 34 Q 80 34, 140 14 T 250 34 L 300 34 L 300 45 L 0 45 Z" fill="url(#curveGradient)" />
+                                                <path d="M 0 34 Q 80 34, 140 14 T 250 34 L 300 34" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                                <circle cx="140" cy="14" r="3.5" fill={current.curveColor} />
+                                            </>
+                                        )}
+                                        {activeScanSample === 'medicine' && (
+                                            <>
+                                                <path d="M 0 34 Q 90 32, 150 20 T 300 32 L 300 45 L 0 45 Z" fill="url(#curveGradient)" />
+                                                <path d="M 0 34 Q 90 32, 150 20 T 300 32 L 300 45" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
+                                                <circle cx="150" cy="20" r="3.5" fill={current.curveColor} />
+                                            </>
+                                        )}
+                                    </svg>
+                                </div>
+                                <div className="flex justify-between text-[9px] sm:text-[10px] text-[#71827e] font-sans">
+                                    <span>Saat Makan</span>
+                                    <span>Zona Normal Terkendali (70–120 mg/dL)</span>
+                                    <span>2 Jam Pasca Makan</span>
+                                </div>
+                            </div>
+
+                            {/* 3 Metrics in Soft Porcelain Cards */}
+                            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                                {current.metrics.map((m, idx) => (
+                                    <div key={idx} className="p-1.5 sm:p-2 rounded-xl bg-white border border-[#e8f0ec] text-center">
+                                        <span className="text-[9px] sm:text-[10px] text-[#697c76] block truncate">
+                                            {m.label}
+                                        </span>
+                                        <span className="font-serif text-xs sm:text-sm font-semibold text-[#182926] block mt-0.5">
+                                            {m.value}
+                                        </span>
+                                        <span className="text-[9px] sm:text-[10px] text-[#7d8f89] block mt-0.5">
+                                            {m.note}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Observation from Doctor */}
+                            <div className="p-2 sm:p-2.5 bg-white rounded-xl border border-[#e8f0ec] space-y-1 text-xs">
+                                <span className="text-[9px] sm:text-[10px] text-[#5e716c] uppercase tracking-wider font-semibold block">
+                                    Catatan Klinis Edukasi:
                                 </span>
-                            </div>
-                            {/* Serene SVG Curve */}
-                            <div className="h-14 w-full relative">
-                                <svg viewBox="0 0 300 50" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor={current.curveColor} stopOpacity="0.15" />
-                                            <stop offset="100%" stopColor={current.curveColor} stopOpacity="0.0" />
-                                        </linearGradient>
-                                    </defs>
-                                    {/* Normal baseline zone band */}
-                                    <rect x="0" y="30" width="300" height="18" fill="#eaf3ee" opacity="0.6" rx="2" />
-                                    {/* Curve path */}
-                                    {activeScanSample === 'drink' && (
-                                        <>
-                                            <path d="M 0 36 Q 60 36, 100 8 T 200 36 L 300 36 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
-                                            <path d="M 0 36 Q 60 36, 100 8 T 200 36 L 300 36" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
-                                            <circle cx="100" cy="8" r="3.5" fill={current.curveColor} />
-                                        </>
-                                    )}
-                                    {activeScanSample === 'food' && (
-                                        <>
-                                            <path d="M 0 36 Q 80 36, 140 16 T 250 36 L 300 36 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
-                                            <path d="M 0 36 Q 80 36, 140 16 T 250 36 L 300 36" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
-                                            <circle cx="140" cy="16" r="3.5" fill={current.curveColor} />
-                                        </>
-                                    )}
-                                    {activeScanSample === 'medicine' && (
-                                        <>
-                                            <path d="M 0 36 Q 90 34, 150 24 T 300 34 L 300 48 L 0 48 Z" fill="url(#curveGradient)" />
-                                            <path d="M 0 36 Q 90 34, 150 24 T 300 34" fill="none" stroke={current.curveColor} strokeWidth="2.2" strokeLinecap="round" />
-                                            <circle cx="150" cy="24" r="3.5" fill={current.curveColor} />
-                                        </>
-                                    )}
-                                </svg>
-                            </div>
-                            <div className="flex justify-between text-[10px] text-[#71827e] font-sans">
-                                <span>Saat Makan</span>
-                                <span>Zona Normal Terkendali (70–120 mg/dL)</span>
-                                <span>2 Jam Pasca Makan</span>
-                            </div>
-                        </div>
-
-                        {/* 3 Metrics in Soft Porcelain Cards */}
-                        <div className="grid grid-cols-3 gap-2">
-                            {current.metrics.map((m, idx) => (
-                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-[#e8f0ec] text-center">
-                                    <span className="text-[10px] text-[#697c76] block truncate">
-                                        {m.label}
-                                    </span>
-                                    <span className="font-serif text-sm font-medium text-[#182926] block mt-0.5">
-                                        {m.value}
-                                    </span>
-                                    <span className="text-[10px] text-[#7d8f89] block mt-0.5">
-                                        {m.note}
-                                    </span>
+                                <p className="text-[#3c4f4a] leading-relaxed text-[10px] sm:text-[11px] line-clamp-2">
+                                    {current.clinicalObservation}
+                                </p>
+                                <div className="pt-1 border-t border-[#edf4f0] flex items-center justify-between text-[9px] sm:text-[10px] text-[#637671]">
+                                    <span className="font-serif text-[11px] sm:text-xs text-[#1c6454] font-medium">{current.physician}</span>
+                                    <span>{current.physicianRole}</span>
                                 </div>
-                            ))}
-                        </div>
-
-                        {/* Observation from Doctor */}
-                        <div className="p-3.5 bg-white rounded-xl border border-[#e8f0ec] space-y-1.5 text-xs">
-                            <span className="text-[10px] text-[#5e716c] uppercase tracking-wider font-medium block">
-                                Catatan Klinis Edukasi:
-                            </span>
-                            <p className="text-[#3c4f4a] leading-relaxed text-[11px]">
-                                {current.clinicalObservation}
-                            </p>
-                            <div className="pt-1.5 border-t border-[#edf4f0] flex items-center justify-between text-[10px] text-[#637671]">
-                                <span className="font-serif text-xs text-[#1c6454] font-medium">{current.physician}</span>
-                                <span>{current.physicianRole}</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Bottom Link */}
-                    <div className="mt-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#637671]">
-                        <span>Mendukung kamera smartphone, deteksi barcode &amp; tabel gizi BPOM</span>
-                        <Link
-                            href="/member/scanner"
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary text-white text-xs font-bold shadow-xs hover:bg-primary-container transition-all active:scale-95"
-                        >
-                            <span>Buka Kamera Sekarang</span>
-                            <span className="material-symbols-outlined text-[15px]">photo_camera</span>
-                        </Link>
+                    {/* Bottom Status Strip */}
+                    <div className="pt-2.5 mt-2.5 border-t border-[#edf4f0] flex items-center justify-between text-[11px] text-[#637671]">
+                        <div className="flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[15px] text-[#1c6454]">verified</span>
+                            <span>Mendukung kamera smartphone, barcode &amp; label BPOM</span>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>AI Terkalibrasi</span>
+                        </span>
                     </div>
                 </div>
             </div>

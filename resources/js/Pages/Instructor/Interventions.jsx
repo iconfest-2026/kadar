@@ -21,7 +21,7 @@ export default function Interventions({ interventions = { data: [], links: [] },
 
     return (
         <InstructorLayout activeNav="interventions" title="Rencana Intervensi Perilaku">
-            <Head title="Rencana Intervensi — Instruktur AEVYRA" />
+            <Head title="Rencana Intervensi - Instruktur AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header & Filter Card */}

@@ -12,13 +12,13 @@ export default function PendingVerification({ status = 'PENDING_VERIFICATION', p
 
     return (
         <div className="min-h-screen bg-[#f0f8f4] text-on-surface flex items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-primary selection:text-on-primary">
-            <Head title="Verifikasi Akun Instruktur — AEVYRA" />
+            <Head title="Verifikasi Akun Instruktur - AEVYRA" />
 
             {/* Ambient Background Glow */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-[600px] h-[350px] bg-gradient-to-tr from-amber-200/30 via-teal-200/20 to-transparent blur-[120px] rounded-full" />
-                <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-gradient-to-bl from-teal-300/20 to-transparent blur-[140px] rounded-full" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-[size:32px_32px] opacity-[0.035]" />
+                <div className="absolute top-1/4 left-1/4 w-150 h-87.5 bg-linear-to-tr from-amber-200/30 via-teal-200/20 to-transparent blur-[120px] rounded-full" />
+                <div className="absolute bottom-10 right-1/4 w-125 h-100 bg-linear-to-bl from-teal-300/20 to-transparent blur-[140px] rounded-full" />
+                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
             </div>
 
             {/* Card Container */}
@@ -102,7 +102,7 @@ export default function PendingVerification({ status = 'PENDING_VERIFICATION', p
                     </Alert>
                 )}
 
-                <div className="p-4 bg-primary/[0.04] rounded-2xl border border-primary/10 text-xs text-left space-y-1.5">
+                <div className="p-4 bg-primary/4 rounded-2xl border border-primary/10 text-xs text-left space-y-1.5">
                     <div className="flex items-center gap-2 font-bold text-primary">
                         <span className="material-symbols-outlined text-[18px]">security</span>
                         <span>Protokol Medis Human-in-the-Loop AEVYRA</span>

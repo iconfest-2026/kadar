@@ -38,10 +38,34 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+// Public FAQ Page (20 Comprehensive Medical & Platform Questions)
+Route::get('/faq', function () {
+    return Inertia::render('Faq');
+})->name('faq');
+
+// Public Packages & Pricing Page (Silver, Gold, Platinum)
+Route::get('/paket', function () {
+    return Inertia::render('Paket');
+})->name('paket');
+
+Route::get('/pricing', function () {
+    return redirect()->route('paket');
+});
+
 // Itch.io Style Interactive Metabolic Mini-Game
 Route::get('/arcade', function () {
     return Inertia::render('Arcade');
 })->name('arcade');
+
+// Legal & Compliance Dedicated Pages
+Route::get('/privacy', function () {
+    return Inertia::render('Privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return Inertia::render('Terms');
+})->name('terms');
+
 
 // Guest / Authentication Routes
 Route::middleware('guest')->group(function () {

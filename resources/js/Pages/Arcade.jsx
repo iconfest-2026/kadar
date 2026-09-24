@@ -55,7 +55,7 @@ export default function Arcade() {
 
     return (
         <div className="min-h-screen bg-[#f7faf8] text-[#142320] flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
-            <Head title="Arena Gamifikasi 2D — Glucose Dash & Edukasi Metabolik | AEVYRA" />
+            <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
             <Header />
 
             <main className="flex-1 max-w-300 mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 w-full space-y-10">

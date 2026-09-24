@@ -69,11 +69,11 @@ export default function Instructors({
 
     return (
         <AppLayout activeTab="instructors" title="Tim Instruktur Medis">
-            <Head title="Tim Dokter & Instruktur Pendamping — AEVYRA" />
+            <Head title="Tim Dokter & Instruktur Pendamping - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
                 {/* Header & Quota Status Banner */}
-                <div className="bg-gradient-to-r from-primary to-primary-container text-white p-6 sm:p-8 rounded-3xl shadow-md relative overflow-hidden">
+                <div className="bg-linear-to-r from-primary to-primary-container text-white p-6 sm:p-8 rounded-3xl shadow-md relative overflow-hidden">
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="max-w-2xl space-y-2">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
@@ -90,7 +90,7 @@ export default function Instructors({
                         </div>
 
                         {/* Quota Counter Card */}
-                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 min-w-[240px] text-center space-y-2 shrink-0">
+                        <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 min-w-60 text-center space-y-2 shrink-0">
                             <span className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
                                 Kuota Pendamping Aktif
                             </span>
@@ -219,7 +219,7 @@ export default function Instructors({
                                 key={inst.id}
                                 className={`rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between shadow-2xs hover:shadow-md ${
                                     isRecommended
-                                        ? 'bg-gradient-to-b from-amber-50/40 via-white to-white border-amber-300/80 ring-1 ring-amber-300/40'
+                                        ? 'bg-linear-to-b from-amber-50/40 via-white to-white border-amber-300/80 ring-1 ring-amber-300/40'
                                         : 'bg-white border-outline-variant/60 hover:border-primary/30'
                                 }`}
                             >

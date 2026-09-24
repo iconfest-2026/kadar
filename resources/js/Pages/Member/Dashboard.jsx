@@ -33,7 +33,6 @@ export default function Dashboard({
         {
             role: 'assistant',
             content: `Halo ${user?.name || 'Kawan'}! Saya asisten gaya hidup preventif Kadar. Saya dapat membantu Anda mendiskusikan pola istirahat, hidrasi, atau kebiasaan harian berdasarkan baseline Anda tanpa memberikan diagnosa medis. Apa yang ingin Anda diskusikan hari ini?`,
-            content: `Halo ${user?.name || 'Kawan'}! Saya asisten gaya hidup preventif AEVYRA. Saya dapat membantu Anda mendiskusikan pola istirahat, hidrasi, atau kebiasaan harian berdasarkan baseline Anda tanpa memberikan diagnosa medis. Apa yang ingin Anda diskusikan hari ini?`,
         },
     ]);
     const [chatInput, setChatInput] = useState('');
@@ -86,8 +85,7 @@ export default function Dashboard({
 
     return (
         <AppLayout title="Dashboard Member" activeTab="dashboard">
-            <Head title="Ringkasan Baseline - Kadar" />
-            <Head title="Ringkasan Baseline — AEVYRA" />
+            <Head title="Ringkasan Baseline - AEVYRA" />
 
             <div className="space-y-6">
                 {/* 1. Welcome & Status Banner */}
