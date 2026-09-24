@@ -142,18 +142,15 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                                                     isAttention 
                                                     ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20' 
                                                     : isNotice 
-                                                    ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
+                                                    ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20' 
                                                     : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
                                                 }`}>
                                                     <span className={`w-1.5 h-1.5 rounded-full ${
                                                         isAttention ? 'bg-rose-500' : isNotice ? 'bg-amber-500' : 'bg-emerald-500'
                                                     }`} />
-                                                    <span>{signal.severity}</span>
                                                     <span>{SEVERITY_MAP[signal.severity] || signal.severity}</span>
                                                 </span>
                                             </td>
-                                            <td className="py-3.5 px-6 font-mono font-semibold text-primary">
-                                                {signal.metric || signal.signal_type || 'Pola Tidur / Glukosa'}
                                             <td className="py-3.5 px-6 font-semibold text-primary text-xs">
                                                 {SIGNAL_MAP[signal.metric || signal.signal_type] || (signal.metric || signal.signal_type ? (signal.metric || signal.signal_type).replace(/_/g, ' ') : 'Pola Tidur / Glukosa')}
                                             </td>
