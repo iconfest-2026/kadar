@@ -37,13 +37,13 @@ class DemoUserSeeder extends Seeder
         $adminRole = Role::where('slug', 'admin')->first();
         $goldTier = MembershipTier::where('slug', 'gold')->first();
 
-        // -------------------------------------------------------------
-        // 1. ADMIN USER
-        // -------------------------------------------------------------
+        // =============================================================
+        // 1. ROLE ADMIN
+        // =============================================================
         $admin = User::firstOrCreate(
             ['email' => 'admin@aevyra.health'],
             [
-                'name' => 'Dr. Budi Pratama (Super Admin)',
+                'name' => 'Administrator AEVYRA',
                 'password' => Hash::make('password'),
                 'status' => 'ACTIVE',
                 'email_verified_at' => now(),
@@ -51,20 +51,6 @@ class DemoUserSeeder extends Seeder
         );
         if ($adminRole) {
             $admin->roles()->syncWithoutDetaching([$adminRole->id]);
-        }
-
-        // Legacy compatibility alias
-        $adminLegacy = User::firstOrCreate(
-            ['email' => 'admin@kadar.id'],
-            [
-                'name' => 'Dr. Budi Pratama (Super Admin)',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($adminRole) {
-            $adminLegacy->roles()->syncWithoutDetaching([$adminRole->id]);
         }
 
         AuditLog::create([
@@ -79,14 +65,13 @@ class DemoUserSeeder extends Seeder
             'created_at' => now(),
         ]);
 
-        // -------------------------------------------------------------
-        // 2. INSTRUCTOR USERS
-        // -------------------------------------------------------------
-        // Instructor 1: Coach Nabila (Active & Recommended)
+        // =============================================================
+        // 2. ROLE INSTRUKTUR
+        // =============================================================
         $instructor = User::firstOrCreate(
             ['email' => 'instruktur@aevyra.health'],
             [
-                'name' => 'Coach Nabila Sp.GK',
+                'name' => 'dr. Nabila Sarah, Sp.GK',
                 'password' => Hash::make('password'),
                 'status' => 'ACTIVE',
                 'email_verified_at' => now(),
@@ -113,98 +98,9 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Legacy compatibility alias
-        $instructorLegacy = User::firstOrCreate(
-            ['email' => 'instruktur@kadar.id'],
-            [
-                'name' => 'Coach Nabila Sp.GK',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($instructorRole) {
-            $instructorLegacy->roles()->syncWithoutDetaching([$instructorRole->id]);
-        }
-        InstructorProfile::updateOrCreate(
-            ['user_id' => $instructorLegacy->id],
-            [
-                'specialization' => 'Dokter Spesialis Gizi Klinis (Sp.GK)',
-                'str_number' => '31.1.1.100.2.21.087654',
-                'sip_number' => 'SIP.503/446/GK-08/2023',
-                'institution' => 'RSUPN Dr. Cipto Mangunkusumo',
-                'years_of_experience' => 8,
-                'bio' => 'Dokter Spesialis Gizi Klinis berfokus pada pencegahan resistensi insulin dan remisi pra-diabetes.',
-                'is_verified' => true,
-                'verified_at' => now()->subMonths(6),
-                'verified_by' => $admin->id,
-                'is_recommended' => true,
-                'max_member_capacity' => 50,
-            ]
-        );
-
-        // Instructor 2: dr. Bramantyo (Chief Medical Advisor)
-        $drBramantyo = User::firstOrCreate(
-            ['email' => 'dr.bramantyo@aevyra.health'],
-            [
-                'name' => 'dr. H. Bramantyo, Sp.PD',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($instructorRole) {
-            $drBramantyo->roles()->syncWithoutDetaching([$instructorRole->id]);
-        }
-        InstructorProfile::updateOrCreate(
-            ['user_id' => $drBramantyo->id],
-            [
-                'specialization' => 'Dokter Spesialis Penyakit Dalam (Sp.PD)',
-                'str_number' => '31.1.1.100.1.18.043219',
-                'sip_number' => 'SIP.503/446/PD-12/2021',
-                'institution' => 'RS Jantung & Pembuluh Darah Harapan Kita',
-                'years_of_experience' => 14,
-                'bio' => 'Dewan Penasihat Medis AEVYRA dan Spesialis Penyakit Dalam konsultan prevensi kardiometabolik.',
-                'is_verified' => true,
-                'verified_at' => now()->subYear(),
-                'verified_by' => $admin->id,
-                'is_recommended' => true,
-                'max_member_capacity' => 50,
-            ]
-        );
-
-        // Instructor 3: dr. Dimas (Pending Verification Demo)
-        $drPending = User::firstOrCreate(
-            ['email' => 'dr.calon@aevyra.health'],
-            [
-                'name' => 'dr. Dimas Setiawan',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($instructorRole) {
-            $drPending->roles()->syncWithoutDetaching([$instructorRole->id]);
-        }
-        InstructorProfile::updateOrCreate(
-            ['user_id' => $drPending->id],
-            [
-                'specialization' => 'Dokter Umum Terverifikasi',
-                'str_number' => '31.1.1.100.3.24.991823',
-                'sip_number' => 'SIP.503/446/DU-04/2024',
-                'institution' => 'Puskesmas Kebayoran Baru',
-                'years_of_experience' => 2,
-                'bio' => 'Dokter umum peminatan kedokteran preventif dan skrining metabolik komunitas.',
-                'is_verified' => false,
-                'is_recommended' => false,
-                'max_member_capacity' => 30,
-            ]
-        );
-
-        // -------------------------------------------------------------
-        // 3. MEMBER USERS
-        // -------------------------------------------------------------
-        // Member 1: Reza Rahardian (Active Male Member)
+        // =============================================================
+        // 3. ROLE MEMBER
+        // =============================================================
         $member = User::firstOrCreate(
             ['email' => 'member@aevyra.health'],
             [
@@ -218,46 +114,7 @@ class DemoUserSeeder extends Seeder
             $member->roles()->syncWithoutDetaching([$memberRole->id]);
         }
 
-        // Legacy compatibility alias
-        $memberLegacy = User::firstOrCreate(
-            ['email' => 'member@kadar.id'],
-            [
-                'name' => 'Reza Rahardian',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($memberRole) {
-            $memberLegacy->roles()->syncWithoutDetaching([$memberRole->id]);
-        }
-
-        // Member 2: Sarah Nindya (Female Member for Menstrual & PCOS Tracker Demo)
-        $sarah = User::firstOrCreate(
-            ['email' => 'sarah@aevyra.health'],
-            [
-                'name' => 'Sarah Nindya',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($memberRole) {
-            $sarah->roles()->syncWithoutDetaching([$memberRole->id]);
-        }
-        MemberProfile::updateOrCreate(
-            ['user_id' => $sarah->id],
-            [
-                'display_name' => 'Sarah',
-                'date_of_birth' => '1999-08-22',
-                'sex' => 'FEMALE',
-                'occupation' => 'Senior UI/UX Designer',
-                'timezone' => 'Asia/Jakarta',
-                'locale' => 'id-ID',
-            ]
-        );
-
-        // Membership for Reza
+        // Membership Gold
         if ($goldTier) {
             Membership::firstOrCreate(
                 ['user_id' => $member->id],
@@ -270,7 +127,7 @@ class DemoUserSeeder extends Seeder
             );
         }
 
-        // Member Profile for Reza
+        // Profil Member
         MemberProfile::updateOrCreate(
             ['user_id' => $member->id],
             [
@@ -283,7 +140,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Lifestyle Profile
+        // Profil Gaya Hidup
         LifestyleProfile::updateOrCreate(
             ['user_id' => $member->id],
             [
@@ -295,7 +152,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Goal
+        // Target / Goals
         $goal = Goal::updateOrCreate(
             ['user_id' => $member->id, 'type' => 'SLEEP_ROUTINE'],
             [
@@ -311,13 +168,13 @@ class DemoUserSeeder extends Seeder
         GoalMetric::updateOrCreate(
             ['goal_id' => $goal->id, 'metric_type' => 'sleep_duration'],
             [
-                'target_value' => 450.0, // 7.5 hours in minutes
+                'target_value' => 450.0, // 7.5 jam dalam menit
                 'unit' => 'minutes',
                 'priority' => 1,
             ]
         );
 
-        // Assign Instructor to Member (Max 3 Multi-Instructor System)
+        // Penugasan Instruktur ke Member (Relasi Binaan)
         InstructorMemberAssignment::updateOrCreate(
             ['member_id' => $member->id, 'instructor_id' => $instructor->id],
             [
@@ -327,7 +184,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Streak
+        // Streak Harian
         UserStreak::updateOrCreate(
             ['user_id' => $member->id, 'type' => 'DAILY_LOGGING'],
             [
@@ -338,7 +195,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Gamification Points
+        // Poin Gamifikasi
         PointsLedger::firstOrCreate(
             ['user_id' => $member->id, 'event_type' => 'ONBOARDING_COMPLETED'],
             ['points' => 50, 'created_at' => now()->subDays(18)]
@@ -352,9 +209,7 @@ class DemoUserSeeder extends Seeder
             ['points' => 70, 'created_at' => now()]
         );
 
-        // -------------------------------------------------------------
-        // 4. HISTORICAL HEALTH DATA FOR HBE DEMONSTRATION
-        // -------------------------------------------------------------
+        // Riwayat Data Kesehatan 14 Hari (Baseline)
         $baselineSleepValues = [435, 440, 425, 450, 430, 445, 435, 440, 420, 450, 435, 440, 425, 430];
         $historicalRecords = [];
 
@@ -376,7 +231,7 @@ class DemoUserSeeder extends Seeder
             ]);
             $historicalRecords[] = $rec;
 
-            // Also seed water intake
+            // Catatan hidrasi air
             HealthRecord::create([
                 'user_id' => $member->id,
                 'metric_type' => MetricType::WATER_INTAKE->value,
@@ -390,7 +245,7 @@ class DemoUserSeeder extends Seeder
             ]);
         }
 
-        // Calculated Sleep Baseline
+        // Baseline Tidur Terhitung
         $sleepBaseline = HealthBaseline::updateOrCreate(
             ['user_id' => $member->id, 'metric_type' => MetricType::SLEEP_DURATION->value],
             [
@@ -407,7 +262,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Water baseline
+        // Baseline Air Minum
         HealthBaseline::updateOrCreate(
             ['user_id' => $member->id, 'metric_type' => MetricType::WATER_INTAKE->value],
             [
@@ -424,7 +279,7 @@ class DemoUserSeeder extends Seeder
             ]
         );
 
-        // Days -4 to Today: Recent 4 days of sleep drop
+        // Data Penurunan Tidur 4 Hari Terakhir
         $recentDropValues = [350, 340, 345, 335];
         $recentRecords = [];
         foreach ($recentDropValues as $idx => $minutes) {
@@ -446,7 +301,7 @@ class DemoUserSeeder extends Seeder
             $recentRecords[] = $rec;
         }
 
-        // Today's water log (1500 ml logged so far)
+        // Catatan Air Hari Ini
         HealthRecord::create([
             'user_id' => $member->id,
             'metric_type' => MetricType::WATER_INTAKE->value,
@@ -460,9 +315,7 @@ class DemoUserSeeder extends Seeder
             'metadata' => ['notes' => 'Botol 500ml x 3'],
         ]);
 
-        // -------------------------------------------------------------
-        // 5. QUALIFIED BEHAVIOR SIGNAL & INSIGHT GENERATION
-        // -------------------------------------------------------------
+        // Sinyal Perilaku & Insight
         $signal = BehaviorSignal::create([
             'user_id' => $member->id,
             'metric_type' => MetricType::SLEEP_DURATION->value,
@@ -478,10 +331,9 @@ class DemoUserSeeder extends Seeder
             'priority_score' => 78.50,
         ]);
 
-        // Attach recent records as evidence
         $signal->records()->syncWithoutDetaching(collect($recentRecords)->pluck('id')->all());
 
-        // Create Insight Card
+        // Insight Card
         $insight = BehaviorInsight::create([
             'user_id' => $member->id,
             'behavior_signal_id' => $signal->id,
@@ -498,7 +350,7 @@ class DemoUserSeeder extends Seeder
             'expires_at' => now()->addDays(7),
         ]);
 
-        // Create Recommendations
+        // Rekomendasi
         Recommendation::create([
             'user_id' => $member->id,
             'insight_id' => $insight->id,
@@ -515,7 +367,7 @@ class DemoUserSeeder extends Seeder
             'user_id' => $member->id,
             'insight_id' => $insight->id,
             'type' => 'REMINDER',
-            'title' => 'Konsultasi Penjadwalan Ulang dengan Coach Nabila',
+            'title' => 'Konsultasi Penjadwalan Ulang dengan dr. Nabila Sarah, Sp.GK',
             'description' => 'Jadwalkan sesi evaluasi 15 menit bersama coach pendamping Anda untuk menata kembali jam istirahat di tengah kesibukan proyek.',
             'difficulty_level' => 'EASY',
             'status' => 'RECOMMENDED',
