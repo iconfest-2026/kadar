@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'midtrans/notification',
+            'api/midtrans/notification',
+        ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
             'verified-instructor' => \App\Http\Middleware\EnsureInstructorIsVerified::class,

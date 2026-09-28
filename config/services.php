@@ -74,4 +74,14 @@ return [
         'rpd_limit' => (int) env('CLOUDFLARE_RPD_LIMIT', 1000),
     ],
 
+    'midtrans' => [
+        'merchant_id' => env('MIDTRANS_MERCHANT_ID', 'Mid-client-o8FP06N-oie4kS_V'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY', 'Mid-client-o8FP06N-oie4kS_V'),
+        'server_key' => env('MIDTRANS_SERVER_KEY', 'Mid-server-CaLOeneUWptQF5Z4vrSr-td7'),
+        'is_production' => filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN),
+        'snap_url' => filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN)
+            ? 'https://app.midtrans.com/snap/snap.js'
+            : 'https://app.sandbox.midtrans.com/snap/snap.js',
+    ],
+
 ];

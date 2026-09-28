@@ -1,75 +1,163 @@
 import React, { useState } from 'react';
 
-export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Gold' }) {
+const FALLBACK_TIERS = [
+    {
+        name: 'Silver',
+        slug: 'silver',
+        price: 'Gratis',
+        period: 'Selamanya',
+        description: 'Fondasi pencatatan preventif harian untuk memulai evaluasi gaya hidup sehat.',
+        features: [
+            { text: '3x Scan Kamera Gizi & Obat / hari', active: true },
+            { text: 'Pencatatan metrik harian (Gula, Tidur, Langkah)', active: true },
+            { text: 'Konsultasi Tanya Jawab AI Dasar (5 sesi/hari)', active: true },
+            { text: 'Akses Komunitas & Forum Diskusi Publik', active: true },
+            { text: 'Konsultasi Dokter Spesialis Terjadwal', active: false },
+            { text: 'Simulasi Lengkap Kurva Beban Glikemik (GL)', active: false },
+            { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
+        ],
+    },
+    {
+        name: 'Gold',
+        slug: 'gold',
+        price: 'Rp 79.000',
+        period: '/ bulan',
+        description: 'Paling populer untuk pencegahan pra-diabetes dan optimasi metabolik mandiri terpandu.',
+        popular: true,
+        features: [
+            { text: '15x Scan Kamera Gizi & Obat / hari', active: true },
+            { text: '4x Konsultasi Terjadwal Bersama Dokter/Spesialis Gizi', active: true },
+            { text: 'AI Asisten Preventif 24/7 Tanpa Batas', active: true },
+            { text: 'Simulasi Lengkap Kurva Glukosa & Beban Glikemik (GL)', active: true },
+            { text: 'Akses Penuh Program Tantangan 14-90 Hari PERKENI', active: true },
+            { text: 'Laporan Perkembangan Bulanan Terstandar Kemenkes', active: true },
+            { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
+        ],
+    },
+    {
+        name: 'Platinum',
+        slug: 'platinum',
+        price: 'Rp 199.000',
+        period: '/ bulan',
+        description: 'Paket VIP paripurna dengan bimbingan dokter spesialis pribadi & ambulans terhubung.',
+        features: [
+            { text: 'Scan Kamera Gizi & Obat UNLIMITED (Bebas Batas)', active: true },
+            { text: '8x Konsultasi Dokter & Spesialis Gizi Klinis (Sp.GK)', active: true },
+            { text: 'Dedicated Personal Health Coach & Intervensi Kustom', active: true },
+            { text: 'Akses Jalur Cepat Ambulans 119 dengan Riwayat Medis Instan', active: true },
+            { text: 'Laporan Klinis Komprehensif Berstandar Rumah Sakit', active: true },
+            { text: 'Prediksi Hormonal & Siklus AI Tingkat Lanjut', active: true },
+            { text: 'Status Eksklusif di Komunitas Pejuang Sehat AEVYRA', active: true },
+        ],
+    },
+];
+
+export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Gold', availableTiers = [] }) {
     const [selectedTier, setSelectedTier] = useState(currentTier);
     const [upgrading, setUpgrading] = useState(false);
     const [upgradeSuccess, setUpgradeSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     if (!isOpen) return null;
 
-    const tiers = [
-        {
-            name: 'Silver',
-            slug: 'silver',
-            price: 'Gratis',
-            period: 'Selamanya',
-            description: 'Fondasi pencatatan preventif harian untuk memulai evaluasi gaya hidup sehat.',
-            features: [
-                { text: '3x Scan Kamera Gizi & Obat / hari', active: true },
-                { text: 'Pencatatan metrik harian (Gula, Tidur, Langkah)', active: true },
-                { text: 'Konsultasi Tanya Jawab AI Dasar (5 sesi/hari)', active: true },
-                { text: 'Akses Komunitas & Forum Diskusi Publik', active: true },
-                { text: 'Konsultasi Dokter Spesialis Terjadwal', active: false },
-                { text: 'Simulasi Lengkap Kurva Beban Glikemik (GL)', active: false },
-                { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
-            ],
-        },
-        {
-            name: 'Gold',
-            slug: 'gold',
-            price: 'Rp 49.000',
-            period: '/ bulan',
-            description: 'Paling populer untuk pencegahan pra-diabetes dan optimasi metabolik mandiri terpandu.',
-            popular: true,
-            features: [
-                { text: '15x Scan Kamera Gizi & Obat / hari', active: true },
-                { text: '4x Konsultasi Terjadwal Bersama Dokter/Spesialis Gizi', active: true },
-                { text: 'AI Asisten Preventif 24/7 Tanpa Batas', active: true },
-                { text: 'Simulasi Lengkap Kurva Glukosa & Beban Glikemik (GL)', active: true },
-                { text: 'Akses Penuh Program Tantangan 14-90 Hari PERKENI', active: true },
-                { text: 'Laporan Perkembangan Bulanan Terstandar Kemenkes', active: true },
-                { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
-            ],
-        },
-        {
-            name: 'Platinum',
-            slug: 'platinum',
-            price: 'Rp 99.000',
-            period: '/ bulan',
-            description: 'Paket VIP paripurna dengan bimbingan dokter spesialis pribadi & ambulans terhubung.',
-            features: [
-                { text: 'Scan Kamera Gizi & Obat UNLIMITED (Bebas Batas)', active: true },
-                { text: '8x Konsultasi Dokter & Spesialis Gizi Klinis (Sp.GK)', active: true },
-                { text: 'Dedicated Personal Health Coach & Intervensi Kustom', active: true },
-                { text: 'Akses Jalur Cepat Ambulans 119 dengan Riwayat Medis Instan', active: true },
-                { text: 'Laporan Klinis Komprehensif Berstandar Rumah Sakit', active: true },
-                { text: 'Prediksi Hormonal & Siklus AI Tingkat Lanjut', active: true },
-                { text: 'Status Eksklusif di Komunitas Pejuang Sehat AEVYRA', active: true },
-            ],
-        },
-    ];
+    const tiers = availableTiers && availableTiers.length > 0
+        ? availableTiers.map((t) => ({
+            id: t.id,
+            name: t.name,
+            slug: t.slug,
+            price: Number(t.total_price || t.price) === 0 ? 'Gratis' : `Rp ${Number(t.total_price || t.price).toLocaleString('id-ID')}`,
+            adminFee: Number(t.calculated_admin_fee || 0),
+            period: Number(t.price) === 0 ? 'Selamanya' : '/ bulan',
+            description: t.description || 'Layanan kesehatan preventif terpadu AEVYRA.',
+            popular: Boolean(t.is_popular),
+            features: Array.isArray(t.features) && t.features.length > 0
+                ? t.features.map((feat) => ({ text: feat, active: true }))
+                : (FALLBACK_TIERS.find((ft) => ft.slug === t.slug)?.features || []),
+        }))
+        : FALLBACK_TIERS;
 
-    const handleUpgrade = (tierName) => {
+    const handleUpgrade = async (tierItem) => {
         setUpgrading(true);
-        setTimeout(() => {
+        setErrorMessage(null);
+
+        try {
+            const getCookie = (name) => {
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = metaToken || xsrfToken || '';
+
+            const res = await fetch(`/member/memberships/${tierItem.slug || tierItem.id}/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            });
+
+            let data = {};
+            try {
+                data = await res.json();
+            } catch (e) {
+                // Non-JSON response
+            }
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || 'Gagal memulai transaksi checkout Midtrans.');
+            }
+
+            // Free tier activation
+            if (data.is_free) {
+                setUpgradeSuccess(true);
+                setSelectedTier(tierItem.name);
+                setTimeout(() => {
+                    setUpgradeSuccess(false);
+                    onClose();
+                    window.location.reload();
+                }, 1500);
+                return;
+            }
+
+            // Midtrans Snap Popup
+            if (data.snap_token) {
+                if (window.snap && typeof window.snap.pay === 'function') {
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function (result) {
+                            setUpgradeSuccess(true);
+                            setSelectedTier(tierItem.name);
+                            setTimeout(() => {
+                                onClose();
+                                window.location.reload();
+                            }, 1500);
+                        },
+                        onPending: function (result) {
+                            alert('Pesanan langganan Anda berhasil dibuat dan menunggu konfirmasi pembayaran.');
+                            onClose();
+                        },
+                        onError: function (result) {
+                            setErrorMessage('Pembayaran gagal atau ditolak oleh gateway.');
+                        },
+                        onClose: function () {
+                            // Modal closed
+                        },
+                    });
+                } else if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    throw new Error('Midtrans Snap SDK belum siap dimuat. Silakan muat ulang halaman.');
+                }
+            }
+        } catch (err) {
+            setErrorMessage(err.message || 'Terjadi gangguan saat menghubungkan ke gateway pembayaran.');
+        } finally {
             setUpgrading(false);
-            setUpgradeSuccess(true);
-            setSelectedTier(tierName);
-            setTimeout(() => {
-                setUpgradeSuccess(false);
-                onClose();
-            }, 1200);
-        }, 1000);
+        }
     };
 
     return (
@@ -101,6 +189,22 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
 
                 {/* Plans Comparison */}
                 <div className="p-6 overflow-y-auto space-y-6">
+                    {errorMessage && (
+                        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[18px]">error</span>
+                                <span>{errorMessage}</span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setErrorMessage(null)}
+                                className="text-rose-500 hover:text-rose-700 cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[16px]">close</span>
+                            </button>
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {tiers.map((t) => {
                             const isCurrent = t.name.toLowerCase() === currentTier.toLowerCase();
@@ -172,11 +276,11 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                                         ) : (
                                             <button
                                                 type="button"
-                                                onClick={() => handleUpgrade(t.name)}
+                                                onClick={() => handleUpgrade(t)}
                                                 disabled={upgrading}
                                                 className="w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs active:scale-95 bg-primary hover:bg-primary-container text-white cursor-pointer"
                                             >
-                                                {upgrading ? 'Memproses...' : `Pilih ${t.name}`}
+                                                {upgrading ? 'Menghubungkan Midtrans...' : `Pilih ${t.name}`}
                                             </button>
                                         )}
                                     </div>
@@ -197,7 +301,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                 <div className="p-4 bg-surface-container-low border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-on-surface-variant text-center sm:text-left">
                     <span className="flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-[16px] text-primary shrink-0">lock</span>
-                        <span>Transaksi terlindungi standar enkripsi medis. Dapat diubah kapan saja.</span>
+                        <span>Transaksi terlindungi Midtrans Payment Gateway & enkripsi perbankan.</span>
                     </span>
                     <button
                         type="button"

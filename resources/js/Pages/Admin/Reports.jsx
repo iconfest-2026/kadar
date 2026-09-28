@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
-import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import { Button, Modal, Tabs, TabsList, TabsTrigger, TabsContent, Badge } from '@/Components/UI';
+import { Button, Modal, Table, Tabs, TabsList, TabsTrigger, TabsContent, Badge, Input } from '@/Components/UI';
 
 export default function Reports({
     cohortReports = [],
@@ -20,6 +19,25 @@ export default function Reports({
 }) {
     const [selectedReport, setSelectedReport] = useState(null);
     const [exportNotice, setExportNotice] = useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+    const createForm = useForm({
+        title: '',
+        cohort_name: '',
+        participants_count: 30,
+        adherence_score: '90%',
+        avg_outcome: '+45 menit tidur / -10 mg/dL glukosa',
+    });
+
+    const handleCreateReport = (e) => {
+        e.preventDefault();
+        createForm.post('/admin/reports/cohort', {
+            onSuccess: () => {
+                setIsCreateOpen(false);
+                createForm.reset();
+            },
+        });
+    };
 
     const handlePrint = () => {
         window.print();
@@ -80,7 +98,7 @@ export default function Reports({
             label: 'Tanggal Terbit',
             render: (row) => (
                 <span className="font-label-mono text-[11px] text-on-surface-variant">
-                    {new Date(row.generated_at).toLocaleDateString('id-ID')}
+                    {row.generated_at ? new Date(row.generated_at).toLocaleDateString('id-ID') : '-'}
                 </span>
             ),
         },
@@ -124,15 +142,26 @@ export default function Reports({
                     icon="analytics"
                     badge={<AdminBadge variant="active">Executive Briefing</AdminBadge>}
                     actions={
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="md"
-                            leftIcon="print"
-                            onClick={handlePrint}
-                        >
-                            Cetak Laporan
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                type="button"
+                                variant="primary"
+                                size="md"
+                                leftIcon="add_chart"
+                                onClick={() => setIsCreateOpen(true)}
+                            >
+                                Buat Laporan Kohor
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="md"
+                                leftIcon="print"
+                                onClick={handlePrint}
+                            >
+                                Cetak Laporan
+                            </Button>
+                        </div>
                     }
                 />
 
@@ -191,7 +220,7 @@ export default function Reports({
 
                     {/* Tab 1: Cohort Reports */}
                     <TabsContent value="cohorts">
-                        <AdminDataTable
+                        <Table
                             columns={cohortColumns}
                             data={cohortReports}
                             emptyMessage="Belum ada laporan kohor terbit."
@@ -382,6 +411,89 @@ export default function Reports({
                         </div>
                     </Modal>
                 )}
+
+                {/* Create Cohort Report Modal */}
+                <Modal
+                    isOpen={isCreateOpen}
+                    onClose={() => setIsCreateOpen(false)}
+                    title="Generate Laporan Kohor Analitik Baru"
+                    subtitle="Kompilasi ringkasan performa klinis dan keterikatan partisipan program kohor."
+                    icon="add_chart"
+                    maxWidth="md"
+                    footer={
+                        <div className="flex items-center justify-end gap-2 w-full">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setIsCreateOpen(false)}
+                                disabled={createForm.processing}
+                            >
+                                Batal
+                            </Button>
+                            <Button
+                                type="submit"
+                                form="create-cohort-report-form"
+                                variant="primary"
+                                size="sm"
+                                leftIcon="save"
+                                loading={createForm.processing}
+                            >
+                                Arsipkan Laporan
+                            </Button>
+                        </div>
+                    }
+                >
+                    <form id="create-cohort-report-form" onSubmit={handleCreateReport} className="space-y-4">
+                        <Input
+                            label="Judul Laporan"
+                            placeholder="Contoh: Evaluasi Kestabilan Glukosa Member Q2"
+                            required
+                            value={createForm.data.title}
+                            onChange={(e) => createForm.setData('title', e.target.value)}
+                            error={createForm.errors.title}
+                        />
+
+                        <Input
+                            label="Nama Program Kohor"
+                            placeholder="Contoh: Program Glukosa Stabil 30 Hari"
+                            required
+                            value={createForm.data.cohort_name}
+                            onChange={(e) => createForm.setData('cohort_name', e.target.value)}
+                            error={createForm.errors.cohort_name}
+                        />
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <Input
+                                label="Jumlah Sampel Peserta"
+                                type="number"
+                                min="1"
+                                required
+                                value={createForm.data.participants_count}
+                                onChange={(e) => createForm.setData('participants_count', parseInt(e.target.value) || 1)}
+                                error={createForm.errors.participants_count}
+                            />
+
+                            <Input
+                                label="Skor Kepatuhan (% Adherence)"
+                                placeholder="Contoh: 92%"
+                                required
+                                value={createForm.data.adherence_score}
+                                onChange={(e) => createForm.setData('adherence_score', e.target.value)}
+                                error={createForm.errors.adherence_score}
+                            />
+                        </div>
+
+                        <Input
+                            label="Hasil Outcome Klinis Terukur"
+                            placeholder="Contoh: +55 menit tidur / -14 mg/dL glukosa puasa"
+                            required
+                            value={createForm.data.avg_outcome}
+                            onChange={(e) => createForm.setData('avg_outcome', e.target.value)}
+                            error={createForm.errors.avg_outcome}
+                        />
+                    </form>
+                </Modal>
             </div>
         </AdminLayout>
     );

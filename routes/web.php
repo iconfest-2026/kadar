@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Payment\MidtransPaymentController;
 use App\Http\Controllers\Instructor\ConsultationController;
 use App\Http\Controllers\Instructor\InstructorCaseloadController;
 use App\Http\Controllers\Instructor\InterventionController;
@@ -74,7 +75,10 @@ Route::get('/faq', function () {
 
 // Public Packages & Pricing Page (Silver, Gold, Platinum)
 Route::get('/paket', function () {
-    return Inertia::render('Paket');
+    $tiers = \App\Models\MembershipTier::where('status', 'ACTIVE')->orderBy('price', 'asc')->get();
+    return Inertia::render('Paket', [
+        'tiersData' => $tiers,
+    ]);
 })->name('paket');
 
 Route::get('/pricing', function () {
@@ -114,6 +118,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Midtrans Payment Gateway Webhook (CSRF Exempt)
+Route::post('/midtrans/notification', [MidtransPaymentController::class, 'notification'])->name('midtrans.notification');
+Route::get('/midtrans/finish', [MidtransPaymentController::class, 'finish'])->name('midtrans.finish');
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
@@ -196,6 +204,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/menstrual/log', [MenstrualCycleController::class, 'storeLog'])->name('menstrual.log');
         Route::post('/menstrual/settings', [MenstrualCycleController::class, 'updateSettings'])->name('menstrual.settings');
         Route::post('/profile/toggle-sex', [DashboardController::class, 'toggleSex'])->name('profile.toggle-sex');
+
+        // Feature: SaaS Membership Checkout via Midtrans
+        Route::post('/memberships/{tier}/checkout', [MidtransPaymentController::class, 'checkout'])->name('memberships.checkout');
+        Route::get('/memberships/finish', [MidtransPaymentController::class, 'finish'])->name('memberships.finish');
     });
 
     // -------------------------------------------------------------
@@ -223,7 +235,12 @@ Route::middleware(['auth'])->group(function () {
     // -------------------------------------------------------------
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminGovernanceController::class, 'index'])->name('dashboard');
+        
+        // Users Management CRUD
         Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
+        Route::post('/users', [UserManagementController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
         Route::post('/users/{user}/toggle-status', [UserManagementController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::patch('/users/{user}/role', [UserManagementController::class, 'changeRole'])->name('users.role.update');
         
@@ -234,26 +251,77 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/instructors/{user}/recommend', [AdminGovernanceController::class, 'toggleRecommendInstructor'])->name('instructors.recommend');
         
         // 11 Core Features Governance Routes
+        // Scanner
         Route::get('/scanner', [AdminGovernanceController::class, 'scanner'])->name('scanner');
+        Route::post('/scanner', [AdminGovernanceController::class, 'storeScan'])->name('scanner.store');
+        Route::delete('/scanner/{record}', [AdminGovernanceController::class, 'destroyScan'])->name('scanner.destroy');
+
+        // Consultations
         Route::get('/consultations', [AdminGovernanceController::class, 'consultations'])->name('consultations');
+        Route::post('/consultations', [AdminGovernanceController::class, 'storeConsultation'])->name('consultations.store');
+        Route::patch('/consultations/{consultation}', [AdminGovernanceController::class, 'updateConsultation'])->name('consultations.update');
+        Route::delete('/consultations/{consultation}', [AdminGovernanceController::class, 'destroyConsultation'])->name('consultations.destroy');
+
+        // Health Tracker
         Route::get('/health-tracker', [AdminGovernanceController::class, 'healthTracker'])->name('health-tracker');
+        Route::post('/health-tracker', [AdminGovernanceController::class, 'storeHealthRecord'])->name('health-tracker.store');
+        Route::delete('/health-tracker/{record}', [AdminGovernanceController::class, 'destroyHealthRecord'])->name('health-tracker.destroy');
+
+        // Recommendations
         Route::get('/recommendations', [AdminGovernanceController::class, 'recommendations'])->name('recommendations');
+        Route::post('/recommendations', [AdminGovernanceController::class, 'storeInsight'])->name('recommendations.store');
+        Route::patch('/recommendations/{insight}/toggle', [AdminGovernanceController::class, 'toggleInsightStatus'])->name('recommendations.toggle');
+        Route::delete('/recommendations/{insight}', [AdminGovernanceController::class, 'destroyInsight'])->name('recommendations.destroy');
+
+        // Programs
         Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
         Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store');
         Route::patch('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
+        Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
+
+        // Challenges
         Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
         Route::post('/challenges', [ChallengeController::class, 'store'])->name('challenges.store');
+        Route::patch('/challenges/{challenge}', [ChallengeController::class, 'update'])->name('challenges.update');
+        Route::delete('/challenges/{challenge}', [ChallengeController::class, 'destroy'])->name('challenges.destroy');
+
+        // Community Moderation
         Route::get('/community', [AdminGovernanceController::class, 'community'])->name('community');
+        Route::post('/community/posts', [AdminGovernanceController::class, 'storeCommunityPost'])->name('community.posts.store');
+        Route::patch('/community/posts/{post}/status', [AdminGovernanceController::class, 'updateCommunityPostStatus'])->name('community.posts.status');
+        Route::delete('/community/posts/{post}', [AdminGovernanceController::class, 'destroyCommunityPost'])->name('community.posts.destroy');
+
+        // Gamification
         Route::get('/gamification', [AdminGovernanceController::class, 'gamification'])->name('gamification');
+        Route::post('/gamification/badges', [AdminGovernanceController::class, 'storeBadge'])->name('gamification.badges.store');
+        Route::patch('/gamification/badges/{achievement}', [AdminGovernanceController::class, 'updateBadge'])->name('gamification.badges.update');
+        Route::delete('/gamification/badges/{achievement}', [AdminGovernanceController::class, 'destroyBadge'])->name('gamification.badges.destroy');
+        Route::post('/gamification/award-points', [AdminGovernanceController::class, 'awardPoints'])->name('gamification.points.award');
+
+        // Memberships & Tiers
         Route::get('/memberships', [AdminGovernanceController::class, 'memberships'])->name('memberships');
+        Route::post('/memberships/assign', [AdminGovernanceController::class, 'assignMembership'])->name('memberships.assign');
+        Route::patch('/memberships/subscriptions/{membership}', [AdminGovernanceController::class, 'updateMembership'])->name('memberships.subscriptions.update');
+        Route::delete('/memberships/subscriptions/{membership}', [AdminGovernanceController::class, 'destroyMembership'])->name('memberships.subscriptions.destroy');
+        Route::delete('/memberships/payments/{payment}', [AdminGovernanceController::class, 'destroyPayment'])->name('memberships.payments.destroy');
+        Route::post('/memberships/tiers', [AdminGovernanceController::class, 'storeTier'])->name('memberships.tiers.store');
+        Route::patch('/memberships/tiers/{tier}', [AdminGovernanceController::class, 'updateTier'])->name('memberships.tiers.update');
+        Route::delete('/memberships/tiers/{tier}', [AdminGovernanceController::class, 'destroyTier'])->name('memberships.tiers.destroy');
+
+        // Emergency 119/112
         Route::get('/emergency', [AdminGovernanceController::class, 'emergency'])->name('emergency');
+        Route::patch('/emergency/{event}/status', [AdminGovernanceController::class, 'updateEmergencyStatus'])->name('emergency.status');
+        Route::delete('/emergency/{event}', [AdminGovernanceController::class, 'destroyEmergencyEvent'])->name('emergency.destroy');
+        Route::post('/emergency/simulate', [AdminGovernanceController::class, 'simulateEmergency'])->name('emergency.simulate');
         
         // Feature 9: Laporan & Analitik Platform Untuk Admin
         Route::get('/reports', [AdminReportsController::class, 'index'])->name('reports.index');
+        Route::post('/reports/cohort', [AdminReportsController::class, 'storeCohortReport'])->name('reports.cohort.store');
 
         // Audit & Settings
         Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
         Route::get('/settings', [AdminGovernanceController::class, 'settings'])->name('settings');
         Route::post('/settings', [AdminGovernanceController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/settings/flags', [AdminGovernanceController::class, 'updateFeatureFlags'])->name('settings.flags');
     });
 });
