@@ -3,25 +3,44 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Program;
 use App\Models\AuditLog;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class ProgramController extends Controller
 {
     public function index(Request $request)
     {
-        $programs = Program::with('creator')
-            ->withCount('members')
-            ->withCount('instructors')
-            ->latest()
-            ->paginate(15);
+        $query = Program::with('creator')
+            ->withCount(['members', 'instructors'])
+            ->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('status') && $request->status !== 'ALL') {
+            $query->where('status', $request->status);
+        }
+
+        $programs = $query->paginate(12)->withQueryString();
+
+        $stats = [
+            'totalPrograms' => Program::count(),
+            'publishedPrograms' => Program::where('status', 'PUBLISHED')->count(),
+            'draftPrograms' => Program::where('status', 'DRAFT')->count(),
+            'archivedPrograms' => Program::where('status', 'ARCHIVED')->count(),
+        ];
 
         return Inertia::render('Admin/Programs', [
             'programs' => $programs,
+            'stats' => $stats,
+            'filters' => $request->only(['search', 'status']),
         ]);
     }
 
@@ -35,7 +54,14 @@ class ProgramController extends Controller
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $baseSlug = Str::slug($validated['name']);
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Program::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter++;
+        }
+
+        $validated['slug'] = $slug;
         $validated['created_by'] = Auth::id();
 
         $program = Program::create($validated);
@@ -49,7 +75,7 @@ class ProgramController extends Controller
             $validated
         );
 
-        return back()->with('success', 'Program berhasil dibuat.');
+        return back()->with('success', "Program {$program->name} berhasil dibuat.");
     }
 
     public function update(Request $request, Program $program)
@@ -63,7 +89,13 @@ class ProgramController extends Controller
         ]);
 
         if ($program->name !== $validated['name']) {
-            $validated['slug'] = Str::slug($validated['name']);
+            $baseSlug = Str::slug($validated['name']);
+            $slug = $baseSlug;
+            $counter = 1;
+            while (Program::where('slug', $slug)->where('id', '!=', $program->id)->exists()) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+            $validated['slug'] = $slug;
         }
 
         $program->update($validated);
@@ -77,7 +109,25 @@ class ProgramController extends Controller
             $validated
         );
 
-        return back()->with('success', 'Program berhasil diperbarui.');
+        return back()->with('success', "Program {$program->name} berhasil diperbarui.");
+    }
+
+    public function destroy(Program $program)
+    {
+        $programName = $program->name;
+        $programId = $program->id;
+
+        $program->delete();
+
+        AuditLog::log(
+            Auth::id(),
+            'admin',
+            'program.delete',
+            'Program',
+            (string)$programId,
+            ['name' => $programName]
+        );
+
+        return back()->with('success', "Program {$programName} berhasil dihapus.");
     }
 }
-

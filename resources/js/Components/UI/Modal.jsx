@@ -6,9 +6,10 @@ export default function Modal({
     onClose,
     title,
     subtitle,
+    icon,
     children,
     footer,
-    maxWidth = 'md', // 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full'
+    maxWidth = 'md', // 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | 'full' or 'max-w-...'
     closeOnEscape = true,
     closeOnBackdropClick = true,
     className = '',
@@ -49,8 +50,12 @@ export default function Modal({
         xl: 'max-w-xl',
         '2xl': 'max-w-2xl',
         '3xl': 'max-w-3xl',
-        full: 'max-w-5xl',
+        '4xl': 'max-w-4xl',
+        '5xl': 'max-w-5xl',
+        full: 'max-w-6xl',
     };
+
+    const resolvedMaxWidth = maxWidthClasses[maxWidth] || (maxWidth.startsWith('max-w-') ? maxWidth : maxWidthClasses.md);
 
     const modalContent = (
         <div
@@ -68,28 +73,39 @@ export default function Modal({
             {/* Modal Dialog Box */}
             <div
                 className={`
-                    relative w-full ${maxWidthClasses[maxWidth] || maxWidthClasses.md}
+                    relative w-full ${resolvedMaxWidth}
                     bg-white rounded-3xl border border-outline-variant/60 shadow-2xl
-                    overflow-hidden z-10 flex flex-col max-h-[90vh]
+                    overflow-hidden z-10 flex flex-col max-h-[90vh] my-auto
                     transform transition-all duration-200 animate-scaleUp
                     ${className}
                 `.replace(/\s+/g, ' ').trim()}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                {(title || subtitle || onClose) && (
-                    <div className="flex items-start justify-between p-6 pb-4 border-b border-outline-variant/40 bg-surface-container-lowest">
-                        <div>
-                            {title && (
-                                <h3 className="text-lg font-headline font-bold text-on-surface tracking-tight">
-                                    {title}
-                                </h3>
+                {(title || subtitle || icon || onClose) && (
+                    <div className="flex items-center justify-between p-6 pb-4 border-b border-outline-variant/40 bg-surface-container-lowest">
+                        <div className="flex items-center gap-3">
+                            {icon && (
+                                typeof icon === 'string' ? (
+                                    <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 shadow-2xs">
+                                        <span className="material-symbols-outlined text-[20px]">{icon}</span>
+                                    </div>
+                                ) : (
+                                    <div className="shrink-0">{icon}</div>
+                                )
                             )}
-                            {subtitle && (
-                                <p className="text-xs text-on-surface-variant/80 mt-0.5 leading-relaxed">
-                                    {subtitle}
-                                </p>
-                            )}
+                            <div>
+                                {title && (
+                                    <h3 className="text-base sm:text-lg font-headline font-bold text-on-surface tracking-tight">
+                                        {title}
+                                    </h3>
+                                )}
+                                {subtitle && (
+                                    <p className="text-xs text-on-surface-variant/80 mt-0.5 leading-relaxed">
+                                        {subtitle}
+                                    </p>
+                                )}
+                            </div>
                         </div>
 
                         {onClose && (
@@ -106,13 +122,13 @@ export default function Modal({
                 )}
 
                 {/* Body Content */}
-                <div className="p-6 overflow-y-auto flex-1 font-sans text-on-surface">
+                <div className="p-6 overflow-y-auto flex-1 font-sans text-on-surface text-xs leading-relaxed">
                     {children}
                 </div>
 
                 {/* Footer */}
                 {footer && (
-                    <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-outline-variant/40 bg-surface-container-low">
+                    <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-outline-variant/40 bg-surface-container-low shrink-0">
                         {footer}
                     </div>
                 )}

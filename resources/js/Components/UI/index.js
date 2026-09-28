@@ -10,5 +10,6 @@ export { default as Alert } from './Alert';
 export { default as Avatar } from './Avatar';
 export { default as Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 export { default as Skeleton } from './Skeleton';
-export { default as Modal } from './Modal';
+export { default as Modal, default as AdminModal } from './Modal';
+export { default as Table, default as AdminDataTable } from './Table';
 
