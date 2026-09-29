@@ -20,6 +20,13 @@ export default function AppLayout({ children, title, activeTab }) {
     const [isTierModalOpen, setIsTierModalOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+
+    useEffect(() => {
+        const handleOpenAiChat = () => setIsAiChatOpen(true);
+        window.addEventListener('open-ai-chat', handleOpenAiChat);
+        return () => window.removeEventListener('open-ai-chat', handleOpenAiChat);
+    }, []);
 
     const handleLogout = () => {
         router.post('/logout');
@@ -39,6 +46,8 @@ export default function AppLayout({ children, title, activeTab }) {
             items: [
                 { id: 'consultations', name: 'Pusat Tele-Konsultasi', href: '/member/consultations-hub', icon: 'support_agent' },
                 { id: 'instructors', name: 'Tim Dokter Pendamping', href: '/member/instructors', icon: 'medical_services' },
+                { id: 'ai-consultation', name: 'Chat AI (WhatsApp)', action: 'open_ai_chat', icon: 'chat', badge: 'Online' },
+                { id: 'emergency', name: 'Siaga Ambulans GPS', href: '/demo/emergency', icon: 'emergency', badge: '119' },
             ],
         },
         {
@@ -47,12 +56,22 @@ export default function AppLayout({ children, title, activeTab }) {
                 { id: 'challenges', name: 'Tantangan Sehat', href: '/member/challenges', icon: 'emoji_events', badge: '14-90 H' },
                 { id: 'community', name: 'Forum Komunitas', href: '/member/community', icon: 'groups' },
                 { id: 'arcade', name: 'Game Edukasi 2D', href: '/arcade', icon: 'sports_esports' },
+                { id: 'gender-vitality', name: 'Siklus & Vitalitas', href: '/demo/gender-vitality', icon: 'vital_signs', badge: 'AI' },
+            ],
+        },
+        {
+            title: 'Layanan & Bantuan',
+            items: [
+                { id: 'home', name: 'Beranda Utama Web', href: '/', icon: 'home', badge: 'Web' },
+                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium' },
+                { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
             ],
         },
         {
             title: 'Pengaturan & Akun',
             items: [
                 { id: 'onboarding', name: 'Profil & Gaya Hidup', href: '/member/onboarding', icon: 'tune' },
+                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge' },
             ],
         },
     ];
@@ -97,9 +116,9 @@ export default function AppLayout({ children, title, activeTab }) {
             
             {/* Ambient Background Soft Blobs */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-paint">
-                <div className="absolute -top-32 left-1/4 w-150 h-80 bg-gradient-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute -top-32 left-1/4 w-150 h-80 bg-linear-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute top-1/2 -right-20 w-120 h-100 bg-[#f4ebe1]/30 blur-3xl rounded-full pointer-events-none" />
-                <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-gradient-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-linear-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
             </div>
 
             {/* Mobile Overlay */}
@@ -134,14 +153,23 @@ export default function AppLayout({ children, title, activeTab }) {
                         </div>
                     </Link>
 
-                    <button 
-                        type="button"
-                        className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
-                        onClick={() => setSidebarOpen(false)}
-                        aria-label="Tutup Menu"
-                    >
-                        <span className="material-symbols-outlined text-[20px]">close</span>
-                    </button>
+                    <div className="flex items-center gap-1">
+                        <Link 
+                            href="/"
+                            className="p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors shrink-0"
+                            title="Ke Beranda Web Utama"
+                        >
+                            <span className="material-symbols-outlined text-[19px]">home</span>
+                        </Link>
+                        <button 
+                            type="button"
+                            className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                            onClick={() => setSidebarOpen(false)}
+                            aria-label="Tutup Menu"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">close</span>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Member Profile Widget */}
@@ -177,6 +205,83 @@ export default function AppLayout({ children, title, activeTab }) {
                     </div>
                 )}
 
+                {!isMember && user && (
+                    <div className="p-3.5 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 shrink-0">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
+                                {user?.name?.charAt(0) || 'U'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
+                                <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Quick Action Buttons (Pindai Gizi & Catat Metrik - Dipindahkan dari Navbar) */}
+                {isMember && (
+                    <div className="px-3 pt-2.5 pb-1 grid grid-cols-2 gap-2 shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setIsQuickLogOpen(true)}
+                            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-primary hover:bg-[#005a54] text-white text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
+                            title="Catat Glukosa, Tensi, Tidur, Langkah"
+                        >
+                            <span className="material-symbols-outlined text-[17px]">add</span>
+                            <span>Catat Metrik</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setIsScannerOpen(true)}
+                            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer border border-surface-container"
+                            title="Buka Kamera Pindai Cepat Gizi & BPOM"
+                        >
+                            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                            <span>Pindai Gizi</span>
+                        </button>
+                    </div>
+                )}
+
+                {/* WhatsApp-Style AI Chat Trigger in Sidebar */}
+                {isMember && (
+                    <div className="px-3 pt-1.5 pb-1 shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setSidebarOpen(false);
+                                setIsAiChatOpen(true);
+                            }}
+                            className="w-full p-2.5 rounded-2xl bg-linear-to-r from-[#008069]/10 via-[#00a884]/10 to-[#25d366]/10 hover:from-[#008069]/20 hover:to-[#25d366]/20 border border-[#008069]/25 flex items-center justify-between transition-all group cursor-pointer shadow-2xs active:scale-98"
+                            title="Buka Chat AI WhatsApp AEVYRA"
+                        >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="relative shrink-0">
+                                    <div className="w-9 h-9 rounded-full bg-[#008069] text-white flex items-center justify-center shadow-xs">
+                                        <span className="material-symbols-outlined text-[19px]">smart_toy</span>
+                                    </div>
+                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#25d366] ring-2 ring-white"></span>
+                                </div>
+                                <div className="text-left min-w-0">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="font-heading font-bold text-xs text-on-surface group-hover:text-[#008069] transition-colors truncate">
+                                            Asisten AI Preventif
+                                        </span>
+                                    </div>
+                                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold block truncate">
+                                        Online • Chat ala WhatsApp
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="px-2.5 py-1 rounded-full bg-[#008069] text-white text-[10px] font-bold shadow-2xs shrink-0 flex items-center gap-1">
+                                <span>Chat</span>
+                                <span className="material-symbols-outlined text-[13px]">chat</span>
+                            </span>
+                        </button>
+                    </div>
+                )}
+
                 {/* Nav Links Feed */}
                 <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5 no-scrollbar">
                     {currentSections.map((sec, idx) => (
@@ -187,6 +292,56 @@ export default function AppLayout({ children, title, activeTab }) {
                             <div className="space-y-0.5">
                                 {sec.items.map((item) => {
                                     const isActive = activeTab === item.id;
+                                    if (item.action === 'open_ai_chat') {
+                                        return (
+                                            <button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSidebarOpen(false);
+                                                    setIsAiChatOpen(true);
+                                                }}
+                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-[#008069] hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition-all min-w-0 cursor-pointer text-left"
+                                            >
+                                                <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-[#008069]">
+                                                        {item.icon}
+                                                    </span>
+                                                    <span className="truncate">{item.name}</span>
+                                                </div>
+                                                {item.badge && (
+                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-emerald-100 text-emerald-800">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </button>
+                                        );
+                                    }
+                                    if (item.action === 'tier_modal') {
+                                        return (
+                                            <button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSidebarOpen(false);
+                                                    setIsTierModalOpen(true);
+                                                }}
+                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all min-w-0 cursor-pointer text-left"
+                                            >
+                                                <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-amber-600">
+                                                        {item.icon}
+                                                    </span>
+                                                    <span className="truncate">{item.name}</span>
+                                                </div>
+                                                {item.badge && (
+                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-surface-container text-on-surface-variant">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </button>
+                                        );
+                                    }
                                     return (
                                         <Link
                                             key={item.id}
@@ -273,128 +428,49 @@ export default function AppLayout({ children, title, activeTab }) {
             {/* Main Application Shell (Shifted for sidebar on desktop) */}
             <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
                 
-                {/* Top Header Bar */}
-                <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-surface/80 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-6 lg:px-8 min-w-0 w-full">
-                    
+                {/* Top Header Bar - HANYA untuk mobile (< lg). Di desktop (lg), navbar dihapus karena menggunakan sidebar permanen */}
+                <header className="lg:hidden sticky top-0 z-30 h-14 bg-white/90 dark:bg-surface/90 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-4 min-w-0 w-full">
                     {/* Left: Mobile Toggle & Page Title */}
-                    <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 mr-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
                         <button
                             type="button"
                             onClick={() => setSidebarOpen(true)}
-                            className="lg:hidden p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                            className="p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
                             aria-label="Buka Menu Sidebar"
                         >
                             <span className="material-symbols-outlined text-[24px]">menu</span>
                         </button>
 
                         <div className="min-w-0">
-                            <span className="text-[10px] font-label-mono font-bold uppercase text-primary tracking-wider hidden sm:block truncate">
-                                AEVYRA Health Platform
+                            <span className="text-[9px] font-label-mono font-bold uppercase text-primary tracking-wider block truncate">
+                                AEVYRA Platform
                             </span>
-                            <h2 className="font-heading font-black text-sm sm:text-base md:text-lg text-on-surface leading-tight truncate">
-                                {title || 'Dashboard Member'}
+                            <h2 className="font-heading font-black text-sm text-on-surface leading-tight truncate">
+                                {title || 'Dashboard'}
                             </h2>
                         </div>
                     </div>
 
-                    {/* Right Utilities */}
-                    <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-                        
-                        {/* Member Quick Actions */}
-                        {isMember && (
-                            <>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsScannerOpen(true)}
-                                    className="hidden md:inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary text-xs font-bold transition-all shadow-2xs cursor-pointer shrink-0"
-                                    title="Buka Kamera Pindai Cepat"
-                                >
-                                    <span className="material-symbols-outlined text-[17px]">photo_camera</span>
-                                    <span>Pindai Gizi</span>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setIsQuickLogOpen(true)}
-                                    className="hidden md:inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-all shadow-2xs cursor-pointer shrink-0"
-                                >
-                                    <span className="material-symbols-outlined text-[17px]">add</span>
-                                    <span>Catat Metrik</span>
-                                </button>
-                            </>
-                        )}
-
-                        {/* Instant Emergency 119 Call */}
+                    {/* Right: Quick Action & SOS */}
+                    <div className="flex items-center gap-1.5 shrink-0">
                         <button
                             type="button"
                             onClick={() => setIsEmergencyOpen(true)}
-                            className="flex items-center gap-1 py-1 px-2 sm:px-3 sm:py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-2xs transition-transform active:scale-95 cursor-pointer shrink-0"
+                            className="flex items-center gap-1 py-1 px-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold shadow-2xs transition-transform active:scale-95 cursor-pointer shrink-0"
                             title="Akses Darurat 119 Tanpa AI"
                         >
-                            <span className="material-symbols-outlined text-[16px]">e911_emergency</span>
-                            <span className="text-[11px] sm:text-xs">SOS 119</span>
+                            <span className="material-symbols-outlined text-[15px]">e911_emergency</span>
+                            <span>SOS 119</span>
                         </button>
 
-                        {/* User Menu Dropdown */}
-                        <div className="relative shrink-0">
-                            <button
-                                type="button"
-                                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center gap-1 p-1 rounded-xl hover:bg-surface-container transition-all cursor-pointer"
-                            >
-                                <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary shrink-0">
-                                    {user?.name?.charAt(0) || 'U'}
-                                </div>
-                                <span className="material-symbols-outlined text-[16px] text-on-surface-variant hidden sm:block">
-                                    expand_more
-                                </span>
-                            </button>
-
-                            {userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white dark:bg-surface rounded-2xl shadow-xl border border-surface-container py-2 z-50 animate-scale-up">
-                                    <div className="px-4 py-2 border-b border-surface-container">
-                                        <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
-                                        <p className="text-[11px] text-on-surface-variant truncate">{user?.email}</p>
-                                        <div className="flex items-center gap-1.5 mt-1">
-                                            <span className="inline-block px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary">
-                                                {roles[0] || 'Member'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {isMember && (
-                                        <>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setUserMenuOpen(false);
-                                                    setIsTierModalOpen(true);
-                                                }}
-                                                className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2 cursor-pointer"
-                                            >
-                                                <span className="material-symbols-outlined text-[16px] text-amber-500">workspace_premium</span>
-                                                <span>Kelola Paket Member</span>
-                                            </button>
-                                            <Link
-                                                href="/member/onboarding"
-                                                className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
-                                                onClick={() => setUserMenuOpen(false)}
-                                            >
-                                                <span className="material-symbols-outlined text-[16px]">tune</span>
-                                                <span>Atur Profil & Gaya Hidup</span>
-                                            </Link>
-                                        </>
-                                    )}
-                                    <button
-                                        type="button"
-                                        onClick={handleLogout}
-                                        className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 flex items-center gap-2 cursor-pointer"
-                                    >
-                                        <span className="material-symbols-outlined text-[16px]">logout</span>
-                                        <span>Keluar Akun</span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsAiChatOpen(true)}
+                            className="w-8 h-8 rounded-full bg-[#008069] text-white flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer active:scale-95"
+                            title="Buka Chat AI WhatsApp"
+                        >
+                            <span className="material-symbols-outlined text-[16px]">chat</span>
+                        </button>
                     </div>
                 </header>
 
@@ -490,7 +566,7 @@ export default function AppLayout({ children, title, activeTab }) {
                             <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                                 <Link
                                     href="/member/scanner"
-                                    className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
+                                    className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
                                         activeTab === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
                                     }`}
                                     title="Pindai Gizi & BPOM OCR"
@@ -564,7 +640,7 @@ export default function AppLayout({ children, title, activeTab }) {
                             <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                                 <Link
                                     href="/instructor/interventions"
-                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
+                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
                                 >
                                     <span className="material-symbols-outlined text-[24px]">clinical_notes</span>
                                 </Link>
@@ -606,7 +682,7 @@ export default function AppLayout({ children, title, activeTab }) {
                             <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                                 <Link
                                     href="/admin/scanner"
-                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
+                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
                                 >
                                     <span className="material-symbols-outlined text-[24px]">document_scanner</span>
                                 </Link>
@@ -657,8 +733,13 @@ export default function AppLayout({ children, title, activeTab }) {
                 currentTier="Gold"
             />
 
-            {/* Authenticated Member Floating AI Chat */}
-            {isMember && <MemberFloatingAiChat />}
+            {/* Authenticated Member WhatsApp AI Chat Drawer */}
+            {isMember && (
+                <MemberFloatingAiChat
+                    isOpen={isAiChatOpen}
+                    onClose={() => setIsAiChatOpen(false)}
+                />
+            )}
         </div>
     );
 }

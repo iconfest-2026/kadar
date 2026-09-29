@@ -240,7 +240,7 @@ export default function Recommendations({
 
     return (
         <AdminLayout activeNav="recommendations" title="Health Behavior Engine (HBE)">
-            <Head title="Health Behavior Engine & Rekomendasi — AEVYRA" />
+            <Head title="Health Behavior Engine & Rekomendasi - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

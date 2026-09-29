@@ -157,7 +157,7 @@ export default function MetabolicRunner2D() {
             jumpPower: 13,
             maxJumps: 1,
             speedMod: 1.0,
-            avatar: '🏃‍♂️',
+            avatar: 'directions_run',
         },
         sarah: {
             id: 'sarah',
@@ -170,7 +170,7 @@ export default function MetabolicRunner2D() {
             jumpPower: 11.5,
             maxJumps: 2,
             speedMod: 1.05,
-            avatar: '🏃‍♀️',
+            avatar: 'sprint',
         },
         bramantyo: {
             id: 'bramantyo',
@@ -183,7 +183,7 @@ export default function MetabolicRunner2D() {
             jumpPower: 12,
             maxJumps: 1,
             speedMod: 0.95,
-            avatar: '👨‍⚕️',
+            avatar: 'stethoscope',
         },
     };
 
@@ -485,10 +485,10 @@ export default function MetabolicRunner2D() {
             if (isHazard) {
                 // Hazard Types
                 const types = [
-                    { name: 'Donat Manis', h: 36, w: 36, yOffset: 0, sugar: +28, icon: '🍩' },
-                    { name: 'Gelas Boba Aren', h: 54, w: 34, yOffset: 0, sugar: +35, icon: '🧋' },
-                    { name: 'Soda Kemasan', h: 32, w: 26, yOffset: 45, sugar: +30, icon: '🥤' }, // floating soda (slide under!)
-                    { name: 'Gorengan Trans-Fat', h: 30, w: 34, yOffset: 0, sugar: +22, icon: '🍟' },
+                    { name: 'Donat Manis', h: 36, w: 36, yOffset: 0, sugar: +28, icon: 'bakery_dining' },
+                    { name: 'Gelas Boba Aren', h: 54, w: 34, yOffset: 0, sugar: +35, icon: 'local_cafe' },
+                    { name: 'Soda Kemasan', h: 32, w: 26, yOffset: 45, sugar: +30, icon: 'liquor' }, // floating soda (slide under!)
+                    { name: 'Gorengan Trans-Fat', h: 30, w: 34, yOffset: 0, sugar: +22, icon: 'fastfood' },
                 ];
                 const hType = types[Math.floor(Math.random() * types.length)];
                 engine.obstacles.push({
@@ -501,10 +501,10 @@ export default function MetabolicRunner2D() {
             } else {
                 // Collectibles
                 const healthyTypes = [
-                    { name: 'Brokoli Serat', pts: 100, sugarMod: -15, type: 'fiber', icon: '🥦', color: '#10b981' },
-                    { name: 'Air Hidrasi', pts: 70, sugarMod: -8, type: 'water', icon: '💧', color: '#06b6d4' },
-                    { name: 'Beri Antioksidan', pts: 120, sugarMod: -12, type: 'berry', icon: '🫐', color: '#a855f7' },
-                    { name: 'Tameng Insulin', pts: 150, sugarMod: -20, type: 'shield', icon: '🛡️', color: '#eab308' },
+                    { name: 'Brokoli Serat', pts: 100, sugarMod: -15, type: 'fiber', icon: 'nutrition', color: '#10b981' },
+                    { name: 'Air Hidrasi', pts: 70, sugarMod: -8, type: 'water', icon: 'water_drop', color: '#06b6d4' },
+                    { name: 'Beri Antioksidan', pts: 120, sugarMod: -12, type: 'berry', icon: 'eco', color: '#a855f7' },
+                    { name: 'Tameng Insulin', pts: 150, sugarMod: -20, type: 'shield', icon: 'shield', color: '#eab308' },
                 ];
                 const cType = healthyTypes[Math.floor(Math.random() * healthyTypes.length)];
                 const isAirborne = Math.random() > 0.5;
@@ -536,7 +536,7 @@ export default function MetabolicRunner2D() {
                 if (engine.shieldTimer > 0) {
                     // Shield protected!
                     sfx.playPowerup();
-                    addFloatingText(engine, '🛡️ TERLINDUNGI!', obs.x, obs.y - 10, '#eab308');
+                    addFloatingText(engine, 'TERLINDUNGI!', obs.x, obs.y - 10, '#eab308');
                     createSparkle(engine, obs.x, obs.y, '#facc15', 12);
                     engine.obstacles.splice(i, 1);
                     continue;
@@ -549,7 +549,7 @@ export default function MetabolicRunner2D() {
                 engine.glucose += obs.type.sugar;
                 if (engine.glucose > engine.peakGlucose) engine.peakGlucose = engine.glucose;
 
-                addFloatingText(engine, `⚠️ ${obs.type.name} (+${obs.type.sugar} mg/dL)`, p.x, p.y - 15, '#e11d48');
+                addFloatingText(engine, `${obs.type.name} (+${obs.type.sugar} mg/dL)`, p.x, p.y - 15, '#e11d48');
                 createSparkle(engine, p.x + p.w / 2, p.y + p.h / 2, '#f43f5e', 14);
                 engine.obstacles.splice(i, 1);
                 continue;
@@ -791,10 +791,10 @@ export default function MetabolicRunner2D() {
         ctx.textAlign = 'right';
         ctx.fillText(`${Math.floor(engine.distance)} m`, w - 24, 30);
 
-        // Hearts
+        // Hearts / Lives
         let heartStr = '';
         for (let i = 0; i < 3; i++) {
-            heartStr += i < engine.lives ? '❤️ ' : '🖤 ';
+            heartStr += i < engine.lives ? '● ' : '○ ';
         }
         ctx.font = '14px sans-serif';
         ctx.fillText(heartStr, w - 24, 50);
@@ -831,8 +831,9 @@ export default function MetabolicRunner2D() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <div className="px-3 py-1 rounded-xl bg-white/10 text-xs font-mono font-semibold text-white/90">
-                        🏆 Rekor: <strong>{highScore}</strong>
+                    <div className="px-3 py-1 rounded-xl bg-white/10 text-xs font-mono font-semibold text-white/90 inline-flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[15px] text-amber-300">emoji_events</span>
+                        <span>Rekor: <strong>{highScore}</strong></span>
                     </div>
 
                     <button
@@ -861,8 +862,9 @@ export default function MetabolicRunner2D() {
                 {/* OVERLAY: Menu / Start Screen */}
                 {gameState === 'menu' && (
                     <div className="absolute inset-0 bg-primary/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-white text-center space-y-5 animate-in fade-in duration-200">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-mono font-bold border border-white/10">
-                            <span>🎮 ARENA GAMIFIKASI METABOLIK 2D</span>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-mono font-bold border border-white/10">
+                            <span className="material-symbols-outlined text-[15px]">sports_esports</span>
+                            <span>ARENA GAMIFIKASI METABOLIK 2D</span>
                         </div>
 
                         <div>
@@ -925,7 +927,7 @@ export default function MetabolicRunner2D() {
                 {/* OVERLAY: Game Over Screen */}
                 {gameState === 'gameover' && (
                     <div className="absolute inset-0 bg-[#002926]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-white text-center space-y-4 animate-in fade-in duration-200">
-                        <span className="text-3xl">🏁</span>
+                        <span className="material-symbols-outlined text-4xl text-amber-400">flag</span>
                         <div>
                             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-rose-300">
                                 Sesi Lari Selesai!
@@ -961,7 +963,10 @@ export default function MetabolicRunner2D() {
 
                         {/* Clinical Insight */}
                         <div className="p-3.5 bg-white/10 rounded-2xl border border-white/10 max-w-lg text-left text-xs leading-relaxed text-[#d4ede2]">
-                            <strong className="text-emerald-300 block mb-0.5">💡 Catatan Klinis dr. Bramantyo, Sp.PD:</strong>
+                            <strong className="text-emerald-300 mb-0.5 flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[15px]">lightbulb</span>
+                                <span>Catatan Klinis dr. Bramantyo, Sp.PD:</span>
+                            </strong>
                             {finalStats.tir >= 80 ? (
                                 <span>Luar biasa! Kontrol glukosa Anda stabil di atas 80% rentang aman (TIR). Konsistensi memilih serat dan hidrasi berhasil meredam lonjakan beban pankreas!</span>
                             ) : (
@@ -1005,9 +1010,10 @@ export default function MetabolicRunner2D() {
                                 handleSlide();
                             }}
                             onClick={handleSlide}
-                            className="px-5 py-3 min-h-11 rounded-2xl bg-surface-container text-on-surface font-bold text-xs border border-surface-container-high active:bg-surface-container-highest transition-all flex items-center gap-1 cursor-pointer"
+                            className="px-5 py-3 min-h-11 rounded-2xl bg-surface-container text-on-surface font-bold text-xs border border-surface-container-high active:bg-surface-container-highest transition-all inline-flex items-center gap-1 cursor-pointer"
                         >
-                            <span>MELUNCUR ⬇️</span>
+                            <span>MELUNCUR</span>
+                            <span className="material-symbols-outlined text-[14px]">arrow_downward</span>
                         </button>
                         <button
                             type="button"
@@ -1016,9 +1022,10 @@ export default function MetabolicRunner2D() {
                                 handleJump();
                             }}
                             onClick={handleJump}
-                            className="px-6 py-3 min-h-11 rounded-2xl bg-primary text-white font-bold text-xs active:bg-primary-container shadow-md transition-all flex items-center gap-1 cursor-pointer"
+                            className="px-6 py-3 min-h-11 rounded-2xl bg-primary text-white font-bold text-xs active:bg-primary-container shadow-md transition-all inline-flex items-center gap-1 cursor-pointer"
                         >
-                            <span>LOMPAT ⬆️</span>
+                            <span>LOMPAT</span>
+                            <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
                         </button>
                     </div>
                 </div>
@@ -1027,28 +1034,28 @@ export default function MetabolicRunner2D() {
             {/* In-Game Legend & Health Mechanics Footer */}
             <div className="p-4 bg-surface-container-lowest border-t border-surface-container grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🥦</span>
+                    <span className="material-symbols-outlined text-xl text-emerald-600">nutrition</span>
                     <div>
                         <strong className="block text-[11px] text-on-surface">Serat Sayuran</strong>
                         <span className="text-[10px] text-emerald-700 font-medium">-15 mg/dL Glukosa</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">💧</span>
+                    <span className="material-symbols-outlined text-xl text-cyan-600">water_drop</span>
                     <div>
                         <strong className="block text-[11px] text-on-surface">Air Hidrasi</strong>
                         <span className="text-[10px] text-cyan-700 font-medium">+Stamina & Pemulihan</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🍩</span>
+                    <span className="material-symbols-outlined text-xl text-rose-500">bakery_dining</span>
                     <div>
                         <strong className="block text-[11px] text-on-surface">Donat & Gula Pasir</strong>
                         <span className="text-[10px] text-rose-700 font-medium">+28 mg/dL Lonjakan</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🛡️</span>
+                    <span className="material-symbols-outlined text-xl text-amber-500">shield</span>
                     <div>
                         <strong className="block text-[11px] text-on-surface">Tameng Insulin</strong>
                         <span className="text-[10px] text-amber-700 font-medium">Kebal Bahaya 6 Detik</span>

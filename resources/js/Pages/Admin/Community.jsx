@@ -174,7 +174,7 @@ export default function Community({
 
     return (
         <AdminLayout activeNav="community" title="Forum & Komunitas">
-            <Head title="Forum & Komunitas — AEVYRA" />
+            <Head title="Forum & Komunitas - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <title>@yield('title') — AEVYRA Health Platform</title>
+    <title>@yield('title') - AEVYRA Health Platform</title>
     <link rel="icon" type="image/png" href="/image/Logo_AEVYRA_Icon.png" />
 
     <!-- Google Fonts -->

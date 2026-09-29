@@ -205,7 +205,7 @@ export default function Consultations({
 
     return (
         <AdminLayout activeNav="consultations" title="Konsultasi & Jadwal Janji Medis">
-            <Head title="Tata Kelola Sesi Konsultasi — AEVYRA" />
+            <Head title="Tata Kelola Sesi Konsultasi - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
@@ -540,9 +540,10 @@ export default function Consultations({
                                         href={selectedConsultation.meeting_url}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="font-bold text-emerald-700 underline text-[11px]"
+                                        className="font-bold text-emerald-700 underline text-[11px] inline-flex items-center gap-1"
                                     >
-                                        Buka Ruang Virtual ↗
+                                        <span>Buka Ruang Virtual</span>
+                                        <span className="material-symbols-outlined text-[13px]">open_in_new</span>
                                     </a>
                                 </div>
                             )}

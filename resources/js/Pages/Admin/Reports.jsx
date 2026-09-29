@@ -133,7 +133,7 @@ export default function Reports({
 
     return (
         <AdminLayout activeNav="reports" title="Laporan Eksekutif & Analitik Platform">
-            <Head title="Laporan Platform Admin — AEVYRA" />
+            <Head title="Laporan Platform Admin - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

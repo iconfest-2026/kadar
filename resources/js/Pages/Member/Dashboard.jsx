@@ -6,7 +6,6 @@ import LiveCameraScannerModal from '../../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../../Components/MembershipTierModal';
 import MenstrualTrackerCard from '../../Components/MenstrualTrackerCard';
 import MaleVitalityCard from '../../Components/MaleVitalityCard';
-import axios from 'axios';
 
 export default function Dashboard({
     user,
@@ -26,17 +25,6 @@ export default function Dashboard({
     const [quickLogMetric, setQuickLogMetric] = useState('sleep_duration');
     const [scannerModalOpen, setScannerModalOpen] = useState(false);
     const [tierModalOpen, setTierModalOpen] = useState(false);
-
-    // AI Chat modal state
-    const [aiChatOpen, setAiChatOpen] = useState(false);
-    const [chatMessages, setChatMessages] = useState([
-        {
-            role: 'assistant',
-            content: `Halo ${user?.name || 'Kawan'}! Saya asisten gaya hidup preventif AEVYRA. Saya siap membantu Anda mengevaluasi pola istirahat, hidrasi, atau kebiasaan harian berdasarkan baseline metabolik Anda tanpa memberikan diagnosa klinis mandiri. Apa yang ingin Anda diskusikan hari ini?`,
-        },
-    ]);
-    const [chatInput, setChatInput] = useState('');
-    const [chatLoading, setChatLoading] = useState(false);
 
     const handleOpenQuickLog = (metric) => {
         setQuickLogMetric(metric);
@@ -93,9 +81,142 @@ export default function Dashboard({
         }
     };
 
+    // Helper to format assistant messages with clean section dividers, bullet points, and numbered lists
+    const renderFormattedAssistantMessage = (content) => {
+        if (!content) return null;
+
+        // 1. Strip residual asterisks
+        const clean = content.replace(/\*/g, '');
+
+        // 2. Normalize text: ensure bullet points and numbered points start on separate lines
+        const normalized = clean
+            .replace(/([^\n])\s*[-•]\s+/g, '$1\n- ')
+            .replace(/([^\n])\s+(\d+)\.\s+/g, '$1\n$2. ');
+
+        const rawLines = normalized.split('\n');
+        const elements = [];
+        let currentBullets = [];
+        let currentNumbers = [];
+
+        const flushLists = () => {
+            if (currentBullets.length > 0) {
+                elements.push({
+                    type: 'bullet-group',
+                    items: [...currentBullets],
+                });
+                currentBullets = [];
+            }
+            if (currentNumbers.length > 0) {
+                elements.push({
+                    type: 'number-group',
+                    items: [...currentNumbers],
+                });
+                currentNumbers = [];
+            }
+        };
+
+        for (let i = 0; i < rawLines.length; i++) {
+            const line = rawLines[i].trim();
+            if (!line) {
+                flushLists();
+                continue;
+            }
+
+            // Bullet item
+            if (line.startsWith('- ') || line.startsWith('• ')) {
+                if (currentNumbers.length > 0) flushLists();
+                currentBullets.push(line.replace(/^[-•]\s+/, '').trim());
+                continue;
+            }
+
+            // Numbered item
+            const numMatch = line.match(/^(\d+)\.\s+(.*)$/);
+            if (numMatch) {
+                if (currentBullets.length > 0) flushLists();
+                currentNumbers.push({
+                    num: numMatch[1],
+                    text: numMatch[2].trim(),
+                });
+                continue;
+            }
+
+            // Flush open lists
+            flushLists();
+
+            // Detect section headers (lines ending with ':', starting with '###', or short header phrases)
+            const isHeader = line.endsWith(':') ||
+                line.startsWith('###') ||
+                (line.length < 80 && /^(Gejala|Tanda|Penyebab|Langkah|Cara|Tips|Prinsip|Rekomendasi|Faktor|Perhatian|Pencegahan|Catatan|Penting|Karakteristik)/i.test(line));
+
+            if (isHeader) {
+                elements.push({
+                    type: 'header',
+                    text: line.replace(/^###\s*/, ''),
+                });
+            } else {
+                elements.push({
+                    type: 'paragraph',
+                    text: line,
+                });
+            }
+        }
+        flushLists();
+
+        return (
+            <div className="space-y-2 text-xs leading-relaxed">
+                {elements.map((el, elIdx) => {
+                    if (el.type === 'header') {
+                        return (
+                            <div key={elIdx} className="pt-2 mt-2.5 first:mt-0 first:pt-0 border-t border-surface-container-high/70">
+                                <div className="flex items-center gap-1.5 text-primary font-bold text-[12px] mb-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                                    <span>{el.text}</span>
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    if (el.type === 'bullet-group') {
+                        return (
+                            <div key={elIdx} className="space-y-1.5 pl-0.5 my-1.5">
+                                {el.items.map((item, itemIdx) => (
+                                    <div key={itemIdx} className="flex items-start gap-2 text-on-surface">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0" />
+                                        <span className="leading-relaxed flex-1">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    if (el.type === 'number-group') {
+                        return (
+                            <div key={elIdx} className="space-y-2 pl-0.5 my-2">
+                                {el.items.map((item, itemIdx) => (
+                                    <div key={itemIdx} className="flex items-start gap-2.5 text-on-surface">
+                                        <span className="w-4.5 h-4.5 rounded-md bg-primary/10 text-primary font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5 border border-primary/20">
+                                            {item.num}
+                                        </span>
+                                        <span className="leading-relaxed flex-1">{item.text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <p key={elIdx} className="text-on-surface leading-relaxed my-1">
+                            {el.text}
+                        </p>
+                    );
+                })}
+            </div>
+        );
+    };
+
     return (
         <AppLayout title="Dashboard Member" activeTab="dashboard">
-            <Head title="Ringkasan Baseline Personal — AEVYRA" />
+            <Head title="Ringkasan Baseline Personal - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 
@@ -171,15 +292,6 @@ export default function Dashboard({
                                     </div>
                                 </div>
                             </div>
-
-                            <button
-                                type="button"
-                                onClick={() => setAiChatOpen(true)}
-                                className="w-full px-4 py-2.5 rounded-2xl bg-white/20 hover:bg-white/30 text-white border border-white/25 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-2xs cursor-pointer"
-                            >
-                                <span className="material-symbols-outlined text-[18px] text-amber-300">smart_toy</span>
-                                <span>Konsultasi AI AEVYRA</span>
-                            </button>
                         </div>
                     </div>
                 </section>
@@ -561,14 +673,13 @@ export default function Dashboard({
                                 </p>
                             </div>
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => setAiChatOpen(true)}
+                        <Link
+                            href="/member/consultations-hub"
                             className="py-2.5 px-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-xs font-semibold text-on-surface border border-surface-container flex items-center gap-2 cursor-pointer transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[16px]">chat</span>
-                            <span>Konsultasi Pertanyaan</span>
-                        </button>
+                            <span className="material-symbols-outlined text-[16px]">stethoscope</span>
+                            <span>Konsultasi Dokter</span>
+                        </Link>
                     </section>
                 )}
 
@@ -672,81 +783,6 @@ export default function Dashboard({
                 onClose={() => setQuickLogOpen(false)}
                 defaultMetric={quickLogMetric}
             />
-
-            {/* AI Assistant Chat Modal */}
-            {aiChatOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div className="w-full max-w-lg bg-surface rounded-3xl border border-surface-container shadow-2xl overflow-hidden flex flex-col h-140 animate-scale-up">
-                        {/* Header */}
-                        <div className="px-5 py-3.5 border-b border-surface-container bg-surface-container-low flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-xs">
-                                    <span className="material-symbols-outlined text-[18px]">smart_toy</span>
-                                </div>
-                                <div>
-                                    <h3 className="font-heading font-bold text-sm text-on-surface">Asisten Gaya Hidup AEVYRA</h3>
-                                    <p className="text-[10px] text-on-surface-variant font-label-mono">
-                                        Non-Diagnostik • Terpandu Batas Klinis
-                                    </p>
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setAiChatOpen(false)}
-                                className="p-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container cursor-pointer"
-                            >
-                                <span className="material-symbols-outlined text-[20px]">close</span>
-                            </button>
-                        </div>
-
-                        {/* Message Feed */}
-                        <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
-                            {chatMessages.map((msg, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                                >
-                                    <div
-                                        className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed ${
-                                            msg.role === 'user'
-                                                ? 'bg-primary text-on-primary rounded-br-xs'
-                                                : 'bg-surface-container-low text-on-surface border border-surface-container rounded-bl-xs'
-                                        }`}
-                                    >
-                                        {msg.content}
-                                    </div>
-                                </div>
-                            ))}
-                            {chatLoading && (
-                                <div className="flex justify-start">
-                                    <div className="bg-surface-container-low text-on-surface border border-surface-container rounded-2xl rounded-bl-xs p-3 flex items-center gap-2">
-                                        <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                                        <span className="text-[11px] text-on-surface-variant">Menyusun respon aman...</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Input Area */}
-                        <form onSubmit={handleSendChatMessage} className="p-3 border-t border-surface-container bg-surface flex items-center gap-2">
-                            <input
-                                type="text"
-                                value={chatInput}
-                                onChange={(e) => setChatInput(e.target.value)}
-                                placeholder="Tanyakan seputar pola tidur, minum air, atau olahraga..."
-                                className="flex-1 px-3.5 py-2.5 bg-surface-container-low text-xs rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary"
-                            />
-                            <button
-                                type="submit"
-                                disabled={chatLoading || !chatInput.trim()}
-                                className="p-2.5 bg-primary text-on-primary rounded-xl hover:bg-primary-container disabled:opacity-50 transition-all flex items-center justify-center cursor-pointer"
-                            >
-                                <span className="material-symbols-outlined text-[18px]">send</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
         </AppLayout>
     );
 }

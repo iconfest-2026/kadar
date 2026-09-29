@@ -194,7 +194,7 @@ export default function Scanner({
 
     return (
         <AdminLayout activeNav="scanner" title="Audit Scanner OCR AI">
-            <Head title="Audit Pemindai Kamera OCR AI — AEVYRA" />
+            <Head title="Audit Pemindai Kamera OCR AI - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

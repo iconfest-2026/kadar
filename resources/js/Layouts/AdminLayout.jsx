@@ -68,7 +68,7 @@ export default function AdminLayout({ children, title, activeNav }) {
 
     return (
         <div className="min-h-screen bg-[#f0f8f4] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
-            <Head title={title ? `${title} — Tata Kelola AEVYRA` : 'Admin Panel — AEVYRA'} />
+            <Head title={title ? `${title} - Tata Kelola AEVYRA` : 'Admin Panel - AEVYRA'} />
 
             {/* Hardware-Accelerated Ambient Background Glow (Isolate Paint Layer) */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden gpu-layer contain-paint">

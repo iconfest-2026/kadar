@@ -185,7 +185,7 @@ export default function Programs({
 
     return (
         <AdminLayout activeNav="programs" title="Program Kohor Kesehatan">
-            <Head title="Program Kohor Kesehatan — AEVYRA" />
+            <Head title="Program Kohor Kesehatan - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

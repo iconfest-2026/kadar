@@ -16,7 +16,7 @@ export default function Footer() {
         { name: 'Program Tantangan Remisi 90 Hari', href: '/member/challenges', requiresAuth: true },
         { name: 'Hub Konsultasi Dokter Spesialis & AI', href: '/member/consultations-hub', requiresAuth: true },
         { name: 'Komunitas & Forum Diskusi Pasien', href: '/member/community', requiresAuth: true },
-        { name: 'Gim Glucose Dash Arcade', href: '/arcade', requiresAuth: false },
+        { name: 'Simulasi Kasus Metabolik 24 Jam', href: '/arcade', requiresAuth: false },
         { name: 'Pilihan Paket Keanggotaan', href: '/paket', requiresAuth: false },
         { name: 'Pusat Tanya Jawab Klinis (FAQ)', href: '/faq', requiresAuth: false },
     ];

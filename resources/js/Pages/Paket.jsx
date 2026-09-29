@@ -349,7 +349,7 @@ export default function Paket(props) {
                                             }`}
                                         >
                                             <span>{tier.cta}</span>
-                                            <span className="text-xs">→</span>
+                                            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                         </Link>
                                     </div>
                                 </div>

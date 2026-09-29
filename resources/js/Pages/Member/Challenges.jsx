@@ -34,7 +34,7 @@ export default function Challenges({ profile, challenges = [], myParticipations 
 
     return (
         <AppLayout title="Program Tantangan Kebiasaan Sehat" activeTab="challenges">
-            <Head title="Program Tantangan 14–90 Hari — AEVYRA" />
+            <Head title="Program Tantangan 14-90 Hari - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 

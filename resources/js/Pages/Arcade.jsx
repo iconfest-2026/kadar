@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
-import MetabolicRunner2D from '../Components/MetabolicRunner2D';
 import MetabolicStoryGame from '../Components/MetabolicStoryGame';
 import MetabolicArcadeModal from '../Components/MetabolicArcadeModal';
 
 export default function Arcade() {
-    const [activeView, setActiveView] = useState('story'); // 'story', 'runner'
     const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
     const leaderboard = [
-        { rank: 1, name: 'dr. Bramantyo, Sp.PD', char: 'dr. Bramantyo', score: 3840, tir: '94%', medal: '1' },
-        { rank: 2, name: 'Sarah Nindya', char: 'Sarah Nindya', score: 3210, tir: '89%', medal: '2' },
-        { rank: 3, name: 'Dimas Aryo', char: 'Dimas Aryo', score: 2750, tir: '81%', medal: '3' },
-        { rank: 4, name: 'Rian Pratama', char: 'Dimas Aryo', score: 2190, tir: '78%', medal: '4' },
-        { rank: 5, name: 'Nadia Salsabila', char: 'Sarah Nindya', score: 1840, tir: '74%', medal: '5' },
+        { rank: 1, name: 'dr. Bramantyo, Sp.PD', title: 'Skrining Optimal', score: 3840, tir: '94%', medal: '1' },
+        { rank: 2, name: 'Sarah Nindya', title: 'Pola Nutrisi Seimbang', score: 3210, tir: '89%', medal: '2' },
+        { rank: 3, name: 'Dimas Aryo', title: 'Manajemen Stres & Hidrasi', score: 2750, tir: '81%', medal: '3' },
+        { rank: 4, name: 'Rian Pratama', title: 'Aktivitas Fisik Rutin', score: 2190, tir: '78%', medal: '4' },
+        { rank: 5, name: 'Nadia Salsabila', title: 'Kepatuhan Remisi', score: 1840, tir: '74%', medal: '5' },
     ];
 
     const foodCards = [
@@ -55,7 +53,7 @@ export default function Arcade() {
 
     return (
         <div className="min-h-screen bg-[#f7faf8] text-[#142320] flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
-            <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
+            <Head title="Simulasi Kasus Metabolik 24 Jam & Edukasi Klinis | AEVYRA" />
             <Header />
 
             <main className="flex-1 max-w-7xl min-w-0 mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 w-full space-y-10">
@@ -63,55 +61,21 @@ export default function Arcade() {
                 <div className="space-y-3 text-center max-w-3xl mx-auto pt-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-xs font-mono font-bold border border-[#cfe1d7]">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>ARENA GAMIFIKASI KESEHATAN PREVENTIF 2D</span>
+                        <span>SIMULASI KEPUTUSAN KESEHATAN METABOLIK 24 JAM</span>
                     </div>
 
                     <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#122824] leading-tight">
-                        Taklukkan Lonjakan Glukosa dalam Aksi 2D Interaktif
+                        Simulasi Kasus Klinis & Keputusan Nutrisi 24 Jam
                     </h1>
 
                     <p className="text-xs sm:text-sm text-[#4d665f] leading-relaxed max-w-2xl mx-auto">
-                        Pelajari respon biologis tubuh terhadap makanan tinggi gula dan manfaat serat secara menyenangkan! Mainkan runner 2D dengan fisika mulus, atau jelajahi simulasi keputusan kasus klinis 24 jam.
+                        Pelajari respon biologis tubuh terhadap makanan tinggi gula dan manfaat serat secara interaktif melalui simulasi keputusan kasus klinis 24 jam berbasis skenario nyata.
                     </p>
-
-                    {/* Mode Selector Tabs */}
-                    <div className="pt-3 flex justify-center w-full">
-                        <div className="p-1.5 bg-surface-container-low rounded-2xl border border-surface-container flex flex-col sm:flex-row items-center gap-1.5 shadow-2xs w-full sm:w-auto">
-                            <button
-                                type="button"
-                                onClick={() => setActiveView('story')}
-                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                                    activeView === 'story'
-                                        ? 'bg-primary text-white shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-[17px]">auto_stories</span>
-                                <span>Story Game 24 Jam</span>
-                                <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-800 text-[9px] font-mono">
-                                    Visual Novel
-                                </span>
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => setActiveView('runner')}
-                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                                    activeView === 'runner'
-                                        ? 'bg-primary text-white shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-[17px]">sports_esports</span>
-                                <span>Aksi 2D: Glucose Dash</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
-                {/* Primary Feature Stage: Story Mode or 2D Runner */}
+                {/* Primary Feature Stage: 24-Hour Patient Story Simulation */}
                 <section className="space-y-4">
-                    {activeView === 'story' ? <MetabolicStoryGame /> : <MetabolicRunner2D />}
+                    <MetabolicStoryGame />
                 </section>
 
                 {/* Secondary Grid: Community Leaderboard & Nutritional Education */}
@@ -148,7 +112,7 @@ export default function Arcade() {
                                         </span>
                                         <div>
                                             <strong className="block text-on-surface leading-tight">{item.name}</strong>
-                                            <span className="text-[10px] text-on-surface-variant font-mono">{item.char}</span>
+                                            <span className="text-[10px] text-on-surface-variant font-medium">{item.title}</span>
                                         </div>
                                     </div>
                                     <div className="text-right">

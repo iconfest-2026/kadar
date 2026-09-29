@@ -40,55 +40,32 @@ export default function Register() {
     const roleConfigs = {
         member: {
             title: 'Member Preventif',
-            badge: 'Pendaftaran Anggota Mandiri',
             desc: 'Akses penuh scanner gizi kamera, tracker lonjakan gula darah, rencana intervensi personal, dan konsultasi dokter siaga.',
-            image: '/image/healthy_nutrition_plate.jpg',
-            highlightTitle: 'Investasi terbaik untuk umur panjang berkualitas.',
-            highlightQuote: 'Dapatkan pendampingan preventif berbasis metabolik personal dan deteksi dini risiko sindrom metabolik.',
-            stats: [
-                { label: 'Gratis Skrining', val: '14 Hari' },
-                { label: 'Analisis Nutrisi', val: 'AI BPOM' },
-                { label: 'Kepatuhan Medis', val: 'PERKENI' },
-            ],
         },
         instructor: {
             title: 'Instruktur & Tenaga Medis',
-            badge: 'Portal Mitra Klinis Terdaftar',
             desc: 'Kelola caseload pasien pra-diabetes, terbitkan intervensi gizi terstandar, dan berikan bimbingan telemedisin terarah.',
-            image: '/image/doctor_consultation.jpg',
-            highlightTitle: 'Dampingi pasien dengan rekam medis digital terpadu.',
-            highlightQuote: 'Platform telemedisin preventif yang terhubung langsung dengan sistem SATUSEHAT Kemenkes RI.',
-            stats: [
-                { label: 'Verifikasi STR', val: 'Kemenkes' },
-                { label: 'Integrasi Faskes', val: 'HL7 FHIR' },
-                { label: 'Sistem Telemedisin', val: 'Siaga 24/7' },
-            ],
         },
     };
 
     const currentConfig = roleConfigs[accountType];
 
     return (
-        <AuthLayout maxWidth="max-w-5xl">
+        <AuthLayout maxWidth="max-w-xl">
             <Head title="Daftar Akun Baru - AEVYRA HealthCheck" />
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-                {/* Left Column: Registration Form */}
-                <div className="lg:col-span-7 bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
-                    <div>
-                        {/* Eyebrow & Headline */}
-                        <div className="space-y-2 pb-4 border-b border-primary/10">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-semibold border border-primary/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>Pendaftaran Pengguna Baru Terverifikasi</span>
-                            </div>
-                            <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
-                                Buat Akun AEVYRA
-                            </h1>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
-                                {currentConfig.desc}
-                            </p>
-                        </div>
+            {/* Registration Card */}
+            <div className="w-full bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                <div>
+                    {/* Eyebrow & Headline */}
+                    <div className="space-y-2 pb-4 border-b border-primary/10">
+                        <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
+                            Buat Akun AEVYRA
+                        </h1>
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                            {currentConfig.desc}
+                        </p>
+                    </div>
 
                         {/* Account Type Selector */}
                         <div className="mt-5 space-y-2">
@@ -163,7 +140,6 @@ export default function Register() {
                                 value={data.name}
                                 onChange={(e) => setData('name', e.target.value)}
                                 placeholder={accountType === 'member' ? 'Contoh: Ahmad Fadilah' : 'Contoh: dr. Nabila Putri, Sp.GK'}
-                                leftIcon="badge"
                                 error={errors.name}
                                 autoComplete="name"
                             />
@@ -175,7 +151,6 @@ export default function Register() {
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                                 placeholder="nama@email.com"
-                                leftIcon="mail"
                                 error={errors.email}
                                 autoComplete="email"
                             />
@@ -214,7 +189,6 @@ export default function Register() {
                                             value={data.str_number}
                                             onChange={(e) => setData('str_number', e.target.value)}
                                             placeholder="Contoh: 31.1.1.100.2.21.123456"
-                                            leftIcon="verified"
                                             error={errors.str_number}
                                         />
 
@@ -223,7 +197,6 @@ export default function Register() {
                                             value={data.sip_number}
                                             onChange={(e) => setData('sip_number', e.target.value)}
                                             placeholder="Contoh: SIP.503/446/123/2024"
-                                            leftIcon="assignment"
                                             error={errors.sip_number}
                                         />
                                     </div>
@@ -236,7 +209,6 @@ export default function Register() {
                                                 value={data.institution}
                                                 onChange={(e) => setData('institution', e.target.value)}
                                                 placeholder="Contoh: RSUPN Dr. Cipto Mangunkusumo"
-                                                leftIcon="apartment"
                                                 error={errors.institution}
                                             />
                                         </div>
@@ -342,92 +314,16 @@ export default function Register() {
                     </div>
 
                     {/* Bottom Accreditations */}
-                    <div className="pt-4 border-t border-primary/10 text-center space-y-2">
+                    <div className="pt-4 border-t border-primary/10 text-center">
                         <p className="text-xs text-on-surface-variant">
                             Sudah memiliki akun terdaftar?{' '}
-                            <Link href="/login" className="text-primary font-bold hover:underline">
-                                Masuk ke Portal Akun →
+                            <Link href="/login" className="text-primary font-bold hover:underline inline-flex items-center gap-1">
+                                <span>Masuk ke Portal Akun</span>
+                                <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
                             </Link>
                         </p>
-                        <div className="flex items-center justify-center gap-3 text-[10px] text-on-surface-variant/80 font-mono">
-                            <span>SatuSehat Terhubung</span>
-                            <span>•</span>
-                            <span>UU PDP No. 27/2022</span>
-                            <span>•</span>
-                            <span>SSL 256-Bit</span>
-                        </div>
                     </div>
                 </div>
-
-                {/* Right Column: Dynamic Editorial Showcase */}
-                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-surface-container-low border border-primary/15 shadow-sm relative overflow-hidden">
-                    {/* Top Role Badge */}
-                    <div className="space-y-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${currentConfig.badge ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-teal-100 text-teal-800 border-teal-300'}`}>
-                                {currentConfig.badge}
-                            </span>
-                            <span className="font-mono text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
-                                Skrining Mandiri
-                            </span>
-                        </div>
-
-                        <div className="space-y-2">
-                            <h2 className="font-heading font-bold text-xl text-primary leading-snug">
-                                {currentConfig.highlightTitle}
-                            </h2>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
-                                {currentConfig.highlightQuote}
-                            </p>
-                        </div>
-
-                        {/* Image Frame */}
-                        <div className="h-44 rounded-2xl overflow-hidden border border-primary/15 shadow-inner relative group bg-white">
-                            <img
-                                src={currentConfig.image}
-                                alt={currentConfig.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
-                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg border border-white/20">
-                                    {currentConfig.title}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Dynamic Metrics */}
-                        <div className="grid grid-cols-3 gap-2 pt-2">
-                            {currentConfig.stats.map((s, idx) => (
-                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-primary/15 text-center shadow-2xs">
-                                    <span className="font-heading font-black text-xs sm:text-sm text-primary block leading-tight">
-                                        {s.val}
-                                    </span>
-                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant block mt-0.5 font-medium">
-                                        {s.label}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Medical Advisor Quote */}
-                    <div className="pt-4 border-t border-primary/10 relative z-10 flex items-center gap-3">
-                        <img
-                            src="/image/doctor_bramantyo.jpg"
-                            alt="dr. Bramantyo"
-                            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 shadow-xs shrink-0"
-                        />
-                        <div className="text-xs leading-tight">
-                            <span className="font-heading font-bold text-primary block">
-                                dr. H. Bramantyo, Sp.PD
-                            </span>
-                            <span className="text-[10px] text-on-surface-variant">
-                                Dewan Penasihat Medis AEVYRA
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </AuthLayout>
     );
 }

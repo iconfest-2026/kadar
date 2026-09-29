@@ -9,7 +9,7 @@ export default function Scanner({ recentScans, todayScanCount, maxScanQuota, tie
 
     return (
         <AppLayout title="Scanner Gizi & BPOM OCR" activeTab="scanner">
-            <Head title="Scanner Open Cam Komposisi & Farmasi — AEVYRA" />
+            <Head title="Scanner Open Cam Komposisi & Farmasi - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 

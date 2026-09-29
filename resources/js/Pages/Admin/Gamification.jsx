@@ -101,8 +101,8 @@ export default function Gamification({
             label: 'Nama & Kunci Lencana',
             render: (row) => (
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/25 text-amber-800 font-heading font-black flex items-center justify-center text-lg shadow-2xs shrink-0">
-                        🏅
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/25 text-amber-800 font-heading font-black flex items-center justify-center shadow-2xs shrink-0">
+                        <span className="material-symbols-outlined text-[20px] text-amber-600">military_tech</span>
                     </div>
                     <div>
                         <p className="font-bold text-xs text-on-surface">{row.name}</p>
@@ -253,7 +253,7 @@ export default function Gamification({
 
     return (
         <AdminLayout activeNav="gamification" title="Gamifikasi & Penghargaan">
-            <Head title="Gamifikasi, Lencana & Poin — AEVYRA" />
+            <Head title="Gamifikasi, Lencana & Poin - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

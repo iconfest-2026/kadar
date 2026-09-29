@@ -45,7 +45,7 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
                     {
                         id: 'init_welcome',
                         role: 'ASSISTANT',
-                        content: 'Halo! Saya Asisten Preventif AEVYRA berbasis pedoman gizi PERKENI & Kemenkes RI. Ada yang bisa saya bantu terkait pola makan, pemahaman label gizi, atau pencegahan pra-diabetes hari ini?',
+                        content: 'Saya Asisten AI Preventif AEVYRA berbasis pedoman gizi PERKENI dan Kemenkes RI. Silakan ajukan pertanyaan seputar pola makan sehat, pemahaman label gizi pangan, atau pengelolaan risiko pra-diabetes.',
                     }
                 ]);
             }
@@ -531,7 +531,7 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
                                         </span>
                                     </div>
                                     <p className="text-[11px] text-on-surface-variant truncate">
-                                        Gemini 3.6 Flash ➔ Groq ➔ Cloudflare ➔ Rule Engine
+                                        Gemini 3.6 Flash &bull; Groq &bull; Cloudflare &bull; Rule Engine
                                     </p>
                                 </div>
                             </div>
@@ -574,7 +574,7 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
                                                         : 'bg-surface-container-low text-on-surface border border-surface-container rounded-bl-xs'
                                                 }`}
                                             >
-                                                {m.content}
+                                                {typeof m.content === 'string' ? m.content.replace(/\*/g, '') : m.content}
                                             </div>
                                             {!isUser && m.provider_used && (
                                                 <div className="flex items-center gap-1.5 px-1 text-[10px] text-on-surface-variant font-mono">

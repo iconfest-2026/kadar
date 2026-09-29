@@ -510,7 +510,7 @@ export default function Memberships({
 
     return (
         <AdminLayout activeNav="memberships" title="Tingkatan Member & SaaS Midtrans">
-            <Head title="Tingkatan Member & Integrasi SaaS — AEVYRA" />
+            <Head title="Tingkatan Member & Integrasi SaaS - AEVYRA" />
 
             <div className="space-y-6">
                 {/* Page Header with Action Buttons */}

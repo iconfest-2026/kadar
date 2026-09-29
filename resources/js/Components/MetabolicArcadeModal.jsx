@@ -752,9 +752,10 @@ export default function MetabolicArcadeModal({ isOpen, onClose }) {
                                     <Link
                                         href="/member/scanner"
                                         onClick={onClose}
-                                        className="px-4 py-2.5 rounded-xl bg-white text-primary font-bold text-xs hover:bg-emerald-50 transition-colors"
+                                        className="px-4 py-2.5 rounded-xl bg-white text-primary font-bold text-xs hover:bg-emerald-50 transition-colors inline-flex items-center gap-1.5"
                                     >
-                                        Buka Pemindai Nutrisi Kamera →
+                                        <span>Buka Pemindai Nutrisi Kamera</span>
+                                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                     </Link>
                                     <button
                                         type="button"

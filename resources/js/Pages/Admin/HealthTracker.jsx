@@ -205,7 +205,7 @@ export default function HealthTracker({
 
     return (
         <AdminLayout activeNav="health-tracker" title="Log & Tata Kelola Tracker">
-            <Head title="Audit Data Tracker Kesehatan — AEVYRA" />
+            <Head title="Audit Data Tracker Kesehatan - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

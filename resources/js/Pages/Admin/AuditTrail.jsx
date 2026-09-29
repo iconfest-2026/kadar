@@ -120,7 +120,7 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
 
     return (
         <AdminLayout activeNav="audit" title="Buku Besar Audit Forensik">
-            <Head title="Audit Trail Forensik — AEVYRA" />
+            <Head title="Audit Trail Forensik - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

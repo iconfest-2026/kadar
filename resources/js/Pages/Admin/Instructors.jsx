@@ -251,7 +251,7 @@ export default function Instructors({ instructors = { data: [], links: [] }, sta
 
     return (
         <AdminLayout activeNav="instructors" title="Verifikasi Instruktur">
-            <Head title="Verifikasi & Kredensial Instruktur — AEVYRA" />
+            <Head title="Verifikasi & Kredensial Instruktur - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

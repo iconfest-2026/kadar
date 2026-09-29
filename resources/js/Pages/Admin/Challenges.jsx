@@ -210,7 +210,7 @@ export default function Challenges({
 
     return (
         <AdminLayout activeNav="challenges" title="Tantangan & Gamifikasi Kesehatan">
-            <Head title="Challenge Komunitas — Admin AEVYRA" />
+            <Head title="Challenge Komunitas - Admin AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader

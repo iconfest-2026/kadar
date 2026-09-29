@@ -49,8 +49,8 @@ export default function Emergency({
             label: 'Member Pemicu SOS',
             render: (row) => (
                 <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-rose-500/15 border border-rose-500/25 text-rose-700 font-bold flex items-center justify-center text-xs">
-                        🆘
+                    <div className="w-8 h-8 rounded-xl bg-rose-500/15 border border-rose-500/25 text-rose-700 font-bold flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[18px]">emergency</span>
                     </div>
                     <div>
                         <p className="font-bold text-on-surface text-xs">{row.user?.name || 'Pengguna Darurat'}</p>
@@ -158,7 +158,7 @@ export default function Emergency({
 
     return (
         <AdminLayout activeNav="emergency" title="Tanggap Darurat 119/112">
-            <Head title="Tanggap Darurat 119/112 — AEVYRA" />
+            <Head title="Tanggap Darurat 119/112 - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
