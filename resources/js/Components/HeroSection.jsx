@@ -85,16 +85,16 @@ export default function HeroSection() {
 
                     {/* Headline */}
                     <div className="space-y-2.5">
-                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-[44px] font-normal text-[#142320] leading-[1.18] tracking-tight">
+                        <h1 className="font-serif text-xl sm:text-3xl lg:text-[40px] font-normal text-[#142320] leading-[1.18] tracking-tight">
                             Pahami dampak makanan pada glukosa Anda, <span className="italic text-primary">sebelum suapan pertama.</span>
                         </h1>
-                        <p className="text-xs sm:text-sm text-[#4a5a55] leading-relaxed max-w-xl">
+                        <p className="text-[11px] sm:text-sm text-[#4a5a55] leading-relaxed max-w-xl">
                             Arahkan kamera smartphone ke label kemasan makanan atau obat. Algoritma visi komputer menganalisis beban glikemik, takaran gula tersembunyi, dan nomor izin edar BPOM seketika — didampingi tim dokter untuk pencegahan pra-diabetes.
                         </p>
                     </div>
 
                     {/* Core Feature Bullet Highlights */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#354843] pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] sm:text-xs text-[#354843] pt-1">
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
                             <span className="truncate">120.000+ Database BPOM</span>
@@ -117,16 +117,16 @@ export default function HeroSection() {
                     <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                         <Link
                             href="/demo/scanner"
-                            className="inline-flex items-center justify-center min-h-11 px-5 py-2.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
+                            className="inline-flex items-center justify-center min-h-10.5 px-5 py-2.5 rounded-full bg-primary text-white text-[11px] sm:text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
                         >
-                            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                            <span className="material-symbols-outlined text-[16px]">photo_camera</span>
                             <span>Buka Demo Scanner Kamera</span>
                         </Link>
                         <Link
                             href="/demo/consultations"
-                            className="inline-flex items-center justify-center min-h-11 px-4 py-2.5 rounded-full bg-white/80 text-[#31433f] text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
+                            className="inline-flex items-center justify-center min-h-10.5 px-4 py-2.5 rounded-full bg-white/80 text-[#31433f] text-[11px] sm:text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
                         >
-                            <span className="material-symbols-outlined text-[17px] text-emerald-700">health_and_safety</span>
+                            <span className="material-symbols-outlined text-[16px] text-emerald-700">health_and_safety</span>
                             <span>Demo Konsultasi &amp; Dokter</span>
                         </Link>
                     </div>
@@ -159,15 +159,15 @@ export default function HeroSection() {
                         {/* Stats Strip */}
                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-surface-container-high/60">
                             <div>
-                                <span className="font-serif text-base sm:text-xl text-primary block leading-tight">120.000+</span>
+                                <span className="font-serif text-sm sm:text-lg text-primary block leading-tight">120.000+</span>
                                 <span className="text-[10px] text-[#63746f] block mt-0.5 leading-tight">Produk BPOM</span>
                             </div>
                             <div>
-                                <span className="font-serif text-base sm:text-xl text-primary block leading-tight">&lt; 0.4 Detik</span>
+                                <span className="font-serif text-sm sm:text-lg text-primary block leading-tight">&lt; 0.4 Detik</span>
                                 <span className="text-[10px] text-[#63746f] block mt-0.5 leading-tight">Kecepatan Analisis</span>
                             </div>
                             <div>
-                                <span className="font-serif text-base sm:text-xl text-primary block leading-tight">98.4%</span>
+                                <span className="font-serif text-sm sm:text-lg text-primary block leading-tight">98.4%</span>
                                 <span className="text-[10px] text-[#63746f] block mt-0.5 leading-tight">Akurasi Pembacaan</span>
                             </div>
                         </div>
@@ -194,7 +194,7 @@ export default function HeroSection() {
                         <button
                             type="button"
                             onClick={() => setActiveScanSample('drink')}
-                            className={`py-1.5 px-2 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
+                            className={`py-1.5 px-1 sm:px-2 text-[10px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
                                 activeScanSample === 'drink'
                                     ? 'bg-white text-primary shadow-xs'
                                     : 'text-[#566863] hover:text-primary'
@@ -205,7 +205,7 @@ export default function HeroSection() {
                         <button
                             type="button"
                             onClick={() => setActiveScanSample('food')}
-                            className={`py-1.5 px-2 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
+                            className={`py-1.5 px-1 sm:px-2 text-[10px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
                                 activeScanSample === 'food'
                                     ? 'bg-white text-primary shadow-xs'
                                     : 'text-[#566863] hover:text-primary'
@@ -216,7 +216,7 @@ export default function HeroSection() {
                         <button
                             type="button"
                             onClick={() => setActiveScanSample('medicine')}
-                            className={`py-1.5 px-2 text-[11px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
+                            className={`py-1.5 px-1 sm:px-2 text-[10px] sm:text-xs font-medium rounded-lg flex items-center justify-center text-center transition-all cursor-pointer ${
                                 activeScanSample === 'medicine'
                                     ? 'bg-white text-primary shadow-xs'
                                     : 'text-[#566863] hover:text-primary'

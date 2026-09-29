@@ -58,37 +58,37 @@ export default function Arcade() {
             <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
             <Header />
 
-            <main className="flex-1 max-w-7xl min-w-0 mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 w-full space-y-10">
+            <main className="flex-1 max-w-7xl min-w-0 mx-auto px-3 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-16 sm:pb-20 w-full space-y-6 sm:space-y-10">
                 {/* Hero Header */}
-                <div className="space-y-3 text-center max-w-3xl mx-auto pt-6">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-xs font-mono font-bold border border-[#cfe1d7]">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <div className="space-y-2.5 sm:space-y-3 text-center max-w-3xl mx-auto pt-2 sm:pt-6">
+                    <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-[10px] sm:text-xs font-mono font-bold border border-[#cfe1d7]">
+                        <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>ARENA GAMIFIKASI KESEHATAN PREVENTIF 2D</span>
                     </div>
 
-                    <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#122824] leading-tight">
+                    <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl font-normal text-[#122824] leading-tight">
                         Taklukkan Lonjakan Glukosa dalam Aksi 2D Interaktif
                     </h1>
 
-                    <p className="text-xs sm:text-sm text-[#4d665f] leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-[11px] sm:text-sm text-[#4d665f] leading-relaxed max-w-2xl mx-auto">
                         Pelajari respon biologis tubuh terhadap makanan tinggi gula dan manfaat serat secara menyenangkan! Mainkan runner 2D dengan fisika mulus, atau jelajahi simulasi keputusan kasus klinis 24 jam.
                     </p>
 
                     {/* Mode Selector Tabs */}
-                    <div className="pt-3 flex justify-center w-full">
-                        <div className="p-1.5 bg-surface-container-low rounded-2xl border border-surface-container flex flex-col sm:flex-row items-center gap-1.5 shadow-2xs w-full sm:w-auto">
+                    <div className="pt-2 sm:pt-3 flex justify-center w-full">
+                        <div className="p-1 sm:p-1.5 bg-surface-container-low rounded-2xl border border-surface-container grid grid-cols-2 sm:flex items-center gap-1 sm:gap-1.5 shadow-2xs w-full sm:w-auto">
                             <button
                                 type="button"
                                 onClick={() => setActiveView('story')}
-                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
                                     activeView === 'story'
                                         ? 'bg-primary text-white shadow-xs'
                                         : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
                                 }`}
                             >
-                                <span className="material-symbols-outlined text-[17px]">auto_stories</span>
-                                <span>Story Game 24 Jam</span>
-                                <span className="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-800 text-[9px] font-mono">
+                                <span className="material-symbols-outlined text-[15px] sm:text-[17px]">auto_stories</span>
+                                <span className="truncate">Story 24 Jam</span>
+                                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-800 text-[9px] font-mono">
                                     Visual Novel
                                 </span>
                             </button>
@@ -96,14 +96,14 @@ export default function Arcade() {
                             <button
                                 type="button"
                                 onClick={() => setActiveView('runner')}
-                                className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
                                     activeView === 'runner'
                                         ? 'bg-primary text-white shadow-xs'
                                         : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
                                 }`}
                             >
-                                <span className="material-symbols-outlined text-[17px]">sports_esports</span>
-                                <span>Aksi 2D: Glucose Dash</span>
+                                <span className="material-symbols-outlined text-[15px] sm:text-[17px]">sports_esports</span>
+                                <span className="truncate">Glucose Dash</span>
                             </button>
                         </div>
                     </div>
@@ -115,14 +115,14 @@ export default function Arcade() {
                 </section>
 
                 {/* Secondary Grid: Community Leaderboard & Nutritional Education */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 pt-2">
                     {/* Community Leaderboard */}
-                    <div className="lg:col-span-1 bg-white rounded-3xl p-6 border border-surface-container-high shadow-xs space-y-4">
+                    <div className="lg:col-span-1 bg-white rounded-3xl p-4 sm:p-6 border border-surface-container-high shadow-xs space-y-4">
                         <div className="flex items-center justify-between border-b border-surface-container pb-3">
                             <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary text-[22px]">leaderboard</span>
+                                <span className="material-symbols-outlined text-primary text-[20px] sm:text-[22px]">leaderboard</span>
                                 <div>
-                                    <h3 className="font-serif font-bold text-base text-on-surface">Papan Peringkat</h3>
+                                    <h3 className="font-serif font-bold text-sm sm:text-base text-on-surface">Papan Peringkat</h3>
                                     <p className="text-[10px] text-on-surface-variant">Top Rekor Skor Komunitas Pekan Ini</p>
                                 </div>
                             </div>
@@ -131,14 +131,14 @@ export default function Arcade() {
                             </span>
                         </div>
 
-                        <div className="space-y-2.5">
+                        <div className="space-y-2">
                             {leaderboard.map((item) => (
                                 <div
                                     key={item.rank}
-                                    className="p-3 rounded-2xl bg-surface-container-lowest border border-surface-container flex items-center justify-between text-xs hover:border-primary/40 transition-colors"
+                                    className="p-2.5 sm:p-3 rounded-2xl bg-surface-container-lowest border border-surface-container flex items-center justify-between text-xs hover:border-primary/40 transition-colors gap-2"
                                 >
-                                    <div className="flex items-center gap-2.5">
-                                        <span className={`w-6 h-6 rounded-full font-mono font-bold text-xs flex items-center justify-center ${
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <span className={`w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-full font-mono font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 ${
                                             item.rank === 1 ? 'bg-amber-100 text-amber-900 border border-amber-300' :
                                             item.rank === 2 ? 'bg-slate-200 text-slate-800 border border-slate-300' :
                                             item.rank === 3 ? 'bg-amber-900/10 text-amber-950 border border-amber-800/30' :
@@ -146,13 +146,13 @@ export default function Arcade() {
                                         }`}>
                                             {item.medal}
                                         </span>
-                                        <div>
-                                            <strong className="block text-on-surface leading-tight">{item.name}</strong>
-                                            <span className="text-[10px] text-on-surface-variant font-mono">{item.char}</span>
+                                        <div className="min-w-0">
+                                            <strong className="block text-on-surface leading-tight text-[11px] sm:text-xs truncate">{item.name}</strong>
+                                            <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-mono block truncate">{item.char}</span>
                                         </div>
                                     </div>
-                                    <div className="text-right">
-                                        <span className="font-mono font-black text-primary text-sm block leading-tight">
+                                    <div className="text-right shrink-0">
+                                        <span className="font-mono font-black text-primary text-xs sm:text-sm block leading-tight">
                                             {item.score}
                                         </span>
                                         <span className="text-[9px] text-on-surface-variant">TIR: {item.tir}</span>
@@ -161,22 +161,22 @@ export default function Arcade() {
                             ))}
                         </div>
 
-                        <div className="pt-2 text-center">
-                            <p className="text-[11px] text-on-surface-variant">
+                        <div className="pt-1 text-center">
+                            <p className="text-[10px] sm:text-[11px] text-on-surface-variant">
                                 Skor disimpan otomatis di peramban Anda.
                             </p>
                         </div>
                     </div>
 
                     {/* Food Items & Glycemic Impact Guide */}
-                    <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-surface-container-high shadow-xs space-y-4 flex flex-col justify-between">
+                    <div className="lg:col-span-2 bg-white rounded-3xl p-4 sm:p-6 border border-surface-container-high shadow-xs space-y-4 flex flex-col justify-between">
                         <div>
-                            <div className="flex items-center justify-between border-b border-surface-container pb-3 mb-4">
+                            <div className="flex flex-wrap items-center justify-between border-b border-surface-container pb-3 mb-4 gap-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-primary text-[22px]">biotech</span>
+                                    <span className="material-symbols-outlined text-primary text-[20px] sm:text-[22px]">biotech</span>
                                     <div>
-                                        <h3 className="font-serif font-bold text-base text-on-surface">
-                                            Kamus Glikemik & Dampak Metabolik
+                                        <h3 className="font-serif font-bold text-sm sm:text-base text-on-surface">
+                                            Kamus Glikemik &amp; Dampak Metabolik
                                         </h3>
                                         <p className="text-[10px] text-on-surface-variant">
                                             Kenapa item dalam game berpengaruh terhadap glukosa darah?
@@ -188,22 +188,22 @@ export default function Arcade() {
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                                 {foodCards.map((card, idx) => (
                                     <div
                                         key={idx}
-                                        className="p-3.5 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-1.5"
+                                        className="p-3 sm:p-3.5 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-1.5"
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <span className="material-symbols-outlined text-primary text-[20px]">{card.icon}</span>
-                                                <h4 className="font-bold text-xs text-on-surface">{card.name}</h4>
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="flex items-center gap-2 min-w-0">
+                                                <span className="material-symbols-outlined text-primary text-[18px] sm:text-[20px] shrink-0">{card.icon}</span>
+                                                <h4 className="font-bold text-[11px] sm:text-xs text-on-surface truncate">{card.name}</h4>
                                             </div>
-                                            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${card.badge}`}>
+                                            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border shrink-0 ${card.badge}`}>
                                                 {card.impact}
                                             </span>
                                         </div>
-                                        <p className="text-[11px] text-[#52645f] leading-relaxed">
+                                        <p className="text-[10px] sm:text-[11px] text-[#52645f] leading-relaxed">
                                             {card.desc}
                                         </p>
                                     </div>
@@ -212,20 +212,20 @@ export default function Arcade() {
                         </div>
 
                         {/* Banner to Real Life Application */}
-                        <div className="p-4 rounded-2xl bg-[#edf5f0] border border-[#cfe1d7] flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
+                        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#edf5f0] border border-[#cfe1d7] flex flex-col sm:flex-row items-center justify-between gap-3 mt-3 sm:mt-4">
                             <div className="space-y-0.5 text-center sm:text-left">
-                                <strong className="text-xs text-primary font-bold block">
+                                <strong className="text-[11px] sm:text-xs text-primary font-bold block">
                                     Ingin Pindai Makanan Nyata Anda Menggunakan Kamera?
                                 </strong>
-                                <p className="text-[11px] text-[#4d665f]">
+                                <p className="text-[10px] sm:text-[11px] text-[#4d665f]">
                                     Arahkan kamera ke label kemasan untuk deteksi gula, natrium, dan beban glikemik dalam &lt;0.4 detik.
                                 </p>
                             </div>
                             <Link
                                 href="/member/scanner"
-                                className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 shadow-xs"
+                                className="w-full sm:w-auto px-4 py-2 sm:py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-[11px] sm:text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-1.5 shadow-xs"
                             >
-                                <span className="material-symbols-outlined text-[16px]">photo_camera</span>
+                                <span className="material-symbols-outlined text-[15px] sm:text-[16px]">photo_camera</span>
                                 <span>Buka Scanner Kamera</span>
                             </Link>
                         </div>

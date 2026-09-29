@@ -194,10 +194,10 @@ export default function Paket(props) {
                             <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
                             <span>Transparansi Biaya • Standar Layanan Medis Terakreditasi</span>
                         </div>
-                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight tracking-tight">
+                        <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight tracking-tight">
                             Investasi preventif untuk kesehatan metabolik bebas komplikasi.
                         </h1>
-                        <p className="text-xs sm:text-sm text-[#4a5e57] leading-relaxed">
+                        <p className="text-[11px] sm:text-sm text-[#4a5e57] leading-relaxed">
                             Pilih tingkatan pendampingan klinis yang sesuai dengan target kesehatan Anda. Mulai dengan pemindaian mandiri gratis seumur hidup hingga supervisi langsung bersama dokter spesialis.
                         </p>
 

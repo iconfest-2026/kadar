@@ -128,14 +128,14 @@ export default function PublicPromoSection() {
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
                     <div className="space-y-1">
-                        <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
+                        <span className="text-[10px] sm:text-[11px] text-primary font-medium tracking-wide uppercase block">
                             Bukti Klinis &amp; Pembalikan Risiko
                         </span>
-                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#142320]">
+                        <h2 className="font-serif text-xl sm:text-2xl lg:text-[32px] font-normal text-[#142320]">
                             Mengapa intervensi dini menentukan masa depan Anda.
                         </h2>
                     </div>
-                    <p className="text-xs sm:text-sm text-[#546661] max-w-sm leading-relaxed">
+                    <p className="text-[11px] sm:text-sm text-[#546661] max-w-sm leading-relaxed">
                         Pra-diabetes berkembang tanpa rasa nyeri. Mengetahui beban gula pada makanan harian dapat mencegah kerusakan pembuluh darah mikro sebelum terlambat.
                     </p>
                 </div>
@@ -146,7 +146,7 @@ export default function PublicPromoSection() {
                     <div className="p-4 sm:p-6 bg-[#faf8f7] rounded-3xl border border-[#ece3de] flex flex-col justify-between space-y-5 h-full">
                         <div className="space-y-4">
                             <div className="flex items-center justify-between pb-3 border-b border-[#ebdcd5]">
-                                <span className="text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center gap-2">
+                                <span className="text-[10px] sm:text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-[#9c5f51]"></span>
                                     Pendekatan Konvensional (Reaktif)
                                 </span>
@@ -155,24 +155,24 @@ export default function PublicPromoSection() {
                                 </span>
                             </div>
 
-                            <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#2b211e] leading-snug">
+                            <h3 className="font-serif text-lg sm:text-xl font-normal text-[#2b211e] leading-snug">
                                 Menunggu gejala fisik hingga diabetes menetap.
                             </h3>
 
-                            <div className="space-y-3.5 text-xs text-[#5f514d] leading-relaxed pt-1">
-                                <div className="flex items-start gap-3">
+                            <div className="space-y-3 text-[11px] sm:text-xs text-[#5f514d] leading-relaxed pt-1">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
                                         <strong className="text-[#2b211e] font-medium">Beban Gula Tersembunyi:</strong> Pemanis cair dan saus kemasan dikonsumsi tanpa panduan, memicu lonjakan glukosa harian yang tidak disadari.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
                                         <strong className="text-[#2b211e] font-medium">Fluktuasi Energi Berulang:</strong> Rasa kantuk hebat dan lemas setelah makan sering diabaikan sebagai kelelahan biasa, padahal pertanda resistensi insulin.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
                                         <strong className="text-[#2b211e] font-medium">Intervensi Terlambat:</strong> Baru berkonsultasi ke fasilitas medis saat komplikasi kardiovaskular atau neuropati telah muncul.
@@ -207,7 +207,7 @@ export default function PublicPromoSection() {
                     <div className="p-4 sm:p-6 bg-[#f2f7f4] rounded-3xl border border-[#cfe1d7] shadow-[0_4px_24px_rgba(0,67,62,0.04)] flex flex-col justify-between space-y-5 h-full">
                         <div className="space-y-4">
                             <div className="flex items-center justify-between pb-3 border-b border-[#d6e7dd]">
-                                <span className="text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center gap-2">
+                                <span className="text-[10px] sm:text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
                                     Pendekatan AEVYRA (Preventif)
                                 </span>
@@ -216,24 +216,24 @@ export default function PublicPromoSection() {
                                 </span>
                             </div>
 
-                            <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#122824] leading-snug">
+                            <h3 className="font-serif text-lg sm:text-xl font-normal text-[#122824] leading-snug">
                                 Deteksi 0.4 detik &amp; bimbingan gaya hidup terpadu.
                             </h3>
 
-                            <div className="space-y-3.5 text-xs text-[#3f5751] leading-relaxed pt-1">
-                                <div className="flex items-start gap-3">
+                            <div className="space-y-3 text-[11px] sm:text-xs text-[#3f5751] leading-relaxed pt-1">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
                                         <strong className="text-[#122824] font-medium">Transparansi Sebelum Makan:</strong> Kamera membedah gramatur sukrosa bebas, garam, dan kalori secara instan sebelum suapan pertama.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
                                         <strong className="text-[#122824] font-medium">Kurva Glukosa Terjaga:</strong> Alternatif pangan yang disarankan dokter membantu menjaga kestabilan energi tanpa rasa lapar berlebih.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-2.5">
                                     <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
                                         <strong className="text-[#122824] font-medium">Remisi Bertahap 90 Hari:</strong> Program kebiasaan mikro terukur dan sinkronisasi data SatuSehat untuk dokter faskes Anda.
@@ -288,7 +288,7 @@ export default function PublicPromoSection() {
                                         key={item.id}
                                         type="button"
                                         onClick={() => changeSlide(idx)}
-                                        className={`px-3 py-1 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
+                                        className={`px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all shrink-0 cursor-pointer ${
                                             isActive
                                                 ? 'bg-primary text-white shadow-sm'
                                                 : 'bg-surface-container-low text-[#4f645f] hover:bg-surface-container hover:text-[#182926]'
@@ -302,7 +302,7 @@ export default function PublicPromoSection() {
 
                         {/* Prev / Next & Pause Indicator */}
                         <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-                            <span className="text-[11px] text-[#6e807b]">
+                            <span className="text-[10px] sm:text-[11px] text-[#6e807b]">
                                 {isPaused ? (
                                     <span className="text-amber-700 font-medium">Jeda (Disorot)</span>
                                 ) : (
@@ -314,9 +314,9 @@ export default function PublicPromoSection() {
                                     type="button"
                                     onClick={handlePrev}
                                     aria-label="Riset Klinis Sebelumnya"
-                                    className="w-8 h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                                    className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                                 >
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
@@ -324,9 +324,9 @@ export default function PublicPromoSection() {
                                     type="button"
                                     onClick={handleNext}
                                     aria-label="Riset Klinis Selanjutnya"
-                                    className="w-8 h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                                    className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                                 >
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </button>
@@ -408,7 +408,7 @@ export default function PublicPromoSection() {
                             </div>
 
                             {/* The Real Scientific Empirical Quote */}
-                            <blockquote className="font-serif italic text-base sm:text-lg lg:text-[19px] text-[#1a332e] leading-relaxed relative pl-4 border-l-3 border-primary/60 my-2">
+                            <blockquote className="font-serif italic text-sm sm:text-base lg:text-lg text-[#1a332e] leading-relaxed relative pl-4 border-l-3 border-primary/60 my-2">
                                 &ldquo;{activeItem.quote}&rdquo;
                             </blockquote>
 

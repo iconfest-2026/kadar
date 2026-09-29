@@ -61,14 +61,14 @@ export default function FaqSection() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
                     <div className="space-y-1">
-                        <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
+                        <span className="text-[10px] sm:text-[11px] text-primary font-medium tracking-wide uppercase block">
                             FAQ • Transparansi &amp; Standar Medis
                         </span>
-                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#142320]">
+                        <h2 className="font-serif text-xl sm:text-2xl lg:text-[32px] font-normal text-[#142320]">
                             Jawaban seputar pemindai, data klinis, dan privasi.
                         </h2>
                     </div>
-                    <p className="text-xs sm:text-sm text-[#546661] max-w-sm leading-relaxed">
+                    <p className="text-[11px] sm:text-sm text-[#546661] max-w-sm leading-relaxed">
                         Ketahui cara kerja algoritma visi gizi, keabsahan data laboratorium, perlindungan data privasi, dan ketentuan paket keanggotaan.
                     </p>
                 </div>
@@ -78,7 +78,7 @@ export default function FaqSection() {
                     <button
                         type="button"
                         onClick={() => handleCategoryChange('all')}
-                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
+                        className={`min-h-7.5 sm:min-h-8 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'all'
                                 ? 'bg-primary text-white shadow-2xs'
                                 : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
@@ -89,7 +89,7 @@ export default function FaqSection() {
                     <button
                         type="button"
                         onClick={() => handleCategoryChange('medical')}
-                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
+                        className={`min-h-7.5 sm:min-h-8 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'medical'
                                 ? 'bg-primary text-white shadow-2xs'
                                 : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
@@ -100,7 +100,7 @@ export default function FaqSection() {
                     <button
                         type="button"
                         onClick={() => handleCategoryChange('ai')}
-                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
+                        className={`min-h-7.5 sm:min-h-8 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'ai'
                                 ? 'bg-primary text-white shadow-2xs'
                                 : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
@@ -111,7 +111,7 @@ export default function FaqSection() {
                     <button
                         type="button"
                         onClick={() => handleCategoryChange('security')}
-                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
+                        className={`min-h-7.5 sm:min-h-8 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'security'
                                 ? 'bg-primary text-white shadow-2xs'
                                 : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
@@ -122,7 +122,7 @@ export default function FaqSection() {
                     <button
                         type="button"
                         onClick={() => handleCategoryChange('billing')}
-                        className={`min-h-8.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
+                        className={`min-h-7.5 sm:min-h-8 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center justify-center cursor-pointer ${
                             activeCategory === 'billing'
                                 ? 'bg-primary text-white shadow-2xs'
                                 : 'bg-white/80 text-[#4e605b] hover:text-primary hover:bg-[#edf5f0]'
@@ -148,23 +148,23 @@ export default function FaqSection() {
                                 <button
                                     type="button"
                                     onClick={() => toggleFaq(idx)}
-                                    className="w-full p-3.5 sm:p-4.5 flex items-center justify-between text-left text-sm sm:text-base font-serif text-[#182926] cursor-pointer gap-4"
+                                    className="w-full p-3.5 sm:p-4 flex items-center justify-between text-left text-xs sm:text-sm font-serif text-[#182926] cursor-pointer gap-4"
                                     aria-expanded={isOpen}
                                 >
                                     <span className="flex items-center gap-3">
-                                        <span className="text-xs font-mono text-[#1c6454] font-semibold">
+                                        <span className="text-[11px] sm:text-xs font-mono text-[#1c6454] font-semibold">
                                             0{idx + 1}.
                                         </span>
                                         <span className="font-medium text-[#182926]">{item.q}</span>
                                     </span>
                                     <span
-                                        className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ease-in-out ${
+                                        className={`w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ease-in-out ${
                                             isOpen
                                                 ? 'bg-primary text-white rotate-180 shadow-2xs'
                                                 : 'bg-[#edf5f0] text-[#1c6454] rotate-0'
                                         }`}
                                     >
-                                        <span className="material-symbols-outlined text-[18px] leading-none">
+                                        <span className="material-symbols-outlined text-[16px] sm:text-[18px] leading-none">
                                             expand_more
                                         </span>
                                     </span>
@@ -177,7 +177,7 @@ export default function FaqSection() {
                                     }`}
                                 >
                                     <div className="overflow-hidden">
-                                        <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#4d605a] leading-relaxed border-t border-[#f0f5f2] pt-3">
+                                        <div className="px-4 sm:px-5 pb-4 text-[11px] sm:text-xs text-[#4d605a] leading-relaxed border-t border-[#f0f5f2] pt-3">
                                             {item.a}
                                         </div>
                                     </div>

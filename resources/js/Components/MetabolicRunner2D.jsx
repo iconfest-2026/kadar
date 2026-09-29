@@ -849,7 +849,7 @@ export default function MetabolicRunner2D() {
             </div>
 
             {/* Game Screen Canvas Container */}
-            <div className="relative w-full aspect-video max-h-115 bg-[#f7faf8] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-[260px] sm:min-h-[340px] max-h-115 bg-[#f7faf8] flex items-center justify-center overflow-hidden">
                 <canvas
                     ref={canvasRef}
                     className="w-full h-full object-contain cursor-pointer select-none"
@@ -860,44 +860,44 @@ export default function MetabolicRunner2D() {
 
                 {/* OVERLAY: Menu / Start Screen */}
                 {gameState === 'menu' && (
-                    <div className="absolute inset-0 bg-primary/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-white text-center space-y-5 animate-in fade-in duration-200">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-mono font-bold border border-white/10">
+                    <div className="absolute inset-0 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 text-white text-center space-y-3 sm:space-y-4 overflow-y-auto max-h-full">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-[10px] sm:text-xs font-mono font-bold border border-white/10">
                             <span>🎮 ARENA GAMIFIKASI METABOLIK 2D</span>
                         </div>
 
                         <div>
-                            <h3 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
-                                Pilih Karakter & Mulai Lari
+                            <h3 className="font-serif text-xl sm:text-3xl font-bold tracking-tight">
+                                Pilih Karakter &amp; Mulai Lari
                             </h3>
-                            <p className="text-xs text-[#cbe5d8] max-w-md mx-auto mt-1">
+                            <p className="text-[11px] sm:text-xs text-[#cbe5d8] max-w-md mx-auto mt-0.5 sm:mt-1 leading-snug">
                                 Hindari donat, boba, dan soda bergula. Ambil serat brokoli, air hidrasi, dan tameng insulin untuk menjaga glukosa dalam batas sehat (70–130 mg/dL)!
                             </p>
                         </div>
 
                         {/* Character Selector */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-xl">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 w-full max-w-xl text-left">
                             {Object.values(characters).map((char) => {
                                 const isSel = selectedChar === char.id;
                                 return (
                                     <div
                                         key={char.id}
                                         onClick={() => setSelectedChar(char.id)}
-                                        className={`p-3.5 rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
+                                        className={`p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border text-left cursor-pointer transition-all duration-200 ${
                                             isSel
-                                                ? 'bg-white text-primary border-emerald-400 shadow-lg scale-102 ring-2 ring-emerald-300'
+                                                ? 'bg-white text-primary border-emerald-400 shadow-lg ring-2 ring-emerald-300'
                                                 : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
                                         }`}
                                     >
-                                        <div className="flex items-center gap-2.5">
-                                            <span className="text-2xl">{char.avatar}</span>
-                                            <div>
-                                                <h4 className="font-bold text-xs leading-tight">{char.name}</h4>
-                                                <span className={`text-[9px] font-mono ${isSel ? 'text-primary/80' : 'text-[#cbe5d8]'}`}>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xl sm:text-2xl shrink-0">{char.avatar}</span>
+                                            <div className="min-w-0">
+                                                <h4 className="font-bold text-[11px] sm:text-xs leading-tight truncate">{char.name}</h4>
+                                                <span className={`text-[9px] font-mono block truncate ${isSel ? 'text-primary/80' : 'text-[#cbe5d8]'}`}>
                                                     {char.role}
                                                 </span>
                                             </div>
                                         </div>
-                                        <p className={`text-[10px] mt-2 line-clamp-2 ${isSel ? 'text-slate-600' : 'text-slate-300'}`}>
+                                        <p className={`text-[10px] mt-1.5 line-clamp-2 leading-tight ${isSel ? 'text-slate-600' : 'text-slate-300'}`}>
                                             {char.desc}
                                         </p>
                                     </div>
@@ -906,17 +906,17 @@ export default function MetabolicRunner2D() {
                         </div>
 
                         {/* Start Button */}
-                        <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                        <div className="pt-1 flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
                             <button
                                 type="button"
                                 onClick={() => startGame(selectedChar)}
-                                className="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+                                className="w-full sm:w-auto px-6 py-2.5 sm:py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[20px]">play_arrow</span>
+                                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">play_arrow</span>
                                 <span>MULAI LARI SEKARANG</span>
                             </button>
-                            <span className="text-[11px] text-[#cbe5d8]">
-                                Tekan <strong>SPASI</strong> atau <strong>⬆️</strong> untuk Lompat • <strong>⬇️</strong> untuk Meluncur
+                            <span className="text-[10px] sm:text-[11px] text-[#cbe5d8]">
+                                Tekan <strong>SPASI</strong> / <strong>⬆️</strong> untuk Lompat • <strong>⬇️</strong> Meluncur
                             </span>
                         </div>
                     </div>
@@ -993,11 +993,11 @@ export default function MetabolicRunner2D() {
 
             {/* Mobile Touch Controls (Adaptive Touch Ergonomics 44px+) */}
             {gameState === 'playing' && (
-                <div className="p-3 bg-surface-container-low border-t border-surface-container flex items-center justify-between sm:hidden">
-                    <div className="text-[11px] text-on-surface-variant font-medium">
-                        Sentuh tombol untuk kendali:
+                <div className="p-2.5 bg-surface-container-low border-t border-surface-container flex items-center justify-between sm:hidden gap-2">
+                    <div className="text-[10px] text-on-surface-variant font-medium shrink-0">
+                        Kendali:
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 flex-1 justify-end">
                         <button
                             type="button"
                             onTouchStart={(e) => {
@@ -1005,7 +1005,7 @@ export default function MetabolicRunner2D() {
                                 handleSlide();
                             }}
                             onClick={handleSlide}
-                            className="px-5 py-3 min-h-11 rounded-2xl bg-surface-container text-on-surface font-bold text-xs border border-surface-container-high active:bg-surface-container-highest transition-all flex items-center gap-1 cursor-pointer"
+                            className="flex-1 py-2.5 px-3 min-h-11 rounded-xl bg-surface-container text-on-surface font-bold text-[11px] border border-surface-container-high active:bg-surface-container-highest transition-all flex items-center justify-center gap-1 cursor-pointer"
                         >
                             <span>MELUNCUR ⬇️</span>
                         </button>
@@ -1016,7 +1016,7 @@ export default function MetabolicRunner2D() {
                                 handleJump();
                             }}
                             onClick={handleJump}
-                            className="px-6 py-3 min-h-11 rounded-2xl bg-primary text-white font-bold text-xs active:bg-primary-container shadow-md transition-all flex items-center gap-1 cursor-pointer"
+                            className="flex-1 py-2.5 px-3 min-h-11 rounded-xl bg-primary text-white font-bold text-[11px] active:bg-primary-container shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer"
                         >
                             <span>LOMPAT ⬆️</span>
                         </button>

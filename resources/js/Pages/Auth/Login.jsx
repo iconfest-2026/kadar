@@ -102,10 +102,10 @@ export default function Login() {
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <span>Gerbang Autentikasi Pengguna Terverifikasi</span>
                             </div>
-                            <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
+                            <h1 className="font-heading font-black text-xl sm:text-3xl text-primary tracking-tight">
                                 Masuk ke Portal AEVYRA
                             </h1>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
+                            <p className="text-[11px] sm:text-xs text-on-surface-variant leading-relaxed">
                                 {activeConfig.desc}
                             </p>
                         </div>
@@ -124,16 +124,14 @@ export default function Login() {
                                             key={key}
                                             type="button"
                                             onClick={() => handleRoleSelect(key)}
-                                            className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                                                isSelected
+                                            className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${isSelected
                                                     ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
                                                     : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-center justify-between w-full mb-1">
-                                                <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${
-                                                    isSelected ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
-                                                }`}>
+                                                <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${isSelected ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
+                                                    }`}>
                                                     <span className="material-symbols-outlined text-[16px]">
                                                         {role.icon}
                                                     </span>

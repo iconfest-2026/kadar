@@ -1872,82 +1872,85 @@ export default function MetabolicStoryGame() {
             }`}
         >
             {/* Top Retro WebGL Bar */}
-            <div className="bg-[#1a2320] px-4 py-2 flex items-center justify-between border-b border-white/10 text-xs">
-                <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span className="font-mono font-bold text-gray-200">
-                        AEVYRA STORY: Perjalanan Medis Pasien Puskesmas &amp; Telemedisin
+            <div className="bg-[#1a2320] px-2.5 sm:px-4 py-2 flex items-center justify-between border-b border-white/10 text-xs gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                    <span className="font-mono font-bold text-gray-200 text-[11px] sm:text-xs truncate">
+                        AEVYRA STORY
                     </span>
-                    <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-emerald-950/80 text-[10px] text-emerald-300 font-mono border border-emerald-500/30">
+                    <span className="hidden md:inline-block font-mono text-gray-400 text-xs truncate">
+                        : Perjalanan Medis Pasien
+                    </span>
+                    <span className="hidden lg:inline-block px-2 py-0.5 rounded bg-emerald-950/80 text-[10px] text-emerald-300 font-mono border border-emerald-500/30 shrink-0">
                         Standar PERKENI &amp; SatuSehat Kemenkes
                     </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 overflow-x-auto scrollbar-none justify-end">
                     {/* Interactive Nutritional Inspector Button ("Cek Kadar Gizi") */}
                     <button
                         type="button"
                         onClick={() => setIsNutritionModalOpen(true)}
-                        className="px-2.5 py-1 rounded bg-emerald-700/80 hover:bg-emerald-600 text-white transition-colors text-[11px] font-mono font-bold flex items-center gap-1.5 cursor-pointer shadow-xs border border-emerald-500/40"
+                        className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded bg-emerald-700/80 hover:bg-emerald-600 text-white transition-colors text-[9px] sm:text-[11px] font-mono font-bold flex items-center gap-0.5 sm:gap-1 cursor-pointer shadow-xs border border-emerald-500/40 shrink-0 whitespace-nowrap"
                         title="Buka Alat Inspeksi & Cek Kadar Gizi Makanan"
                     >
-                        <span className="material-symbols-outlined text-[14px]">nutrition</span>
-                        <span>Cek Kadar Gizi</span>
+                        <span className="material-symbols-outlined text-[12px] sm:text-[14px]">nutrition</span>
+                        <span>Cek Gizi</span>
                     </button>
 
                     {/* Log Backlog Button */}
                     <button
                         type="button"
                         onClick={() => setIsLogOpen(true)}
-                        className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors text-[11px] font-mono cursor-pointer"
+                        className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors text-[9px] sm:text-[11px] font-mono cursor-pointer shrink-0 whitespace-nowrap"
                         title="Lihat Riwayat Percakapan Lengkap"
                     >
-                        Riwayat Log
+                        Log
                     </button>
 
                     {/* Speed Toggle */}
                     <button
                         type="button"
                         onClick={cycleSpeed}
-                        className="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors text-[11px] font-mono cursor-pointer"
+                        className="px-1 sm:px-2 py-0.5 sm:py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors text-[9px] sm:text-[11px] font-mono cursor-pointer shrink-0 whitespace-nowrap"
                         title="Atur Kecepatan Teks"
                     >
-                        {typeSpeed === 26 ? 'SPEED: 1x' : typeSpeed === 16 ? 'SPEED: 2x' : 'SPEED: 3x'}
+                        {typeSpeed === 26 ? '1x' : typeSpeed === 16 ? '2x' : '3x'}
                     </button>
 
                     {/* Auto-Play Toggle */}
                     <button
                         type="button"
                         onClick={() => setIsAutoPlay(!isAutoPlay)}
-                        className={`px-2.5 py-1 rounded transition-colors text-[11px] font-mono cursor-pointer ${
+                        className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded transition-colors text-[9px] sm:text-[11px] font-mono cursor-pointer shrink-0 whitespace-nowrap ${
                             isAutoPlay ? 'bg-emerald-600 text-white font-bold' : 'bg-white/10 text-gray-300 hover:bg-white/20'
                         }`}
                         title="Otomatis Lanjut Dialog"
                     >
-                        {isAutoPlay ? 'AUTO ON' : 'AUTO'}
+                        AUTO
                     </button>
 
                     {/* Sound Toggle */}
                     <button
                         type="button"
                         onClick={toggleSound}
-                        className="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
+                        className="p-1 sm:px-2 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors flex items-center gap-1 cursor-pointer shrink-0"
                         title={soundOn ? 'Matikan Audio' : 'Nyalakan Audio'}
                     >
-                        <span className="material-symbols-outlined text-[15px]">
+                        <span className="material-symbols-outlined text-[13px] sm:text-[15px]">
                             {soundOn ? 'volume_up' : 'volume_off'}
                         </span>
-                        <span className="text-[11px] font-mono">{soundOn ? 'BGM' : 'MUTE'}</span>
+                        <span className="text-[10px] sm:text-[11px] font-mono hidden sm:inline">{soundOn ? 'BGM' : 'MUTE'}</span>
                     </button>
 
                     {/* Fullscreen */}
                     <button
                         type="button"
                         onClick={toggleFullscreen}
-                        className="p-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors cursor-pointer"
+                        className="p-1 rounded bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors cursor-pointer shrink-0"
                         title="Layar Penuh"
                     >
-                        <span className="material-symbols-outlined text-[16px]">
+                        <span className="material-symbols-outlined text-[14px] sm:text-[16px]">
                             {isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
                         </span>
                     </button>
@@ -1956,7 +1959,7 @@ export default function MetabolicStoryGame() {
                     <button
                         type="button"
                         onClick={handleRestart}
-                        className="w-5 h-5 rounded-full bg-rose-500/80 hover:bg-rose-500 text-white flex items-center justify-center text-[10px] font-bold cursor-pointer transition-transform active:scale-95"
+                        className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-rose-500/80 hover:bg-rose-500 text-white flex items-center justify-center text-[9px] sm:text-[10px] font-bold cursor-pointer transition-transform active:scale-95 shrink-0"
                         title="Mulai Ulang Cerita"
                     >
                         ✕
@@ -1966,7 +1969,7 @@ export default function MetabolicStoryGame() {
 
             {/* TIMELINE PROGRESS CONTINUUM (6 Stages) */}
             {gameState !== 'prologue' && gameState !== 'select_patient' && (
-                <div className="bg-[#141e1a] px-3 sm:px-6 py-2 border-b border-white/10 flex items-center justify-between gap-1 overflow-x-auto text-[11px] font-mono">
+                <div className="bg-[#141e1a] px-3 sm:px-6 py-2 border-b border-white/10 flex items-center justify-between gap-1 overflow-x-auto text-[11px] font-mono scrollbar-none">
                     {medicalChapters.map((ch, idx) => {
                         const isActive = idx === chapterIndex;
                         const isDone = idx < chapterIndex;
@@ -2003,7 +2006,7 @@ export default function MetabolicStoryGame() {
             )}
 
             {/* MAIN 16:9 2D VISUAL NOVEL CANVAS */}
-            <div className="relative w-full aspect-video min-h-120 sm:min-h-135 bg-black flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-[380px] sm:min-h-135 bg-black flex flex-col justify-between overflow-hidden">
                 {/* 2D Scenic Background */}
                 <div
                     className="absolute inset-0 bg-cover bg-center transition-all duration-700"
@@ -2014,24 +2017,24 @@ export default function MetabolicStoryGame() {
 
                 {/* Top Medical HUD: Live Patient Biomarkers */}
                 {gameState !== 'prologue' && gameState !== 'select_patient' && (
-                    <div className="relative z-20 p-3 sm:p-4 flex items-center justify-between gap-2 flex-wrap animate-in fade-in duration-300">
+                    <div className="relative z-20 p-2 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2 flex-wrap animate-in fade-in duration-300">
                         {/* Phase & Time Indicator */}
-                        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-xs font-mono shadow-md">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs font-mono shadow-md">
+                            <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-400 animate-ping"></span>
                             <span className="font-bold text-emerald-300">{currentChapter.time}</span>
                             <span className="text-gray-300">• {currentChapter.phase}</span>
                         </div>
 
                         {/* Real-Time Clinical Strip (Clean Typography, Zero Emojis) */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                             {/* Condition Tag */}
                             <div className="hidden lg:flex items-center px-2.5 py-1 rounded-full bg-emerald-950/80 backdrop-blur-md border border-emerald-500/40 text-[10px] font-mono text-emerald-300">
                                 {activeChar.specialCaseTitle}
                             </div>
 
                             {/* Glucose Monitor */}
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 shadow-md">
-                                <span className="text-[11px] text-gray-300 font-mono uppercase">Glukosa:</span>
+                            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 shadow-md">
+                                <span className="text-[10px] sm:text-[11px] text-gray-300 font-mono uppercase">Glukosa:</span>
                                 <span
                                     className={`font-mono font-bold text-xs sm:text-sm ${
                                         metrics.glucose > 140
@@ -2062,13 +2065,13 @@ export default function MetabolicStoryGame() {
                             </div>
 
                             {/* Patient Badge */}
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 shadow-md text-xs">
+                            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 shadow-md text-[10px] sm:text-xs">
                                 <img
                                     src={activeChar.avatar}
                                     alt={activeChar.name}
-                                    className="w-5 h-5 rounded-full object-cover ring-1 ring-white/50"
+                                    className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover ring-1 ring-white/50"
                                 />
-                                <span className="font-medium text-white truncate max-w-28 sm:max-w-none">
+                                <span className="font-medium text-white truncate max-w-20 sm:max-w-none">
                                     {activeChar.name}
                                 </span>
                             </div>
@@ -2080,22 +2083,22 @@ export default function MetabolicStoryGame() {
                 {/* SCENE: PATIENT SELECTION (BEFORE SICKNESS PHASE) */}
                 {/* ============================================================== */}
                 {gameState === 'select_patient' && (
-                    <div className="relative z-20 flex-1 flex flex-col justify-center items-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-300">
-                        <div className="max-w-4xl w-full text-center space-y-4">
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-800/90 backdrop-blur-md border border-white/20 text-xs font-mono font-bold text-white">
+                    <div className="relative z-20 flex-1 flex flex-col justify-center items-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-300 overflow-y-auto max-h-full">
+                        <div className="max-w-4xl w-full text-center space-y-3 sm:space-y-4 my-auto">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/90 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-white">
                                 <span>PILIH KASUS KLINIS PASIEN • ALUR &amp; INTERVENSI KHUSUS</span>
                             </div>
 
-                            <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal drop-shadow-md">
+                            <h2 className="font-serif text-xl sm:text-3xl text-white font-normal drop-shadow-md">
                                 Pilih Profil Pasien yang Mengunjungi Puskesmas Hari Ini
                             </h2>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 text-left">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left max-h-[65vh] sm:max-h-none overflow-y-auto">
                                 {Object.values(characters).map((char) => (
                                     <div
                                         key={char.id}
                                         onClick={() => handleSelectPatient(char.id)}
-                                        className={`group bg-[#fcf9f4]/98 text-[#1b2824] p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-102 hover:shadow-2xl flex flex-col justify-between space-y-3 ${
+                                        className={`group bg-[#fcf9f4]/98 text-[#1b2824] p-3.5 sm:p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-102 hover:shadow-2xl flex flex-col justify-between space-y-2.5 ${
                                             selectedCharId === char.id
                                                 ? 'border-emerald-600 ring-2 ring-emerald-500/30'
                                                 : 'border-transparent hover:border-emerald-500'
@@ -2106,24 +2109,24 @@ export default function MetabolicStoryGame() {
                                                 <img
                                                     src={char.avatar}
                                                     alt={char.name}
-                                                    className="w-12 h-12 rounded-xl object-cover ring-2 ring-emerald-600/30"
+                                                    className="w-10 sm:w-12 h-10 sm:h-12 rounded-xl object-cover ring-2 ring-emerald-600/30 shrink-0"
                                                 />
-                                                <div>
-                                                    <h3 className="font-heading font-bold text-sm text-primary">
+                                                <div className="min-w-0">
+                                                    <h3 className="font-heading font-bold text-xs sm:text-sm text-primary truncate">
                                                         {char.name}
                                                     </h3>
-                                                    <p className="text-[10px] text-gray-500 font-mono">
+                                                    <p className="text-[9px] sm:text-[10px] text-gray-500 font-mono truncate">
                                                         {char.age} Tahun • {char.role}
                                                     </p>
                                                 </div>
                                             </div>
 
                                             {/* Special Case Badge */}
-                                            <div className="px-2 py-1 rounded bg-[#edf5f0] text-emerald-900 text-[10px] font-bold font-mono border border-emerald-200">
+                                            <div className="px-2 py-1 rounded bg-[#edf5f0] text-emerald-900 text-[9px] sm:text-[10px] font-bold font-mono border border-emerald-200 truncate">
                                                 {char.specialCaseTitle}
                                             </div>
 
-                                            <p className="text-[11px] text-gray-700 leading-snug line-clamp-3">
+                                            <p className="text-[10px] sm:text-[11px] text-gray-700 leading-snug line-clamp-3">
                                                 {char.symptomHistory}
                                             </p>
                                         </div>
@@ -2132,7 +2135,7 @@ export default function MetabolicStoryGame() {
                                             <span className="text-[10px] font-mono text-gray-600">
                                                 GDS: <b className="text-rose-600">{char.baseGlucose}</b> mg/dL
                                             </span>
-                                            <span className="text-xs text-primary font-bold group-hover:translate-x-1 transition-transform">
+                                            <span className="text-[11px] sm:text-xs text-primary font-bold group-hover:translate-x-1 transition-transform">
                                                 Mulai Triase →
                                             </span>
                                         </div>
@@ -2147,29 +2150,29 @@ export default function MetabolicStoryGame() {
                 {/* SCENE: CLINICAL DECISION CHOICES (Clean Typography, Zero Emojis) */}
                 {/* ============================================================== */}
                 {gameState === 'chapter_choice' && (
-                    <div className="relative z-20 px-4 sm:px-8 py-3 max-w-2xl mx-auto w-full space-y-2.5 animate-in slide-in-from-bottom-6 duration-300">
+                    <div className="relative z-20 mt-auto pb-3 px-3 sm:px-8 py-2 sm:py-3 max-w-2xl mx-auto w-full space-y-2 sm:space-y-2.5 animate-in slide-in-from-bottom-6 duration-300 max-h-[70%] overflow-y-auto">
                         <div className="flex items-center justify-between">
-                            <span className="text-[11px] px-3.5 py-1 rounded-full bg-black/85 backdrop-blur-md text-emerald-300 font-mono font-bold border border-white/20">
+                            <span className="text-[10px] sm:text-[11px] px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full bg-black/85 backdrop-blur-md text-emerald-300 font-mono font-bold border border-white/20">
                                 KEPUTUSAN KLINIS: {activeChar.name.toUpperCase()}
                             </span>
 
                             <button
                                 type="button"
                                 onClick={() => setIsNutritionModalOpen(true)}
-                                className="px-2.5 py-1 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer shadow-md"
+                                className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white text-[9px] sm:text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer shadow-md"
                             >
-                                <span className="material-symbols-outlined text-[13px]">nutrition</span>
-                                <span>Cek Kadar Gizi Dulu</span>
+                                <span className="material-symbols-outlined text-[12px] sm:text-[13px]">nutrition</span>
+                                <span>Cek Gizi</span>
                             </button>
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1.5 sm:space-y-2">
                             {currentChapter.choices.map((c) => (
                                 <button
                                     key={c.id}
                                     type="button"
                                     onClick={() => handlePickChoice(c)}
-                                    className={`w-full p-3.5 sm:p-4 rounded-2xl text-left transition-all active:scale-98 flex items-center justify-between gap-3 shadow-lg cursor-pointer border ${
+                                    className={`w-full p-2.5 sm:p-4 rounded-xl sm:rounded-2xl text-left transition-all active:scale-98 flex items-center justify-between gap-2.5 sm:gap-3 shadow-lg cursor-pointer border ${
                                         c.type === 'danger'
                                             ? 'bg-[#fff7f7]/98 hover:bg-rose-50 text-rose-950 border-rose-300'
                                             : c.type === 'healthy'
@@ -2177,23 +2180,23 @@ export default function MetabolicStoryGame() {
                                             : 'bg-[#fffcf4]/98 hover:bg-amber-50 text-amber-950 border-amber-300'
                                     }`}
                                 >
-                                    <div className="space-y-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-black/10 text-gray-800">
+                                    <div className="space-y-0.5 sm:space-y-1 min-w-0">
+                                        <div className="flex items-center gap-1.5 sm:gap-2">
+                                            <span className="px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-bold bg-black/10 text-gray-800 shrink-0">
                                                 {c.code}
                                             </span>
-                                            <span className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                                            <span className="text-[11px] sm:text-sm font-bold text-gray-900 leading-snug truncate">
                                                 {c.label}
                                             </span>
                                         </div>
-                                        <p className="text-[11px] text-gray-600 leading-relaxed pl-1">
+                                        <p className="text-[10px] sm:text-[11px] text-gray-600 leading-snug pl-1 line-clamp-2 sm:line-clamp-none">
                                             {c.desc}
                                         </p>
                                     </div>
 
-                                    <div className="shrink-0 text-right font-mono font-bold text-xs">
+                                    <div className="shrink-0 text-right font-mono font-bold text-[10px] sm:text-xs">
                                         <span
-                                            className={`px-2.5 py-1 rounded-md border ${
+                                            className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md border ${
                                                 c.deltaGlucose < 0
                                                     ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
                                                     : 'bg-rose-100 text-rose-800 border-rose-300'
@@ -2319,36 +2322,37 @@ export default function MetabolicStoryGame() {
                 {/* THE ICONIC FLOATING DIALOGUE BOX (KOPMART RETRO VN STYLE) */}
                 {/* ============================================================== */}
                 {gameState !== 'select_patient' && gameState !== 'chapter_choice' && gameState !== 'ending' && (
-                    <div className="relative z-20 pb-5 sm:pb-7 px-4 sm:px-8 w-full">
+                    <div className="relative z-20 mt-auto pb-3 sm:pb-6 px-2.5 sm:px-6 w-full">
                         <div
                             onClick={handleAdvanceDialogue}
-                            className="group max-w-2xl mx-auto bg-[#f4eee5]/95 text-[#1b2a26] p-4 sm:p-5 rounded-[26px] sm:rounded-[30px] border border-[#dcd1c2] shadow-[0_12px_32px_rgba(0,0,0,0.35)] cursor-pointer relative transition-transform active:scale-[0.99] space-y-2 backdrop-blur-md"
+                            className="group max-w-2xl mx-auto bg-[#f4eee5]/95 text-[#1b2a26] p-3.5 sm:p-5 rounded-2xl sm:rounded-[30px] border border-[#dcd1c2] shadow-[0_12px_32px_rgba(0,0,0,0.35)] cursor-pointer relative transition-transform active:scale-[0.99] space-y-1.5 sm:space-y-2 backdrop-blur-md"
                         >
                             {/* Dialogue Header */}
-                            <div className="flex items-center justify-between">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#1b7058] text-white text-[11px] font-mono font-bold shadow-xs">
+                            <div className="flex items-center justify-between gap-2">
+                                <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full bg-[#1b7058] text-white text-[10px] sm:text-[11px] font-mono font-bold shadow-xs shrink-0">
                                     <span>{currentSpeaker}</span>
                                 </div>
 
-                                <span className="text-[10px] text-gray-500 font-mono">
-                                    [Klik kotak atau tekan Spasi untuk lanjut]
+                                <span className="text-[9px] sm:text-[10px] text-gray-500 font-mono truncate">
+                                    <span className="hidden sm:inline">[Klik kotak atau tekan Spasi untuk lanjut]</span>
+                                    <span className="sm:hidden">[Ketuk untuk lanjut]</span>
                                 </span>
                             </div>
 
                             {/* Main Typewriter Text (Clean Literary Prose) */}
-                            <p className="font-sans text-xs sm:text-sm text-[#142320] leading-relaxed min-h-10.5 select-text">
+                            <p className="font-sans text-xs sm:text-sm text-[#142320] leading-relaxed min-h-10 select-text">
                                 {displayedText}
                             </p>
 
                             {/* Bottom Indicators */}
                             <div className="flex items-center justify-between pt-1">
-                                <div className="text-[10px] text-gray-400 font-mono">
+                                <div className="text-[9px] sm:text-[10px] text-gray-400 font-mono truncate">
                                     AEVYRA Medical Story Engine • {activeChar.name}
                                 </div>
 
                                 {/* Bouncing Red Arrow (1:1 with Screenshot) */}
                                 {!isTyping && gameState !== 'chapter_outcome' && (
-                                    <div className="text-[#c94a38] text-sm animate-bounce font-black select-none">
+                                    <div className="text-[#c94a38] text-xs sm:text-sm animate-bounce font-black select-none shrink-0 ml-1">
                                         ▼
                                     </div>
                                 )}
@@ -2360,9 +2364,9 @@ export default function MetabolicStoryGame() {
                                             e.stopPropagation();
                                             handleNextChapter();
                                         }}
-                                        className="px-4 py-1.5 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-container transition-all active:scale-95 shadow-md flex items-center gap-1"
+                                        className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary text-white text-[11px] sm:text-xs font-bold hover:bg-primary-container transition-all active:scale-95 shadow-md flex items-center gap-1 shrink-0"
                                     >
-                                        <span>Lanjut ke Babak Berikutnya</span>
+                                        <span>Lanjut Babak</span>
                                         <span>→</span>
                                     </button>
                                 )}

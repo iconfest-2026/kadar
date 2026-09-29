@@ -242,14 +242,14 @@ export default function MemberFeaturesSection() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
                     <div className="space-y-1">
-                        <span className="text-[11px] text-primary font-bold tracking-wider uppercase block">
+                        <span className="text-[10px] sm:text-[11px] text-primary font-bold tracking-wider uppercase block">
                             Ringkasan Fitur Ekosistem AEVYRA
                         </span>
-                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#142320]">
+                        <h2 className="font-serif text-xl sm:text-2xl lg:text-[32px] font-normal text-[#142320]">
                             Solusi lengkap untuk kesehatan preventif Anda.
                         </h2>
                     </div>
-                    <p className="text-xs sm:text-sm text-[#546661] max-w-md leading-relaxed">
+                    <p className="text-[11px] sm:text-sm text-[#546661] max-w-md leading-relaxed">
                         Pilih modul di bawah untuk mencoba dan mengakses fitur klinis secara langsung.
                     </p>
                 </div>
@@ -261,7 +261,7 @@ export default function MemberFeaturesSection() {
                             key={cat.id}
                             type="button"
                             onClick={() => setActiveCategory(cat.id)}
-                            className={`min-h-8 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                            className={`min-h-7.5 sm:min-h-8 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                                 activeCategory === cat.id
                                     ? 'bg-primary text-white shadow-2xs font-semibold'
                                     : 'bg-white/90 text-[#52645f] hover:bg-[#edf5f0] border border-surface-container'
@@ -294,7 +294,7 @@ export default function MemberFeaturesSection() {
                                     </span>
                                 </div>
 
-                                <h3 className="font-serif font-bold text-base sm:text-lg text-[#142320] leading-snug group-hover:text-primary transition-colors">
+                                <h3 className="font-serif font-bold text-sm sm:text-base text-[#142320] leading-snug group-hover:text-primary transition-colors">
                                     {item.title}
                                 </h3>
 

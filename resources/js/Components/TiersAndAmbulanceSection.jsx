@@ -100,13 +100,13 @@ export default function TiersAndAmbulanceSection() {
                 {/* 1. Membership Tiers Section */}
                 <div className="space-y-5 sm:space-y-6">
                     <div className="text-center max-w-2xl mx-auto space-y-2">
-                        <span className="text-[11px] text-primary font-medium tracking-wide uppercase block">
+                        <span className="text-[10px] sm:text-[11px] text-primary font-medium tracking-wide uppercase block">
                             Pilihan Keanggotaan Transparan
                         </span>
-                        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#142320]">
+                        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-normal text-[#142320]">
                             Investasi terukur untuk metabolisme jangka panjang.
                         </h2>
-                        <p className="text-xs sm:text-sm text-[#546661] max-w-lg mx-auto leading-relaxed">
+                        <p className="text-[11px] sm:text-sm text-[#546661] max-w-lg mx-auto leading-relaxed">
                             Mulai tanpa biaya untuk pemantauan mandiri, atau pilih bimbingan klinis terpadu bersama tim dokter spesialis kami.
                         </p>
 
@@ -116,7 +116,7 @@ export default function TiersAndAmbulanceSection() {
                                 <button
                                     type="button"
                                     onClick={() => setBillingCycle('monthly')}
-                                    className={`min-h-10.5 px-3.5 sm:px-4 py-2 rounded-full text-[11px] sm:text-xs transition-all whitespace-nowrap flex items-center justify-center ${
+                                    className={`min-h-9 sm:min-h-10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs transition-all whitespace-nowrap flex items-center justify-center ${
                                         billingCycle === 'monthly'
                                             ? 'bg-white text-primary font-medium shadow-xs'
                                             : 'text-[#52645f] hover:text-primary'
@@ -127,7 +127,7 @@ export default function TiersAndAmbulanceSection() {
                                 <button
                                     type="button"
                                     onClick={() => setBillingCycle('yearly')}
-                                    className={`min-h-10.5 px-3.5 sm:px-4 py-2 rounded-full text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
+                                    className={`min-h-9 sm:min-h-10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
                                         billingCycle === 'yearly'
                                             ? 'bg-white text-primary font-medium shadow-xs'
                                             : 'text-[#52645f] hover:text-primary'
@@ -156,7 +156,7 @@ export default function TiersAndAmbulanceSection() {
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <h3 className="font-serif text-xl sm:text-2xl font-medium text-[#182926]">
+                                            <h3 className="font-serif text-lg sm:text-xl font-medium text-[#182926]">
                                                 {t.name}
                                             </h3>
                                             <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-medium mt-1 inline-block ${t.tagStyle}`}>
@@ -168,7 +168,7 @@ export default function TiersAndAmbulanceSection() {
                                     {/* Price Box */}
                                     <div className="pt-1">
                                         <div className="flex items-baseline gap-1">
-                                            <span className="font-serif text-3xl sm:text-4xl font-normal text-[#182926]">
+                                            <span className="font-serif text-2xl sm:text-3xl font-normal text-[#182926]">
                                                 {billingCycle === 'yearly' ? t.priceYearly : t.priceMonthly}
                                             </span>
                                             <span className="text-xs text-[#63746f]">
@@ -202,7 +202,7 @@ export default function TiersAndAmbulanceSection() {
                                 <div className="pt-3">
                                     <Link
                                         href="/register"
-                                        className={`w-full min-h-12 py-3 rounded-full text-xs font-medium flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
+                                        className={`w-full min-h-10 sm:min-h-11 py-2.5 rounded-full text-xs font-medium flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
                                             t.isPopular
                                                 ? 'bg-primary text-white hover:bg-primary-container shadow-[0_2px_12px_rgba(0,67,62,0.15)]'
                                                 : 'bg-white text-[#2a3d38] border border-[#d2dfd8] hover:bg-[#f4faf6]'
@@ -218,7 +218,7 @@ export default function TiersAndAmbulanceSection() {
                 </div>
 
                 {/* 2. Emergency Response 119 - Crisp Clinical Telemetry (AEVYRA Theme Aligned) */}
-                <div className="p-5 sm:p-7 lg:p-8 bg-white/95 rounded-3xl border border-surface-container-high shadow-[0_8px_32px_rgba(0,40,36,0.04)] relative overflow-hidden backdrop-blur-sm" id="ambulance">
+                <div className="p-5 sm:p-7 lg:p-8 bg-white/95 rounded-3xl border border-surface-container-high shadow-[0_8px_32px_rgba(0,40,36,0.04)] relative overflow-hidden backdrop-blur-xs" id="ambulance">
                     {/* Ambient subtle glow */}
                     <div className="absolute -top-24 -right-24 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -226,7 +226,7 @@ export default function TiersAndAmbulanceSection() {
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
                         <div className="lg:col-span-7 space-y-4">
                             {/* Live Clinical Beacon Header */}
-                            <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#edf5f0] border border-[#d2e5da] text-[#1c6454] text-[11px] font-medium tracking-wide">
+                            <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#edf5f0] border border-[#d2e5da] text-[#1c6454] text-[10px] sm:text-[11px] font-medium tracking-wide">
                                 <span className="relative flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
@@ -234,11 +234,11 @@ export default function TiersAndAmbulanceSection() {
                                 <span>Akses Siaga Darurat 24 Jam • Integrasi Posko 119 Kemenkes RI</span>
                             </div>
 
-                            <h3 className="font-serif text-2xl sm:text-3xl lg:text-[32px] font-normal text-[#142320] leading-tight">
+                            <h3 className="font-serif text-xl sm:text-2xl lg:text-[28px] font-normal text-[#142320] leading-tight">
                                 Panggilan darurat ambulan berbasis koordinat GPS faskes.
                             </h3>
 
-                            <p className="text-xs sm:text-sm leading-relaxed max-w-xl text-[#52645f]">
+                            <p className="text-[11px] sm:text-sm leading-relaxed max-w-xl text-[#52645f]">
                                 Saat terjadi penurunan glukosa drastis (hipoglikemia akut), nyeri dada mendadak, atau keluhan darurat di rumah, transmisi koordinat otomatis mempercepat kedatangan armada ambulan faskes terdekat tanpa kendala birokrasi.
                             </p>
 

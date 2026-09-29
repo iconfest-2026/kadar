@@ -374,10 +374,10 @@ export default function Privacy(props) {
                             <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
                             <span>Kepatuhan Regulasi Nasional • UU No. 27 Tahun 2022 &amp; Permenkes No. 24/2022</span>
                         </div>
-                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
+                        <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
                             Kebijakan Privasi &amp; Pelindungan Data Medis Pribadi.
                         </h1>
-                        <p className="text-sm sm:text-base text-[#4a5e57] max-w-3xl leading-relaxed">
+                        <p className="text-[11px] sm:text-base text-[#4a5e57] max-w-3xl leading-relaxed">
                             Penjelasan transparan dan menyeluruh mengenai tata kelola pengumpulan, pemrosesan, perlindungan enkripsi AES-256, serta hak-hak hukum Anda selaku subjek data kesehatan di platform AEVYRA.
                         </p>
 

@@ -193,10 +193,10 @@ export default function Faq(props) {
                             <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
                             <span>Pusat Bantuan • Direktori Pengetahuan Klinis Lengkap (Total 20 Pertanyaan)</span>
                         </div>
-                        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
+                        <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
                             Jawaban Lengkap seputar Skrining, Data Klinis &amp; Layanan.
                         </h1>
-                        <p className="text-sm sm:text-base text-[#4a5e57] max-w-2xl leading-relaxed">
+                        <p className="text-[11px] sm:text-base text-[#4a5e57] max-w-2xl leading-relaxed">
                             Pelajari cara kerja algoritma visi gizi, landasan ilmiah beban glikemik PERKENI, jaminan keamanan privasi data, dan cara memaksimalkan pendampingan dokter.
                         </p>
                     </div>

@@ -82,10 +82,10 @@ export default function Register() {
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 <span>Pendaftaran Pengguna Baru Terverifikasi</span>
                             </div>
-                            <h1 className="font-heading font-black text-2xl sm:text-3xl text-primary tracking-tight">
+                            <h1 className="font-heading font-black text-xl sm:text-3xl text-primary tracking-tight">
                                 Buat Akun AEVYRA
                             </h1>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
+                            <p className="text-[11px] sm:text-xs text-on-surface-variant leading-relaxed">
                                 {currentConfig.desc}
                             </p>
                         </div>
@@ -99,15 +99,13 @@ export default function Register() {
                                 <button
                                     type="button"
                                     onClick={() => handleAccountTypeChange('member')}
-                                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                                        accountType === 'member'
+                                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${accountType === 'member'
                                             ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
                                             : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
-                                    }`}
+                                        }`}
                                 >
-                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                                        accountType === 'member' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
-                                    }`}>
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${accountType === 'member' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
+                                        }`}>
                                         <span className="material-symbols-outlined text-[18px]">person</span>
                                     </div>
                                     <div className="overflow-hidden">
@@ -123,15 +121,13 @@ export default function Register() {
                                 <button
                                     type="button"
                                     onClick={() => handleAccountTypeChange('instructor')}
-                                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                                        accountType === 'instructor'
+                                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${accountType === 'instructor'
                                             ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
                                             : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
-                                    }`}
+                                        }`}
                                 >
-                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                                        accountType === 'instructor' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
-                                    }`}>
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${accountType === 'instructor' ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
+                                        }`}>
                                         <span className="material-symbols-outlined text-[18px]">health_and_safety</span>
                                     </div>
                                     <div className="overflow-hidden">

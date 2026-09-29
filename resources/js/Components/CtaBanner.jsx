@@ -27,22 +27,22 @@ export default function CtaBanner() {
                 {/* Content */}
                 <div className="relative z-10 space-y-3.5 max-w-2xl mx-auto">
                     {/* Editorial Headline */}
-                    <h3 className="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-[1.2] font-normal text-white">
+                    <h3 className="font-serif text-xl sm:text-3xl lg:text-[42px] leading-[1.2] font-normal text-white">
                         Kendalikan glukosa darah &amp; lindungi metabolisme Anda hari ini.
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-[#d4ebe0] max-w-lg mx-auto leading-relaxed">
+                    <p className="text-[11px] sm:text-sm text-[#d4ebe0] max-w-lg mx-auto leading-relaxed">
                         Arahkan kamera ke label kemasan makanan Anda. Dapatkan pemetaan beban glikemik seketika, rekomendasi gizi dari dokter konsultan, dan panduan remisi bertahap.
                     </p>
 
                     {/* Action Buttons */}
-                    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+                    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
                         {user ? (
                             <Link
                                 href={dashboardHref}
-                                className="inline-flex items-center justify-center min-h-12 px-7 py-3.5 rounded-full bg-white text-primary text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-sm text-center gap-2"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white text-primary text-[11px] sm:text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-xs text-center gap-2"
                             >
-                                <span className="material-symbols-outlined text-[18px]">
+                                <span className="material-symbols-outlined text-[16px] sm:text-[18px]">
                                     {isAdmin ? 'admin_panel_settings' : isInstructor ? 'clinical_notes' : 'space_dashboard'}
                                 </span>
                                 <span>{dashboardLabel}</span>
@@ -51,7 +51,7 @@ export default function CtaBanner() {
                         ) : (
                             <Link
                                 href="/register"
-                                className="inline-flex items-center justify-center min-h-12 px-7 py-3.5 rounded-full bg-white text-primary text-xs font-medium hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-sm text-center"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white text-primary text-[11px] sm:text-xs font-medium hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-xs text-center"
                             >
                                 <span>Mulai Skrining Mandiri Bebas Biaya</span>
                                 <span className="ml-1 text-xs">→</span>
@@ -59,14 +59,14 @@ export default function CtaBanner() {
                         )}
                         <a
                             href="mailto:care@aevyra.health"
-                            className="inline-flex items-center justify-center min-h-12 px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-sm text-white text-xs font-medium hover:bg-white/15 transition-all active:scale-95 border border-white/20 text-center"
+                            className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 transition-all active:scale-95 border border-white/20 text-center"
                         >
                             <span>Tanya Edukator Klinis</span>
                         </a>
                     </div>
 
                     {/* Factual Trust Footnote */}
-                    <div className="pt-5 text-[11px] text-[#b3dac8] border-t border-white/10 flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+                    <div className="pt-4 sm:pt-5 text-[10px] sm:text-[11px] text-[#b3dac8] border-t border-white/10 flex flex-wrap items-center justify-center gap-2 sm:gap-5">
                         <span>Pedoman Klinis PERKENI</span>
                         <span>•</span>
                         <span>Verifikasi Mandiri Label BPOM</span>
