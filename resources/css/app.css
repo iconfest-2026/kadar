@@ -191,3 +191,51 @@
         scroll-behavior: smooth;
     }
 }
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-drawer-in {
+    animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes scanLaser {
+    0% {
+        top: 0%;
+        opacity: 0.9;
+    }
+    50% {
+        top: 96%;
+        opacity: 1;
+    }
+    100% {
+        top: 0%;
+        opacity: 0.9;
+    }
+}
+
+.animate-laser-scan {
+    position: absolute;
+    animation: scanLaser 2.2s infinite ease-in-out;
+}
+
+

@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
-import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import AdminModal from '@/Components/Admin/AdminModal';
+import { Table, Modal, Button } from '@/Components/UI';
 
 export default function AuditTrail({ auditLogs = { data: [], links: [] }, filters = {} }) {
     const [action, setAction] = useState(filters.action || '');
     const [actorRole, setActorRole] = useState(filters.actor_role || '');
     const [selectedLog, setSelectedLog] = useState(null);
+    const isFirstRender = useRef(true);
 
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         const timeoutId = setTimeout(() => {
             router.get('/admin/audit', { action, actor_role: actorRole }, {
                 preserveState: true,
@@ -23,13 +28,36 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
         return () => clearTimeout(timeoutId);
     }, [action, actorRole]);
 
+    const logResult = (res) => {
+        if (!res || res === 'ALLOWED' || res === 'SUCCESS') return 'DIIZINKAN';
+        return 'DITOLAK';
+    };
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '-';
+        try {
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return String(dateStr);
+            return date.toLocaleString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+        } catch {
+            return String(dateStr);
+        }
+    };
+
     const columns = [
         {
             key: 'action',
             label: 'Nama Aksi (Action Key)',
             render: (row) => (
                 <AdminBadge variant="admin" size="xs">
-                    {row.action}
+                    {row.action || '-'}
                 </AdminBadge>
             ),
         },
@@ -68,14 +96,7 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
             label: 'Timestamp UTC',
             render: (row) => (
                 <span className="font-label-mono text-[11px] text-on-surface-variant">
-                    {new Date(row.created_at).toLocaleString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                    })}
+                    {formatDate(row.created_at)}
                 </span>
             ),
         },
@@ -84,33 +105,29 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
             label: 'Rincian',
             align: 'right',
             render: (row) => (
-                <button
+                <Button
                     type="button"
+                    size="xs"
+                    variant="outline"
+                    leftIcon="data_object"
                     onClick={() => setSelectedLog(row)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-primary/5 text-primary border border-primary/15 font-semibold text-xs transition-all shadow-xs ml-auto"
                 >
-                    <span className="material-symbols-outlined text-[14px]">data_object</span>
-                    <span>Payload</span>
-                </button>
+                    Payload
+                </Button>
             ),
         },
     ];
 
-    const logResult = (res) => {
-        if (!res || res === 'ALLOWED' || res === 'SUCCESS') return 'DIIZINKAN';
-        return 'DITOLAK';
-    };
-
     return (
         <AdminLayout activeNav="audit" title="Buku Besar Audit Forensik">
-            <Head title="Audit Trail Forensik — AEVYRA" />
+            <Head title="Audit Trail Forensik - AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
                     title="Buku Besar Audit Forensik Imutabel (Append-Only)"
                     subtitle="Pencatatan kriptografis setiap perubahan state data, mutasi hak akses pengguna, otorisasi peran, dan tindakan sistemik platform AEVYRA."
                     icon="shield"
-                    badge={<AdminBadge variant="emerald">Cryptographic Hash Validated</AdminBadge>}
+                    badge={<AdminBadge variant="active">Cryptographic Hash Validated</AdminBadge>}
                 />
 
                 <AdminFilterBar
@@ -137,7 +154,7 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
                     }}
                 />
 
-                <AdminDataTable
+                <Table
                     columns={columns}
                     data={auditLogs}
                     emptyMessage="Tidak ada rekaman audit log yang cocok."
@@ -145,26 +162,32 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
                 />
 
                 {/* Payload Inspection Modal */}
-                <AdminModal
-                    isOpen={!!selectedLog}
+                <Modal
+                    isOpen={Boolean(selectedLog)}
                     onClose={() => setSelectedLog(null)}
                     title="Metadata Konteks Audit Forensik"
                     subtitle={`Aksi: ${selectedLog?.action} • Aktor: ${selectedLog?.actor?.name || 'Sistem'}`}
                     icon="shield"
+                    maxWidth="md"
                     footer={
-                        <button
+                        <Button
                             type="button"
+                            variant="primary"
+                            size="sm"
                             onClick={() => setSelectedLog(null)}
-                            className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-semibold"
                         >
                             Tutup
-                        </button>
+                        </Button>
                     }
                 >
                     {selectedLog && (
                         <div className="space-y-4">
                             <div className="bg-[#1e2926] text-emerald-300 p-4 rounded-2xl font-label-mono text-xs overflow-x-auto max-h-64 scrollbar-thin">
-                                <pre>{JSON.stringify(selectedLog.context || { info: 'Tidak ada perubahan state spesifik tercatat' }, null, 2)}</pre>
+                                <pre>
+                                    {typeof selectedLog.context === 'string'
+                                        ? selectedLog.context
+                                        : JSON.stringify(selectedLog.context || { info: 'Tidak ada perubahan state spesifik tercatat' }, null, 2)}
+                                </pre>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3 text-xs">
@@ -179,7 +202,7 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
                             </div>
                         </div>
                     )}
-                </AdminModal>
+                </Modal>
             </div>
         </AdminLayout>
     );

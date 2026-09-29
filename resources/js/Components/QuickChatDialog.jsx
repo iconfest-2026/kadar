@@ -167,7 +167,7 @@ export default function QuickChatDialog() {
                             className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-xs"
                             aria-label="Tutup percakapan"
                         >
-                            ✕
+                            <span className="material-symbols-outlined text-[15px]">close</span>
                         </button>
                     </div>
 
@@ -277,10 +277,10 @@ export default function QuickChatDialog() {
                             <span>Chat bebas dengan AI?</span>
                             <a
                                 href="/login"
-                                className="font-semibold text-primary hover:underline flex items-center gap-0.5"
+                                className="font-semibold text-primary hover:underline inline-flex items-center gap-0.5"
                             >
                                 <span>Masuk ke Akun</span>
-                                <span>→</span>
+                                <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
                             </a>
                         </div>
                     </div>

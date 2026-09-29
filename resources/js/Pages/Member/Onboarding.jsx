@@ -32,7 +32,7 @@ export default function Onboarding({ user, existingProfile, existingLifestyle, e
 
     return (
         <AppLayout title="Inisialisasi Profil & Baseline" activeTab="onboarding">
-            <Head title="Pengaturan Profil Baseline — AEVYRA" />
+            <Head title="Pengaturan Profil Baseline - AEVYRA" />
 
             <div className="max-w-3xl mx-auto space-y-6 py-4">
                 <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-surface-container shadow-xs space-y-2">

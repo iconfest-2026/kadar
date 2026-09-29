@@ -1,37 +1,74 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 
-export default function MemberFloatingAiChat() {
-    const [isOpen, setIsOpen] = useState(false);
+export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: propOnClose }) {
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isOpen = propIsOpen !== undefined ? propIsOpen : internalOpen;
+
+    const handleClose = () => {
+        if (propOnClose) {
+            propOnClose();
+        }
+        setInternalOpen(false);
+    };
+
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [conversationId, setConversationId] = useState(null);
-    const [activeProvider, setActiveProvider] = useState('Gemini Multi-Model');
+    const [activeProvider, setActiveProvider] = useState('Gemini 3.8 Flash');
     const [hasLoadedHistory, setHasLoadedHistory] = useState(false);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
     const quickPrompts = [
-        'Berapa batas konsumsi gula harian saya?',
-        'Rekomendasi menu sarapan rendah glikemik',
-        'Bagaimana cara mencegah kantuk setelah makan siang?',
+        'Berapa batas aman konsumsi gula harian saya?',
+        'Rekomendasi menu sarapan rendah lonjakan glikemik',
+        'Bagaimana cara mencegah kantuk berat setelah makan siang?',
         'Tips menurunkan resistensi insulin secara alami',
+        'Berapa target hidrasi air putih untuk berat badan saya?',
     ];
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // Listen to global open-ai-chat event from anywhere (e.g. Dashboard hero card or sidebar)
+    useEffect(() => {
+        const handleOpenEvent = (e) => {
+            setInternalOpen(true);
+            if (e.detail?.prompt) {
+                setTimeout(() => {
+                    handleSendMessage(e.detail.prompt);
+                }, 100);
+            }
+        };
+        window.addEventListener('open-ai-chat', handleOpenEvent);
+        return () => window.removeEventListener('open-ai-chat', handleOpenEvent);
+    }, [conversationId]);
+
+    // Handle ESC key to close drawer
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                handleClose();
+            }
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [isOpen]);
+
     useEffect(() => {
         if (isOpen) {
             scrollToBottom();
-            inputRef.current?.focus();
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 150);
             if (!hasLoadedHistory) {
                 loadHistory();
             }
         }
-    }, [isOpen, messages, isLoading]);
+    }, [isOpen, messages.length, isLoading]);
 
     const loadHistory = async () => {
         try {
@@ -46,6 +83,7 @@ export default function MemberFloatingAiChat() {
                             id: m.id,
                             role: m.role?.toLowerCase() === 'assistant' ? 'assistant' : 'user',
                             content: m.content,
+                            provider: m.provider_used || 'Gemini AI',
                             time: new Date(m.created_at || Date.now()).toLocaleTimeString([], {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -59,8 +97,9 @@ export default function MemberFloatingAiChat() {
                             id: 'welcome-1',
                             role: 'assistant',
                             content:
-                                'Halo! Saya **Asisten AI Preventif AEVYRA** Anda. Silakan ketik pertanyaan seputar pola makan, pemahaman label gizi, aktivitas fisik, atau strategi menjaga kestabilan glukosa harian Anda.',
+                                'Saya Asisten AI Preventif AEVYRA. Silakan ketik pertanyaan seputar pola makan gizi seimbang, tidur, aktivitas fisik, atau strategi menjaga kestabilan glukosa harian Anda.',
                             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                            provider: 'Gemini 3.8 Flash',
                         },
                     ]);
                 }
@@ -110,7 +149,7 @@ export default function MemberFloatingAiChat() {
                         id: `ai-${Date.now()}`,
                         role: 'assistant',
                         content: data.reply,
-                        provider: data.provider_used || 'Gemini AI',
+                        provider: data.provider_used || 'Gemini 3.8 Flash',
                         is_safety_triggered: data.is_safety_triggered || false,
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     };
@@ -135,6 +174,7 @@ export default function MemberFloatingAiChat() {
                     content:
                         'Maaf, terjadi gangguan sementara saat menghubungkan ke asisten AI. Silakan coba kembali sesaat lagi.',
                     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    provider: 'Fallback Engine',
                 },
             ]);
         } finally {
@@ -149,207 +189,400 @@ export default function MemberFloatingAiChat() {
         }
     };
 
-    // Helper to format simple markdown bolding and bullet lines
-    const renderFormattedText = (text) => {
-        if (!text) return null;
-        const paragraphs = text.split('\n');
-        return paragraphs.map((para, pIdx) => {
-            if (!para.trim()) {
-                return <div key={pIdx} className="h-1.5" />;
-            }
-
-            // Bold matcher
-            const parts = para.split(/(\*\*.*?\*\*)/g);
-            const renderedParts = parts.map((part, idx) => {
-                if (part.startsWith('**') && part.endsWith('**')) {
-                    return <strong key={idx} className="font-semibold text-primary">{part.slice(2, -2)}</strong>;
-                }
-                return part;
-            });
-
-            if (para.trim().startsWith('- ') || para.trim().startsWith('* ')) {
-                return (
-                    <li key={pIdx} className="ml-4 list-disc text-xs leading-relaxed my-0.5">
-                        {renderedParts}
-                    </li>
-                );
-            }
-
-            if (para.trim().startsWith('### ')) {
-                return (
-                    <h5 key={pIdx} className="font-heading font-bold text-xs text-primary mt-2 mb-1">
-                        {para.replace('### ', '')}
-                    </h5>
-                );
-            }
-
-            return (
-                <p key={pIdx} className="text-xs leading-relaxed my-1">
-                    {renderedParts}
-                </p>
-            );
-        });
+    const handleClearChat = () => {
+        setMessages([
+            {
+                id: `welcome-${Date.now()}`,
+                role: 'assistant',
+                content:
+                    'Percakapan telah direset. Silakan tanyakan hal baru seputar gaya hidup sehat, evaluasi makanan, atau tips metabolisme Anda.',
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                provider: activeProvider,
+            },
+        ]);
+        setConversationId(null);
     };
 
-    return (
-        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end print:hidden">
-            {/* Chat Box Popup */}
-            {isOpen && (
-                <div className="w-[calc(100vw-32px)] sm:w-96 h-135 max-h-[82vh] mb-3 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/80 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
-                    {/* Header */}
-                    <div className="p-3.5 bg-primary text-white flex items-center justify-between border-b border-primary-container shadow-xs">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center p-1.5 shrink-0 border border-white/20">
-                                <span className="material-symbols-outlined text-[18px] text-white">smart_toy</span>
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="font-heading font-bold text-xs block leading-tight">
-                                        Asisten AI Preventif
-                                    </span>
-                                    <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-400/20 text-emerald-200 font-mono font-semibold">
-                                        Aktif
-                                    </span>
+    // Helper to format clean text without asterisks, with dividers, bullets, and numbered badges
+    const renderFormattedText = (content) => {
+        if (!content) return null;
+
+        // 1. Strip residual asterisks
+        const clean = content.replace(/\*/g, '');
+
+        // 2. Normalize text: ensure bullet points and numbered points start on separate lines
+        const normalized = clean
+            .replace(/([^\n])\s*[-•]\s+/g, '$1\n- ')
+            .replace(/([^\n])\s+(\d+)\.\s+/g, '$1\n$2. ');
+
+        const rawLines = normalized.split('\n');
+        const elements = [];
+        let currentBullets = [];
+        let currentNumbers = [];
+
+        const flushLists = () => {
+            if (currentBullets.length > 0) {
+                elements.push({
+                    type: 'bullet-group',
+                    items: [...currentBullets],
+                });
+                currentBullets = [];
+            }
+            if (currentNumbers.length > 0) {
+                elements.push({
+                    type: 'number-group',
+                    items: [...currentNumbers],
+                });
+                currentNumbers = [];
+            }
+        };
+
+        for (let i = 0; i < rawLines.length; i++) {
+            const line = rawLines[i].trim();
+            if (!line) {
+                flushLists();
+                continue;
+            }
+
+            // Bullet item
+            if (line.startsWith('- ') || line.startsWith('• ')) {
+                if (currentNumbers.length > 0) flushLists();
+                currentBullets.push(line.replace(/^[-•]\s+/, '').trim());
+                continue;
+            }
+
+            // Numbered item
+            const numMatch = line.match(/^(\d+)\.\s+(.*)$/);
+            if (numMatch) {
+                if (currentBullets.length > 0) flushLists();
+                currentNumbers.push({
+                    num: numMatch[1],
+                    text: numMatch[2].trim(),
+                });
+                continue;
+            }
+
+            // Flush open lists
+            flushLists();
+
+            // Detect section headers
+            const isHeader =
+                line.endsWith(':') ||
+                line.startsWith('###') ||
+                (line.length < 80 &&
+                    /^(Gejala|Tanda|Penyebab|Langkah|Cara|Tips|Prinsip|Rekomendasi|Faktor|Perhatian|Pencegahan|Catatan|Penting|Karakteristik)/i.test(
+                        line
+                    ));
+
+            if (isHeader) {
+                elements.push({
+                    type: 'header',
+                    text: line.replace(/^###\s*/, ''),
+                });
+            } else {
+                elements.push({
+                    type: 'paragraph',
+                    text: line,
+                });
+            }
+        }
+        flushLists();
+
+        return (
+            <div className="space-y-2 text-xs sm:text-[13px] leading-relaxed">
+                {elements.map((el, elIdx) => {
+                    if (el.type === 'header') {
+                        return (
+                            <div
+                                key={elIdx}
+                                className="pt-2 mt-2 first:mt-0 first:pt-0 border-t border-[#e2e8e4]"
+                            >
+                                <div className="flex items-center gap-1.5 text-[#008069] font-bold text-[12px] mb-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#008069] shrink-0" />
+                                    <span>{el.text}</span>
                                 </div>
-                                <span className="text-[10px] text-[#cbe5d8] block">
-                                    Terhubung Multi-Model • Bebas Ketik
+                            </div>
+                        );
+                    }
+
+                    if (el.type === 'bullet-group') {
+                        return (
+                            <div key={elIdx} className="space-y-1.5 pl-0.5 my-1.5">
+                                {el.items.map((item, itemIdx) => (
+                                    <div key={itemIdx} className="flex items-start gap-2 text-[#111b21]">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#008069] mt-1.5 shrink-0" />
+                                        <span className="leading-relaxed flex-1">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    if (el.type === 'number-group') {
+                        return (
+                            <div key={elIdx} className="space-y-2 pl-0.5 my-2">
+                                {el.items.map((item, itemIdx) => (
+                                    <div key={itemIdx} className="flex items-start gap-2.5 text-[#111b21]">
+                                        <span className="w-4.5 h-4.5 rounded-full bg-[#008069]/10 text-[#008069] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5 border border-[#008069]/20">
+                                            {item.num}
+                                        </span>
+                                        <span className="leading-relaxed flex-1">{item.text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <p key={elIdx} className="text-[#111b21] leading-relaxed my-1">
+                            {el.text}
+                        </p>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 overflow-hidden print:hidden">
+            {/* Backdrop Overlay */}
+            <div
+                className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300"
+                onClick={handleClose}
+                aria-label="Tutup Panel Chat"
+            />
+
+            {/* WhatsApp Styled Side Drawer Panel */}
+            <aside
+                className="fixed inset-y-0 right-0 z-50 w-full sm:w-110 md:w-115 max-w-full bg-[#efeae2] shadow-2xl flex flex-col border-l border-[#d1d7db] animate-drawer-in"
+                role="dialog"
+                aria-label="Chat AI Konsultasi Gaya Hidup"
+            >
+                {/* 1. Authentic WhatsApp Dark Emerald Header */}
+                <div className="h-16 bg-[#008069] text-white px-3 sm:px-4 flex items-center justify-between shadow-xs select-none shrink-0 z-20">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <button
+                            type="button"
+                            onClick={handleClose}
+                            className="p-1 rounded-full hover:bg-black/10 text-white transition-colors cursor-pointer shrink-0"
+                            title="Tutup Chat"
+                            aria-label="Tutup"
+                        >
+                            <span className="material-symbols-outlined text-[22px]">arrow_back</span>
+                        </button>
+
+                        <div className="relative shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-[#005c4b] border border-white/20 flex items-center justify-center text-white shadow-xs">
+                                <span className="material-symbols-outlined text-[22px]">smart_toy</span>
+                            </div>
+                            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#25d366] ring-2 ring-[#008069]"></span>
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                                <h3 className="font-heading font-bold text-sm text-white truncate leading-tight">
+                                    Asisten AI AEVYRA
+                                </h3>
+                                <span className="material-symbols-outlined text-[14px] text-[#25d366]" title="Terverifikasi Preventif">
+                                    verified
                                 </span>
                             </div>
-                        </div>
-
-                        <div className="flex items-center gap-1">
-                            <Link
-                                href="/member/consultations-hub"
-                                title="Buka Konsultasi Dokter & Riwayat Lengkap"
-                                className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-xs"
-                            >
-                                <span className="material-symbols-outlined text-[15px]">open_in_new</span>
-                            </Link>
-                            <button
-                                type="button"
-                                onClick={() => setIsOpen(false)}
-                                className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
-                                aria-label="Tutup percakapan"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">close</span>
-                            </button>
+                            {isLoading ? (
+                                <span className="text-[11px] text-[#d9fdd3] leading-tight font-medium animate-pulse flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#25d366]"></span>
+                                    <span>sedang mengetik...</span>
+                                </span>
+                            ) : (
+                                <span className="text-[11px] text-[#d9fdd3] block leading-tight font-medium">
+                                    online • Konsultasi Terpandu Klinis
+                                </span>
+                            )}
                         </div>
                     </div>
 
-                    {/* Messages Scroll Area */}
-                    <div className="flex-1 p-3.5 space-y-3.5 overflow-y-auto bg-[#fafcfb]">
-                        {messages.map((msg) => {
-                            const isAssistant = msg.role === 'assistant';
-                            return (
+                    <div className="flex items-center gap-1 shrink-0">
+                        <button
+                            type="button"
+                            onClick={handleClearChat}
+                            className="p-1.5 rounded-full hover:bg-black/10 text-white/90 hover:text-white transition-colors cursor-pointer"
+                            title="Mulai Sesi Chat Baru"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">restart_alt</span>
+                        </button>
+
+                        <Link
+                            href="/member/consultations-hub"
+                            className="p-1.5 rounded-full hover:bg-black/10 text-white/90 hover:text-white transition-colors cursor-pointer hidden sm:block"
+                            title="Pusat Konsultasi Lengkap & Dokter IDI"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">support_agent</span>
+                        </Link>
+
+                        <button
+                            type="button"
+                            onClick={handleClose}
+                            className="p-1.5 rounded-full hover:bg-black/10 text-white/90 hover:text-white transition-colors cursor-pointer"
+                            title="Tutup Panel"
+                        >
+                            <span className="material-symbols-outlined text-[22px]">close</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* 2. Chat Scroll Area with WhatsApp Pattern Wallpaper */}
+                <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3 relative">
+                    {/* Subtle WhatsApp-style wallpaper doodle pattern */}
+                    <div
+                        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+                        style={{
+                            backgroundImage: `radial-gradient(#005c4b 1.5px, transparent 1.5px), radial-gradient(#008069 1.5px, #efeae2 1.5px)`,
+                            backgroundSize: '24px 24px',
+                            backgroundPosition: '0 0, 12px 12px',
+                        }}
+                    />
+
+                    {/* WhatsApp Security / Clinical Advisory Pill */}
+                    <div className="flex justify-center my-1 relative z-10">
+                        <div className="bg-[#ffeecd] border border-[#ffe082]/70 text-[#7a5e17] text-[10px] px-3.5 py-1.5 rounded-xl max-w-[95%] text-center shadow-[0_1px_0.5px_rgba(11,20,26,0.08)] flex items-center gap-1.5 justify-center leading-relaxed">
+                            <span className="material-symbols-outlined text-[14px] text-[#b78103] shrink-0">
+                                lock
+                            </span>
+                            <span>Percakapan preventif terenkripsi &amp; terpandu batas klinis IDI/Kemenkes.</span>
+                        </div>
+                    </div>
+
+                    {/* WhatsApp Centered Date Pill */}
+                    <div className="flex justify-center my-2 sticky top-1 z-10">
+                        <span className="bg-white/95 text-[#54656f] text-[10px] font-semibold px-3 py-1 rounded-lg shadow-[0_1px_1px_rgba(11,20,26,0.12)] uppercase tracking-wider">
+                            HARI INI
+                        </span>
+                    </div>
+
+                    {/* Messages Stream */}
+                    {messages.map((msg) => {
+                        const isAssistant = msg.role === 'assistant';
+                        return (
+                            <div
+                                key={msg.id}
+                                className={`flex flex-col relative z-10 ${
+                                    isAssistant ? 'items-start' : 'items-end'
+                                }`}
+                            >
                                 <div
-                                    key={msg.id}
-                                    className={`flex flex-col ${isAssistant ? 'items-start' : 'items-end'}`}
+                                    className={`max-w-[88%] p-3 sm:p-3.5 rounded-2xl shadow-[0_1px_0.5px_rgba(11,20,26,0.13)] text-xs sm:text-[13px] leading-relaxed transition-all ${
+                                        isAssistant
+                                            ? 'bg-white text-[#111b21] rounded-tl-xs border border-[#e9edef]'
+                                            : 'bg-[#d9fdd3] text-[#111b21] rounded-tr-xs'
+                                    }`}
                                 >
+                                    {isAssistant ? (
+                                        <div>{renderFormattedText(msg.content)}</div>
+                                    ) : (
+                                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                                    )}
+
+                                    {/* Bubble Meta (Time & Double Blue Checkmark for user) */}
                                     <div
-                                        className={`max-w-[88%] p-3 rounded-2xl text-xs leading-relaxed shadow-2xs ${
+                                        className={`flex items-center gap-1.5 mt-1.5 pt-0.5 select-none text-[10px] ${
                                             isAssistant
-                                                ? 'bg-white text-[#223933] border border-[#d8e8de] rounded-tl-xs'
-                                                : 'bg-primary text-white rounded-tr-xs'
+                                                ? 'justify-between border-t border-slate-100 text-[#667781]'
+                                                : 'justify-end text-[#667781]'
                                         }`}
                                     >
-                                        {isAssistant ? (
-                                            <div>{renderFormattedText(msg.content)}</div>
-                                        ) : (
-                                            <p className="whitespace-pre-wrap">{msg.content}</p>
-                                        )}
-                                    </div>
-                                    <div className="flex items-center gap-2 px-1 mt-1 text-[9px] text-[#71857f]">
-                                        <span>{msg.time}</span>
-                                        {isAssistant && msg.provider && (
-                                            <span className="font-mono text-[9px] bg-slate-100 text-slate-500 px-1 rounded">
-                                                {msg.provider}
+                                        {isAssistant && (
+                                            <span className="font-mono text-[9px] text-[#008069] bg-[#e7fed9] px-1.5 py-0.2 rounded font-semibold">
+                                                {msg.provider || 'AI Preventif'}
                                             </span>
                                         )}
+                                        <div className="flex items-center gap-1">
+                                            <span>{msg.time}</span>
+                                            {!isAssistant && (
+                                                <span
+                                                    className="material-symbols-outlined text-[15px] text-[#53bdeb]"
+                                                    title="Terkirim & Terbaca"
+                                                >
+                                                    done_all
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            );
-                        })}
-
-                        {isLoading && (
-                            <div className="flex items-center gap-2 p-3 bg-white rounded-2xl rounded-tl-xs border border-[#d8e8de] w-fit text-xs text-[#445b54] shadow-2xs">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse [animation-delay:0.2s]"></span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse [animation-delay:0.4s]"></span>
-                                <span className="text-[10px] text-[#5b736b] ml-1">AI sedang menganalisis & menyusun respon...</span>
                             </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
+                        );
+                    })}
 
-                    {/* Quick Suggestion Pills */}
-                    <div className="px-3 pt-2 pb-1 bg-white border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
-                        {quickPrompts.map((prompt, pIdx) => (
-                            <button
-                                key={pIdx}
-                                type="button"
-                                onClick={() => handleSendMessage(prompt)}
-                                disabled={isLoading}
-                                className="shrink-0 px-2.5 py-1 rounded-lg bg-[#f0f6f3] hover:bg-[#e4efe8] text-[#1c6454] text-[10px] font-medium border border-[#d4e6dc] active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
-                            >
-                                {prompt}
-                            </button>
-                        ))}
-                    </div>
+                    {/* WhatsApp Bouncing Typing Indicator */}
+                    {isLoading && (
+                        <div className="self-start bg-white rounded-2xl rounded-tl-xs p-3 shadow-[0_1px_0.5px_rgba(11,20,26,0.13)] flex items-center gap-2 border border-[#e9edef] max-w-fit relative z-10 animate-fade-in">
+                            <div className="flex items-center gap-1">
+                                <span className="w-2 h-2 rounded-full bg-[#00a884] animate-bounce [animation-delay:-0.3s]"></span>
+                                <span className="w-2 h-2 rounded-full bg-[#00a884] animate-bounce [animation-delay:-0.15s]"></span>
+                                <span className="w-2 h-2 rounded-full bg-[#00a884] animate-bounce"></span>
+                            </div>
+                            <span className="text-[11px] text-[#667781] font-medium ml-1">
+                                sedang mengetik jawaban...
+                            </span>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
 
-                    {/* Input Area (Bisa Diketik) */}
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSendMessage();
-                        }}
-                        className="p-3 bg-white border-t border-surface-container flex items-center gap-2 shrink-0"
-                    >
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            disabled={isLoading}
-                            placeholder="Ketik pertanyaan kesehatan atau gizi di sini..."
-                            className="flex-1 px-3.5 py-2.5 text-xs bg-[#f4f8f5] text-[#1c2e2a] placeholder-[#798e87] rounded-xl border border-[#d6e5dc] focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all"
-                        />
+                {/* 3. WhatsApp Quick Suggestion Chips */}
+                <div className="px-3 py-2 bg-[#f0f2f5] border-t border-[#e9edef] flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0 z-20">
+                    {quickPrompts.map((prompt, pIdx) => (
                         <button
-                            type="submit"
-                            disabled={isLoading || !input.trim()}
-                            className="w-10 h-10 rounded-xl bg-primary hover:bg-primary-container text-white disabled:opacity-40 disabled:hover:bg-primary flex items-center justify-center transition-all shadow-xs shrink-0 cursor-pointer active:scale-95"
-                            aria-label="Kirim Pesan"
+                            key={pIdx}
+                            type="button"
+                            onClick={() => handleSendMessage(prompt)}
+                            disabled={isLoading}
+                            className="shrink-0 px-3 py-1.5 rounded-full bg-white hover:bg-[#e7fed9] text-[#008069] text-[11px] font-semibold border border-[#008069]/25 shadow-2xs active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
                         >
-                            <span className="material-symbols-outlined text-[18px]">send</span>
+                            {prompt}
                         </button>
-                    </form>
+                    ))}
                 </div>
-            )}
 
-            {/* Floating Trigger Button */}
-            <button
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                className={`group flex items-center gap-2.5 px-4 py-3 min-h-11 rounded-full shadow-[0_4px_25px_rgba(0,67,62,0.22)] transition-all duration-300 active:scale-95 border cursor-pointer ${
-                    isOpen
-                        ? 'bg-white text-primary border-[#d6e5dc] hover:bg-[#f3f8f5]'
-                        : 'bg-primary text-white border-primary hover:bg-primary-container'
-                }`}
-                aria-label="Tanya Asisten AI Preventif"
-            >
-                <div className="relative flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[19px]">smart_toy</span>
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#82d6b3] ring-2 ring-primary animate-pulse"></span>
-                </div>
-                <div className="text-left">
-                    <span className="text-xs font-bold block leading-tight">
-                        {isOpen ? 'Tutup Asisten' : 'Chat Asisten AI'}
-                    </span>
-                    <span className="text-[9px] text-[#cbe5d8] hidden sm:block">
-                        {isOpen ? 'Klik untuk sembunyikan' : 'Bisa diketik & interaktif'}
-                    </span>
-                </div>
-            </button>
+                {/* 4. WhatsApp Bottom Input Bar */}
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSendMessage();
+                    }}
+                    className="p-2.5 sm:p-3 bg-[#f0f2f5] border-t border-[#d1d7db] flex items-center gap-2 shrink-0 z-20"
+                >
+                    <button
+                        type="button"
+                        onClick={() => setInput((prev) => prev + ' ')}
+                        className="p-1.5 rounded-full text-[#54656f] hover:text-[#111b21] transition-colors cursor-pointer shrink-0"
+                        title="Ekspresi & Emoji"
+                    >
+                        <span className="material-symbols-outlined text-[22px]">sentiment_satisfied</span>
+                    </button>
+
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        disabled={isLoading}
+                        placeholder="Ketik pesan konsultasi kesehatan..."
+                        className="flex-1 bg-white rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-[#111b21] placeholder-[#8696a0] border border-transparent focus:outline-none focus:ring-1 focus:ring-[#00a884] shadow-2xs transition-all"
+                    />
+
+                    <button
+                        type="submit"
+                        disabled={isLoading || !input.trim()}
+                        className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-40 disabled:hover:bg-[#00a884] text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform cursor-pointer shrink-0"
+                        title="Kirim Pesan"
+                        aria-label="Kirim"
+                    >
+                        <span className="material-symbols-outlined text-[19px]">send</span>
+                    </button>
+                </form>
+            </aside>
         </div>
     );
 }

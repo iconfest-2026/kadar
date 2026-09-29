@@ -55,7 +55,7 @@ export default function Consultations({
 
     return (
         <InstructorLayout activeNav="consultations" title="Jadwal Tele-Konsultasi & Bimbingan">
-            <Head title="Jadwal Konsultasi — Instruktur AEVYRA" />
+            <Head title="Jadwal Konsultasi - Instruktur AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header Card */}

@@ -1,23 +1,30 @@
-const CACHE_NAME = "laravel-pwa-1790261584";
+const CACHE_NAME = "laravel-pwa-v2";
 const OFFLINE_URL = "/offline.html";
 
+// Only pre-cache static offline fallback, NEVER dynamic root ("/") or Vite bundles
 const FILES_TO_CACHE = [
-    "/",
     OFFLINE_URL
 ];
 
+// If running on local development (localhost / 127.0.0.1), unregister immediately to allow Vite HMR
+if (self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1' || self.location.port === '5173') {
+    self.registration.unregister().then(() => {
+        console.log('[AEVYRA PWA] Self-unregistered on localhost to allow Vite HMR auto-refresh.');
+    });
+}
+
 // Pre-cache critical resources
 self.addEventListener("install", (event) => {
-    console.log('[Laravel PWA] Service Worker installing...');
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(FILES_TO_CACHE))
+            .catch(err => console.warn('[PWA] Failed to cache offline asset:', err))
     );
 });
 
-// Remove old caches
+// Remove old caches & claim clients
 self.addEventListener("activate", (event) => {
-    console.log('[Laravel PWA] Service Worker activated.');
     event.waitUntil(
         caches.keys().then(keys =>
             Promise.all(
@@ -27,9 +34,8 @@ self.addEventListener("activate", (event) => {
                     }
                 })
             )
-        )
+        ).then(() => self.clients.claim())
     );
-    self.clients.claim();
 });
 
 // Listen for skip waiting message
@@ -41,16 +47,41 @@ self.addEventListener('message', (event) => {
 
 // Fetch strategy
 self.addEventListener("fetch", (event) => {
-
     const request = event.request;
+    const url = new URL(request.url);
 
-    // ✅ Never cache non-GET requests (fix Cache.put POST error)
+    // 🚫 1. Never intercept local development, Vite dev server, HMR WebSocket, or dynamic routes
+    if (
+        url.hostname === 'localhost' ||
+        url.hostname === '127.0.0.1' ||
+        url.port === '5173' ||
+        url.pathname.startsWith('/@vite') ||
+        url.pathname.startsWith('/@react-refresh') ||
+        url.pathname.startsWith('/@fs') ||
+        url.pathname.startsWith('/@id') ||
+        url.pathname.includes('hot-update') ||
+        url.pathname.startsWith('/resources/') ||
+        url.pathname.startsWith('/node_modules/') ||
+        url.protocol === 'ws:' ||
+        url.protocol === 'wss:' ||
+        request.headers.get('Upgrade') === 'websocket' ||
+        request.headers.has('X-Inertia') ||
+        request.headers.get('X-Requested-With') === 'XMLHttpRequest' ||
+        url.pathname.startsWith('/api/') ||
+        url.pathname.startsWith('/admin/') ||
+        url.pathname.startsWith('/member/') ||
+        url.pathname.startsWith('/midtrans/')
+    ) {
+        return; // Pass through directly to browser network
+    }
+
+    // 🚫 2. Never cache non-GET requests (avoid Cache.put POST error)
     if (request.method !== 'GET') {
         event.respondWith(fetch(request));
         return;
     }
 
-    // ✅ Handle page navigation (offline fallback)
+    // 🌐 3. Handle page navigation (Network-First with offline fallback)
     if (request.mode === "navigate") {
         event.respondWith(
             fetch(request)
@@ -59,44 +90,53 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    // ✅ Cache-first for static assets
+    // 🌐 4. Static assets (images, fonts) -> Stale-While-Revalidate
     if (
-        request.destination === "style" ||
-        request.destination === "script" ||
         request.destination === "image" ||
         request.destination === "font"
     ) {
         event.respondWith(
-            caches.match(request)
-                .then(cached => {
-                    return cached || fetch(request).then(response => {
-                        return caches.open(CACHE_NAME).then(cache => {
-                            cache.put(request, response.clone());
-                            return response;
-                        });
-                    });
-                })
+            caches.match(request).then(cached => {
+                const networkFetch = fetch(request).then(response => {
+                    if (response && response.status === 200) {
+                        const copy = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+                    }
+                    return response;
+                }).catch(() => cached);
+
+                return cached || networkFetch;
+            })
         );
         return;
     }
 
-    // ✅ Default: network-first with cache fallback
+    // 🌐 5. Scripts and Styles -> ALWAYS Network-First (so updates are never blocked)
+    if (
+        request.destination === "style" ||
+        request.destination === "script"
+    ) {
+        event.respondWith(
+            fetch(request)
+                .then(response => {
+                    if (response && response.status === 200) {
+                        const copy = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+                    }
+                    return response;
+                })
+                .catch(() => caches.match(request))
+        );
+        return;
+    }
+
+    // 🌐 6. Default: Network-first
     event.respondWith(
         fetch(request)
             .then(response => {
-                return caches.open(CACHE_NAME).then(cache => {
-                    cache.put(request, response.clone());
-                    return response;
-                });
+                return response;
             })
-            .catch(async (error) => {
-                // Retry failed API requests if Background Sync is supported
-                if (request.method === 'POST' && 'SyncManager' in self) {
-                    // We can't easily queue it here because we can't access IndexedDB easily without a library or boilerplate
-                    // But we've already handled form submissions in background-sync.js
-                }
-                return caches.match(request);
-            })
+            .catch(() => caches.match(request))
     );
 });
 
@@ -108,32 +148,42 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncRequests() {
-    const db = await openDB();
-    const tx = db.transaction('offline-requests', 'readonly');
-    const store = tx.objectStore('offline-requests');
-    const requests = await getAllRequests(store);
+    try {
+        const db = await openDB();
+        const tx = db.transaction('offline-requests', 'readonly');
+        const store = tx.objectStore('offline-requests');
+        const requests = await getAllRequests(store);
 
-    for (const req of requests) {
-        try {
-            const response = await fetch(req.url, {
-                method: req.method,
-                headers: req.headers,
-                body: req.body
-            });
+        for (const req of requests) {
+            try {
+                const response = await fetch(req.url, {
+                    method: req.method,
+                    headers: req.headers,
+                    body: req.body
+                });
 
-            if (response.ok) {
-                const deleteTx = db.transaction('offline-requests', 'readwrite');
-                deleteTx.objectStore('offline-requests').delete(req.id);
+                if (response.ok) {
+                    const deleteTx = db.transaction('offline-requests', 'readwrite');
+                    deleteTx.objectStore('offline-requests').delete(req.id);
+                }
+            } catch (err) {
+                console.error('[Laravel PWA] Sync failed for:', req.url, err);
             }
-        } catch (err) {
-            console.error('[Laravel PWA] Sync failed for:', req.url, err);
         }
+    } catch (e) {
+        console.warn('[Laravel PWA] Background sync failed:', e);
     }
 }
 
 function openDB() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('laravel-pwa-sync', 1);
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('offline-requests')) {
+                db.createObjectStore('offline-requests', { keyPath: 'id', autoIncrement: true });
+            }
+        };
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
     });

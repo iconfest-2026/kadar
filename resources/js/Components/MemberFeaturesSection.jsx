@@ -170,26 +170,27 @@ export default function MemberFeaturesSection() {
             id: 'arcade',
             category: 'lifestyle',
             num: '07',
-            title: 'Arena Edukasi Glucose Dash',
-            summary: 'Permainan simulasi interaktif untuk mengenali dampak pemanis dan bahan pangan secara menyenangkan dengan poin skor.',
-            badge: 'Edukasi Gamifikasi',
+            title: 'Simulasi Kasus Metabolik 24 Jam',
+            summary: 'Simulasi kasus interaktif 24 jam untuk mengambil keputusan gizi, aktivitas, dan memantau kurva respon glukosa darah.',
+            badge: 'Simulasi Klinis',
             badgeStyle: 'bg-[#eef2ff] text-[#3730a3] border-[#c7d2fe]',
             href: '/arcade',
-            btnText: 'Mainkan Gim',
-            statusNote: 'Simulasi Edukasi Play',
+            btnText: 'Mulai Simulasi',
+            statusNote: 'Edukasi Interaktif 24 Jam',
             visual: (
                 <div className="mt-3.5 h-26 sm:h-28 p-3 rounded-2xl bg-linear-to-r from-slate-900 to-emerald-950 border border-emerald-800/40 text-white flex items-center justify-between">
                     <div className="space-y-1">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-amber-400 text-xs">⚡</span>
-                            <span className="text-xs font-bold font-mono tracking-wide">GLUCOSE DASH</span>
+                            <span className="material-symbols-outlined text-[16px] text-amber-400">auto_stories</span>
+                            <span className="text-xs font-bold font-mono tracking-wide">STORY SIMULASI 24H</span>
                         </div>
                         <p className="text-[10px] text-emerald-200/80 line-clamp-1">
-                            Hindari lonjakan sukrosa, kumpulkan serat larut!
+                            Ambil keputusan nutrisi harian & amati dampaknya!
                         </p>
                     </div>
-                    <span className="px-2.5 py-1 rounded-xl bg-white/15 backdrop-blur-xs text-[10px] font-mono font-bold text-white shrink-0">
-                        PLAY ▶
+                    <span className="px-2.5 py-1 rounded-xl bg-white/15 backdrop-blur-xs text-[10px] font-mono font-bold text-white shrink-0 inline-flex items-center gap-1">
+                        <span>MULAI</span>
+                        <span className="material-symbols-outlined text-[13px]">play_arrow</span>
                     </span>
                 </div>
             ),

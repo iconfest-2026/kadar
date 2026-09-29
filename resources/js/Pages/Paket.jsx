@@ -10,7 +10,7 @@ export default function Paket(props) {
         setFaqOpenIndex(faqOpenIndex === index ? null : index);
     };
 
-    const tiers = [
+    const defaultTiers = [
         {
             id: 'silver',
             name: 'Silver',
@@ -93,6 +93,26 @@ export default function Paket(props) {
             cardStyle: 'bg-white/90 border-[#d8e6df] shadow-xs',
         },
     ];
+
+    const rawTiers = props.tiersData || [];
+    const tiers = defaultTiers.map((dt) => {
+        const found = rawTiers.find((t) => t.slug === dt.id);
+        if (!found) return dt;
+        const price = Number(found.total_price || found.price);
+        const yearly = Math.round(price * 0.8);
+        return {
+            ...dt,
+            name: found.name || dt.name,
+            badge: found.badge_text || dt.badge,
+            priceMonthly: price === 0 ? 'Gratis' : `Rp ${price.toLocaleString('id-ID')}`,
+            priceYearly: price === 0 ? 'Gratis' : `Rp ${yearly.toLocaleString('id-ID')}`,
+            desc: found.description || dt.desc,
+            isPopular: found.is_popular !== undefined ? Boolean(found.is_popular) : dt.isPopular,
+            features: Array.isArray(found.features) && found.features.length > 0
+                ? found.features.map((f) => ({ text: f, included: true }))
+                : dt.features,
+        };
+    });
 
     const comparisonCategories = [
         {
@@ -329,7 +349,7 @@ export default function Paket(props) {
                                             }`}
                                         >
                                             <span>{tier.cta}</span>
-                                            <span className="text-xs">→</span>
+                                            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                         </Link>
                                     </div>
                                 </div>

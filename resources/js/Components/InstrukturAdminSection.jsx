@@ -7,7 +7,7 @@ export default function InstrukturAdminSection() {
         {
             member: 'Ahmad F. (42 th)',
             tier: 'Gold',
-            hba1c: '6.4% [↓ -0.6%]',
+            hba1c: '6.4% (-0.6%)',
             scanActivity: '18 Scan / Minggu',
             note: 'Kepatuhan porsi karbohidrat membaik, target defisit gula tercapai.',
         },
@@ -95,8 +95,9 @@ export default function InstrukturAdminSection() {
                                                 HbA1c: {r.hba1c}
                                             </span>
                                         </div>
-                                        <p className="text-on-surface-variant text-[11px]">
-                                            📊 {r.note}
+                                        <p className="text-on-surface-variant text-[11px] flex items-center gap-1">
+                                            <span className="material-symbols-outlined text-[14px] text-primary shrink-0">monitoring</span>
+                                            <span>{r.note}</span>
                                         </p>
                                     </div>
 
@@ -128,7 +129,7 @@ export default function InstrukturAdminSection() {
                                 <span className="font-data-lg text-2xl font-bold text-primary block">
                                     {item.val}
                                 </span>
-                                <span className="text-body-sm text-xs text-on-surface-variant">
+                                <span className="text-body-sm text-on-surface-variant">
                                     {item.sub}
                                 </span>
                             </div>

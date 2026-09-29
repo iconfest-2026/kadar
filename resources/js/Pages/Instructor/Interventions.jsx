@@ -59,7 +59,7 @@ export default function Interventions({
 
     return (
         <InstructorLayout activeNav="interventions" title="Rencana Intervensi Perilaku (HBE)">
-            <Head title="Rencana Intervensi — Instruktur AEVYRA" />
+            <Head title="Rencana Intervensi - Instruktur AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header & Main Actions */}

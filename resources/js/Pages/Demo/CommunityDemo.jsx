@@ -64,7 +64,7 @@ export default function CommunityDemo() {
 
     return (
         <MarketingLayout>
-            <Head title="Demo Komunitas Pejuang Sehat — AEVYRA" />
+            <Head title="Demo Komunitas Pejuang Sehat - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
                 {/* Header */}

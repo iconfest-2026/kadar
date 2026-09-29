@@ -36,7 +36,8 @@ export default function AdminBadge({ variant = 'default', children, icon, size =
         default: 'bg-surface-container text-on-surface-variant border-surface-container',
     };
 
-    const style = variantStyles[variant.toLowerCase()] || variantStyles.default;
+    const safeKey = typeof variant === 'string' ? variant.toLowerCase() : 'default';
+    const style = variantStyles[safeKey] || variantStyles.default;
 
     return (
         <span

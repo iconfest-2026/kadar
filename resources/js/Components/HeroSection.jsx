@@ -96,19 +96,27 @@ export default function HeroSection() {
                     {/* Core Feature Bullet Highlights */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] sm:text-xs text-[#354843] pt-1">
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
-                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                            </span>
                             <span className="truncate">120.000+ Database BPOM</span>
                         </div>
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
-                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                            </span>
                             <span className="truncate">Deteksi Laser OCR &lt; 0.4 Detik</span>
                         </div>
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
-                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                            </span>
                             <span className="truncate">Estimasi Kurva Glukosa Darah</span>
                         </div>
                         <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
-                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                            <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                            </span>
                             <span className="truncate">Standar PERKENI &amp; SatuSehat</span>
                         </div>
                     </div>

@@ -89,11 +89,11 @@ export default function Dashboard({
 
     return (
         <AdminLayout activeNav="dashboard" title="Ringkasan Tata Kelola">
-            <Head title="Admin Dashboard — AEVYRA" />
+            <Head title="Admin Dashboard - AEVYRA" />
 
             <div className="space-y-6">
                 {/* Header Welcome Card */}
-                <div className="relative overflow-hidden bg-gradient-to-r from-primary via-primary-container to-primary text-white rounded-3xl p-6 sm:p-8 shadow-lg border border-white/20">
+                <div className="relative overflow-hidden bg-linear-to-r from-primary via-primary-container to-primary text-white rounded-3xl p-6 sm:p-8 shadow-lg border border-white/20">
                     <div className="relative z-10 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-label-mono font-bold tracking-wider uppercase mb-3 border border-white/20">
                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -165,7 +165,7 @@ export default function Dashboard({
 
                                     {/* Interactive Bar */}
                                     <div
-                                        className="w-full bg-gradient-to-t from-primary to-teal-500 rounded-t-xl transition-all duration-300 group-hover:from-amber-600 group-hover:to-amber-400 group-hover:scale-y-105 origin-bottom shadow-xs cursor-pointer"
+                                        className="w-full bg-linear-to-t from-primary to-teal-500 rounded-t-xl transition-all duration-300 group-hover:from-amber-600 group-hover:to-amber-400 group-hover:scale-y-105 origin-bottom shadow-xs cursor-pointer"
                                         style={{ height: `${heightPercent}%` }}
                                     />
 
@@ -194,8 +194,9 @@ export default function Dashboard({
                                 <span className="material-symbols-outlined text-primary text-[20px]">person_add</span>
                                 <span>Pengguna Terdaftar Terbaru</span>
                             </h3>
-                            <Link href="/admin/users" className="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
-                                Kelola Semua →
+                            <Link href="/admin/users" className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                                <span>Kelola Semua</span>
+                                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                             </Link>
                         </div>
                         <AdminDataTable
@@ -212,8 +213,9 @@ export default function Dashboard({
                                 <span className="material-symbols-outlined text-primary text-[20px]">security</span>
                                 <span>Jejak Audit Forensik Mutasi</span>
                             </h3>
-                            <Link href="/admin/audit" className="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
-                                Buku Besar →
+                            <Link href="/admin/audit" className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                                <span>Buku Besar</span>
+                                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                             </Link>
                         </div>
                         <AdminDataTable

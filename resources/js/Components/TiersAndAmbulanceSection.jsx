@@ -190,8 +190,8 @@ export default function TiersAndAmbulanceSection() {
                                     <ul className="space-y-2.5 pt-4 border-t border-surface-container-high text-xs text-[#354843]">
                                         {t.features.map((f, fIdx) => (
                                             <li key={fIdx} className="flex items-start gap-2.5">
-                                                <span className="text-[#1c6454] font-serif leading-none shrink-0 mt-0.5">
-                                                    ✓
+                                                <span className="text-[#1c6454] shrink-0 mt-0.5">
+                                                    <span className="material-symbols-outlined text-[14px]">check</span>
                                                 </span>
                                                 <span className="leading-relaxed">{f}</span>
                                             </li>
@@ -209,7 +209,7 @@ export default function TiersAndAmbulanceSection() {
                                         }`}
                                     >
                                         <span>{t.cta}</span>
-                                        <span className="text-xs">→</span>
+                                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                     </Link>
                                 </div>
                             </div>

@@ -115,11 +115,11 @@ export default function Header() {
             color: 'text-rose-700 bg-rose-100',
         },
         {
-            name: 'Arena Gamifikasi 2D',
-            desc: 'Game 2D Glucose Dash & Simulasi Kasus Interaktif',
+            name: 'Story Game Metabolik',
+            desc: 'Simulasi Keputusan Kasus Klinis 24 Jam Interaktif',
             href: '/arcade',
-            icon: 'sports_esports',
-            badge: 'Play',
+            icon: 'auto_stories',
+            badge: 'Interaktif',
             color: 'text-purple-700 bg-purple-100',
         },
         {
@@ -221,7 +221,7 @@ export default function Header() {
                                     setUserDropdownOpen(false);
                                 }}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
-                                    clinicalDropdownOpen || isActive('/member/scanner') || isActive('/demo/scanner')
+                                    clinicalDropdownOpen || featureItems.some((item) => isActive(item.href))
                                         ? 'bg-primary text-white shadow-2xs'
                                         : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
                                 }`}
@@ -276,30 +276,6 @@ export default function Header() {
                                 </div>
                             )}
                         </div>
-
-                        {/* 3. Konsultasi */}
-                        <Link
-                            href={user ? '/member/consultations-hub' : '/demo/consultations'}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
-                                isActive('/member/consultations-hub') || isActive('/demo/consultations')
-                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
-                                    : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
-                            }`}
-                        >
-                            Konsultasi
-                        </Link>
-
-                        {/* 4. Tantangan Program */}
-                        <Link
-                            href={user ? '/member/challenges' : '/demo/challenges'}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
-                                isActive('/member/challenges') || isActive('/demo/challenges')
-                                    ? 'bg-[#edf5f0] text-primary font-bold border border-[#d2e5da] shadow-2xs'
-                                    : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
-                            }`}
-                        >
-                            Tantangan
-                        </Link>
 
                         {/* 5. Paket Keanggotaan */}
                         <Link

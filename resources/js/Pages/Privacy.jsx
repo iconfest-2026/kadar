@@ -464,9 +464,10 @@ export default function Privacy(props) {
                             </button>
                             <Link
                                 href="/terms"
-                                className="px-3 py-1.5 rounded-full text-xs font-medium bg-white border border-[#d5e4dc] text-primary hover:bg-[#edf5f0] transition-all whitespace-nowrap"
+                                className="px-3 py-1.5 rounded-full text-xs font-medium bg-white border border-[#d5e4dc] text-primary hover:bg-[#edf5f0] transition-all whitespace-nowrap inline-flex items-center gap-1"
                             >
-                                Buka Syarat &amp; Ketentuan →
+                                <span>Buka Syarat &amp; Ketentuan</span>
+                                <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
                             </Link>
                         </div>
                     </div>

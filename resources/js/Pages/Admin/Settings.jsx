@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import { Switch, Input, Button, Alert } from '@/Components/UI';
 
-export default function Settings({ featureFlags: initialFlags = [], systemRules = {} }) {
+export default function Settings({ featureFlags: initialFlags = {}, systemRules = {} }) {
     const [featureFlags, setFeatureFlags] = useState({
-        ocrScanner: true,
-        aiChatAssistant: true,
-        ambulanceSos119: true,
-        communityForums: true,
-        sensorWearablesSync: false,
+        ocrScanner: initialFlags?.ocrScanner ?? true,
+        aiChatAssistant: initialFlags?.aiChatAssistant ?? true,
+        ambulanceSos119: initialFlags?.ambulanceSos119 ?? true,
+        communityForums: initialFlags?.communityForums ?? true,
+        sensorWearablesSync: initialFlags?.sensorWearablesSync ?? false,
     });
+    const [flagsProcessing, setFlagsProcessing] = useState(false);
 
     const { data, setData, post, processing, recentlySuccessful, errors } = useForm({
         max_instructors_per_member: systemRules.max_instructors_per_member ?? 3,
@@ -25,6 +26,14 @@ export default function Settings({ featureFlags: initialFlags = [], systemRules 
         }));
     };
 
+    const handleSaveFlags = () => {
+        setFlagsProcessing(true);
+        router.post('/admin/settings/flags', { flags: featureFlags }, {
+            preserveScroll: true,
+            onFinish: () => setFlagsProcessing(false),
+        });
+    };
+
     const handleSaveRules = (e) => {
         e.preventDefault();
         post('/admin/settings', {
@@ -34,7 +43,7 @@ export default function Settings({ featureFlags: initialFlags = [], systemRules 
 
     return (
         <AdminLayout activeNav="settings" title="Konfigurasi & Parameter Sistem">
-            <Head title="Pengaturan Sistem — Admin AEVYRA" />
+            <Head title="Pengaturan Sistem - Admin AEVYRA" />
 
             <div className="space-y-6">
                 <AdminPageHeader
@@ -98,14 +107,26 @@ export default function Settings({ featureFlags: initialFlags = [], systemRules 
 
                 {/* Feature Flags Section */}
                 <div className="bg-white/95 rounded-3xl p-6 shadow-xs border border-primary/15 space-y-5">
-                    <div>
-                        <h3 className="font-heading font-black text-lg text-primary flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[22px]">toggle_on</span>
-                            <span>Sakelar Fitur Bertahap (Feature Flags)</span>
-                        </h3>
-                        <p className="text-xs text-on-surface-variant font-medium mt-0.5">
-                            Aktifkan atau nonaktifkan modul aplikasi secara langsung tanpa perlu proses deployment ulang.
-                        </p>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 className="font-heading font-black text-lg text-primary flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[22px]">toggle_on</span>
+                                <span>Sakelar Fitur Bertahap (Feature Flags)</span>
+                            </h3>
+                            <p className="text-xs text-on-surface-variant font-medium mt-0.5">
+                                Aktifkan atau nonaktifkan modul aplikasi secara langsung tanpa perlu proses deployment ulang.
+                            </p>
+                        </div>
+                        <Button
+                            type="button"
+                            variant="primary"
+                            size="sm"
+                            loading={flagsProcessing}
+                            leftIcon="save"
+                            onClick={handleSaveFlags}
+                        >
+                            Simpan Perubahan Sakelar
+                        </Button>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -112,7 +112,7 @@ export default function MemberDetail({
 
     return (
         <InstructorLayout activeNav="members" title={`Rekam Medis & Bimbingan: ${member.name}`}>
-            <Head title={`Detail Binaan ${member.name} — Instruktur AEVYRA`} />
+            <Head title={`Detail Binaan ${member.name} - Instruktur AEVYRA`} />
 
             <div className="space-y-6">
                 {/* Member Profile Header */}

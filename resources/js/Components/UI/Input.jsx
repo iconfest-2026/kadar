@@ -46,8 +46,8 @@ const Input = forwardRef(function Input(
 
             <div className="relative flex items-center">
                 {leftIcon && (
-                    <div className="absolute left-3.5 flex items-center justify-center text-on-surface-variant pointer-events-none">
-                        <span className="material-symbols-outlined text-[18px]">{leftIcon}</span>
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-on-surface-variant pointer-events-none">
+                        <span className="material-symbols-outlined text-[18px] leading-none select-none">{leftIcon}</span>
                     </div>
                 )}
 
@@ -59,7 +59,7 @@ const Input = forwardRef(function Input(
                     required={required}
                     className={`w-full bg-surface-container-low text-on-surface border transition-all duration-200 placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium ${
                         leftIcon ? 'pl-10' : ''
-                    } ${rightIcon || isPassword ? 'pr-10' : ''} ${
+                    } ${rightIcon || isPassword ? 'pr-11' : ''} ${
                         error
                             ? 'border-rose-400 focus:border-rose-600 focus:ring-rose-500/20 bg-rose-50/20'
                             : 'border-primary/15 focus:border-primary focus:ring-primary/15 focus:bg-white'
@@ -72,18 +72,18 @@ const Input = forwardRef(function Input(
                         type="button"
                         tabIndex={-1}
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3.5 p-1 rounded-lg text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                         title={showPassword ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi'}
                     >
-                        <span className="material-symbols-outlined text-[18px]">
+                        <span className="material-symbols-outlined text-[18px] leading-none select-none">
                             {showPassword ? 'visibility_off' : 'visibility'}
                         </span>
                     </button>
                 )}
 
                 {!isPassword && rightIcon && (
-                    <div className="absolute right-3.5 flex items-center justify-center text-on-surface-variant pointer-events-none">
-                        <span className="material-symbols-outlined text-[18px]">{rightIcon}</span>
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-on-surface-variant pointer-events-none">
+                        <span className="material-symbols-outlined text-[18px] leading-none select-none">{rightIcon}</span>
                     </div>
                 )}
             </div>

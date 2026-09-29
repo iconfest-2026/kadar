@@ -120,7 +120,7 @@ export default function Error({ status = 404, message = null, errorId = null }) 
 
     return (
         <div className="min-h-screen w-full bg-[#f7faf8] text-[#142320] flex flex-col font-sans selection:bg-primary/20 selection:text-primary relative overflow-x-hidden">
-            <Head title={`${currentError.code} — ${currentError.title} | AEVYRA Health`} />
+            <Head title={`${currentError.code} - ${currentError.title} | AEVYRA Health`} />
 
             {/* Peaceful, Serene Background Canvas Blooms */}
             <div 

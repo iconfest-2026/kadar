@@ -96,8 +96,14 @@ export default function DoctorWorkspaceSection() {
                                         </div>
                                         {isSelected && (
                                             <div className="mt-2 pt-2 border-t border-surface-container text-xs text-on-surface-variant flex items-center justify-between">
-                                                <span>📋 Catatan Rekomendasi: {p.action}</span>
-                                                <span className="text-primary font-medium hover:underline text-[11px]">Buka Lembar RME →</span>
+                                                <span className="flex items-center gap-1">
+                                                    <span className="material-symbols-outlined text-[15px] text-primary">assignment</span>
+                                                    <span>Catatan Rekomendasi: {p.action}</span>
+                                                </span>
+                                                <span className="text-primary font-medium hover:underline text-[11px] inline-flex items-center gap-0.5">
+                                                    <span>Buka Lembar RME</span>
+                                                    <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                                </span>
                                             </div>
                                         )}
                                     </div>
@@ -124,7 +130,7 @@ export default function DoctorWorkspaceSection() {
                                 <span className="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
                                 <h4 className="text-sm font-headline-sm">Chat &amp; Floating Telemetry</h4>
                             </div>
-                            <p className="text-body-sm text-xs text-on-surface-variant leading-relaxed">
+                            <p className="text-body-sm text-on-surface-variant leading-relaxed">
                                 Grafik glukosa 7 hari & foto makanan pasien tersaji langsung di jendela konsultasi tanpa pindah tab.
                             </p>
                         </div>
@@ -134,7 +140,7 @@ export default function DoctorWorkspaceSection() {
                                 <span className="material-symbols-outlined text-[20px]">calendar_month</span>
                                 <h4 className="text-sm font-headline-sm">Kalender &amp; Rujukan RME</h4>
                             </div>
-                            <p className="text-body-sm text-xs text-on-surface-variant leading-relaxed">
+                            <p className="text-body-sm text-on-surface-variant leading-relaxed">
                                 Atur kuota telekonsultasi, jadwal cek HbA1c 90 hari, dan terbitkan rujukan faskes bila ditemukan risiko tinggi.
                             </p>
                         </div>

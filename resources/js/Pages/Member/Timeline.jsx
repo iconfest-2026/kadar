@@ -232,7 +232,7 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
 
     return (
         <AppLayout title="Timeline & Riwayat Kesehatan" activeTab="timeline">
-            <Head title="Timeline Kesehatan & Riwayat Intervensi — AEVYRA" />
+            <Head title="Timeline Kesehatan & Riwayat Intervensi - AEVYRA" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
                 
