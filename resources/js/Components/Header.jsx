@@ -35,7 +35,6 @@ export default function Header() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [clinicalDropdownOpen, setClinicalDropdownOpen] = useState(false);
-    const [reportsDropdownOpen, setReportsDropdownOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -57,7 +56,6 @@ export default function Header() {
     };
 
     const clinicalRef = useRef(null);
-    const reportsRef = useRef(null);
     const userDropdownRef = useRef(null);
 
     const handleLogout = () => {
@@ -132,31 +130,11 @@ export default function Header() {
         },
     ];
 
-    const reportItems = [
-        {
-            name: 'Laporan Instruktur',
-            desc: 'Metrik kepatuhan member, caseload, dan efektivitas intervensi klinis',
-            href: '/instructor/reports',
-            icon: 'assignment_turned_in',
-            role: 'Instruktur',
-        },
-        {
-            name: 'Laporan Admin',
-            desc: 'Tata kelola platform, audit sistem, dan statistik pemindaian terpadu',
-            href: '/admin/reports',
-            icon: 'admin_panel_settings',
-            role: 'Admin',
-        },
-    ];
-
     // Close dropdowns on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (clinicalRef.current && !clinicalRef.current.contains(e.target)) {
                 setClinicalDropdownOpen(false);
-            }
-            if (reportsRef.current && !reportsRef.current.contains(e.target)) {
-                setReportsDropdownOpen(false);
             }
             if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
                 setUserDropdownOpen(false);
@@ -301,57 +279,6 @@ export default function Header() {
                             FAQ
                         </Link>
 
-                        {/* 7. Laporan Dropdown */}
-                        <div className="relative" ref={reportsRef}>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setReportsDropdownOpen(!reportsDropdownOpen);
-                                    setClinicalDropdownOpen(false);
-                                    setUserDropdownOpen(false);
-                                }}
-                                className={`px-2.5 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
-                                    reportsDropdownOpen || isActive('/instructor/reports') || isActive('/admin/reports')
-                                        ? 'bg-primary text-white shadow-2xs'
-                                        : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
-                                }`}
-                            >
-                                <span>Laporan</span>
-                                <span className="material-symbols-outlined text-[14px]">
-                                    {reportsDropdownOpen ? 'expand_less' : 'expand_more'}
-                                </span>
-                            </button>
-
-                            {reportsDropdownOpen && (
-                                <div className="absolute top-full right-0 mt-2 w-72 bg-white border border-surface-container-high rounded-2xl p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
-                                    <div className="px-2.5 py-1.5 border-b border-surface-container flex items-center justify-between">
-                                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                                            Tata Kelola &amp; Audit
-                                        </span>
-                                    </div>
-                                    {reportItems.map((r, idx) => (
-                                        <Link
-                                            key={idx}
-                                            href={r.href}
-                                            onClick={() => setReportsDropdownOpen(false)}
-                                            className="p-2.5 rounded-xl hover:bg-[#edf5f0]/70 transition-all flex items-start gap-2.5 group"
-                                        >
-                                            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                                <span className="material-symbols-outlined text-[17px]">{r.icon}</span>
-                                            </div>
-                                            <div>
-                                                <span className="text-xs font-bold text-on-surface block group-hover:text-primary">
-                                                    {r.name}
-                                                </span>
-                                                <span className="text-[10px] text-on-surface-variant block">
-                                                    {r.desc}
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
                     </nav>
 
                     {/* Right Actions: Authenticated vs Guest */}
@@ -716,31 +643,6 @@ export default function Header() {
                                     <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
                                     <span>Pusat Bantuan &amp; FAQ Medis</span>
                                 </Link>
-                            </div>
-
-                            {/* Group 3: Reports & Governance */}
-                            <div className="pt-2 border-t border-surface-container space-y-1">
-                                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                    Portal Laporan &amp; Governance
-                                </span>
-                                {reportItems.map((r, idx) => (
-                                    <Link
-                                        key={idx}
-                                        href={r.href}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
-                                    >
-                                        <div className="flex items-center gap-2.5">
-                                            <span className="material-symbols-outlined text-[18px] text-primary">
-                                                {r.icon}
-                                            </span>
-                                            <span>{r.name}</span>
-                                        </div>
-                                        <span className="text-[9px] px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold">
-                                            {r.role}
-                                        </span>
-                                    </Link>
-                                ))}
                             </div>
 
                             {/* Group 4: Auth Actions (Guest vs Logged In) */}

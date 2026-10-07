@@ -319,6 +319,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/gamification/badges/{achievement}', [AdminGovernanceController::class, 'destroyBadge'])->name('gamification.badges.destroy');
         Route::post('/gamification/award-points', [AdminGovernanceController::class, 'awardPoints'])->name('gamification.points.award');
 
+        // SaaS Subscriptions & Premium Members Governance (Relasi User -> Membership)
+        Route::get('/subscriptions', [AdminGovernanceController::class, 'subscriptions'])->name('subscriptions');
+        Route::post('/subscriptions/assign', [AdminGovernanceController::class, 'assignMembership'])->name('subscriptions.assign');
+        Route::patch('/subscriptions/{membership}', [AdminGovernanceController::class, 'updateMembership'])->name('subscriptions.update');
+        Route::delete('/subscriptions/{membership}', [AdminGovernanceController::class, 'destroyMembership'])->name('subscriptions.destroy');
+        Route::post('/subscriptions/{membership}/renew', [AdminGovernanceController::class, 'renewSubscription'])->name('subscriptions.renew');
+        Route::post('/subscriptions/verify-payment', [AdminGovernanceController::class, 'verifyPayment'])->name('subscriptions.verify-payment');
+
         // Memberships & Tiers
         Route::get('/memberships', [AdminGovernanceController::class, 'memberships'])->name('memberships');
         Route::post('/memberships/assign', [AdminGovernanceController::class, 'assignMembership'])->name('memberships.assign');
@@ -339,10 +347,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [AdminReportsController::class, 'index'])->name('reports.index');
         Route::post('/reports/cohort', [AdminReportsController::class, 'storeCohortReport'])->name('reports.cohort.store');
 
-        // Audit & Settings
+        // Audit & Settings & Server Management
         Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
         Route::get('/settings', [AdminGovernanceController::class, 'settings'])->name('settings');
         Route::post('/settings', [AdminGovernanceController::class, 'updateSettings'])->name('settings.update');
         Route::post('/settings/flags', [AdminGovernanceController::class, 'updateFeatureFlags'])->name('settings.flags');
+        Route::post('/settings/cache-clear', [AdminGovernanceController::class, 'clearCache'])->name('settings.cache-clear');
+        Route::post('/settings/optimize', [AdminGovernanceController::class, 'optimizeServer'])->name('settings.optimize');
+        Route::post('/settings/maintenance-toggle', [AdminGovernanceController::class, 'toggleMaintenance'])->name('settings.maintenance');
+
+        // Server Error Logs Viewer
+        Route::get('/logs', [AdminGovernanceController::class, 'logs'])->name('logs');
+        Route::post('/logs/clear', [AdminGovernanceController::class, 'clearLogs'])->name('logs.clear');
+        Route::get('/logs/download', [AdminGovernanceController::class, 'downloadLogs'])->name('logs.download');
     });
 });

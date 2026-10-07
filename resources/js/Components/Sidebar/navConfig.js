@@ -68,23 +68,5 @@ export function getInstructorNavSections() {
                 { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
             ],
         },
-        {
-            title: 'Evaluasi & Laporan',
-            items: [
-                { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
-            ],
-        },
-    ];
-}
-
-export function getAdminNavSections() {
-    return [
-        {
-            title: 'Tata Kelola Platform',
-            items: [
-                { id: 'admin', name: 'Tata Kelola & Audit', href: '/admin/dashboard', icon: 'dashboard' },
-                { id: 'reports', name: 'Laporan & Ambulans', href: '/admin/reports', icon: 'analytics' },
-            ],
-        },
     ];
 }

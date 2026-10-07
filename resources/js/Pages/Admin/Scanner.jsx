@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Select } from '@/Components/UI';
+import { Table, Modal, Button, Input, Select, DropdownAction } from '@/Components/UI';
 
 export default function Scanner({
     records = { data: [], links: [] },
@@ -168,24 +168,12 @@ export default function Scanner({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="visibility"
-                        onClick={() => setSelectedRecord(row)}
-                        title="Lihat Detail Scan"
-                    >
-                        Detail
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingRecord(row)}
-                        title="Hapus Rekaman Scan"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedRecord(row)}
+                        detailLabel="Lihat Detail Scan"
+                        onDelete={() => setDeletingRecord(row)}
+                        deleteLabel="Hapus Rekaman Scan"
                     />
                 </div>
             ),

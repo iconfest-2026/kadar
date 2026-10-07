@@ -60,85 +60,6 @@ export default function AppLayout({ children, title, activeTab }) {
         router.post('/logout');
     };
 
-    const memberNavSections = [
-        {
-            title: 'Metabolisme & Biomarker',
-            items: [
-                { id: 'dashboard', name: 'Dashboard Baseline', href: '/member/dashboard', icon: 'monitoring', badge: 'HBE' },
-                { id: 'scanner', name: 'Scanner Gizi & BPOM', href: '/member/scanner', icon: 'photo_camera', badge: 'OCR' },
-                { id: 'timeline', name: 'Timeline & Riwayat', href: '/member/timeline', icon: 'history_edu' },
-            ],
-        },
-        {
-            title: 'Telemedisin & Tenaga Medis',
-            items: [
-                { id: 'consultations', name: 'Pusat Tele-Konsultasi', href: '/member/consultations-hub', icon: 'support_agent' },
-                { id: 'instructors', name: 'Tim Dokter Pendamping', href: '/member/instructors', icon: 'medical_services' },
-                { id: 'ai-consultation', name: 'Asisten AI', action: 'open_ai_chat', icon: 'smart_toy' },
-                { id: 'emergency', name: 'Siaga Ambulans GPS', href: '/demo/emergency', icon: 'emergency', badge: '119' },
-            ],
-        },
-        {
-            title: 'Program & Komunitas',
-            items: [
-                { id: 'challenges', name: 'Tantangan Sehat', href: '/member/challenges', icon: 'emoji_events', badge: '14-90 H' },
-                { id: 'community', name: 'Forum Komunitas', href: '/member/community', icon: 'groups' },
-                { id: 'arcade', name: 'Game Edukasi 2D', href: '/arcade', icon: 'sports_esports' },
-                { id: 'gender-vitality', name: 'Siklus & Vitalitas', href: '/demo/gender-vitality', icon: 'vital_signs', badge: 'AI' },
-            ],
-        },
-        {
-            title: 'Layanan & Bantuan',
-            items: [
-                { id: 'home', name: 'Beranda Utama Web', href: '/', icon: 'home', badge: 'Web' },
-                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium', badge: currentTierName },
-                { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
-            ],
-        },
-        {
-            title: 'Pengaturan & Akun',
-            items: [
-                { id: 'onboarding', name: 'Profil & Gaya Hidup', href: '/member/onboarding', icon: 'tune' },
-                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge', badge: 'Aktif' },
-            ],
-        },
-    ];
-
-    const instructorNavSections = [
-        {
-            title: 'Pengawasan Caseload & Sinyal',
-            items: [
-                { id: 'dashboard', name: 'Dashboard Caseload', href: '/instructor/dashboard', icon: 'dashboard' },
-                { id: 'members', name: 'Member Binaan', href: '/instructor/members', icon: 'groups', badge: 'Kohor' },
-            ],
-        },
-        {
-            title: 'Tindakan Klinis & Intervensi',
-            items: [
-                { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes', badge: 'HBE' },
-                { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
-            ],
-        },
-        {
-            title: 'Evaluasi & Laporan',
-            items: [
-                { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
-            ],
-        },
-    ];
-
-    const adminNavSections = [
-        {
-            title: 'Tata Kelola Platform',
-            items: [
-                { id: 'admin', name: 'Tata Kelola & Audit', href: '/admin/dashboard', icon: 'dashboard' },
-                { id: 'reports', name: 'Laporan & Ambulans', href: '/admin/reports', icon: 'analytics' },
-            ],
-        },
-    ];
-
-    const currentSections = isAdmin ? adminNavSections : isInstructor ? instructorNavSections : memberNavSections;
-
     return (
         <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
             
@@ -267,107 +188,7 @@ export default function AppLayout({ children, title, activeTab }) {
                 aria-label="Navigasi Bawah Mobile"
             >
                 <div className="flex items-center justify-around max-w-lg mx-auto">
-                    {isMember ? (
-                        <>
-                            {/* 1. Dashboard / Beranda */}
-                            <Link
-                                href="/member/dashboard"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'dashboard'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
-                            >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
-                                        monitoring
-                                    </span>
-                                    {activeTab === 'dashboard' && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
-                                </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Beranda</span>
-                            </Link>
-
-                            {/* 2. Timeline / Riwayat */}
-                            <Link
-                                href="/member/timeline"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'timeline'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
-                            >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
-                                        history_edu
-                                    </span>
-                                    {activeTab === 'timeline' && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
-                                </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Riwayat</span>
-                            </Link>
-
-                            {/* 3. Center Elevated Action Button: AI Health Scanner */}
-                            <div className="flex flex-col items-center justify-center flex-1 -mt-6">
-                                <Link
-                                    href="/member/scanner"
-                                    className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
-                                        activeTab === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
-                                    }`}
-                                    title="Pindai Gizi & BPOM OCR"
-                                >
-                                    <span className="material-symbols-outlined text-[24px]">photo_camera</span>
-                                </Link>
-                                <span className={`text-[10px] mt-1 font-bold ${activeTab === 'scanner' ? 'text-primary' : 'text-primary'}`}>
-                                    Scan AI
-                                </span>
-                            </div>
-
-                            {/* 4. Konsultasi Klinis */}
-                            <Link
-                                href="/member/consultations-hub"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'consultations' || activeTab === 'instructors'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
-                            >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
-                                        support_agent
-                                    </span>
-                                    {(activeTab === 'consultations' || activeTab === 'instructors') && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
-                                </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Konsultasi</span>
-                            </Link>
-
-                            {/* 5. Menu Drawer / Opsi Lengkap */}
-                            <button
-                                type="button"
-                                onClick={() => setSidebarOpen(true)}
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all cursor-pointer ${
-                                    sidebarOpen || ['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab)
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
-                                aria-label="Buka Menu Lengkap"
-                            >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
-                                        grid_view
-                                    </span>
-                                    {['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab) && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
-                                </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
-                            </button>
-                        </>
-                    ) : isInstructor ? (
+                    {isInstructor ? (
                         <>
                             {/* Instructor Bottom Nav */}
                             <Link
@@ -411,44 +232,98 @@ export default function AppLayout({ children, title, activeTab }) {
                         </>
                     ) : (
                         <>
-                            {/* Admin Bottom Nav */}
+                            {/* Member & Public Bottom Nav */}
                             <Link
-                                href="/admin/dashboard"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'admin' || activeTab === 'dashboard' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                href="/member/dashboard"
+                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                                    activeTab === 'dashboard'
+                                        ? 'text-primary font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
                             >
-                                <span className="material-symbols-outlined text-[22px]">dashboard</span>
-                                <span className="text-[10px] mt-0.5">Admin</span>
+                                <div className="relative flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[22px]">
+                                        monitoring
+                                    </span>
+                                    {activeTab === 'dashboard' && (
+                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                                    )}
+                                </div>
+                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Beranda</span>
                             </Link>
+
                             <Link
-                                href="/admin/users"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'users' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                href="/member/timeline"
+                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                                    activeTab === 'timeline'
+                                        ? 'text-primary font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
                             >
-                                <span className="material-symbols-outlined text-[22px]">group</span>
-                                <span className="text-[10px] mt-0.5">Users</span>
+                                <div className="relative flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[22px]">
+                                        history_edu
+                                    </span>
+                                    {activeTab === 'timeline' && (
+                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                                    )}
+                                </div>
+                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Riwayat</span>
                             </Link>
+
                             <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                                 <Link
-                                    href="/admin/scanner"
-                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
+                                    href="/member/scanner"
+                                    className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
+                                        activeTab === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
+                                    }`}
+                                    title="Pindai Gizi & BPOM OCR"
                                 >
-                                    <span className="material-symbols-outlined text-[24px]">document_scanner</span>
+                                    <span className="material-symbols-outlined text-[24px]">photo_camera</span>
                                 </Link>
-                                <span className="text-[10px] font-bold text-primary mt-1">Scanner</span>
+                                <span className={`text-[10px] mt-1 font-bold ${activeTab === 'scanner' ? 'text-primary' : 'text-primary'}`}>
+                                    Scan AI
+                                </span>
                             </div>
+
                             <Link
-                                href="/admin/reports"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'reports' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                href="/member/consultations-hub"
+                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                                    activeTab === 'consultations' || activeTab === 'instructors'
+                                        ? 'text-primary font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
                             >
-                                <span className="material-symbols-outlined text-[22px]">analytics</span>
-                                <span className="text-[10px] mt-0.5">Laporan</span>
+                                <div className="relative flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[22px]">
+                                        support_agent
+                                    </span>
+                                    {(activeTab === 'consultations' || activeTab === 'instructors') && (
+                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                                    )}
+                                </div>
+                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Konsultasi</span>
                             </Link>
+
                             <button
                                 type="button"
                                 onClick={() => setSidebarOpen(true)}
-                                className="flex flex-col items-center justify-center flex-1 py-1 text-on-surface-variant hover:text-primary cursor-pointer"
+                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all cursor-pointer ${
+                                    sidebarOpen || ['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab)
+                                        ? 'text-primary font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
+                                aria-label="Buka Menu Lengkap"
                             >
-                                <span className="material-symbols-outlined text-[22px]">grid_view</span>
-                                <span className="text-[10px] mt-0.5">Menu</span>
+                                <div className="relative flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[22px]">
+                                        grid_view
+                                    </span>
+                                    {['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab) && (
+                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                                    )}
+                                </div>
+                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
                             </button>
                         </>
                     )}
