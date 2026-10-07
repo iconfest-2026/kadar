@@ -7,6 +7,7 @@ use App\Models\HealthRecord;
 use App\Models\PointsLedger;
 use App\Models\UserStreak;
 use App\Services\Ocr\NutritionOcrService;
+use App\Services\Ai\YoloFoodVisionService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,8 @@ use Inertia\Inertia;
 class ScannerController extends Controller
 {
     public function __construct(
-        protected NutritionOcrService $ocrService
+        protected NutritionOcrService $ocrService,
+        protected YoloFoodVisionService $yoloService
     ) {}
 
     /**
@@ -55,12 +57,12 @@ class ScannerController extends Controller
     }
 
     /**
-     * Analyze image from live camera snapshot, uploaded file, or sample preset using OCR.
+     * Analyze image from live camera snapshot, uploaded file, or sample preset using Multi-Modal YOLO Food Vision & OCR.
      */
     public function analyze(Request $request)
     {
         $input = $request->all();
-        $result = $this->ocrService->analyze($input);
+        $result = $this->yoloService->analyze($input);
 
         return response()->json($result);
     }

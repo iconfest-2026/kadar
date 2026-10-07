@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import MarketingLayout from '@/Layouts/MarketingLayout';
+import AppLayout from '@/Layouts/AppLayout';
 
 // =============================================================================
 // COMPREHENSIVE FEMALE 28-DAY METABOLIC & HORMONE DATABASE (POGI & ENDOCRINE GROUNDED)
@@ -293,11 +294,18 @@ export default function GenderVitalityDemo() {
         };
     }, [maleTimeHour]);
 
+    const { auth } = usePage().props;
+    const isAuthenticated = !!auth?.user;
+    const Layout = isAuthenticated ? AppLayout : MarketingLayout;
+    const layoutProps = isAuthenticated
+        ? { title: 'Siklus & Vitalitas (AI)', activeTab: 'gender-vitality' }
+        : {};
+
     return (
-        <MarketingLayout>
+        <Layout {...layoutProps}>
             <Head title="Demo Personalisasi Biologis Hormon & Vitalitas Gender - AEVYRA" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
                 {/* Header & Breadcrumb */}
                 <div className="space-y-3 border-b border-[#e2eee6] pb-6">
                     <div className="flex items-center gap-2 text-xs text-[#40564f] font-medium">
@@ -986,6 +994,6 @@ export default function GenderVitalityDemo() {
                     </div>
                 )}
             </div>
-        </MarketingLayout>
+        </Layout>
     );
 }

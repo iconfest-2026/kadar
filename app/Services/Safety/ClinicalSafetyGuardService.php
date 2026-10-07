@@ -25,6 +25,16 @@ class ClinicalSafetyGuardService
 
         // 2. Emergency Acute Crisis Detection (Priority 0 Clinical Safety)
         if ($this->detectEmergency($normalized)) {
+            // Empathetic mental health crisis redirection
+            if (str_contains($normalized, 'bunuh diri') || str_contains($normalized, 'ingin mati') || str_contains($normalized, 'melukai diri') || str_contains($normalized, 'overdosis')) {
+                return [
+                    'is_safe' => false,
+                    'trigger_type' => 'MENTAL_HEALTH_CRISIS_REDIRECTION',
+                    'safe_response' => "Saya sangat peduli dengan keselamatan dan kondisi perasaan Anda saat ini. Anda sangat berharga dan Anda tidak sendirian menghadapi beban ini. Mohon segera hubungi Layanan SEJIWA Kementerian Kesehatan RI di hotline 119 (ekstensi 8), Halo Kemenkes 1500-567, atau bicarakan segera dengan orang terdekat yang Anda percayai sekarang. Bantuan dan pendampingan selalu tersedia untuk Anda.",
+                    'action_required' => 'DIAL_SEJIWA_119_EXT_8',
+                ];
+            }
+
             return [
                 'is_safe' => false,
                 'trigger_type' => 'ACUTE_EMERGENCY_REDIRECTION',
@@ -38,7 +48,7 @@ class ClinicalSafetyGuardService
             return [
                 'is_safe' => false,
                 'trigger_type' => 'MEDICATION_DOSING_REFUSAL',
-                'safe_response' => "AEVYRA beroperasi murni sebagai platform pendamping gaya hidup preventif dan tidak memiliki kewenangan medis untuk meresepkan obat, menganjurkan jenis farmakoterapi, ataupun mengubah dosis obat. Mohon konsultasikan aturan resep obat Anda secara langsung kepada dokter atau apoteker berlisensi.",
+                'safe_response' => "AEVYRA beroperasi murni sebagai platform pendamping gaya hidup preventif dan kesehatan mental suportif, serta tidak memiliki kewenangan medis untuk meresepkan obat keras atau mengubah dosis obat farmasi. Mohon konsultasikan resep obat Anda secara langsung kepada dokter atau apoteker berlisensi.",
                 'action_required' => 'REFER_TO_DOCTOR',
             ];
         }
@@ -48,7 +58,7 @@ class ClinicalSafetyGuardService
             return [
                 'is_safe' => false,
                 'trigger_type' => 'DIAGNOSTIC_VERDICT_REFUSAL',
-                'safe_response' => "Kami dapat membantu Anda mengamati pola kebiasaan dan tren kesehatan, namun AEVYRA bukan pengganti konsultasi medis dan tidak dapat mendiagnosis penyakit tertentu. Jika Anda merasakan gejala fisik yang mengkhawatirkan, disarankan untuk melakukan pemeriksaan fisik di fasilitas pelayanan kesehatan resmi.",
+                'safe_response' => "Kami dapat membantu Anda mengamati pola kebiasaan, tren metabolisme tubuh, serta mendengarkan curhat dan emosi Anda. Namun AEVYRA bukan pengganti pemeriksaan medis langsung dan tidak dapat mengeluarkan diagnosis definitif penyakit tertentu. Jika ada keluhan fisik yang mengkhawatirkan, disarankan untuk berkonsultasi ke fasilitas layanan kesehatan resmi.",
                 'action_required' => 'NON_DIAGNOSTIC_REDIRECT',
             ];
         }
@@ -58,7 +68,7 @@ class ClinicalSafetyGuardService
             return [
                 'is_safe' => false,
                 'trigger_type' => 'OUT_OF_SCOPE_GUARDRAIL',
-                'safe_response' => "Pertanyaan ini berada di luar fokus kesehatan preventif. Sebagai Asisten AI Preventif AEVYRA, fokus keahlian saya adalah mendampingi kesehatan metabolik, nutrisi, kadar gula darah, dan gaya hidup sehat. Silakan tanyakan hal seputar pola makan sehat, pemahaman label gizi, aktivitas fisik, atau pencegahan pra-diabetes.",
+                'safe_response' => "Pertanyaan ini berada di luar fokus kesehatan dan kesejahteraan holistik AEVYRA. Sebagai Asisten AI & Sahabat Curhat Anda, fokus saya adalah mendampingi kesehatan metabolik, nutrisi gizi seimbang, kebugaran fisik, serta mendengarkan curhat, kecemasan, stres, dan kesehatan mental Anda. Silakan ceritakan apa yang sedang Anda rasakan atau tanyakan seputar gaya hidup sehat Anda.",
                 'action_required' => 'NON_HEALTH_SCOPE_REDIRECT',
             ];
         }
@@ -160,8 +170,9 @@ class ClinicalSafetyGuardService
             }
         }
 
-        // 1. Whitelist: If text mentions any health, nutrition, metabolic, organ, or lifestyle topics, do NOT block
+        // 1. Whitelist: If text mentions health, nutrition, metabolic, mental health, psychology, curhat, or emotional wellbeing, do NOT block
         $healthKeywords = [
+            // Physical & Metabolic Health
             'gula', 'glukosa', 'diabetes', 'insulin', 'makan', 'minum', 'nutrisi', 'gizi',
             'kalori', 'karbo', 'karbohidrat', 'lemak', 'protein', 'serat', 'kolesterol',
             'tensi', 'darah', 'tekanan darah', 'jantung', 'tidur', 'istirahat', 'olahraga',
@@ -170,10 +181,28 @@ class ClinicalSafetyGuardService
             'metabolik', 'suplemen', 'vitamin', 'sayur', 'buah', 'garam', 'natrium',
             'pankreas', 'ginjal', 'asam urat', 'kebugaran', 'kardio', 'porsi', 'pangan',
             'lemak jenuh', 'aktivitas', 'sakit kepala', 'demam', 'gejala', 'pusing',
-            'kebiasaan', 'begadang', 'stress', 'stres', 'sarapan', 'snack', 'camilan',
-            'harian', 'kesehatan', 'tubuh', 'fisik', 'pasien', 'medis', 'klinis',
-            'glikemik', 'obesitas', 'hipertensi', 'anemia', 'otot', 'tulang', 'pencernaan',
-            'lambung', 'maag', 'gerd', 'usus', 'mata', 'kulit', 'paru', 'napas', 'nafas',
+            'kebiasaan', 'begadang', 'sarapan', 'snack', 'camilan', 'harian', 'kesehatan',
+            'tubuh', 'fisik', 'pasien', 'medis', 'klinis', 'glikemik', 'obesitas',
+            'hipertensi', 'anemia', 'otot', 'tulang', 'pencernaan', 'lambung', 'maag',
+            'gerd', 'usus', 'mata', 'kulit', 'paru', 'napas', 'nafas',
+
+            // Mental Health, Psychology & Teman Curhat
+            'mental', 'jiwa', 'psikolog', 'psikologi', 'psikologis', 'konseling', 'curhat',
+            'curahan', 'stres', 'stress', 'cemas', 'kecemasan', 'anxiety', 'panik', 'panic',
+            'sedih', 'kesedihan', 'menangis', 'nangis', 'galau', 'kecewa', 'kesepian',
+            'sendirian', 'burnout', 'lelah mental', 'capek', 'lelah', 'penat', 'mumet',
+            'overthinking', 'insecure', 'perasaan', 'emosi', 'mood', 'suasana hati',
+            'pikiran', 'beban', 'masalah', 'tekanan', 'trauma', 'takut', 'ketakutan',
+            'khawatir', 'bingung', 'hampa', 'putus asa', 'down', 'kehilangan arah',
+            'teman bicara', 'teman ngobrol', 'teman curhat', 'ngobrol', 'cerita', 'dengarkan',
+            'mindfulness', 'meditasi', 'relaksasi', 'self care', 'self-care', 'self love',
+            'self-compassion', 'motivasi', 'semangat', 'lega', 'tenang', 'ketenangan',
+            'bahagia', 'kebahagiaan', 'afirmasi', 'batin',
+
+            // Friendly Greetings & Conversational Icebreakers
+            'halo', 'hai', 'hello', 'hey', 'hei', 'selamat pagi', 'selamat siang',
+            'selamat sore', 'selamat malam', 'apa kabar', 'assalam', 'terima kasih',
+            'makasih', 'thank you', 'thanks'
         ];
 
         foreach ($healthKeywords as $hk) {

@@ -40,11 +40,11 @@
     <!-- Diffused Natural Light Ambient Blooms -->
     <div 
         aria-hidden="true" 
-        class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] max-w-[90vw] h-[350px] bg-gradient-to-b from-[#e3f0e9]/70 via-[#edf6f1]/40 to-transparent blur-3xl rounded-full"
+        class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-150 max-w-[90vw] h-87.5 bg-linear-to-b from-[#e3f0e9]/70 via-[#edf6f1]/40 to-transparent blur-3xl rounded-full"
     ></div>
     <div 
         aria-hidden="true" 
-        class="pointer-events-none absolute bottom-0 right-0 w-[450px] max-w-[80vw] h-[350px] bg-[#f4ebe1]/30 blur-3xl rounded-full"
+        class="pointer-events-none absolute bottom-0 right-0 w-112.5 max-w-[80vw] h-87.5 bg-[#f4ebe1]/30 blur-3xl rounded-full"
     ></div>
 
     <!-- Header -->
@@ -52,7 +52,7 @@
         <div class="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
             <a href="/" class="flex items-center gap-2">
                 <img
-                    src="/image/Logo_AEVYRA_Horizontal.png"
+                    src="/image/Logo_EVYRA_Horizontal.png"
                     alt="AEVYRA Logo"
                     class="h-7 sm:h-8 w-auto object-contain"
                 />

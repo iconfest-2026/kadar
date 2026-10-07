@@ -116,9 +116,8 @@ Route::get('/terms', function () {
 })->name('terms');
 
 // Itch.io Style Interactive Metabolic Mini-Game
-Route::get('/arcade', function () {
-    return Inertia::render('Arcade');
-})->name('arcade');
+Route::get('/arcade', [\App\Http\Controllers\ArcadeController::class, 'index'])->name('arcade');
+Route::post('/arcade/scores', [\App\Http\Controllers\ArcadeController::class, 'storeScore'])->name('arcade.scores.store');
 
 // Error Page Testing & Verification Route
 Route::get('/error/{code?}', function (?int $code = 404) {
@@ -226,8 +225,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/menstrual/settings', [MenstrualCycleController::class, 'updateSettings'])->name('menstrual.settings');
         Route::post('/profile/toggle-sex', [DashboardController::class, 'toggleSex'])->name('profile.toggle-sex');
 
-        // Feature: SaaS Membership Checkout via Midtrans
+        // Feature: SaaS Membership Checkout & Verification via Midtrans
         Route::post('/memberships/{tier}/checkout', [MidtransPaymentController::class, 'checkout'])->name('memberships.checkout');
+        Route::post('/memberships/verify', [MidtransPaymentController::class, 'verifyStatus'])->name('memberships.verify')->middleware('throttle:30,1');
         Route::get('/memberships/finish', [MidtransPaymentController::class, 'finish'])->name('memberships.finish');
     });
 

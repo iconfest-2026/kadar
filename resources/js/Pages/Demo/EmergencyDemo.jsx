@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import MarketingLayout from '@/Layouts/MarketingLayout';
+import AppLayout from '@/Layouts/AppLayout';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -620,11 +621,18 @@ export default function EmergencyDemo() {
         });
     };
 
+    const { auth } = usePage().props;
+    const isAuthenticated = !!auth?.user;
+    const Layout = isAuthenticated ? AppLayout : MarketingLayout;
+    const layoutProps = isAuthenticated
+        ? { title: 'Siaga Ambulans GPS 119', activeTab: 'emergency' }
+        : {};
+
     return (
-        <MarketingLayout>
+        <Layout {...layoutProps}>
             <Head title="Demo Siaga Ambulans 119 & Geolocation IGD Presisi - AEVYRA" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
                 {/* Header Section */}
                 <div className="space-y-3 border-b border-surface-container pb-6">
                     <div className="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
@@ -1065,6 +1073,6 @@ export default function EmergencyDemo() {
                     </div>
                 </div>
             </div>
-        </MarketingLayout>
+        </Layout>
     );
 }

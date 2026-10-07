@@ -89,19 +89,13 @@ export default function Login() {
     const activeConfig = roleConfigs[selectedRole];
 
     return (
-        <AuthLayout maxWidth="max-w-5xl">
+        <AuthLayout maxWidth="max-w-xl">
             <Head title="Masuk Akun - AEVYRA HealthCheck" />
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-                {/* Left Column: Form & Role Switcher */}
-                <div className="lg:col-span-7 bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
+            <div className="w-full bg-white rounded-3xl border border-primary/15 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
                     <div>
                         {/* Header Badge & Title */}
                         <div className="space-y-2 pb-4 border-b border-primary/10">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-semibold border border-primary/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>Gerbang Autentikasi Pengguna Terverifikasi</span>
-                            </div>
                             <h1 className="font-heading font-black text-xl sm:text-3xl text-primary tracking-tight">
                                 Masuk ke Portal AEVYRA
                             </h1>
@@ -161,10 +155,8 @@ export default function Login() {
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                                 placeholder="nama@aevyra.health"
-                                leftIcon="mail"
                                 error={errors.email}
                                 autoComplete="username"
-                                helperText={`Peran aktif: ${activeConfig.title}`}
                             />
 
                             <Input
@@ -224,76 +216,6 @@ export default function Login() {
                             <span>SSL 256-Bit</span>
                         </div>
                     </div>
-                </div>
-
-                {/* Right Column: Dynamic Role Showcase */}
-                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-7 rounded-3xl bg-surface-container-low border border-primary/15 shadow-sm relative overflow-hidden">
-                    {/* Top Role Badge */}
-                    <div className="space-y-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${activeConfig.badgeBg}`}>
-                                {activeConfig.previewBadge}
-                            </span>
-                            <span className="font-mono text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
-                                Lingkungan Aman
-                            </span>
-                        </div>
-
-                        <div className="space-y-2">
-                            <h2 className="font-heading font-bold text-xl text-primary leading-snug">
-                                {activeConfig.previewTitle}
-                            </h2>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
-                                {activeConfig.previewQuote}
-                            </p>
-                        </div>
-
-                        {/* Image Frame */}
-                        <div className="h-44 rounded-2xl overflow-hidden border border-primary/15 shadow-inner relative group bg-white">
-                            <img
-                                src={activeConfig.previewImage}
-                                alt={activeConfig.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
-                                <span className="text-[11px] text-white font-medium bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-lg border border-white/20">
-                                    {activeConfig.title}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Dynamic Metrics */}
-                        <div className="grid grid-cols-3 gap-2 pt-2">
-                            {activeConfig.previewStats.map((s, idx) => (
-                                <div key={idx} className="p-2.5 rounded-xl bg-white border border-primary/15 text-center shadow-2xs">
-                                    <span className="font-heading font-black text-xs sm:text-sm text-primary block leading-tight">
-                                        {s.val}
-                                    </span>
-                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant block mt-0.5 font-medium">
-                                        {s.label}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Medical Advisor Quote */}
-                    <div className="pt-4 border-t border-primary/10 relative z-10 flex items-center gap-3">
-                        <img
-                            src="/image/doctor_bramantyo.jpg"
-                            alt="dr. Bramantyo"
-                            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 shadow-xs shrink-0"
-                        />
-                        <div className="text-xs leading-tight">
-                            <span className="font-heading font-bold text-primary block">
-                                dr. H. Bramantyo, Sp.PD
-                            </span>
-                            <span className="text-[10px] text-on-surface-variant">
-                                Dewan Penasihat Medis AEVYRA
-                            </span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </AuthLayout>
     );

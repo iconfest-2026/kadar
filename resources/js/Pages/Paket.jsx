@@ -594,7 +594,9 @@ export default function Paket(props) {
                                                     <li
                                                         key={idx}
                                                         className={`flex items-start gap-2.5 ${
-                                                            f.included ? 'text-[#283c36]' : 'text-[#9ab1a7] line-through'
+                                                            f.included
+                                                                ? 'text-[#20342e]'
+                                                                : 'text-[#5a736a] line-through decoration-[#8aa096]'
                                                         }`}
                                                     >
                                                         <span
@@ -603,12 +605,12 @@ export default function Paket(props) {
                                                                     ? f.highlight
                                                                         ? 'text-primary font-bold'
                                                                         : 'text-emerald-700'
-                                                                    : 'text-[#b5c7bf]'
+                                                                    : 'text-[#7e968d]'
                                                             }`}
                                                         >
                                                             {f.included ? 'check_circle' : 'remove_circle_outline'}
                                                         </span>
-                                                        <span className={f.highlight ? 'font-semibold text-primary' : ''}>
+                                                        <span className={f.highlight ? 'font-bold text-[#006057]' : ''}>
                                                             {f.text}
                                                         </span>
                                                     </li>

@@ -5,9 +5,13 @@ import QuickLogModal from '../Components/QuickLogModal';
 import LiveCameraScannerModal from '../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../Components/MembershipTierModal';
 import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
+import AppSidebar from '../Components/Sidebar/AppSidebar';
 
 export default function AppLayout({ children, title, activeTab }) {
-    const { auth, flash, membership } = usePage().props;
+
+    const page = usePage();
+    const { auth, flash, membership } = page.props;
+    const pageUrl = page.url || '';
     const user = auth?.user;
     const roles = auth?.roles || [];
     const isMember = roles.includes('member') || (!roles.includes('admin') && !roles.includes('instructor'));
@@ -45,6 +49,12 @@ export default function AppLayout({ children, title, activeTab }) {
         window.addEventListener('open-ai-chat', handleOpenAiChat);
         return () => window.removeEventListener('open-ai-chat', handleOpenAiChat);
     }, []);
+
+    useEffect(() => {
+        if (pageUrl.includes('chat=ai') || pageUrl.includes('open_ai_chat=1')) {
+            setIsAiChatOpen(true);
+        }
+    }, [pageUrl]);
 
     const handleLogout = () => {
         router.post('/logout');
@@ -146,270 +156,20 @@ export default function AppLayout({ children, title, activeTab }) {
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
-
-            {/* Sidebar Navigation */}
-            <aside 
-                className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-3rem)] bg-white dark:bg-surface border-r border-surface-container flex flex-col transition-transform duration-300 shadow-sm lg:translate-x-0 ${
-                    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                }`}
-            >
-                {/* Brand Header */}
-                <div className="h-16 flex items-center justify-between px-5 border-b border-surface-container shrink-0">
-                    <Link href="/dashboard" className="flex items-center gap-2.5 group min-w-0">
-                        <img 
-                            src="/image/Logo_AEVYRA_Icon.png" 
-                            alt="AEVYRA Logo" 
-                            className="w-8 h-8 rounded-xl object-contain shadow-2xs group-hover:scale-105 transition-transform shrink-0" 
-                        />
-                        <div className="min-w-0">
-                            <div className="flex items-center gap-1.5">
-                                <span className="font-heading font-black text-lg text-primary tracking-tight">AEVYRA</span>
-                                <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
-                                    {isAdmin ? 'Admin' : isInstructor ? 'Instruktur' : 'Preventif'}
-                                </span>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <div className="flex items-center gap-1">
-                        <Link 
-                            href="/"
-                            className="p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors shrink-0"
-                            title="Ke Beranda Web Utama"
-                        >
-                            <span className="material-symbols-outlined text-[19px]">home</span>
-                        </Link>
-                        <button 
-                            type="button"
-                            className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
-                            onClick={() => setSidebarOpen(false)}
-                            aria-label="Tutup Menu"
-                        >
-                            <span className="material-symbols-outlined text-[20px]">close</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Member Profile Widget */}
-                {isMember && (
-                    <div className="p-3.5 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 shrink-0">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
-                                {user?.name?.charAt(0) || 'M'}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-xs font-bold text-on-surface truncate">{user?.name || 'Member Sehat'}</p>
-                                <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-1.5 border-t border-surface-container/70 text-[11px]">
-                            <button
-                                type="button"
-                                onClick={() => setIsTierModalOpen(true)}
-                                className="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors cursor-pointer group min-w-0"
-                                title="Lihat Status & Kelola Paket"
-                            >
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                                <span className="font-semibold text-[10px] truncate text-on-surface group-hover:text-primary">
-                                    {currentTierName}
-                                </span>
-                            </button>
-                            <Link
-                                href="/member/onboarding"
-                                className="text-[10px] text-on-surface-variant hover:text-primary transition-colors shrink-0"
-                            >
-                                Edit Profil
-                            </Link>
-                        </div>
-                    </div>
-                )}
-
-                {!isMember && user && (
-                    <div className="p-3.5 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 shrink-0">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
-                                {user?.name?.charAt(0) || 'U'}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
-                                <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Quick Action Buttons (Pindai Gizi & Catat Metrik - Dipindahkan dari Navbar) */}
-                {isMember && (
-                    <div className="px-3 pt-2.5 pb-1 grid grid-cols-2 gap-2 shrink-0">
-                        <button
-                            type="button"
-                            onClick={() => setIsQuickLogOpen(true)}
-                            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-primary hover:bg-[#005a54] text-white text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
-                            title="Catat Glukosa, Tensi, Tidur, Langkah"
-                        >
-                            <span className="material-symbols-outlined text-[17px]">add</span>
-                            <span>Catat Metrik</span>
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setIsScannerOpen(true)}
-                            className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer border border-surface-container"
-                            title="Buka Kamera Pindai Cepat Gizi & BPOM"
-                        >
-                            <span className="material-symbols-outlined text-[17px]">photo_camera</span>
-                            <span>Pindai Gizi</span>
-                        </button>
-                    </div>
-                )}
-
-
-
-                {/* Nav Links Feed */}
-                <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5 no-scrollbar">
-                    {currentSections.map((sec, idx) => (
-                        <div key={idx} className="space-y-1">
-                            <span className="px-3 text-[10px] font-label-mono font-bold uppercase tracking-wider text-on-surface-variant block">
-                                {sec.title}
-                            </span>
-                            <div className="space-y-0.5">
-                                {sec.items.map((item) => {
-                                    const isActive = activeTab === item.id;
-                                    if (item.action === 'open_ai_chat') {
-                                        return (
-                                            <button
-                                                key={item.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setSidebarOpen(false);
-                                                    setIsAiChatOpen(true);
-                                                }}
-                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all min-w-0 cursor-pointer text-left"
-                                            >
-                                                <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-primary">
-                                                        {item.icon}
-                                                    </span>
-                                                    <span className="truncate">{item.name}</span>
-                                                </div>
-                                                {item.badge && (
-                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-surface-container text-on-surface-variant">
-                                                        {item.badge}
-                                                    </span>
-                                                )}
-                                            </button>
-                                        );
-                                    }
-                                    if (item.action === 'tier_modal') {
-                                        return (
-                                            <button
-                                                key={item.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setSidebarOpen(false);
-                                                    setIsTierModalOpen(true);
-                                                }}
-                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all min-w-0 cursor-pointer text-left"
-                                            >
-                                                <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-amber-600">
-                                                        {item.icon}
-                                                    </span>
-                                                    <span className="truncate">{item.name}</span>
-                                                </div>
-                                                {item.badge && (
-                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-surface-container text-on-surface-variant">
-                                                        {item.badge}
-                                                    </span>
-                                                )}
-                                            </button>
-                                        );
-                                    }
-                                    return (
-                                        <Link
-                                            key={item.id}
-                                            href={item.href}
-                                            onClick={() => setSidebarOpen(false)}
-                                            className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all min-w-0 ${
-                                                isActive
-                                                    ? 'bg-primary text-white font-bold shadow-2xs'
-                                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
-                                            }`}
-                                        >
-                                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                                <span className={`material-symbols-outlined text-[18px] shrink-0 ${
-                                                    isActive ? 'text-white' : 'text-primary'
-                                                }`}>
-                                                    {item.icon}
-                                                </span>
-                                                <span className="truncate">{item.name}</span>
-                                            </div>
-
-                                            {item.badge && (
-                                                <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 ${
-                                                    isActive
-                                                        ? 'bg-white/20 text-white'
-                                                        : 'bg-surface-container text-on-surface-variant'
-                                                }`}>
-                                                    {item.badge}
-                                                </span>
-                                            )}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ))}
-
-                    {/* Status Paket Minimalis (Member only) */}
-                    {isMember && (
-                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 min-w-0">
-                                <span className="material-symbols-outlined text-[16px] text-primary shrink-0">workspace_premium</span>
-                                <div className="min-w-0">
-                                    <p className="text-[11px] font-bold text-on-surface truncate leading-tight">
-                                        Paket {currentTierName}
-                                    </p>
-                                    <p className="text-[10px] text-on-surface-variant truncate leading-tight">
-                                        Status Aktif
-                                    </p>
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setIsTierModalOpen(true)}
-                                className="px-2.5 py-1 rounded-lg text-[10px] font-bold text-primary hover:bg-surface-container border border-surface-container transition-colors cursor-pointer shrink-0"
-                            >
-                                Kelola
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* Sidebar Footer Utilities */}
-                <div className="p-3 border-t border-surface-container space-y-2 shrink-0 bg-white dark:bg-surface">
-                    {/* SOS Emergency Hotline Trigger */}
-                    <button
-                        type="button"
-                        onClick={() => setIsEmergencyOpen(true)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-2xs flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer animate-pulse"
-                    >
-                        <span className="material-symbols-outlined text-[17px]">e911_emergency</span>
-                        <span>Hotline Siaga SOS 119</span>
-                    </button>
-
-                    {/* Logout Button */}
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="w-full py-2 px-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-700 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                    >
-                        <span className="material-symbols-outlined text-[16px]">logout</span>
-                        <span>Keluar Akun</span>
-                    </button>
-                </div>
-            </aside>
+            {/* Modular Sidebar Component */}
+            <AppSidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+                user={user}
+                roles={roles}
+                activeTab={activeTab}
+                onOpenEmergency={() => setIsEmergencyOpen(true)}
+                onOpenQuickLog={() => setIsQuickLogOpen(true)}
+                onOpenScanner={() => setIsScannerOpen(true)}
+                onOpenTierModal={() => setIsTierModalOpen(true)}
+                onOpenAiChat={() => setIsAiChatOpen(true)}
+                onLogout={handleLogout}
+            />
 
             {/* Main Application Shell (Shifted for sidebar on desktop) */}
             <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">

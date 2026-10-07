@@ -306,6 +306,9 @@ export default function MetabolicStoryGame() {
     const gameContainerRef = useRef(null);
     const typingTimerRef = useRef(null);
     const autoPlayTimerRef = useRef(null);
+    const currentFullTextRef = useRef('');
+    const isTypingRef = useRef(false);
+    const handleAdvanceDialogueRef = useRef(null);
 
     // Dialog history backlog
     const [dialogHistory, setDialogHistory] = useState([]);
@@ -1694,11 +1697,19 @@ export default function MetabolicStoryGame() {
     // Typewriter Engine Implementation
     // ============================================================================
     const startTypewriter = (text, speaker) => {
-        if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-        if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+        if (typingTimerRef.current) {
+            clearInterval(typingTimerRef.current);
+            typingTimerRef.current = null;
+        }
+        if (autoPlayTimerRef.current) {
+            clearTimeout(autoPlayTimerRef.current);
+            autoPlayTimerRef.current = null;
+        }
 
+        currentFullTextRef.current = text;
         setDisplayedText('');
         setIsTyping(true);
+        isTypingRef.current = true;
 
         // Record to backlog
         setDialogHistory((prev) => [...prev, { speaker, text }]);
@@ -1710,17 +1721,43 @@ export default function MetabolicStoryGame() {
                 if (i % 3 === 0) audio.playType();
                 i++;
             } else {
-                clearInterval(typingTimerRef.current);
+                if (typingTimerRef.current) {
+                    clearInterval(typingTimerRef.current);
+                    typingTimerRef.current = null;
+                }
                 setIsTyping(false);
+                isTypingRef.current = false;
 
                 // If Auto-Play is active, wait 2.2 seconds then advance
                 if (isAutoPlay) {
                     autoPlayTimerRef.current = setTimeout(() => {
-                        handleAdvanceDialogue();
+                        handleAdvanceDialogueRef.current?.();
                     }, 2200);
                 }
             }
         }, typeSpeed);
+    };
+
+    const skipTyping = () => {
+        if (typingTimerRef.current) {
+            clearInterval(typingTimerRef.current);
+            typingTimerRef.current = null;
+        }
+        if (autoPlayTimerRef.current) {
+            clearTimeout(autoPlayTimerRef.current);
+            autoPlayTimerRef.current = null;
+        }
+
+        setDisplayedText(currentFullTextRef.current);
+        setIsTyping(false);
+        isTypingRef.current = false;
+
+        // If Auto-Play is active, wait 2.2 seconds then advance
+        if (isAutoPlay) {
+            autoPlayTimerRef.current = setTimeout(() => {
+                handleAdvanceDialogueRef.current?.();
+            }, 2200);
+        }
     };
 
     useEffect(() => {
@@ -1734,33 +1771,90 @@ export default function MetabolicStoryGame() {
     }, [gameState, currentLineIndex, chapterIndex, selectedCharId]);
 
     const handleAdvanceDialogue = () => {
-        audio.playClick();
-
-        if (isTyping) {
-            if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-            if (gameState === 'prologue') {
-                setDisplayedText(prologueScript[currentLineIndex].text);
-            } else if (gameState === 'chapter_story') {
-                setDisplayedText(currentChapter.script[currentLineIndex].text);
-            }
-            setIsTyping(false);
+        // If still typing, skip typewriter animation and immediately show full text!
+        if (isTypingRef.current) {
+            audio.playClick();
+            skipTyping();
             return;
         }
 
+        audio.playClick();
+
         if (gameState === 'prologue') {
             if (currentLineIndex < prologueScript.length - 1) {
-                setCurrentLineIndex(currentLineIndex + 1);
+                setCurrentLineIndex((prev) => prev + 1);
             } else {
                 setGameState('select_patient');
             }
         } else if (gameState === 'chapter_story') {
             if (currentLineIndex < currentChapter.script.length - 1) {
-                setCurrentLineIndex(currentLineIndex + 1);
+                setCurrentLineIndex((prev) => prev + 1);
             } else {
                 setGameState('chapter_choice');
             }
+        } else if (gameState === 'chapter_outcome') {
+            handleNextChapter();
         }
     };
+
+    handleAdvanceDialogueRef.current = handleAdvanceDialogue;
+
+    // Keyboard navigation (Space, Enter, 1/2/3, Escape)
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const target = e.target;
+            if (
+                target &&
+                (target.tagName === 'INPUT' ||
+                    target.tagName === 'TEXTAREA' ||
+                    target.tagName === 'SELECT' ||
+                    target.isContentEditable)
+            ) {
+                return;
+            }
+
+            // Close modal with Escape
+            if (isNutritionModalOpen || isLogOpen) {
+                if (e.key === 'Escape') {
+                    setIsNutritionModalOpen(false);
+                    setIsLogOpen(false);
+                }
+                return;
+            }
+
+            // Advance / Skip with Space or Enter
+            if (e.code === 'Space' || e.key === ' ' || e.code === 'Enter' || e.key === 'Enter') {
+                e.preventDefault();
+                if (e.repeat) return; // Prevent hold repeat flood
+
+                if (
+                    gameState === 'prologue' ||
+                    gameState === 'chapter_story' ||
+                    gameState === 'chapter_outcome'
+                ) {
+                    handleAdvanceDialogueRef.current?.();
+                }
+            } else if (gameState === 'select_patient') {
+                if (e.key === '1') handleSelectPatient('sarah');
+                else if (e.key === '2') handleSelectPatient('bambang');
+                else if (e.key === '3') handleSelectPatient('dimas');
+            } else if (gameState === 'chapter_choice') {
+                if (currentChapter?.choices) {
+                    const k = e.key.toLowerCase();
+                    if (e.key === '1' || k === 'a') {
+                        if (currentChapter.choices[0]) handlePickChoice(currentChapter.choices[0]);
+                    } else if (e.key === '2' || k === 'b') {
+                        if (currentChapter.choices[1]) handlePickChoice(currentChapter.choices[1]);
+                    } else if (e.key === '3' || k === 'c') {
+                        if (currentChapter.choices[2]) handlePickChoice(currentChapter.choices[2]);
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [gameState, isNutritionModalOpen, isLogOpen, currentChapter]);
 
     const handleSelectPatient = (charId) => {
         audio.playSuccess();
@@ -2006,7 +2100,7 @@ export default function MetabolicStoryGame() {
             )}
 
             {/* MAIN 16:9 2D VISUAL NOVEL CANVAS */}
-            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-[380px] sm:min-h-135 bg-black flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-95 sm:min-h-135 bg-black flex flex-col justify-between overflow-hidden">
                 {/* 2D Scenic Background */}
                 <div
                     className="absolute inset-0 bg-cover bg-center transition-all duration-700"
@@ -2334,8 +2428,17 @@ export default function MetabolicStoryGame() {
                                 </div>
 
                                 <span className="text-[9px] sm:text-[10px] text-gray-500 font-mono truncate">
-                                    <span className="hidden sm:inline">[Klik kotak atau tekan Spasi untuk lanjut]</span>
-                                    <span className="sm:hidden">[Ketuk untuk lanjut]</span>
+                                    {isTyping ? (
+                                        <>
+                                            <span className="hidden sm:inline">[Klik kotak atau tekan Spasi untuk percepat]</span>
+                                            <span className="sm:hidden">[Ketuk untuk percepat]</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="hidden sm:inline">[Klik kotak atau tekan Spasi untuk lanjut]</span>
+                                            <span className="sm:hidden">[Ketuk untuk lanjut]</span>
+                                        </>
+                                    )}
                                 </span>
                             </div>
 
@@ -2376,15 +2479,10 @@ export default function MetabolicStoryGame() {
                 )}
             </div>
 
-            {/* Bottom Retro Unity WebGL Bar */}
+            {/* Bottom Status Bar */}
             <div className="bg-[#141d1a] px-4 py-2 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 text-gray-300 font-bold font-mono text-[11px]">
-                        <span className="w-3.5 h-3.5 bg-gray-300 inline-block [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]"></span>
-                        <span>Unity</span>
-                    </div>
-
-                    <span className="text-[10px] font-mono text-gray-500 hidden sm:inline">
+                <div>
+                    <span className="text-[10px] sm:text-[11px] font-mono text-gray-400">
                         Puskesmas &amp; Telemedisin Sim
                     </span>
                 </div>

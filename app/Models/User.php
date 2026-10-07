@@ -229,4 +229,15 @@ class User extends Authenticatable
     {
         return (int) $this->pointsLedger()->sum('points');
     }
+
+    public function arcadeScores(): HasMany
+    {
+        return $this->hasMany(ArcadeScore::class);
+    }
+
+    public function bestArcadeScore(): HasOne
+    {
+        return $this->hasOne(ArcadeScore::class)->ofMany('score', 'max');
+    }
 }
+
