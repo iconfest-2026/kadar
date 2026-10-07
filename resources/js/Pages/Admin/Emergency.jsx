@@ -4,7 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import { Table, Modal, Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@/Components/UI';
+import { Table, Modal, Button, Tabs, TabsList, TabsTrigger, TabsContent, DropdownAction } from '@/Components/UI';
 
 export default function Emergency({
     emergencyLogs = { data: [], links: [] },
@@ -95,16 +95,11 @@ export default function Emergency({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="visibility"
-                        onClick={() => setSelectedLog(row)}
-                    >
-                        Detail
-                    </Button>
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedLog(row)}
+                        detailLabel="Detail Panggilan SOS"
+                    />
                 </div>
             ),
         },

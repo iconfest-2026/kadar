@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Textarea, Select, Avatar } from '@/Components/UI';
+import { Table, Modal, Button, Input, Textarea, Select, Avatar, DropdownAction } from '@/Components/UI';
 
 export default function Community({
     posts = { data: [], links: [] },
@@ -148,24 +148,13 @@ export default function Community({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="shield"
-                        onClick={() => setSelectedPost(row)}
-                        title="Moderasi Post"
-                    >
-                        Moderasi
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingPost(row)}
-                        title="Hapus Post"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedPost(row)}
+                        detailLabel="Moderasi Post"
+                        detailIcon="shield"
+                        onDelete={() => setDeletingPost(row)}
+                        deleteLabel="Hapus Post"
                     />
                 </div>
             ),

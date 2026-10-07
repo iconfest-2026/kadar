@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Select, Avatar } from '@/Components/UI';
+import { Table, Modal, Button, Input, Select, Avatar, DropdownAction } from '@/Components/UI';
 
 export default function Users({
     users = { data: [], links: [] },
@@ -161,34 +161,21 @@ export default function Users({
             render: (row) => {
                 const isSuspended = row.status === 'SUSPENDED';
                 return (
-                    <div className="flex items-center justify-end gap-1.5">
-                        <Button
-                            type="button"
-                            size="xs"
-                            variant="outline"
-                            leftIcon="edit"
-                            onClick={() => openEditModal(row)}
-                            title="Edit Pengguna"
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            type="button"
-                            size="xs"
-                            variant={isSuspended ? 'success' : 'destructive'}
-                            leftIcon={isSuspended ? 'check_circle' : 'block'}
-                            onClick={() => toggleStatus(row)}
-                            title={isSuspended ? 'Aktifkan Akun' : 'Bekukan Akun'}
-                        >
-                            {isSuspended ? 'Aktifkan' : 'Bekukan'}
-                        </Button>
-                        <Button
-                            type="button"
-                            size="xs"
-                            variant="destructive"
-                            leftIcon="delete"
-                            onClick={() => setDeletingUser(row)}
-                            title="Hapus Akun"
+                    <div className="flex items-center justify-end">
+                        <DropdownAction
+                            onEdit={() => openEditModal(row)}
+                            editLabel="Edit Pengguna"
+                            onDelete={() => setDeletingUser(row)}
+                            deleteLabel="Hapus Akun"
+                            customActions={[
+                                {
+                                    key: 'toggle-status',
+                                    label: isSuspended ? 'Aktifkan Akun' : 'Bekukan Akun',
+                                    icon: isSuspended ? 'check_circle' : 'block',
+                                    onClick: () => toggleStatus(row),
+                                    variant: isSuspended ? 'success' : 'warning',
+                                },
+                            ]}
                         />
                     </div>
                 );

@@ -5,7 +5,7 @@ import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Textarea, Select, Tabs, TabsList, TabsTrigger, TabsContent } from '@/Components/UI';
+import { Table, Modal, Button, Input, Textarea, Select, Tabs, TabsList, TabsTrigger, TabsContent, DropdownAction } from '@/Components/UI';
 
 export default function Gamification({
     achievements = { data: [], links: [] },
@@ -152,24 +152,12 @@ export default function Gamification({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="edit"
-                        onClick={() => openEditBadge(row)}
-                        title="Edit Lencana"
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingBadge(row)}
-                        title="Hapus Lencana"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onEdit={() => openEditBadge(row)}
+                        editLabel="Edit Lencana"
+                        onDelete={() => setDeletingBadge(row)}
+                        deleteLabel="Hapus Lencana"
                     />
                 </div>
             ),

@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Tabs, TabsList, TabsTrigger, TabsContent, Input, Textarea, Select } from '@/Components/UI';
+import { Table, Modal, Button, Tabs, TabsList, TabsTrigger, TabsContent, Input, Textarea, Select, DropdownAction } from '@/Components/UI';
 
 export default function Recommendations({
     insights = { data: [], links: [] },
@@ -135,34 +135,21 @@ export default function Recommendations({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="visibility"
-                        onClick={() => setSelectedInsight(row)}
-                        title="Detail Wawasan"
-                    >
-                        Detail
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant={row.status === 'ACTIVE' ? 'secondary' : 'success'}
-                        leftIcon={row.status === 'ACTIVE' ? 'archive' : 'unarchive'}
-                        onClick={() => toggleInsight(row)}
-                        title={row.status === 'ACTIVE' ? 'Arsipkan' : 'Aktifkan'}
-                    >
-                        {row.status === 'ACTIVE' ? 'Tutup' : 'Buka'}
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingInsight(row)}
-                        title="Hapus Wawasan"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedInsight(row)}
+                        detailLabel="Detail Wawasan"
+                        onDelete={() => setDeletingInsight(row)}
+                        deleteLabel="Hapus Wawasan"
+                        customActions={[
+                            {
+                                key: 'toggle',
+                                label: row.status === 'ACTIVE' ? 'Arsipkan / Tutup Wawasan' : 'Aktifkan Kembali',
+                                icon: row.status === 'ACTIVE' ? 'archive' : 'unarchive',
+                                onClick: () => toggleInsight(row),
+                                variant: row.status === 'ACTIVE' ? 'warning' : 'success',
+                            },
+                        ]}
                     />
                 </div>
             ),

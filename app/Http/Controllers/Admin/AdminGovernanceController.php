@@ -24,11 +24,15 @@ use App\Models\Recommendation;
 use App\Models\SystemSetting;
 use App\Models\User;
 use App\Models\UserStreak;
+use App\Services\MidtransService;
 use App\Services\Safety\EmergencyService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 class AdminGovernanceController extends Controller
@@ -943,6 +947,165 @@ class AdminGovernanceController extends Controller
         return back()->with('success', "Data mutasi transaksi '{$orderId}' berhasil dihapus.");
     }
 
+    // SaaS Subscriptions & Premium Members Governance
+    public function subscriptions(Request $request)
+    {
+        $search = $request->input('search');
+        $tierFilter = $request->input('tier', 'ALL');
+        $statusFilter = $request->input('status', 'ALL');
+
+        // Query 1: User -> Membership & Tier (Daftar Pengguna & Relasi Langganan SaaS)
+        $membersQuery = User::with([
+            'roles',
+            'activeMembership.tier',
+            'latestMembership.tier',
+            'memberships.tier',
+            'membershipPayments' => fn($q) => $q->latest()->take(5),
+        ])
+        ->withCount(['memberships', 'membershipPayments'])
+        ->latest();
+
+        if (!empty($search)) {
+            $membersQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($tierFilter !== 'ALL') {
+            $membersQuery->whereHas('activeMembership.tier', function($q) use ($tierFilter) {
+                $q->where('slug', $tierFilter)->orWhere('id', $tierFilter);
+            });
+        }
+
+        if ($statusFilter !== 'ALL') {
+            if ($statusFilter === 'ACTIVE') {
+                $membersQuery->whereHas('activeMembership');
+            } elseif ($statusFilter === 'EXPIRED') {
+                $membersQuery->whereDoesntHave('activeMembership')
+                    ->whereHas('latestMembership', fn($q) => $q->where('status', 'EXPIRED'));
+            } elseif ($statusFilter === 'FREE') {
+                $membersQuery->whereDoesntHave('memberships');
+            }
+        }
+
+        $members = $membersQuery->paginate(12)->withQueryString();
+
+        // Query 2: Membership Contracts (Membership -> User & Tier)
+        $contractsQuery = Membership::with(['user.roles', 'tier'])->latest();
+        if (!empty($search)) {
+            $contractsQuery->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+        if ($tierFilter !== 'ALL') {
+            $contractsQuery->whereHas('tier', fn($q) => $q->where('slug', $tierFilter)->orWhere('id', $tierFilter));
+        }
+        if ($statusFilter !== 'ALL') {
+            $contractsQuery->where('status', $statusFilter);
+        }
+        $contracts = $contractsQuery->paginate(12)->withQueryString();
+
+        // Query 3: SaaS Payment Transactions (MembershipPayment -> User & Tier)
+        $paymentsQuery = MembershipPayment::with(['user', 'tier'])->latest();
+        if (!empty($search)) {
+            $paymentsQuery->where(function ($q) use ($search) {
+                $q->where('order_id', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"));
+            });
+        }
+        $payments = $paymentsQuery->paginate(12)->withQueryString();
+
+        // Tiers for filter and assignment
+        $tiers = MembershipTier::orderBy('price', 'asc')->get();
+
+        // Users for assign modal
+        $users = User::select('id', 'name', 'email')->orderBy('name', 'asc')->get();
+
+        // SaaS Metrics
+        $totalUsers = User::count();
+        $activeSubscribers = Membership::where('status', 'ACTIVE')->count();
+        $expiredSubscribers = Membership::where('status', 'EXPIRED')->count();
+        $totalRevenue = (float) MembershipPayment::where('status', 'SETTLEMENT')->sum('gross_amount');
+        
+        // MRR estimate from active memberships
+        $mrr = (float) Membership::where('memberships.status', 'ACTIVE')
+            ->join('membership_tiers', 'memberships.tier_id', '=', 'membership_tiers.id')
+            ->sum('membership_tiers.price');
+
+        $stats = [
+            'totalUsers' => $totalUsers,
+            'activeSubscribers' => $activeSubscribers,
+            'expiredSubscribers' => $expiredSubscribers,
+            'totalRevenue' => $totalRevenue,
+            'mrr' => $mrr,
+            'conversionRate' => $totalUsers > 0 ? round(($activeSubscribers / $totalUsers) * 100, 1) : 0,
+            'silverCount' => Membership::where('status', 'ACTIVE')->whereHas('tier', fn($q) => $q->where('slug', 'silver'))->count(),
+            'goldCount' => Membership::where('status', 'ACTIVE')->whereHas('tier', fn($q) => $q->where('slug', 'gold'))->count(),
+            'platinumCount' => Membership::where('status', 'ACTIVE')->whereHas('tier', fn($q) => $q->where('slug', 'platinum'))->count(),
+        ];
+
+        return Inertia::render('Admin/Subscriptions', [
+            'members' => $members,
+            'contracts' => $contracts,
+            'payments' => $payments,
+            'tiers' => $tiers,
+            'users' => $users,
+            'stats' => $stats,
+            'filters' => [
+                'search' => $search ?? '',
+                'tier' => $tierFilter,
+                'status' => $statusFilter,
+            ],
+        ]);
+    }
+
+    public function renewSubscription(Request $request, Membership $membership)
+    {
+        $validated = $request->validate([
+            'months' => ['required', 'integer', 'min:1', 'max:24'],
+            'tier_id' => ['nullable', 'exists:membership_tiers,id'],
+        ]);
+
+        $currentEndsAt = ($membership->ends_at && $membership->ends_at->isFuture()) 
+            ? $membership->ends_at 
+            : now();
+
+        $newEndsAt = $currentEndsAt->copy()->addMonths((int)$validated['months']);
+
+        $membership->update([
+            'tier_id' => $validated['tier_id'] ?? $membership->tier_id,
+            'status' => 'ACTIVE',
+            'ends_at' => $newEndsAt,
+        ]);
+
+        AuditLog::log(
+            Auth::id(),
+            'admin',
+            'membership.renew',
+            'Membership',
+            (string) $membership->id,
+            ['user_id' => $membership->user_id, 'months' => $validated['months'], 'ends_at' => $newEndsAt->toDateTimeString()]
+        );
+
+        return back()->with('success', "Masa aktif langganan berhasil diperpanjang hingga {$newEndsAt->format('d M Y')}.");
+    }
+
+    public function verifyPayment(Request $request)
+    {
+        $request->validate(['order_id' => 'required|string']);
+        /** @var MidtransService $midtrans */
+        $midtrans = app(MidtransService::class);
+        $result = $midtrans->syncPaymentWithMidtrans($request->order_id);
+
+        if (!$result['success']) {
+            return back()->with('error', $result['message'] ?? 'Gagal memverifikasi dengan Midtrans.');
+        }
+
+        return back()->with('success', "Status pembayaran Midtrans berhasil disinkronkan: {$result['payment_status']}");
+    }
+
     // 11. Tanggap Darurat & Telepon Ambulan Berbasis Lokasi (119/112)
     public function emergency(Request $request)
     {
@@ -1014,10 +1177,41 @@ class AdminGovernanceController extends Controller
         $systemRules = [
             'max_instructors_per_member' => (int) SystemSetting::get('max_instructors_per_member', 3),
         ];
+
+        // Gather real-time server diagnostics
+        $dbStatus = 'Connected';
+        try {
+            DB::connection()->getPdo();
+        } catch (\Throwable $e) {
+            $dbStatus = 'Terputus: ' . $e->getMessage();
+        }
+
+        $serverInfo = [
+            'php_version' => PHP_VERSION,
+            'laravel_version' => app()->version(),
+            'server_os' => PHP_OS_FAMILY,
+            'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? (php_uname('s') . ' ' . php_uname('r')),
+            'environment' => app()->environment(),
+            'debug_mode' => (bool) config('app.debug'),
+            'maintenance_mode' => app()->isDownForMaintenance(),
+            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . ' MB',
+            'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . ' MB',
+            'memory_limit' => ini_get('memory_limit') ?: 'N/A',
+            'max_execution_time' => (ini_get('max_execution_time') ?: '0') . 's',
+            'upload_max_filesize' => ini_get('upload_max_filesize') ?: 'N/A',
+            'post_max_size' => ini_get('post_max_size') ?: 'N/A',
+            'database_status' => $dbStatus,
+            'database_driver' => config('database.default'),
+            'disk_free_space' => @disk_free_space(base_path()) ? round(disk_free_space(base_path()) / (1024 * 1024 * 1024), 2) . ' GB' : 'N/A',
+            'disk_total_space' => @disk_total_space(base_path()) ? round(disk_total_space(base_path()) / (1024 * 1024 * 1024), 2) . ' GB' : 'N/A',
+            'cache_driver' => config('cache.default'),
+            'queue_connection' => config('queue.default'),
+        ];
         
         return Inertia::render('Admin/Settings', [
             'featureFlags' => $featureFlags,
             'systemRules' => $systemRules,
+            'serverInfo' => $serverInfo,
         ]);
     }
 
@@ -1061,6 +1255,258 @@ class AdminGovernanceController extends Controller
             'Konfigurasi sakelar fitur operasional sistem'
         );
 
+        AuditLog::log(
+            Auth::id(),
+            'admin',
+            'settings.flags_update',
+            'SystemSetting',
+            'feature_flags',
+            ['flags' => $validated['flags']]
+        );
+
         return back()->with('success', 'Status sakelar fitur operasional sistem berhasil disimpan.');
+    }
+
+    public function clearCache(Request $request)
+    {
+        $type = $request->input('type', 'all');
+
+        try {
+            if ($type === 'route') {
+                Artisan::call('route:clear');
+                $message = 'Cache routing aplikasi berhasil dibersihkan.';
+            } elseif ($type === 'config') {
+                Artisan::call('config:clear');
+                $message = 'Cache konfigurasi aplikasi berhasil dibersihkan.';
+            } elseif ($type === 'view') {
+                Artisan::call('view:clear');
+                $message = 'Cache kompilasi view/template berhasil dibersihkan.';
+            } else {
+                Artisan::call('optimize:clear');
+                $message = 'Seluruh cache aplikasi (cache, config, route, view) berhasil dibersihkan secara tuntas.';
+            }
+
+            AuditLog::log(
+                Auth::id(),
+                'admin',
+                'server.cache_clear',
+                'Server',
+                'cache',
+                ['type' => $type]
+            );
+
+            return back()->with('success', $message);
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal membersihkan cache: ' . $e->getMessage());
+        }
+    }
+
+    public function optimizeServer(Request $request)
+    {
+        try {
+            Artisan::call('optimize');
+
+            AuditLog::log(
+                Auth::id(),
+                'admin',
+                'server.optimize',
+                'Server',
+                'optimize',
+                ['timestamp' => now()]
+            );
+
+            return back()->with('success', 'Optimasi server berhasil dieksekusi (Cache config, routes, dan framework telah dikompilasi).');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal mengoptimasi server: ' . $e->getMessage());
+        }
+    }
+
+    public function toggleMaintenance(Request $request)
+    {
+        try {
+            $isDown = app()->isDownForMaintenance();
+            if ($isDown) {
+                Artisan::call('up');
+                $status = 'dinonaktifkan (Aplikasi Kembali Online)';
+            } else {
+                $secret = $request->input('secret', 'admin-emergency-bypass');
+                Artisan::call('down', [
+                    '--secret' => $secret,
+                ]);
+                $status = "diaktifkan (Mode Pemeliharaan Aktif, Bypass Secret: {$secret})";
+            }
+
+            AuditLog::log(
+                Auth::id(),
+                'admin',
+                'server.maintenance_toggle',
+                'Server',
+                'maintenance',
+                ['is_down_before' => $isDown]
+            );
+
+            return back()->with('success', "Mode Maintenance sistem berhasil {$status}.");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal mengubah status mode maintenance: ' . $e->getMessage());
+        }
+    }
+
+    public function logs(Request $request)
+    {
+        $logPath = storage_path('logs/laravel.log');
+        $fileSize = 0;
+        $fileSizeFormatted = '0 KB';
+        $entries = [];
+
+        if (File::exists($logPath)) {
+            $fileSize = File::size($logPath);
+            if ($fileSize >= 1048576) {
+                $fileSizeFormatted = round($fileSize / 1048576, 2) . ' MB';
+            } else {
+                $fileSizeFormatted = round($fileSize / 1024, 2) . ' KB';
+            }
+
+            // Read up to last 2MB for memory safety and fast page load
+            $maxBytes = 2 * 1024 * 1024;
+            $content = '';
+            if ($fileSize > $maxBytes) {
+                $fp = fopen($logPath, 'r');
+                fseek($fp, -$maxBytes, SEEK_END);
+                fgets($fp); // discard first incomplete line
+                $content = stream_get_contents($fp);
+                fclose($fp);
+            } else {
+                $content = File::get($logPath);
+            }
+
+            // Match log patterns: [2026-10-07 16:20:41] local.ERROR: Message ...
+            $pattern = '/^\[(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})\]\s(\w+)\.([A-Z]+):\s([\s\S]*?)(?=(?:^\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\]|\z))/m';
+            preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
+
+            $idCounter = 1;
+            foreach (array_reverse($matches) as $match) {
+                $rawBody = trim($match[4]);
+                $lines = explode("\n", $rawBody);
+                $message = trim($lines[0] ?? '');
+                
+                // Stack trace or context
+                $context = count($lines) > 1 ? trim(implode("\n", array_slice($lines, 1))) : null;
+
+                // Extract file & line if available
+                $fileInfo = null;
+                if (preg_match('/(?:at|in)\s+([A-Za-z0-9_\-\/\\:\.]+\.php)(?:\((\d+)\)|:(\d+))?/', $rawBody, $fileMatches)) {
+                    $fileInfo = [
+                        'file' => $fileMatches[1] ?? '',
+                        'line' => $fileMatches[2] ?? ($fileMatches[3] ?? null),
+                    ];
+                }
+
+                $entries[] = [
+                    'id' => $idCounter++,
+                    'timestamp' => $match[1],
+                    'environment' => $match[2],
+                    'level' => strtoupper($match[3]),
+                    'message' => $message,
+                    'stack_trace' => $context,
+                    'file_info' => $fileInfo,
+                ];
+            }
+        }
+
+        // Summary counts (before filter)
+        $counts = [
+            'total' => count($entries),
+            'emergency' => 0,
+            'critical' => 0,
+            'error' => 0,
+            'warning' => 0,
+            'info' => 0,
+        ];
+        foreach ($entries as $e) {
+            $lvl = strtolower($e['level']);
+            if (isset($counts[$lvl])) {
+                $counts[$lvl]++;
+            }
+        }
+
+        // Filter by Level
+        $selectedLevel = $request->input('level', 'ALL');
+        if ($selectedLevel && $selectedLevel !== 'ALL') {
+            $entries = array_values(array_filter($entries, function ($item) use ($selectedLevel) {
+                return $item['level'] === strtoupper($selectedLevel);
+            }));
+        }
+
+        // Filter by Search Query
+        $search = $request->input('search');
+        if (!empty($search)) {
+            $searchLower = strtolower($search);
+            $entries = array_values(array_filter($entries, function ($item) use ($searchLower) {
+                return str_contains(strtolower($item['message']), $searchLower)
+                    || str_contains(strtolower($item['stack_trace'] ?? ''), $searchLower)
+                    || str_contains(strtolower($item['timestamp']), $searchLower);
+            }));
+        }
+
+        // Manual Pagination via LengthAwarePaginator for Table component compatibility
+        $perPage = 25;
+        $currentPage = max(1, (int) $request->input('page', 1));
+        $totalItems = count($entries);
+        $offset = ($currentPage - 1) * $perPage;
+        $paginatedData = array_slice($entries, $offset, $perPage);
+
+        $paginator = new LengthAwarePaginator(
+            $paginatedData,
+            $totalItems,
+            $perPage,
+            $currentPage,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]
+        );
+
+        return Inertia::render('Admin/Logs', [
+            'logs' => $paginator,
+            'filters' => [
+                'level' => $selectedLevel,
+                'search' => $search,
+            ],
+            'counts' => $counts,
+            'fileInfo' => [
+                'size' => $fileSizeFormatted,
+                'path' => 'storage/logs/laravel.log',
+                'exists' => File::exists($logPath),
+            ],
+        ]);
+    }
+
+    public function clearLogs(Request $request)
+    {
+        $logPath = storage_path('logs/laravel.log');
+        if (File::exists($logPath)) {
+            File::put($logPath, '');
+        }
+
+        AuditLog::log(
+            Auth::id(),
+            'admin',
+            'server.logs_clear',
+            'Server',
+            'laravel.log',
+            ['timestamp' => now()]
+        );
+
+        return back()->with('success', 'Seluruh isi berkas storage/logs/laravel.log berhasil dikosongkan.');
+    }
+
+    public function downloadLogs()
+    {
+        $logPath = storage_path('logs/laravel.log');
+        if (!File::exists($logPath)) {
+            return back()->with('error', 'Berkas log tidak ditemukan pada server.');
+        }
+
+        return response()->download($logPath, 'laravel-' . date('Y-m-d-His') . '.log');
     }
 }

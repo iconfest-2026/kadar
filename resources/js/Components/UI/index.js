@@ -12,4 +12,7 @@ export { default as Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 export { default as Skeleton } from './Skeleton';
 export { default as Modal, default as AdminModal } from './Modal';
 export { default as Table, default as AdminDataTable } from './Table';
+export { default as DropdownAction, default as DropdownActions } from './DropdownAction';
+export { default as AdminDeleteConfirmModal, default as DeleteConfirmModal } from '../Admin/AdminDeleteConfirmModal';
+export { default as AdminBadge } from '../Admin/AdminBadge';
 

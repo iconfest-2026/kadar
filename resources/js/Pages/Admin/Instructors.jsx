@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import { Button, Modal, Textarea, Avatar, Badge } from '@/Components/UI';
+import { Button, Modal, Textarea, Avatar, Badge, DropdownAction } from '@/Components/UI';
 
 export default function Instructors({ instructors = { data: [], links: [] }, stats = {}, filters = {} }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -204,45 +204,51 @@ export default function Instructors({ instructors = { data: [], links: [] }, sta
         },
         {
             key: 'actions',
-            label: 'Tindakan & Audit',
+            label: 'Tindakan',
             align: 'right',
             render: (row) => {
                 return (
-                    <div className="flex items-center justify-end gap-1.5">
-                        <Button
-                            type="button"
-                            size="xs"
-                            variant="outline"
-                            leftIcon="visibility"
-                            onClick={() => openDetailModal(row)}
-                        >
-                            Detail
-                        </Button>
-
-                        {row.status === 'PENDING_VERIFICATION' && (
-                            <Button
-                                type="button"
-                                size="xs"
-                                variant="success"
-                                leftIcon="verified"
-                                onClick={() => approveInstructor(row)}
-                            >
-                                Sahkan
-                            </Button>
-                        )}
-
-                        {row.status === 'ACTIVE' && (
-                            <Button
-                                type="button"
-                                size="xs"
-                                variant={row.instructor_profile?.is_recommended ? 'secondary' : 'ghost'}
-                                leftIcon="star"
-                                onClick={() => toggleRecommendation(row)}
-                                title="Atur Rekomendasi Unggulan"
-                            >
-                                {row.instructor_profile?.is_recommended ? 'Batal Rekomendasi' : 'Rekomendasikan'}
-                            </Button>
-                        )}
+                    <div className="flex items-center justify-end">
+                        <DropdownAction
+                            onDetail={() => openDetailModal(row)}
+                            detailLabel="Detail Profil & Kredensial"
+                            customActions={[
+                                ...(row.status === 'PENDING_VERIFICATION'
+                                    ? [
+                                          {
+                                              key: 'approve',
+                                              label: 'Sahkan & Verifikasi',
+                                              icon: 'verified',
+                                              onClick: () => approveInstructor(row),
+                                              variant: 'success',
+                                          },
+                                          {
+                                              key: 'reject',
+                                              label: 'Tolak Verifikasi',
+                                              icon: 'cancel',
+                                              onClick: () => {
+                                                  setSelectedInstructor(row);
+                                                  setIsRejectModalOpen(true);
+                                              },
+                                              variant: 'danger',
+                                          },
+                                      ]
+                                    : []),
+                                ...(row.status === 'ACTIVE'
+                                    ? [
+                                          {
+                                              key: 'recommend',
+                                              label: row.instructor_profile?.is_recommended
+                                                  ? 'Batal Rekomendasi'
+                                                  : 'Jadikan Rekomendasi Unggulan',
+                                              icon: 'star',
+                                              onClick: () => toggleRecommendation(row),
+                                              variant: 'warning',
+                                          },
+                                      ]
+                                    : []),
+                            ]}
+                        />
                     </div>
                 );
             },

@@ -4,7 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import { Button, Modal, Table, Tabs, TabsList, TabsTrigger, TabsContent, Badge, Input } from '@/Components/UI';
+import { Button, Modal, Table, Tabs, TabsList, TabsTrigger, TabsContent, Badge, Input, DropdownAction } from '@/Components/UI';
 
 export default function Reports({
     cohortReports = [],
@@ -107,25 +107,20 @@ export default function Reports({
             label: 'Aksi',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="visibility"
-                        onClick={() => setSelectedReport(row)}
-                    >
-                        Detail
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="primary"
-                        leftIcon="download"
-                        onClick={() => handleExport('PDF')}
-                    >
-                        PDF
-                    </Button>
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedReport(row)}
+                        detailLabel="Detail Laporan"
+                        customActions={[
+                            {
+                                key: 'export',
+                                label: 'Unduh Ringkasan PDF',
+                                icon: 'download',
+                                onClick: () => handleExport('PDF'),
+                                variant: 'primary',
+                            },
+                        ]}
+                    />
                 </div>
             ),
         },

@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Textarea, Select } from '@/Components/UI';
+import { Table, Modal, Button, Input, Textarea, Select, DropdownAction } from '@/Components/UI';
 
 export default function Challenges({
     challenges = { data: [], links: [] },
@@ -184,24 +184,12 @@ export default function Challenges({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="edit"
-                        onClick={() => openEditModal(row)}
-                        title="Edit Tantangan"
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingChallenge(row)}
-                        title="Hapus Tantangan"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onEdit={() => openEditModal(row)}
+                        editLabel="Edit Tantangan"
+                        onDelete={() => setDeletingChallenge(row)}
+                        deleteLabel="Hapus Tantangan"
                     />
                 </div>
             ),

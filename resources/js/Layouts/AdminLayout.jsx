@@ -57,11 +57,13 @@ export default function AdminLayout({ children, title, activeNav }) {
         {
             title: 'Monetisasi & Keselamatan',
             items: [
+                { key: 'subscriptions', label: 'Langganan SaaS & Member', icon: 'card_membership', href: '/admin/subscriptions' },
                 { key: 'memberships', label: 'Tier Membership', icon: 'workspace_premium', href: '/admin/memberships' },
                 { key: 'emergency', label: 'Tanggap Darurat 119', icon: 'emergency', href: '/admin/emergency' },
                 { key: 'reports', label: 'Laporan & Analitik', icon: 'analytics', href: '/admin/reports' },
                 { key: 'audit', label: 'Audit Trail Forensik', icon: 'shield', href: '/admin/audit' },
                 { key: 'settings', label: 'Konfigurasi Sistem', icon: 'tune', href: '/admin/settings' },
+                { key: 'logs', label: 'Log Error Server', icon: 'terminal', href: '/admin/logs' },
             ],
         },
     ];

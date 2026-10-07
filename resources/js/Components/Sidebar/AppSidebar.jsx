@@ -6,7 +6,7 @@ import SidebarAiBanner from './SidebarAiBanner';
 import SidebarNavLinks from './SidebarNavLinks';
 import SidebarUpgradeCard from './SidebarUpgradeCard';
 import SidebarFooter from './SidebarFooter';
-import { getMemberNavSections, getInstructorNavSections, getAdminNavSections } from './navConfig';
+import { getMemberNavSections, getInstructorNavSections } from './navConfig';
 
 export default function AppSidebar({
     isOpen = false,
@@ -25,9 +25,7 @@ export default function AppSidebar({
     const isInstructor = roles.includes('instructor');
     const isMember = roles.includes('member') || (!isAdmin && !isInstructor);
 
-    const sections = isAdmin
-        ? getAdminNavSections()
-        : isInstructor
+    const sections = isInstructor
         ? getInstructorNavSections()
         : getMemberNavSections();
 

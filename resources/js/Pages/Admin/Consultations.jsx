@@ -6,7 +6,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Select, Textarea } from '@/Components/UI';
+import { Table, Modal, Button, Input, Select, Textarea, DropdownAction } from '@/Components/UI';
 
 export default function Consultations({
     consultations = { data: [], links: [] },
@@ -169,34 +169,14 @@ export default function Consultations({
             label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="visibility"
-                        onClick={() => setSelectedConsultation(row)}
-                        title="Lihat Detail"
-                    >
-                        Detail
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="outline"
-                        leftIcon="edit"
-                        onClick={() => openEditModal(row)}
-                        title="Edit Sesi"
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        type="button"
-                        size="xs"
-                        variant="destructive"
-                        leftIcon="delete"
-                        onClick={() => setDeletingConsultation(row)}
-                        title="Hapus Sesi"
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedConsultation(row)}
+                        detailLabel="Lihat Detail"
+                        onEdit={() => openEditModal(row)}
+                        editLabel="Edit Sesi"
+                        onDelete={() => setDeletingConsultation(row)}
+                        deleteLabel="Hapus Sesi"
                     />
                 </div>
             ),

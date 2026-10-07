@@ -4,6 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
+import { DropdownAction } from '@/Components/UI';
 
 export default function Dashboard({
     kpis = {},
@@ -53,6 +54,19 @@ export default function Dashboard({
                 <span className="font-label-mono text-[11px] text-on-surface-variant">
                     {new Date(row.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
+            ),
+        },
+        {
+            key: 'actions',
+            label: 'Aksi',
+            align: 'right',
+            render: (row) => (
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        detailHref={`/admin/users?search=${encodeURIComponent(row.email)}`}
+                        detailLabel="Kelola Akun"
+                    />
+                </div>
             ),
         },
     ];

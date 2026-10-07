@@ -4,7 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminFilterBar from '@/Components/Admin/AdminFilterBar';
 import AdminBadge from '@/Components/Admin/AdminBadge';
-import { Table, Modal, Button } from '@/Components/UI';
+import { Table, Modal, Button, DropdownAction } from '@/Components/UI';
 
 export default function AuditTrail({ auditLogs = { data: [], links: [] }, filters = {} }) {
     const [action, setAction] = useState(filters.action || '');
@@ -102,18 +102,16 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
         },
         {
             key: 'actions',
-            label: 'Rincian',
+            label: 'Tindakan',
             align: 'right',
             render: (row) => (
-                <Button
-                    type="button"
-                    size="xs"
-                    variant="outline"
-                    leftIcon="data_object"
-                    onClick={() => setSelectedLog(row)}
-                >
-                    Payload
-                </Button>
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDetail={() => setSelectedLog(row)}
+                        detailLabel="Inspeksi Payload JSON"
+                        detailIcon="data_object"
+                    />
+                </div>
             ),
         },
     ];

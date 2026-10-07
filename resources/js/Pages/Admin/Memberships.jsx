@@ -5,7 +5,7 @@ import AdminPageHeader from '@/Components/Admin/AdminPageHeader';
 import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal';
-import { Table, Modal, Button, Input, Textarea, Select, Switch } from '@/Components/UI';
+import { Table, Modal, Button, Input, Textarea, Select, Switch, DropdownAction } from '@/Components/UI';
 
 const PRESET_FEATURES = [
     'Pemindai Kamera Makanan & Obat BPOM Tanpa Batas',
@@ -410,26 +410,16 @@ export default function Memberships({
         },
         {
             key: 'actions',
-            label: 'Aksi (CRUD)',
+            label: 'Aksi',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1.5">
-                    <button
-                        type="button"
-                        onClick={() => openEditSubscription(row)}
-                        className="p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
-                        title="Edit Langganan Member (Ubah Paket/Status/Masa Berlaku)"
-                    >
-                        <span className="material-symbols-outlined text-[17px]">edit</span>
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setDeletingSubscription(row)}
-                        className="p-1.5 rounded-xl text-on-surface-variant hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                        title="Cabut & Hapus Langganan Member"
-                    >
-                        <span className="material-symbols-outlined text-[17px]">delete</span>
-                    </button>
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onEdit={() => openEditSubscription(row)}
+                        editLabel="Ubah Paket / Status"
+                        onDelete={() => setDeletingSubscription(row)}
+                        deleteLabel="Cabut Langganan"
+                    />
                 </div>
             ),
         },
@@ -544,26 +534,21 @@ export default function Memberships({
             label: 'Aksi',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1">
-                    <button
-                        type="button"
-                        onClick={() => handleVerifyPayment(row)}
-                        disabled={verifyingOrderId === row.order_id}
-                        className="p-1.5 rounded-xl text-teal-600 hover:bg-teal-500/10 transition-colors cursor-pointer"
-                        title="Verifikasi Status Langsung ke Midtrans"
-                    >
-                        <span className={`material-symbols-outlined text-[17px] ${verifyingOrderId === row.order_id ? 'animate-spin' : ''}`}>
-                            sync
-                        </span>
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setDeletingPayment(row)}
-                        className="p-1.5 rounded-xl text-on-surface-variant hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                        title="Hapus Catatan Mutasi"
-                    >
-                        <span className="material-symbols-outlined text-[17px]">delete</span>
-                    </button>
+                <div className="flex items-center justify-end">
+                    <DropdownAction
+                        onDelete={() => setDeletingPayment(row)}
+                        deleteLabel="Hapus Catatan Mutasi"
+                        customActions={[
+                            {
+                                key: 'verify',
+                                label: verifyingOrderId === row.order_id ? 'Memverifikasi...' : 'Cek Status Midtrans',
+                                icon: 'sync',
+                                onClick: () => handleVerifyPayment(row),
+                                disabled: verifyingOrderId === row.order_id,
+                                variant: 'primary',
+                            },
+                        ]}
+                    />
                 </div>
             ),
         },

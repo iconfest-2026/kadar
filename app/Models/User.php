@@ -147,6 +147,21 @@ class User extends Authenticatable
         return $this->hasMany(Membership::class);
     }
 
+    public function latestMembership(): HasOne
+    {
+        return $this->hasOne(Membership::class)->latestOfMany();
+    }
+
+    public function activeMembership(): HasOne
+    {
+        return $this->hasOne(Membership::class)->where('status', 'ACTIVE')->latestOfMany();
+    }
+
+    public function membershipPayments(): HasMany
+    {
+        return $this->hasMany(MembershipPayment::class);
+    }
+
     public function streaks(): HasMany
     {
         return $this->hasMany(UserStreak::class);
