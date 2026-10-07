@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, usePage, router, Head } from '@inertiajs/react';
 import EmergencyModal from '../Components/EmergencyModal';
 import QuickLogModal from '../Components/QuickLogModal';
@@ -7,12 +7,30 @@ import MembershipTierModal from '../Components/MembershipTierModal';
 import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 
 export default function AppLayout({ children, title, activeTab }) {
-    const { auth, flash } = usePage().props;
+    const { auth, flash, membership } = usePage().props;
     const user = auth?.user;
     const roles = auth?.roles || [];
     const isMember = roles.includes('member') || (!roles.includes('admin') && !roles.includes('instructor'));
     const isInstructor = roles.includes('instructor');
     const isAdmin = roles.includes('admin');
+
+    const currentTierName = membership?.current_tier || 'Silver';
+    const currentTierSlug = membership?.current_tier_slug || 'silver';
+    const activeTiers = membership?.active_tiers || [];
+
+    const currentTierObj = activeTiers.find((t) =>
+        (t.slug && currentTierSlug && t.slug.toLowerCase() === currentTierSlug.toLowerCase()) ||
+        (t.name && currentTierName && t.name.toLowerCase() === currentTierName.toLowerCase()) ||
+        (t.id && membership?.tier_id && t.id === membership.tier_id)
+    ) || null;
+
+    const scannerQuotaText = currentTierObj
+        ? (currentTierObj.max_scanner === -1 ? 'Unlimited scan kamera gizi' : (currentTierObj.max_scanner > 0 ? `${currentTierObj.max_scanner}x scan kamera gizi / hari` : 'Skrining dasar'))
+        : (membership?.max_scanner === -1 ? 'Unlimited scan kamera gizi' : (membership?.max_scanner > 0 ? `${membership.max_scanner}x scan kamera gizi / hari` : '10x scan gizi / hari'));
+
+    const consultationQuotaText = currentTierObj
+        ? (currentTierObj.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (currentTierObj.max_consultations > 0 ? `${currentTierObj.max_consultations} sesi konsultasi dokter / bln` : 'tanpa kuota konsultasi'))
+        : (membership?.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (membership?.max_consultations > 0 ? `${membership.max_consultations} sesi konsultasi dokter / bln` : '1 sesi konsultasi dokter'));
 
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
     const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
@@ -46,7 +64,7 @@ export default function AppLayout({ children, title, activeTab }) {
             items: [
                 { id: 'consultations', name: 'Pusat Tele-Konsultasi', href: '/member/consultations-hub', icon: 'support_agent' },
                 { id: 'instructors', name: 'Tim Dokter Pendamping', href: '/member/instructors', icon: 'medical_services' },
-                { id: 'ai-consultation', name: 'Chat AI (WhatsApp)', action: 'open_ai_chat', icon: 'chat', badge: 'Online' },
+                { id: 'ai-consultation', name: 'Asisten AI', action: 'open_ai_chat', icon: 'smart_toy' },
                 { id: 'emergency', name: 'Siaga Ambulans GPS', href: '/demo/emergency', icon: 'emergency', badge: '119' },
             ],
         },
@@ -63,7 +81,7 @@ export default function AppLayout({ children, title, activeTab }) {
             title: 'Layanan & Bantuan',
             items: [
                 { id: 'home', name: 'Beranda Utama Web', href: '/', icon: 'home', badge: 'Web' },
-                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium' },
+                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium', badge: currentTierName },
                 { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
             ],
         },
@@ -71,7 +89,7 @@ export default function AppLayout({ children, title, activeTab }) {
             title: 'Pengaturan & Akun',
             items: [
                 { id: 'onboarding', name: 'Profil & Gaya Hidup', href: '/member/onboarding', icon: 'tune' },
-                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge' },
+                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge', badge: 'Aktif' },
             ],
         },
     ];
@@ -174,9 +192,9 @@ export default function AppLayout({ children, title, activeTab }) {
 
                 {/* Member Profile Widget */}
                 {isMember && (
-                    <div className="p-4 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2.5 shrink-0">
+                    <div className="p-3.5 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 shrink-0">
                         <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
+                            <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
                                 {user?.name?.charAt(0) || 'M'}
                             </div>
                             <div className="flex-1 min-w-0">
@@ -185,19 +203,21 @@ export default function AppLayout({ children, title, activeTab }) {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between pt-1 border-t border-surface-container/80">
+                        <div className="flex items-center justify-between pt-1.5 border-t border-surface-container/70 text-[11px]">
                             <button
                                 type="button"
                                 onClick={() => setIsTierModalOpen(true)}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-all cursor-pointer shrink-0"
-                                title="Lihat Kuota & Tingkatan Member"
+                                className="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors cursor-pointer group min-w-0"
+                                title="Lihat Status & Kelola Paket"
                             >
-                                <span className="material-symbols-outlined text-[13px] text-amber-600">workspace_premium</span>
-                                <span>Gold Member</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                <span className="font-semibold text-[10px] truncate text-on-surface group-hover:text-primary">
+                                    {currentTierName}
+                                </span>
                             </button>
                             <Link
                                 href="/member/onboarding"
-                                className="text-[10px] text-primary font-semibold hover:underline shrink-0"
+                                className="text-[10px] text-on-surface-variant hover:text-primary transition-colors shrink-0"
                             >
                                 Edit Profil
                             </Link>
@@ -244,43 +264,7 @@ export default function AppLayout({ children, title, activeTab }) {
                     </div>
                 )}
 
-                {/* WhatsApp-Style AI Chat Trigger in Sidebar */}
-                {isMember && (
-                    <div className="px-3 pt-1.5 pb-1 shrink-0">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setSidebarOpen(false);
-                                setIsAiChatOpen(true);
-                            }}
-                            className="w-full p-2.5 rounded-2xl bg-linear-to-r from-[#008069]/10 via-[#00a884]/10 to-[#25d366]/10 hover:from-[#008069]/20 hover:to-[#25d366]/20 border border-[#008069]/25 flex items-center justify-between transition-all group cursor-pointer shadow-2xs active:scale-98"
-                            title="Buka Chat AI WhatsApp AEVYRA"
-                        >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                                <div className="relative shrink-0">
-                                    <div className="w-9 h-9 rounded-full bg-[#008069] text-white flex items-center justify-center shadow-xs">
-                                        <span className="material-symbols-outlined text-[19px]">smart_toy</span>
-                                    </div>
-                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#25d366] ring-2 ring-white"></span>
-                                </div>
-                                <div className="text-left min-w-0">
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="font-heading font-bold text-xs text-on-surface group-hover:text-[#008069] transition-colors truncate">
-                                            Asisten AI Preventif
-                                        </span>
-                                    </div>
-                                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold block truncate">
-                                        Online • Chat ala WhatsApp
-                                    </span>
-                                </div>
-                            </div>
-                            <span className="px-2.5 py-1 rounded-full bg-[#008069] text-white text-[10px] font-bold shadow-2xs shrink-0 flex items-center gap-1">
-                                <span>Chat</span>
-                                <span className="material-symbols-outlined text-[13px]">chat</span>
-                            </span>
-                        </button>
-                    </div>
-                )}
+
 
                 {/* Nav Links Feed */}
                 <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5 no-scrollbar">
@@ -301,16 +285,16 @@ export default function AppLayout({ children, title, activeTab }) {
                                                     setSidebarOpen(false);
                                                     setIsAiChatOpen(true);
                                                 }}
-                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-[#008069] hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition-all min-w-0 cursor-pointer text-left"
+                                                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all min-w-0 cursor-pointer text-left"
                                             >
                                                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-[#008069]">
+                                                    <span className="material-symbols-outlined text-[18px] shrink-0 text-primary">
                                                         {item.icon}
                                                     </span>
                                                     <span className="truncate">{item.name}</span>
                                                 </div>
                                                 {item.badge && (
-                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-emerald-100 text-emerald-800">
+                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-mono shrink-0 bg-surface-container text-on-surface-variant">
                                                         {item.badge}
                                                     </span>
                                                 )}
@@ -378,24 +362,26 @@ export default function AppLayout({ children, title, activeTab }) {
                         </div>
                     ))}
 
-                    {/* Quick Upgrade Callout (Member only) */}
+                    {/* Status Paket Minimalis (Member only) */}
                     {isMember && (
-                        <div className="p-3.5 rounded-2xl bg-linear-to-br from-amber-500/10 to-transparent border border-amber-400/25 space-y-2">
-                            <div className="flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-amber-600 text-[18px]">workspace_premium</span>
-                                <span className="font-heading font-black text-xs text-amber-900 dark:text-amber-300">
-                                    Paket Gold Aktif
-                                </span>
+                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <span className="material-symbols-outlined text-[16px] text-primary shrink-0">workspace_premium</span>
+                                <div className="min-w-0">
+                                    <p className="text-[11px] font-bold text-on-surface truncate leading-tight">
+                                        Paket {currentTierName}
+                                    </p>
+                                    <p className="text-[10px] text-on-surface-variant truncate leading-tight">
+                                        Status Aktif
+                                    </p>
+                                </div>
                             </div>
-                            <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                                Nikmati 15x scan kamera gizi harian dan 4 sesi konsultasi dokter spesialis IDI.
-                            </p>
                             <button
                                 type="button"
                                 onClick={() => setIsTierModalOpen(true)}
-                                className="w-full py-1.5 px-2.5 bg-white dark:bg-surface rounded-xl text-[11px] font-bold text-amber-800 dark:text-amber-300 border border-amber-200 hover:bg-amber-50 transition-colors text-center cursor-pointer block"
+                                className="px-2.5 py-1 rounded-lg text-[10px] font-bold text-primary hover:bg-surface-container border border-surface-container transition-colors cursor-pointer shrink-0"
                             >
-                                Kelola Tingkatan Paket
+                                Kelola
                             </button>
                         </div>
                     )}
@@ -466,10 +452,11 @@ export default function AppLayout({ children, title, activeTab }) {
                         <button
                             type="button"
                             onClick={() => setIsAiChatOpen(true)}
-                            className="w-8 h-8 rounded-full bg-[#008069] text-white flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer active:scale-95"
-                            title="Buka Chat AI WhatsApp"
+                            className="w-8 h-8 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary flex items-center justify-center font-bold text-xs shadow-2xs cursor-pointer active:scale-95 border border-surface-container"
+                            title="Asisten AI Preventif"
+                            aria-label="Buka Asisten AI"
                         >
-                            <span className="material-symbols-outlined text-[16px]">chat</span>
+                            <span className="material-symbols-outlined text-[17px]">smart_toy</span>
                         </button>
                     </div>
                 </header>
@@ -501,7 +488,7 @@ export default function AppLayout({ children, title, activeTab }) {
                 <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="font-medium text-center sm:text-left">
-                            © 2026 AEVYRA — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
+                            © 2026 AEVYRA - Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
                         </p>
                         <div className="flex items-center gap-4 text-[11px]">
                             <span>UU PDP No. 27/2022 Patuh</span>
@@ -730,7 +717,8 @@ export default function AppLayout({ children, title, activeTab }) {
             <MembershipTierModal
                 isOpen={isTierModalOpen}
                 onClose={() => setIsTierModalOpen(false)}
-                currentTier="Gold"
+                currentTier={currentTierName}
+                availableTiers={activeTiers}
             />
 
             {/* Authenticated Member WhatsApp AI Chat Drawer */}

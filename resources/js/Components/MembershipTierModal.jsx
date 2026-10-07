@@ -1,84 +1,290 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
 
-const FALLBACK_TIERS = [
+// Fallback tiers mirroring exact database configuration
+const SYSTEM_FALLBACK_TIERS = [
     {
-        name: 'Silver',
+        id: 4,
+        name: 'Silver (Gratis)',
         slug: 'silver',
-        price: 'Gratis',
-        period: 'Selamanya',
-        description: 'Fondasi pencatatan preventif harian untuk memulai evaluasi gaya hidup sehat.',
-        features: [
-            { text: '3x Scan Kamera Gizi & Obat / hari', active: true },
-            { text: 'Pencatatan metrik harian (Gula, Tidur, Langkah)', active: true },
-            { text: 'Konsultasi Tanya Jawab AI Dasar (5 sesi/hari)', active: true },
-            { text: 'Akses Komunitas & Forum Diskusi Publik', active: true },
-            { text: 'Konsultasi Dokter Spesialis Terjadwal', active: false },
-            { text: 'Simulasi Lengkap Kurva Beban Glikemik (GL)', active: false },
-            { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
-        ],
+        price: 0,
+        admin_fee: 0,
+        calculated_admin_fee: 0,
+        total_price: 0,
+        max_scanner: 10,
+        max_consultations: 0,
+        badge_text: 'Akses Esensial Mandiri',
+        is_popular: false,
+        description: 'Fondasi skrining mandiri label pangan, buku harian glukosa darah, dan edukasi preventif tanpa biaya.',
     },
     {
-        name: 'Gold',
+        id: 5,
+        name: 'PERAK',
+        slug: 'perak',
+        price: 90000,
+        admin_fee: 4000,
+        calculated_admin_fee: 4000,
+        total_price: 94000,
+        max_scanner: -1,
+        max_consultations: 0,
+        badge_text: 'Paling Rekomen',
+        is_popular: true,
+        description: 'Akses scanner OCR makanan dan obat tanpa batas ditambah paket glukometer mandiri diantar ke rumah.',
+    },
+    {
+        id: 2,
+        name: 'Gold Sehat',
         slug: 'gold',
-        price: 'Rp 79.000',
-        period: '/ bulan',
-        description: 'Paling populer untuk pencegahan pra-diabetes dan optimasi metabolik mandiri terpandu.',
-        popular: true,
-        features: [
-            { text: '15x Scan Kamera Gizi & Obat / hari', active: true },
-            { text: '4x Konsultasi Terjadwal Bersama Dokter/Spesialis Gizi', active: true },
-            { text: 'AI Asisten Preventif 24/7 Tanpa Batas', active: true },
-            { text: 'Simulasi Lengkap Kurva Glukosa & Beban Glikemik (GL)', active: true },
-            { text: 'Akses Penuh Program Tantangan 14-90 Hari PERKENI', active: true },
-            { text: 'Laporan Perkembangan Bulanan Terstandar Kemenkes', active: true },
-            { text: 'Instruktur Pendamping Medis Terverifikasi', active: false },
-        ],
+        price: 99000,
+        admin_fee: 4000,
+        calculated_admin_fee: 4000,
+        total_price: 103000,
+        max_scanner: 50,
+        max_consultations: 2,
+        badge_text: 'Paling Diminati',
+        is_popular: true,
+        description: 'Program terstruktur untuk pembalikan pra-diabetes, penurunan resistensi insulin, dan telekonsultasi dokter.',
     },
     {
-        name: 'Platinum',
+        id: 3,
+        name: 'Platinum VIP Klinis',
         slug: 'platinum',
-        price: 'Rp 199.000',
-        period: '/ bulan',
-        description: 'Paket VIP paripurna dengan bimbingan dokter spesialis pribadi & ambulans terhubung.',
-        features: [
-            { text: 'Scan Kamera Gizi & Obat UNLIMITED (Bebas Batas)', active: true },
-            { text: '8x Konsultasi Dokter & Spesialis Gizi Klinis (Sp.GK)', active: true },
-            { text: 'Dedicated Personal Health Coach & Intervensi Kustom', active: true },
-            { text: 'Akses Jalur Cepat Ambulans 119 dengan Riwayat Medis Instan', active: true },
-            { text: 'Laporan Klinis Komprehensif Berstandar Rumah Sakit', active: true },
-            { text: 'Prediksi Hormonal & Siklus AI Tingkat Lanjut', active: true },
-            { text: 'Status Eksklusif di Komunitas Pejuang Sehat AEVYRA', active: true },
-        ],
+        price: 249000,
+        admin_fee: 4000,
+        calculated_admin_fee: 4000,
+        total_price: 253000,
+        max_scanner: -1,
+        max_consultations: 6,
+        badge_text: 'Pendampingan Spesialis VIP',
+        is_popular: false,
+        description: 'Bimbingan klinis intensif 1-on-1 bersama Dokter Spesialis Penyakit Dalam (Sp.PD) untuk kondisi metabolisme kompleks.',
     },
 ];
 
-export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Gold', availableTiers = [] }) {
-    const [selectedTier, setSelectedTier] = useState(currentTier);
-    const [upgrading, setUpgrading] = useState(false);
-    const [upgradeSuccess, setUpgradeSuccess] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
+// Helper to provide realistic feature defaults if tier has no features defined in DB
+const getDefaultFeatures = (t) => {
+    const slug = (t.slug || '').toLowerCase();
+    const maxScanner = Number(t.max_scanner ?? 0);
+    const maxConsultations = Number(t.max_consultations ?? 0);
+
+    if (slug === 'silver' || slug === 'free') {
+        return [
+            { text: maxScanner === -1 ? 'Scan Nutrisi & Obat BPOM Tanpa Batas' : `${maxScanner > 0 ? maxScanner : 10}x Scan Nutrisi & BPOM / hari`, active: true },
+            { text: 'Pencatatan metrik harian (Gula Darah, Tidur, Langkah)', active: true },
+            { text: 'Deteksi Beban Glikemik & Gramatur Gula Instan', active: true },
+            { text: 'Konsultasi Asisten AI Preventif Medis Terverifikasi', active: true },
+            { text: 'Akses Siaga Panggilan Darurat SPGDT 119', active: true },
+            { text: 'Forum Diskusi Komunitas & Edukasi Pasien Publik', active: true },
+            { text: 'Konsultasi Terjadwal Bersama Dokter Spesialis', active: false },
+        ];
+    }
+
+    if (slug === 'perak') {
+        return [
+            { text: 'Semua kapabilitas dasar paket Silver', active: true },
+            { text: maxScanner === -1 ? 'Scan Kamera Gizi & BPOM UNLIMITED' : `${maxScanner}x Scan Kamera Gizi / hari`, active: true },
+            { text: 'Starter Kit Glukometer Mandiri Diantar ke Rumah', active: true },
+            { text: 'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)', active: true },
+            { text: 'Prediksi Lonjakan Glikemik Makanan (Kurva 2 Jam)', active: true },
+            { text: 'Laporan Evaluasi Progres Bulanan Format PDF', active: true },
+            { text: maxConsultations > 0 ? `${maxConsultations}x Sesi Telekonsultasi Dokter / bln` : 'Jadwal Konsultasi Dokter Spesialis Terjadwal', active: maxConsultations > 0 },
+        ];
+    }
+
+    if (slug === 'gold') {
+        return [
+            { text: 'Semua kapabilitas paket Silver & Perak', active: true },
+            { text: maxScanner === -1 ? 'Scan Kamera OCR Tanpa Batas' : `${maxScanner > 0 ? maxScanner : 50}x Scan Nutrisi & BPOM / hari`, active: true },
+            { text: `${maxConsultations > 0 ? maxConsultations : 2}x Sesi Konsultasi Dokter Spesialis / bln`, active: true },
+            { text: 'Rencana Intervensi Gizi & Menu Presisi Personal', active: true },
+            { text: 'Akses Penuh Program Tantangan Remisi 14-90 Hari', active: true },
+            { text: 'Prediksi Lonjakan Glikemik & Analisis Kurva 2 Jam', active: true },
+            { text: 'Laporan Perkembangan Bulanan Terstandar Medis', active: true },
+        ];
+    }
+
+    if (slug === 'platinum') {
+        return [
+            { text: 'Semua kapabilitas komprehensif paket Gold', active: true },
+            { text: 'Scan Nutrisi & Obat BPOM UNLIMITED Bebas Batas', active: true },
+            { text: `${maxConsultations > 0 ? maxConsultations : 6}x Sesi Konsultasi Dokter Spesialis (1-on-1)`, active: true },
+            { text: 'Dedicated Personal Health Coach Medis Berpengalaman', active: true },
+            { text: 'Jalur Koordinasi Ambulans 119 dengan Riwayat Klinis Instan', active: true },
+            { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Lipid)', active: true },
+            { text: 'Resume Medis PDF Terstandar Rumah Sakit & Rujukan', active: true },
+        ];
+    }
+
+    // Dynamic generation for custom admin tiers
+    const list = [];
+    if (maxScanner === -1) {
+        list.push({ text: 'Pemindai Kamera Gizi & Obat BPOM Tanpa Batas (Unlimited)', active: true });
+    } else if (maxScanner > 0) {
+        list.push({ text: `${maxScanner}x Pemindai Kamera Gizi & BPOM / hari`, active: true });
+    } else {
+        list.push({ text: 'Akses Pencatatan Metrik Dasar', active: true });
+    }
+
+    if (maxConsultations === -1) {
+        list.push({ text: 'Konsultasi Tim Dokter Spesialis Tanpa Batas', active: true });
+    } else if (maxConsultations > 0) {
+        list.push({ text: `${maxConsultations}x Sesi Konsultasi Dokter Terjadwal / bulan`, active: true });
+    } else {
+        list.push({ text: 'Konsultasi Dokter Spesialis Terjadwal', active: false });
+    }
+
+    list.push({ text: 'Asisten AI Preventif Medis 24/7', active: true });
+    list.push({ text: 'Pencatatan Riwayat Biomarker & Tren Kestabilan', active: true });
+    list.push({ text: 'Akses Siaga Panggilan Darurat SPGDT 119', active: true });
+    list.push({ text: 'Laporan Evaluasi Progres Terstandar Kemenkes', active: true });
+
+    return list;
+};
+
+// Helper to safely parse features avoiding React object child rendering errors
+const parseFeatures = (t) => {
+    if (Array.isArray(t.features) && t.features.length > 0) {
+        return t.features.map((feat) => {
+            if (typeof feat === 'string') {
+                return { text: feat, active: true };
+            }
+            if (typeof feat === 'object' && feat !== null) {
+                return {
+                    text: feat.text || feat.name || feat.title || JSON.stringify(feat),
+                    active: feat.active !== false && feat.included !== false,
+                };
+            }
+            return { text: String(feat), active: true };
+        });
+    }
+    return getDefaultFeatures(t);
+};
+
+export default function MembershipTierModal({ isOpen, onClose, currentTier = null, availableTiers = [] }) {
+    const { membership, midtrans } = usePage().props;
+    const [processingTierId, setProcessingTierId] = useState(null);
+    const [statusMessage, setStatusMessage] = useState(null); // { type: 'success' | 'error' | 'info', text: string }
+
+    // Keyboard navigation (Esc to close)
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
 
     if (!isOpen) return null;
 
-    const tiers = availableTiers && availableTiers.length > 0
-        ? availableTiers.map((t) => ({
+    // Pick tiers dynamically: prefer passed prop, then inertia shared membership tiers, then fallback
+    const rawTiers = (Array.isArray(availableTiers) && availableTiers.length > 0)
+        ? availableTiers
+        : ((Array.isArray(membership?.active_tiers) && membership.active_tiers.length > 0)
+            ? membership.active_tiers
+            : ((Array.isArray(membership?.all_tiers) && membership.all_tiers.length > 0)
+                ? membership.all_tiers
+                : SYSTEM_FALLBACK_TIERS));
+
+    // Determine currently active tier with multiple fallback matching
+    const checkIsCurrentTier = (t) => {
+        if (typeof t.is_current === 'boolean') {
+            return t.is_current;
+        }
+
+        const activeTierId = membership?.tier_id || (typeof currentTier === 'object' ? currentTier?.id : null);
+        if (activeTierId && t.id && Number(t.id) === Number(activeTierId)) {
+            return true;
+        }
+
+        const activeSlug = (
+            membership?.current_tier_slug ||
+            (typeof currentTier === 'object' ? currentTier?.slug : null) ||
+            (typeof currentTier === 'string' ? currentTier : '')
+        ).trim().toLowerCase();
+
+        const tSlug = (t.slug || '').trim().toLowerCase();
+        if (activeSlug && tSlug && (activeSlug === tSlug || activeSlug.startsWith(tSlug) || tSlug.startsWith(activeSlug))) {
+            return true;
+        }
+
+        const activeName = (
+            membership?.current_tier ||
+            (typeof currentTier === 'object' ? currentTier?.name : null) ||
+            (typeof currentTier === 'string' ? currentTier : '')
+        ).trim().toLowerCase();
+
+        const tName = (t.name || '').trim().toLowerCase();
+        if (activeName && tName && (activeName === tName || activeName.includes(tName) || tName.includes(activeName))) {
+            return true;
+        }
+
+        return false;
+    };
+
+    // Normalize tiers data
+    const tiers = rawTiers.map((t) => {
+        const basePrice = Number(t.price || 0);
+        const adminFee = Number(t.calculated_admin_fee ?? t.admin_fee ?? 0);
+        const totalPrice = Number(t.total_price || (basePrice + adminFee));
+
+        return {
             id: t.id,
             name: t.name,
             slug: t.slug,
-            price: Number(t.total_price || t.price) === 0 ? 'Gratis' : `Rp ${Number(t.total_price || t.price).toLocaleString('id-ID')}`,
-            adminFee: Number(t.calculated_admin_fee || 0),
-            period: Number(t.price) === 0 ? 'Selamanya' : '/ bulan',
-            description: t.description || 'Layanan kesehatan preventif terpadu AEVYRA.',
-            popular: Boolean(t.is_popular),
-            features: Array.isArray(t.features) && t.features.length > 0
-                ? t.features.map((feat) => ({ text: feat, active: true }))
-                : (FALLBACK_TIERS.find((ft) => ft.slug === t.slug)?.features || []),
-        }))
-        : FALLBACK_TIERS;
+            basePrice,
+            adminFee,
+            totalPrice,
+            price: totalPrice === 0 ? 'Gratis' : `Rp ${totalPrice.toLocaleString('id-ID')}`,
+            basePriceFormatted: `Rp ${basePrice.toLocaleString('id-ID')}`,
+            adminFeeFormatted: `Rp ${adminFee.toLocaleString('id-ID')}`,
+            period: basePrice === 0 ? 'selamanya' : '/ bulan',
+            description: t.description || 'Program kesehatan preventif terpadu AEVYRA.',
+            badge: t.badge_text,
+            isPopular: Boolean(t.is_popular),
+            maxConsultations: t.max_consultations,
+            maxScanner: t.max_scanner,
+            features: parseFeatures(t),
+            isCurrent: checkIsCurrentTier(t),
+        };
+    });
 
+    // Helper to ensure Midtrans Snap is ready
+    const ensureSnapLoaded = (serverClientKey) => {
+        return new Promise((resolve) => {
+            if (window.snap && typeof window.snap.pay === 'function') {
+                return resolve(true);
+            }
+
+            const clientKey = serverClientKey || midtrans?.client_key || 'Mid-client-o8FP06N-oie4kS_V';
+            const snapUrl = midtrans?.snap_url || 'https://app.sandbox.midtrans.com/snap/snap.js';
+
+            let script = document.getElementById('midtrans-snap-script');
+            if (script) {
+                if (window.snap && typeof window.snap.pay === 'function') {
+                    return resolve(true);
+                }
+                script.addEventListener('load', () => resolve(true));
+                setTimeout(() => resolve(Boolean(window.snap && typeof window.snap.pay === 'function')), 1500);
+                return;
+            }
+
+            script = document.createElement('script');
+            script.id = 'midtrans-snap-script';
+            script.src = snapUrl;
+            script.setAttribute('data-client-key', clientKey);
+            script.async = true;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    // Checkout / Upgrade Handler
     const handleUpgrade = async (tierItem) => {
-        setUpgrading(true);
-        setErrorMessage(null);
+        setProcessingTierId(tierItem.id || tierItem.slug);
+        setStatusMessage(null);
 
         try {
             const getCookie = (name) => {
@@ -101,6 +307,15 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                 credentials: 'same-origin',
             });
 
+            if (res.status === 419) {
+                throw new Error('Sesi keamanan Anda telah berakhir. Halaman akan dimuat ulang...');
+            }
+
+            if (res.status === 401) {
+                window.location.href = '/login';
+                return;
+            }
+
             let data = {};
             try {
                 data = await res.json();
@@ -109,63 +324,85 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
             }
 
             if (!res.ok || !data.success) {
-                throw new Error(data.message || 'Gagal memulai transaksi checkout Midtrans.');
+                throw new Error(data.message || 'Gagal memulai transaksi pembayaran paket.');
             }
 
-            // Free tier activation
+            // Free tier instant activation
             if (data.is_free) {
-                setUpgradeSuccess(true);
-                setSelectedTier(tierItem.name);
+                setStatusMessage({
+                    type: 'success',
+                    text: `Berhasil! Paket ${tierItem.name} telah aktif di akun Anda.`,
+                });
                 setTimeout(() => {
-                    setUpgradeSuccess(false);
                     onClose();
                     window.location.reload();
-                }, 1500);
+                }, 1600);
                 return;
             }
 
-            // Midtrans Snap Popup
+            // Midtrans Snap Checkout
             if (data.snap_token) {
+                await ensureSnapLoaded(data.client_key);
+
                 if (window.snap && typeof window.snap.pay === 'function') {
                     window.snap.pay(data.snap_token, {
-                        onSuccess: function (result) {
-                            setUpgradeSuccess(true);
-                            setSelectedTier(tierItem.name);
+                        onSuccess: function () {
+                            setStatusMessage({
+                                type: 'success',
+                                text: `Pembayaran berhasil! Paket ${tierItem.name} Anda sedang diaktifkan.`,
+                            });
                             setTimeout(() => {
                                 onClose();
                                 window.location.reload();
-                            }, 1500);
+                            }, 1800);
                         },
-                        onPending: function (result) {
-                            alert('Pesanan langganan Anda berhasil dibuat dan menunggu konfirmasi pembayaran.');
-                            onClose();
+                        onPending: function () {
+                            setStatusMessage({
+                                type: 'info',
+                                text: `Pesanan paket ${tierItem.name} berhasil dibuat. Silakan selesaikan pembayaran sesuai petunjuk Midtrans.`,
+                            });
+                            setTimeout(() => {
+                                onClose();
+                                window.location.reload();
+                            }, 3000);
                         },
-                        onError: function (result) {
-                            setErrorMessage('Pembayaran gagal atau ditolak oleh gateway.');
+                        onError: function () {
+                            setStatusMessage({
+                                type: 'error',
+                                text: 'Pembayaran dibatalkan atau terjadi penolakan dari gateway pembayaran Midtrans.',
+                            });
+                            setProcessingTierId(null);
                         },
                         onClose: function () {
-                            // Modal closed
+                            setProcessingTierId(null);
                         },
                     });
                 } else if (data.redirect_url) {
                     window.location.href = data.redirect_url;
                 } else {
-                    throw new Error('Midtrans Snap SDK belum siap dimuat. Silakan muat ulang halaman.');
+                    throw new Error('SDK pembayaran Midtrans Snap tidak dapat dimuat. Silakan periksa koneksi internet Anda.');
                 }
             }
         } catch (err) {
-            setErrorMessage(err.message || 'Terjadi gangguan saat menghubungkan ke gateway pembayaran.');
-        } finally {
-            setUpgrading(false);
+            setStatusMessage({
+                type: 'error',
+                text: err.message || 'Terjadi gangguan saat menghubungkan ke gateway pembayaran.',
+            });
+            setProcessingTierId(null);
         }
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-            <div className="bg-white dark:bg-surface rounded-3xl max-w-4xl w-full shadow-2xl border border-surface-container overflow-hidden flex flex-col max-h-[90vh] animate-scale-up">
-                
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto"
+            onClick={onClose}
+        >
+            <div
+                className="bg-white dark:bg-surface rounded-3xl max-w-6xl w-full shadow-2xl border border-surface-container overflow-hidden flex flex-col max-h-[92vh] animate-scale-up my-auto"
+                onClick={(e) => e.stopPropagation()}
+            >
                 {/* Header */}
-                <div className="p-4 sm:p-6 bg-surface-container-low border-b border-surface-container flex items-start justify-between gap-3">
+                <div className="p-4 sm:p-6 bg-surface-container-low border-b border-surface-container flex items-start justify-between gap-3 shrink-0">
                     <div className="min-w-0 flex-1">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary mb-1">
                             <span className="material-symbols-outlined text-[14px]">workspace_premium</span>
@@ -175,77 +412,129 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                             Tingkatan Akses & Kuota Layanan AEVYRA
                         </h3>
                         <p className="text-xs text-on-surface-variant line-clamp-2 sm:line-clamp-none">
-                            Mendorong keberlanjutan hidup sehat jangka panjang dengan fleksibilitas fitur komprehensif
+                            Tarif resmi fiks sesuai input admin dan terintegrasi langsung dengan Midtrans Payment Gateway.
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={onClose}
                         className="w-8 h-8 shrink-0 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors cursor-pointer"
+                        aria-label="Tutup Modal"
                     >
                         <span className="material-symbols-outlined text-[18px]">close</span>
                     </button>
                 </div>
 
-                {/* Plans Comparison */}
-                <div className="p-6 overflow-y-auto space-y-6">
-                    {errorMessage && (
-                        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-between gap-2">
+                {/* Plans Comparison Body */}
+                <div className="p-4 sm:p-6 overflow-y-auto space-y-5">
+                    {/* Status Alert Messages */}
+                    {statusMessage && (
+                        <div
+                            className={`p-3.5 rounded-2xl border text-xs font-bold flex items-center justify-between gap-2 animate-fade-in ${
+                                statusMessage.type === 'success'
+                                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
+                                    : statusMessage.type === 'info'
+                                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-800 dark:text-amber-300'
+                                    : 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-300'
+                            }`}
+                        >
                             <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-[18px]">error</span>
-                                <span>{errorMessage}</span>
+                                <span className="material-symbols-outlined text-[18px]">
+                                    {statusMessage.type === 'success' ? 'check_circle' : statusMessage.type === 'info' ? 'info' : 'error'}
+                                </span>
+                                <span>{statusMessage.text}</span>
                             </div>
                             <button
                                 type="button"
-                                onClick={() => setErrorMessage(null)}
-                                className="text-rose-500 hover:text-rose-700 cursor-pointer"
+                                onClick={() => setStatusMessage(null)}
+                                className="cursor-pointer opacity-70 hover:opacity-100"
                             >
                                 <span className="material-symbols-outlined text-[16px]">close</span>
                             </button>
                         </div>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Cards Grid: Dynamic 1 / 2 / 4 Columns */}
+                    <div className={`grid grid-cols-1 sm:grid-cols-2 ${tiers.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-4`}>
                         {tiers.map((t) => {
-                            const isCurrent = t.name.toLowerCase() === currentTier.toLowerCase();
+                            const isProcessingThis = processingTierId === (t.id || t.slug);
                             return (
                                 <div
-                                    key={t.name}
-                                    className={`rounded-3xl border p-5 flex flex-col justify-between transition-all bg-white dark:bg-surface relative ${
-                                        t.popular
+                                    key={t.id || t.slug || t.name}
+                                    className={`rounded-3xl border p-4 sm:p-5 flex flex-col justify-between transition-all bg-white dark:bg-surface relative ${
+                                        t.isPopular
                                             ? 'border-primary ring-2 ring-primary/20 shadow-xs'
                                             : 'border-surface-container hover:border-primary/30'
                                     }`}
                                 >
-                                    {t.popular && (
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-white font-bold text-[9px] uppercase tracking-wider shadow-xs">
-                                            Paling Direkomendasikan
+                                    {t.isPopular && (
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-white font-bold text-[9px] uppercase tracking-wider shadow-xs whitespace-nowrap">
+                                            {t.badge || 'Paling Diminati'}
                                         </div>
                                     )}
 
                                     <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <h4 className="font-heading font-black text-base text-on-surface">
+                                        {/* Card Title & Badges */}
+                                        <div className="flex items-center justify-between gap-1">
+                                            <h4 className="font-heading font-black text-sm sm:text-base text-on-surface truncate" title={t.name}>
                                                 {t.name}
                                             </h4>
-                                            {isCurrent && (
-                                                <span className="px-2 py-0.5 rounded-full text-[9px] font-label-mono font-bold bg-primary/10 text-primary">
-                                                    Paket Aktif Anda
+                                            {t.isCurrent ? (
+                                                <span className="px-2 py-0.5 rounded-full text-[9px] font-label-mono font-bold bg-primary/10 text-primary shrink-0">
+                                                    Paket Aktif
                                                 </span>
+                                            ) : t.badge && !t.isPopular ? (
+                                                <span className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-surface-container-high text-on-surface-variant border border-surface-container shrink-0">
+                                                    {t.badge}
+                                                </span>
+                                            ) : null}
+                                        </div>
+
+                                        {/* Pricing Box */}
+                                        <div>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-xl sm:text-2xl font-black font-mono text-on-surface">
+                                                    {t.price}
+                                                </span>
+                                                <span className="text-xs text-on-surface-variant font-medium">{t.period}</span>
+                                            </div>
+
+                                            {t.basePrice > 0 && (
+                                                <div className="mt-1.5 p-2 rounded-xl bg-surface-container-low border border-primary/10 flex items-center justify-between text-[10px]">
+                                                    <span className="text-on-surface-variant">
+                                                        Pokok: <strong className="text-on-surface">{t.basePriceFormatted}</strong>
+                                                    </span>
+                                                    <span className="text-teal-700 dark:text-teal-400 font-mono font-bold">
+                                                        + Fee: {t.adminFeeFormatted}
+                                                    </span>
+                                                </div>
                                             )}
                                         </div>
 
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="text-2xl font-black font-mono text-on-surface">
-                                                {t.price}
-                                            </span>
-                                            <span className="text-xs text-on-surface-variant font-medium">{t.period}</span>
-                                        </div>
-
-                                        <p className="text-[11px] text-on-surface-variant leading-relaxed min-h-[32px]">
+                                        {/* Description */}
+                                        <p className="text-[11px] text-on-surface-variant leading-relaxed min-h-[30px]">
                                             {t.description}
                                         </p>
 
+                                        {/* Quota Quick Summary */}
+                                        {(t.maxConsultations !== undefined || t.maxScanner !== undefined) && (
+                                            <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-surface-container-low/60 border border-surface-container text-[10px]">
+                                                <div>
+                                                    <span className="text-on-surface-variant block text-[9px]">Konsultasi:</span>
+                                                    <span className="font-bold text-primary truncate block">
+                                                        {t.maxConsultations === -1 ? 'Bebas Batas' : (t.maxConsultations > 0 ? `${t.maxConsultations}x / bln` : '0 Sesi')}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-on-surface-variant block text-[9px]">Scanner OCR:</span>
+                                                    <span className="font-bold text-primary truncate block">
+                                                        {t.maxScanner === -1 ? 'Unlimited' : (t.maxScanner > 0 ? `${t.maxScanner}x / hari` : '0')}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Features List */}
                                         <div className="pt-3 border-t border-surface-container space-y-2 text-xs">
                                             {t.features.map((feat, idx) => (
                                                 <div
@@ -265,22 +554,39 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                                         </div>
                                     </div>
 
-                                    <div className="pt-5 mt-4 border-t border-surface-container">
-                                        {isCurrent ? (
+                                    {/* Action Button */}
+                                    <div className="pt-4 mt-3 border-t border-surface-container">
+                                        {t.isCurrent ? (
                                             <button
+                                                type="button"
                                                 disabled
                                                 className="w-full py-2.5 rounded-xl bg-surface-container text-on-surface-variant font-bold text-xs cursor-default text-center"
                                             >
-                                                Status Aktif Saat Ini
+                                                Paket Aktif Saat Ini
                                             </button>
                                         ) : (
                                             <button
                                                 type="button"
                                                 onClick={() => handleUpgrade(t)}
-                                                disabled={upgrading}
-                                                className="w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs active:scale-95 bg-primary hover:bg-primary-container text-white cursor-pointer"
+                                                disabled={Boolean(processingTierId)}
+                                                className={`w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer ${
+                                                    isProcessingThis
+                                                        ? 'bg-primary/70 text-white cursor-wait'
+                                                        : t.totalPrice === 0
+                                                        ? 'bg-surface-container-high hover:bg-surface-container-highest text-on-surface'
+                                                        : 'bg-primary hover:bg-primary-container text-white'
+                                                }`}
                                             >
-                                                {upgrading ? 'Menghubungkan Midtrans...' : `Pilih ${t.name}`}
+                                                {isProcessingThis ? (
+                                                    <>
+                                                        <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
+                                                        <span>Menghubungkan Midtrans...</span>
+                                                    </>
+                                                ) : t.totalPrice === 0 ? (
+                                                    <span>Aktifkan {t.name}</span>
+                                                ) : (
+                                                    <span>Pilih & Bayar {t.name}</span>
+                                                )}
                                             </button>
                                         )}
                                     </div>
@@ -288,27 +594,20 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                             );
                         })}
                     </div>
-
-                    {upgradeSuccess && (
-                        <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 animate-fade-in">
-                            <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                            <span>Berhasil! Tingkatan keanggotaan Anda telah diperbarui ke {selectedTier}.</span>
-                        </div>
-                    )}
                 </div>
 
-                {/* Footer */}
-                <div className="p-4 bg-surface-container-low border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-on-surface-variant text-center sm:text-left">
+                {/* Footer Utilities */}
+                <div className="p-4 bg-surface-container-low border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-on-surface-variant text-center sm:text-left shrink-0">
                     <span className="flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-[16px] text-primary shrink-0">lock</span>
-                        <span>Transaksi terlindungi Midtrans Payment Gateway & enkripsi perbankan.</span>
+                        <span>Transaksi terlindungi Midtrans Payment Gateway & enkripsi perbankan berizin Bank Indonesia.</span>
                     </span>
                     <button
                         type="button"
                         onClick={onClose}
                         className="font-bold text-primary hover:underline cursor-pointer shrink-0"
                     >
-                        Tutup
+                        Tutup Modal
                     </button>
                 </div>
             </div>

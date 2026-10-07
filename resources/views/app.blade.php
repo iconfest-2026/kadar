@@ -138,7 +138,8 @@
                 });
             }
             if ('caches' in window) {
-                caches.keys().then(function(keys) {
+                caches.keys().then(func
+                tion(keys) {
                     for (let key of keys) {
                         caches.delete(key);
                     }

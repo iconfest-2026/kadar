@@ -100,11 +100,13 @@ class BookingController extends Controller
             ->first();
 
         $tierName = $membership?->tier?->name ?? 'Silver';
-        $quota = match (strtoupper($tierName)) {
-            'PLATINUM' => ['total' => 8, 'used' => $consultations->where('is_upcoming', true)->count()],
-            'GOLD' => ['total' => 4, 'used' => $consultations->where('is_upcoming', true)->count()],
-            default => ['total' => 1, 'used' => $consultations->where('is_upcoming', true)->count()],
-        };
+        $totalQuota = $membership?->tier
+            ? ($membership->tier->max_consultations === -1 ? 999 : (int) ($membership->tier->max_consultations ?? 1))
+            : 1;
+        $quota = [
+            'total' => $totalQuota,
+            'used' => $consultations->where('is_upcoming', true)->count(),
+        ];
 
         // 4. Default available time slots template
         $defaultSlots = [
