@@ -260,6 +260,14 @@ export default function Dashboard({
                                     <span className="material-symbols-outlined text-[17px]">add_circle</span>
                                     <span>Catat Biomarker</span>
                                 </button>
+                                <button
+                                    type="button"
+                                    onClick={() => window.dispatchEvent(new CustomEvent('open-ai-chat'))}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-400/25 hover:bg-emerald-400/35 text-white font-bold text-xs border border-white/20 backdrop-blur-xs transition-all cursor-pointer shadow-xs active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined text-[17px]">chat</span>
+                                    <span>Chat &amp; Curhat AI</span>
+                                </button>
                             </div>
                         </div>
 
@@ -775,6 +783,7 @@ export default function Dashboard({
                 isOpen={tierModalOpen}
                 onClose={() => setTierModalOpen(false)}
                 currentTier={membership?.tier || 'Gold'}
+                availableTiers={membership?.all_tiers || []}
             />
 
             {/* Quick Log Modal */}

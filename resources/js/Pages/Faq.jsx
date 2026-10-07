@@ -5,7 +5,9 @@ import MarketingLayout from '../Layouts/MarketingLayout';
 export default function Faq(props) {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
-    const [openIndex, setOpenIndex] = useState(null);
+    const [openKey, setOpenKey] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const categories = [
         { id: 'all', label: 'Semua Pertanyaan', count: 20 },
@@ -145,13 +147,20 @@ export default function Faq(props) {
         },
     ];
 
-    const toggleFaq = (index) => {
-        setOpenIndex(openIndex === index ? null : index);
+    const toggleFaq = (questionText) => {
+        setOpenKey((prev) => (prev === questionText ? null : questionText));
     };
 
     const handleCategoryChange = (cat) => {
         setActiveCategory(cat);
-        setOpenIndex(null);
+        setCurrentPage(1);
+        setOpenKey(null);
+    };
+
+    const handleSearchChange = (query) => {
+        setSearchQuery(query);
+        setCurrentPage(1);
+        setOpenKey(null);
     };
 
     const filteredFaqs = useMemo(() => {
@@ -165,6 +174,26 @@ export default function Faq(props) {
             return matchesCategory && matchesQuery;
         });
     }, [activeCategory, searchQuery]);
+
+    const totalPages = Math.ceil(filteredFaqs.length / itemsPerPage) || 1;
+    const validCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+    const paginatedFaqs = useMemo(() => {
+        const start = (validCurrentPage - 1) * itemsPerPage;
+        return filteredFaqs.slice(start, start + itemsPerPage);
+    }, [filteredFaqs, validCurrentPage, itemsPerPage]);
+
+    const startItem = filteredFaqs.length === 0 ? 0 : (validCurrentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(validCurrentPage * itemsPerPage, filteredFaqs.length);
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+        setOpenKey(null);
+        const listEl = document.getElementById('faq-list-anchor');
+        if (listEl) {
+            listEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
 
     return (
         <MarketingLayout {...props}>
@@ -209,18 +238,15 @@ export default function Faq(props) {
                         <input
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setOpenIndex(null);
-                            }}
+                            onChange={(e) => handleSearchChange(e.target.value)}
                             placeholder="Cari topik pertanyaan (misal: gula, kalori, BPOM, dokter, privasi, gratis, ambulans)..."
                             className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-white border border-[#d6e5dd] text-sm text-[#182a26] placeholder-[#7d8f89] shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                         />
                         {searchQuery && (
                             <button
                                 type="button"
-                                onClick={() => setSearchQuery('')}
-                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-[#7d8f89] hover:text-primary px-1.5 py-0.5 rounded bg-gray-100"
+                                onClick={() => handleSearchChange('')}
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-[#7d8f89] hover:text-primary px-1.5 py-0.5 rounded bg-gray-100 cursor-pointer"
                             >
                                 Reset
                             </button>
@@ -252,17 +278,28 @@ export default function Faq(props) {
                         ))}
                     </div>
 
-                    {/* Results Counter */}
-                    <div className="flex items-center justify-between text-xs text-[#5e716b] px-1">
+                    {/* Results Counter Anchor */}
+                    <div id="faq-list-anchor" className="scroll-mt-24 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#5e716b] px-1 gap-2">
                         <span>
-                            Menampilkan <strong>{filteredFaqs.length}</strong> dari 20 pertanyaan
+                            {filteredFaqs.length === 0 ? (
+                                'Tidak ada pertanyaan yang sesuai dengan kriteria filter.'
+                            ) : (
+                                <>
+                                    Menampilkan <strong>{startItem} - {endItem}</strong> dari <strong>{filteredFaqs.length}</strong> pertanyaan
+                                    {totalPages > 1 && (
+                                        <span className="text-[#7d918a] ml-1.5 font-normal">
+                                            (Halaman {validCurrentPage} dari {totalPages})
+                                        </span>
+                                    )}
+                                </>
+                            )}
                             {searchQuery && ` untuk kata kunci "${searchQuery}"`}
                         </span>
                         {searchQuery && (
                             <button
                                 type="button"
-                                onClick={() => setSearchQuery('')}
-                                className="text-primary hover:underline font-medium"
+                                onClick={() => handleSearchChange('')}
+                                className="text-primary hover:underline font-medium self-start sm:self-auto cursor-pointer"
                             >
                                 Bersihkan Pencarian
                             </button>
@@ -282,18 +319,21 @@ export default function Faq(props) {
                                 </p>
                                 <button
                                     type="button"
-                                    onClick={() => setSearchQuery('')}
-                                    className="inline-flex items-center px-4 py-2 rounded-full bg-primary text-white text-xs font-medium"
+                                    onClick={() => handleSearchChange('')}
+                                    className="inline-flex items-center px-4 py-2 rounded-full bg-primary text-white text-xs font-medium cursor-pointer"
                                 >
                                     Reset Pencarian
                                 </button>
                             </div>
                         ) : (
-                            filteredFaqs.map((item, idx) => {
-                                const isOpen = openIndex === idx;
+                            paginatedFaqs.map((item, idx) => {
+                                const isOpen = openKey === item.q;
+                                const globalIndex = (validCurrentPage - 1) * itemsPerPage + idx + 1;
+                                const formattedIndex = globalIndex < 10 ? `0${globalIndex}.` : `${globalIndex}.`;
+
                                 return (
                                     <div
-                                        key={idx}
+                                        key={item.q}
                                         className={`rounded-2xl border transition-all duration-300 ease-in-out ${
                                             isOpen
                                                 ? 'bg-white border-[#1c6454]/40 shadow-[0_4px_20px_rgba(0,40,36,0.04)]'
@@ -302,13 +342,13 @@ export default function Faq(props) {
                                     >
                                         <button
                                             type="button"
-                                            onClick={() => toggleFaq(idx)}
+                                            onClick={() => toggleFaq(item.q)}
                                             className="w-full p-4 sm:p-5 flex items-center justify-between text-left text-sm sm:text-base font-serif text-[#182926] cursor-pointer gap-4"
                                             aria-expanded={isOpen}
                                         >
                                             <span className="flex items-start sm:items-center gap-3">
                                                 <span className="text-xs font-mono text-[#1c6454] font-semibold mt-0.5 sm:mt-0 shrink-0">
-                                                    {idx + 1 < 10 ? `0${idx + 1}.` : `${idx + 1}.`}
+                                                    {formattedIndex}
                                                 </span>
                                                 <span className="font-medium text-[#182926] leading-snug">
                                                     {item.q}
@@ -348,6 +388,67 @@ export default function Faq(props) {
                             })
                         )}
                     </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#dce7e1]">
+                            <div className="text-xs text-[#5e716b]">
+                                Halaman <strong className="text-[#192b27]">{validCurrentPage}</strong> dari <strong className="text-[#192b27]">{totalPages}</strong> (10 data per halaman)
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                                {/* Previous Page Button */}
+                                <button
+                                    type="button"
+                                    disabled={validCurrentPage === 1}
+                                    onClick={() => goToPage(validCurrentPage - 1)}
+                                    className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                                        validCurrentPage === 1
+                                            ? 'opacity-40 cursor-not-allowed bg-white text-[#7d8f89] border border-[#dce5dd]'
+                                            : 'bg-white text-[#2a403a] hover:bg-[#edf5f0] hover:text-primary border border-[#d2e2d8] cursor-pointer shadow-2xs'
+                                    }`}
+                                    aria-label="Halaman sebelumnya"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">chevron_left</span>
+                                    <span className="hidden sm:inline">Sebelumnya</span>
+                                </button>
+
+                                {/* Page Number Buttons */}
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                    <button
+                                        key={pageNum}
+                                        type="button"
+                                        onClick={() => goToPage(pageNum)}
+                                        className={`w-8.5 h-8.5 rounded-xl text-xs font-medium transition-all flex items-center justify-center cursor-pointer ${
+                                            validCurrentPage === pageNum
+                                                ? 'bg-primary text-white font-semibold shadow-2xs'
+                                                : 'bg-white text-[#4e605b] hover:text-primary hover:bg-[#edf5f0] border border-[#d8e6df]'
+                                        }`}
+                                        aria-label={`Ke halaman ${pageNum}`}
+                                        aria-current={validCurrentPage === pageNum ? 'page' : undefined}
+                                    >
+                                        {pageNum}
+                                    </button>
+                                ))}
+
+                                {/* Next Page Button */}
+                                <button
+                                    type="button"
+                                    disabled={validCurrentPage === totalPages}
+                                    onClick={() => goToPage(validCurrentPage + 1)}
+                                    className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                                        validCurrentPage === totalPages
+                                            ? 'opacity-40 cursor-not-allowed bg-white text-[#7d8f89] border border-[#dce5dd]'
+                                            : 'bg-white text-[#2a403a] hover:bg-[#edf5f0] hover:text-primary border border-[#d2e2d8] cursor-pointer shadow-2xs'
+                                    }`}
+                                    aria-label="Halaman selanjutnya"
+                                >
+                                    <span className="hidden sm:inline">Selanjutnya</span>
+                                    <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Bottom Support Banner */}
                     <div className="p-6 sm:p-8 bg-primary text-white rounded-3xl shadow-[0_8px_30px_rgba(0,67,62,0.12)] space-y-4 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">

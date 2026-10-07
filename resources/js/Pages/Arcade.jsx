@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
-import Header from '../Components/Header';
-import Footer from '../Components/Footer';
+import { Head, Link, usePage } from '@inertiajs/react';
+import AppLayout from '../Layouts/AppLayout';
+import MarketingLayout from '../Layouts/MarketingLayout';
 import MetabolicRunner2D from '../Components/MetabolicRunner2D';
 import MetabolicStoryGame from '../Components/MetabolicStoryGame';
 import MetabolicArcadeModal from '../Components/MetabolicArcadeModal';
 
-export default function Arcade() {
+export default function Arcade({ leaderboard: initialLeaderboard = [] }) {
+    const { auth } = usePage().props;
+    const isAuthenticated = !!auth?.user;
     const [activeView, setActiveView] = useState('story'); // 'story', 'runner'
     const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
-
-    const leaderboard = [
-        { rank: 1, name: 'dr. Bramantyo, Sp.PD', char: 'dr. Bramantyo', score: 3840, tir: '94%', medal: '1' },
-        { rank: 2, name: 'Sarah Nindya', char: 'Sarah Nindya', score: 3210, tir: '89%', medal: '2' },
-        { rank: 3, name: 'Dimas Aryo', char: 'Dimas Aryo', score: 2750, tir: '81%', medal: '3' },
-        { rank: 4, name: 'Rian Pratama', char: 'Dimas Aryo', score: 2190, tir: '78%', medal: '4' },
-        { rank: 5, name: 'Nadia Salsabila', char: 'Sarah Nindya', score: 1840, tir: '74%', medal: '5' },
-    ];
+    const [leaderboard, setLeaderboard] = useState(initialLeaderboard);
 
     const foodCards = [
         {
@@ -53,14 +48,10 @@ export default function Arcade() {
         },
     ];
 
-    return (
-        <div className="min-h-screen bg-[#f7faf8] text-[#142320] flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
-            <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
-            <Header />
-
-            <main className="flex-1 max-w-7xl min-w-0 mx-auto px-3 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-16 sm:pb-20 w-full space-y-6 sm:space-y-10">
-                {/* Hero Header */}
-                <div className="space-y-2.5 sm:space-y-3 text-center max-w-3xl mx-auto pt-2 sm:pt-6">
+    const content = (
+        <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-10">
+            {/* Hero Header */}
+            <div className="space-y-2.5 sm:space-y-3 text-center max-w-3xl mx-auto pt-2 sm:pt-4">
                     <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-[10px] sm:text-xs font-mono font-bold border border-[#cfe1d7]">
                         <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>ARENA GAMIFIKASI KESEHATAN PREVENTIF 2D</span>
@@ -111,7 +102,11 @@ export default function Arcade() {
 
                 {/* Primary Feature Stage: Story Mode or 2D Runner */}
                 <section className="space-y-4">
-                    {activeView === 'story' ? <MetabolicStoryGame /> : <MetabolicRunner2D />}
+                    {activeView === 'story' ? (
+                        <MetabolicStoryGame />
+                    ) : (
+                        <MetabolicRunner2D onLeaderboardUpdate={setLeaderboard} />
+                    )}
                 </section>
 
                 {/* Secondary Grid: Community Leaderboard & Nutritional Education */}
@@ -132,39 +127,77 @@ export default function Arcade() {
                         </div>
 
                         <div className="space-y-2">
-                            {leaderboard.map((item) => (
-                                <div
-                                    key={item.rank}
-                                    className="p-2.5 sm:p-3 rounded-2xl bg-surface-container-lowest border border-surface-container flex items-center justify-between text-xs hover:border-primary/40 transition-colors gap-2"
-                                >
-                                    <div className="flex items-center gap-2 min-w-0">
-                                        <span className={`w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-full font-mono font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 ${
-                                            item.rank === 1 ? 'bg-amber-100 text-amber-900 border border-amber-300' :
-                                            item.rank === 2 ? 'bg-slate-200 text-slate-800 border border-slate-300' :
-                                            item.rank === 3 ? 'bg-amber-900/10 text-amber-950 border border-amber-800/30' :
-                                            'bg-surface-container text-on-surface-variant'
-                                        }`}>
-                                            {item.medal}
-                                        </span>
-                                        <div className="min-w-0">
-                                            <strong className="block text-on-surface leading-tight text-[11px] sm:text-xs truncate">{item.name}</strong>
-                                            <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-mono block truncate">{item.char}</span>
-                                        </div>
-                                    </div>
-                                    <div className="text-right shrink-0">
-                                        <span className="font-mono font-black text-primary text-xs sm:text-sm block leading-tight">
-                                            {item.score}
-                                        </span>
-                                        <span className="text-[9px] text-on-surface-variant">TIR: {item.tir}</span>
-                                    </div>
+                            {leaderboard.length === 0 ? (
+                                <div className="p-4 rounded-2xl bg-surface-container-lowest border border-dashed border-surface-container text-center text-xs text-on-surface-variant">
+                                    Belum ada skor yang dicatat oleh akun yang pernah login.
                                 </div>
-                            ))}
+                            ) : (
+                                leaderboard.map((item) => {
+                                    const isCurrentUser = auth?.user && auth.user.id === item.user_id;
+                                    return (
+                                        <div
+                                            key={item.user_id || item.rank}
+                                            className={`p-2.5 sm:p-3 rounded-2xl border flex items-center justify-between text-xs transition-colors gap-2 ${
+                                                isCurrentUser
+                                                    ? 'bg-emerald-50/80 border-emerald-300 ring-1 ring-emerald-400/30'
+                                                    : 'bg-surface-container-lowest border border-surface-container hover:border-primary/40'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-2 min-w-0">
+                                                <span
+                                                    className={`w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-full font-mono font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 ${
+                                                        item.rank === 1
+                                                            ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs'
+                                                            : item.rank === 2
+                                                            ? 'bg-slate-200 text-slate-800 border border-slate-300'
+                                                            : item.rank === 3
+                                                            ? 'bg-amber-900/10 text-amber-950 border border-amber-800/30'
+                                                            : 'bg-surface-container text-on-surface-variant'
+                                                    }`}
+                                                >
+                                                    {item.medal}
+                                                </span>
+                                                <div className="min-w-0">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <strong className="block text-on-surface leading-tight text-[11px] sm:text-xs truncate">
+                                                            {item.name}
+                                                        </strong>
+                                                        {isCurrentUser && (
+                                                            <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white font-mono text-[9px] font-bold shrink-0">
+                                                                Anda
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-mono block truncate">
+                                                        {item.char}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="text-right shrink-0">
+                                                <span className="font-mono font-black text-primary text-xs sm:text-sm block leading-tight">
+                                                    {item.score}
+                                                </span>
+                                                <span className="text-[9px] text-on-surface-variant">TIR: {item.tir}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
 
-                        <div className="pt-1 text-center">
-                            <p className="text-[10px] sm:text-[11px] text-on-surface-variant">
-                                Skor disimpan otomatis di peramban Anda.
-                            </p>
+                        <div className="pt-1 text-center text-[10px] sm:text-[11px] text-on-surface-variant">
+                            {auth?.user ? (
+                                <p className="text-emerald-700 font-medium">
+                                    Terkoneksi sebagai <strong>{auth.user.name}</strong> • Mainkan Glucose Dash untuk mencetak rekor Anda
+                                </p>
+                            ) : (
+                                <p>
+                                    <Link href="/login" className="text-primary font-bold hover:underline">
+                                        Masuk akun
+                                    </Link>{' '}
+                                    untuk mencatatkan rekor Anda ke papan peringkat.
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -237,9 +270,24 @@ export default function Arcade() {
                     isOpen={isStoryModalOpen}
                     onClose={() => setIsStoryModalOpen(false)}
                 />
-            </main>
-
-            <Footer />
         </div>
+    );
+
+    if (isAuthenticated) {
+        return (
+            <AppLayout title="Arena Gim Glucose Dash & Edukasi Metabolik" activeTab="arcade">
+                <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
+                {content}
+            </AppLayout>
+        );
+    }
+
+    return (
+        <MarketingLayout>
+            <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
+            <div className="py-6 sm:py-10 px-3 sm:px-6">
+                {content}
+            </div>
+        </MarketingLayout>
     );
 }

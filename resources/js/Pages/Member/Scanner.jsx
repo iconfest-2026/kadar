@@ -18,14 +18,14 @@ export default function Scanner({ recentScans, todayScanCount, maxScanQuota, tie
                     <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                     <div className="relative z-10 max-w-2xl space-y-3">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-semibold">
-                            <span className="material-symbols-outlined text-[15px] text-emerald-300">center_focus_strong</span>
-                            <span>VISION OCR • INFORMASI NILAI GIZI & BPOM RI</span>
+                            <span className="material-symbols-outlined text-[15px] text-emerald-300">auto_awesome</span>
+                            <span>MULTI-DETEKSI AI • YOLO FOOD VISION & OCR BPOM</span>
                         </div>
                         <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight leading-tight">
-                            Pindai Cepat Label Gizi & Obat Tanpa Riset Manual
+                            Pindai Makanan Fisik (YOLO) & Label Gizi (OCR)
                         </h1>
                         <p className="text-white/85 text-xs sm:text-sm leading-relaxed">
-                            Arahkan kamera ponsel ke tabel Informasi Nilai Gizi minuman kemasan, makanan olahan, atau etiket obat. AI membaca kandungan gula tersembunyi, natrium, dan memproyeksikan kurva lonjakan glukosa darah Anda dalam hitungan detik.
+                            Arahkan kamera ke piring makanan (nasi, ayam, sayur, buah) dengan <strong>YOLO Object Detection</strong>, atau ke tabel kemasan & etiket obat dengan <strong>Vision OCR</strong>. AI memproyeksikan kalori, makronutrisi, dan kurva glukosa postprandial 2 jam secara instan.
                         </p>
                         
                         <div className="flex flex-wrap items-center gap-3 pt-1">

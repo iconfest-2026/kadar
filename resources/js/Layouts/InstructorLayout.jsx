@@ -67,9 +67,9 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
             {/* Ambient Background Soft Blobs */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-paint">
-                <div className="absolute -top-32 left-1/4 w-150 h-80 bg-gradient-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute -top-32 left-1/4 w-150 h-80 bg-linear-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute top-1/2 -right-20 w-120 h-100 bg-[#f4ebe1]/30 blur-3xl rounded-full pointer-events-none" />
-                <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-gradient-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
+                <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-linear-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
             </div>
 
             {/* Mobile Overlay */}
@@ -96,7 +96,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                         />
                         <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                                <span className="font-heading font-black text-lg text-primary tracking-tight">AEVYRA</span>
+                                <span className="font-heading font-black text-lg text-primary tracking-tight">EVYRA</span>
                                 <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
                                     INSTRUKTUR
                                 </span>
@@ -372,7 +372,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                     <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                         <Link
                             href="/instructor/interventions"
-                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
+                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
                                 activeNav === 'interventions' ? 'ring-2 ring-primary ring-offset-1' : ''
                             }`}
                             title="Rencana Intervensi Klinis"

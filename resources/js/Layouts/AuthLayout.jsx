@@ -13,18 +13,13 @@ export default function AuthLayout({ children, title, subtitle, maxWidth = 'max-
                 <div className="h-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
                     <Link href="/" className="flex items-center group active:scale-95 transition-transform">
                         <img
-                            src="/image/Logo_AEVYRA_Horizontal.png"
+                            src="/image/Logo_EVYRA_Horizontal.png"
                             alt="AEVYRA — Your Health, Ahead"
                             className="h-8 sm:h-9 w-auto object-contain"
                         />
                     </Link>
 
                     <div className="flex items-center gap-3 text-xs">
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#edf5f0] text-[#1c6454] border border-[#d4e8dd] font-mono text-[10px]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>ENKRIPSI AES-256 • SATUSEHAT KEMENKES</span>
-                        </div>
-
                         <Link
                             href="/"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs text-[#52645f] hover:text-primary hover:bg-primary/5 font-medium transition-all"

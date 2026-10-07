@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const FALLBACK_TIERS = [
     {
@@ -57,6 +57,34 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
     const [upgrading, setUpgrading] = useState(false);
     const [upgradeSuccess, setUpgradeSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [activeOrder, setActiveOrder] = useState(null);
+    const [isVerifying, setIsVerifying] = useState(false);
+
+    // Retrieve any pending order saved from current session
+    useEffect(() => {
+        if (isOpen) {
+            try {
+                const stored = sessionStorage.getItem('aevyra_pending_payment');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (parsed?.orderId && /^[A-Za-z0-9\-_]{5,100}$/.test(parsed.orderId)) {
+                        setActiveOrder(parsed);
+                    }
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
+    }, [isOpen]);
+
+    // Persist pending order to sessionStorage
+    useEffect(() => {
+        if (activeOrder && activeOrder.status === 'PENDING') {
+            sessionStorage.setItem('aevyra_pending_payment', JSON.stringify(activeOrder));
+        } else if (activeOrder && ['SETTLEMENT', 'EXPIRE', 'CANCEL'].includes(activeOrder.status)) {
+            sessionStorage.removeItem('aevyra_pending_payment');
+        }
+    }, [activeOrder]);
 
     if (!isOpen) return null;
 
@@ -76,18 +104,92 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
         }))
         : FALLBACK_TIERS;
 
+    const getCsrfTokens = () => {
+        const getCookie = (name) => {
+            const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+            return match ? decodeURIComponent(match[3]) : null;
+        };
+        const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const xsrfToken = getCookie('XSRF-TOKEN');
+        const csrfToken = metaToken || xsrfToken || '';
+        return { csrfToken, xsrfToken };
+    };
+
+    /**
+     * Authoritatively verifies transaction status directly with Midtrans backend API.
+     * Prevents client spoofing, tampering, and injection.
+     */
+    const verifyPaymentStatus = async (orderId) => {
+        if (!orderId || !/^[A-Za-z0-9\-_]{5,100}$/.test(orderId)) {
+            setErrorMessage('ID Pesanan tidak valid.');
+            return;
+        }
+
+        setIsVerifying(true);
+        setErrorMessage(null);
+
+        try {
+            const { csrfToken, xsrfToken } = getCsrfTokens();
+
+            const res = await fetch('/member/memberships/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ order_id: orderId }),
+            });
+
+            if (res.status === 429) {
+                setErrorMessage('Terlalu banyak permintaan verifikasi. Mohon tunggu beberapa detik.');
+                return;
+            }
+
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok || !data.success) {
+                setErrorMessage(data.message || 'Verifikasi status pembayaran gagal.');
+                return;
+            }
+
+            const paymentStatus = (data.payment_status || '').toUpperCase();
+
+            if (data.is_paid || paymentStatus === 'SETTLEMENT' || paymentStatus === 'CAPTURE') {
+                setActiveOrder((prev) => prev ? { ...prev, status: 'SETTLEMENT' } : null);
+                setUpgradeSuccess(true);
+                sessionStorage.removeItem('aevyra_pending_payment');
+                setTimeout(() => {
+                    onClose();
+                    window.location.reload();
+                }, 1800);
+            } else if (paymentStatus === 'EXPIRE') {
+                setActiveOrder((prev) => prev ? { ...prev, status: 'EXPIRE' } : null);
+                setErrorMessage('Waktu pembayaran QRIS / transfer telah kedaluwarsa. Silakan lakukan pemesanan ulang.');
+                sessionStorage.removeItem('aevyra_pending_payment');
+            } else if (paymentStatus === 'CANCEL' || paymentStatus === 'DENY') {
+                setActiveOrder((prev) => prev ? { ...prev, status: 'CANCEL' } : null);
+                setErrorMessage('Transaksi pembayaran telah dibatalkan atau ditolak.');
+                sessionStorage.removeItem('aevyra_pending_payment');
+            } else {
+                setActiveOrder((prev) => prev ? { ...prev, status: 'PENDING' } : null);
+            }
+        } catch (err) {
+            setErrorMessage(err.message || 'Gagal memverifikasi status pembayaran dengan Midtrans.');
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
     const handleUpgrade = async (tierItem) => {
         setUpgrading(true);
         setErrorMessage(null);
 
         try {
-            const getCookie = (name) => {
-                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-                return match ? decodeURIComponent(match[3]) : null;
-            };
-            const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            const xsrfToken = getCookie('XSRF-TOKEN');
-            const csrfToken = metaToken || xsrfToken || '';
+            const { csrfToken, xsrfToken } = getCsrfTokens();
 
             const res = await fetch(`/member/memberships/${tierItem.slug || tierItem.id}/checkout`, {
                 method: 'POST',
@@ -126,25 +228,30 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
 
             // Midtrans Snap Popup
             if (data.snap_token) {
+                const orderData = {
+                    orderId: data.order_id,
+                    tierName: tierItem.name,
+                    grossAmount: data.gross_amount,
+                    status: 'PENDING',
+                    snapToken: data.snap_token,
+                };
+                setActiveOrder(orderData);
+
                 if (window.snap && typeof window.snap.pay === 'function') {
                     window.snap.pay(data.snap_token, {
                         onSuccess: function (result) {
-                            setUpgradeSuccess(true);
-                            setSelectedTier(tierItem.name);
-                            setTimeout(() => {
-                                onClose();
-                                window.location.reload();
-                            }, 1500);
+                            verifyPaymentStatus(data.order_id);
                         },
                         onPending: function (result) {
-                            alert('Pesanan langganan Anda berhasil dibuat dan menunggu konfirmasi pembayaran.');
-                            onClose();
+                            verifyPaymentStatus(data.order_id);
                         },
                         onError: function (result) {
                             setErrorMessage('Pembayaran gagal atau ditolak oleh gateway.');
+                            verifyPaymentStatus(data.order_id);
                         },
                         onClose: function () {
-                            // Modal closed
+                            // User closed Snap modal, perform status check immediately
+                            verifyPaymentStatus(data.order_id);
                         },
                     });
                 } else if (data.redirect_url) {
@@ -157,6 +264,20 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
             setErrorMessage(err.message || 'Terjadi gangguan saat menghubungkan ke gateway pembayaran.');
         } finally {
             setUpgrading(false);
+        }
+    };
+
+    const reopenSnap = () => {
+        if (activeOrder?.snapToken && window.snap && typeof window.snap.pay === 'function') {
+            window.snap.pay(activeOrder.snapToken, {
+                onSuccess: () => verifyPaymentStatus(activeOrder.orderId),
+                onPending: () => verifyPaymentStatus(activeOrder.orderId),
+                onError: () => {
+                    setErrorMessage('Pembayaran gagal atau ditolak oleh gateway.');
+                    verifyPaymentStatus(activeOrder.orderId);
+                },
+                onClose: () => verifyPaymentStatus(activeOrder.orderId),
+            });
         }
     };
 
@@ -188,7 +309,79 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = 'Go
                 </div>
 
                 {/* Plans Comparison */}
-                <div className="p-6 overflow-y-auto space-y-6">
+                <div className="p-6 overflow-y-auto space-y-5">
+                    {/* Active Order / Verification Banner */}
+                    {activeOrder && (
+                        <div className={`p-4 rounded-2xl border transition-all animate-fade-in ${
+                            activeOrder.status === 'SETTLEMENT'
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-100'
+                                : activeOrder.status === 'EXPIRE' || activeOrder.status === 'CANCEL'
+                                ? 'bg-rose-500/10 border-rose-500/30 text-rose-900 dark:text-rose-100'
+                                : 'bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-100'
+                        }`}>
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className={`w-2.5 h-2.5 rounded-full ${
+                                            activeOrder.status === 'SETTLEMENT' ? 'bg-emerald-500' :
+                                            activeOrder.status === 'EXPIRE' || activeOrder.status === 'CANCEL' ? 'bg-rose-500' :
+                                            'bg-amber-500 animate-pulse'
+                                        }`} />
+                                        <span className="font-bold text-xs uppercase tracking-wider">
+                                            Status Pembayaran: <strong className="font-mono">{activeOrder.status}</strong>
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-on-surface-variant font-mono">
+                                        Order ID: {activeOrder.orderId} • {activeOrder.tierName} • Rp {Number(activeOrder.grossAmount || 0).toLocaleString('id-ID')}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-2">
+                                    {activeOrder.status === 'PENDING' && activeOrder.snapToken && (
+                                        <button
+                                            type="button"
+                                            onClick={reopenSnap}
+                                            className="px-3 py-1.5 rounded-xl bg-white dark:bg-surface-container border border-surface-container text-on-surface text-xs font-bold hover:bg-surface-container-high transition-colors cursor-pointer"
+                                        >
+                                            Buka QRIS / Bayar
+                                        </button>
+                                    )}
+
+                                    <button
+                                        type="button"
+                                        onClick={() => verifyPaymentStatus(activeOrder.orderId)}
+                                        disabled={isVerifying}
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold transition-all shadow-2xs active:scale-95 disabled:opacity-50 cursor-pointer"
+                                    >
+                                        <span className={`material-symbols-outlined text-[16px] ${isVerifying ? 'animate-spin' : ''}`}>
+                                            {isVerifying ? 'sync' : 'verified'}
+                                        </span>
+                                        <span>{isVerifying ? 'Memverifikasi...' : 'Verifikasi Status Midtrans'}</span>
+                                    </button>
+
+                                    {(activeOrder.status === 'EXPIRE' || activeOrder.status === 'CANCEL') && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setActiveOrder(null);
+                                                sessionStorage.removeItem('aevyra_pending_payment');
+                                            }}
+                                            className="px-2.5 py-1.5 rounded-xl text-xs font-medium text-on-surface-variant hover:text-on-surface cursor-pointer"
+                                        >
+                                            Buat Pesanan Baru
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {activeOrder.status === 'PENDING' && (
+                                <p className="mt-2.5 pt-2.5 border-t border-amber-500/20 text-[11px] leading-relaxed text-on-surface-variant">
+                                    Setelah menyelesaikan transfer atau pemindaian QRIS, tekan tombol <strong>Verifikasi Status Midtrans</strong> untuk mengonfirmasi pelunasan dan mengaktifkan kuota paket secara instan.
+                                </p>
+                            )}
+                        </div>
+                    )}
+
                     {errorMessage && (
                         <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2">

@@ -92,7 +92,7 @@ class AiAssistantService
         // Direct Account Identity Query handler (e.g. "siapa saya", "siapa nama saya", "nama akun saya apa", etc.)
         if ($this->isIdentityQuery($userMessage)) {
             $userName = $user->name ?: 'Member AEVYRA';
-            $reply = "Anda adalah {$userName}, terdaftar sebagai {$userRole} di platform kesehatan metabolik AEVYRA. Saya siap mendampingi Anda memantau target glukosa harian, asupan nutrisi, pola hidrasi, dan kebiasaan hidup sehat Anda. Ada data kesehatan atau kebiasaan yang ingin Anda evaluasi hari ini?";
+            $reply = "Halo {$userName}! Anda terdaftar sebagai {$userRole} di platform kesehatan & kesejahteraan holistik AEVYRA.\n\nSebagai asisten AI dan teman curhat Anda, saya siap mendampingi target kesehatan fisik (glukosa, nutrisi, hidrasi, tidur) maupun kesehatan mental Anda (manajemen stres, overthinking, atau sekadar teman bicara saat Anda butuh didengarkan). Ada hal yang sedang Anda pikirkan atau ingin dievaluasi hari ini?";
             $reply = $this->formatDirectResponse($reply);
 
             AiMessage::create([
@@ -202,77 +202,35 @@ class AiAssistantService
     }
 
     /**
-     * Strictly format response:
-     * 1. Remove all asterisks (*) completely (no bold, no italic, no * bullet)
-     * 2. Remove opening pleasantries / greetings so the answer starts directly
-     * 3. Clean trailing repetitive pleasantries
+     * Format response cleanly:
+     * 1. Remove markdown asterisks (*) for clean plain-text reading
+     * 2. Strip emojis from responses as instructed
+     * 3. Normalize lists and spacing so bullet points and numbered points render cleanly
      */
     public function formatDirectResponse(string $text): string
     {
-        // 1. Remove all asterisks (*) completely
+        // 1. Remove markdown asterisks (*)
         $text = str_replace('*', '', $text);
 
-        // 2. Remove opening pleasantries, greetings, and chit-chat openers at the beginning
-        $openingPatterns = [
-            // "Halo! Senang sekali bisa menyapa Anda. 😊"
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*(halo|hai|selamat (pagi|siang|sore|malam)|assalamu[\'\w]*|salam sejahtera)[^.\n?!]*[.\n?!]*/iu',
-            // "Senang sekali bisa menyapa/berbincang dengan Anda hari ini..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*senang sekali bisa (menyapa|berbincang|berdiskusi|membantu)[^.\n?!]*[.\n?!]*/iu',
-            // "Bagaimana kabar dan kondisi Anda hari ini?..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*bagaimana kabar[^.\n?!]*[.\n?!]*/iu',
-            // "Semoga hari Anda berjalan dengan baik dan sehat, ya!..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*semoga hari anda[^.\n?!]*[.\n?!]*/iu',
-            // "Tentu, saya siap membantu!..." or "Tentu, ini adalah..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*tentu( saja)?,? (saya siap membantu|mari kita bahas|berikut ini)[^.\n?!]*[.\n?!]*/iu',
-            // "Apakah ada topik seputar gaya hidup sehat yang ingin Anda diskusikan hari ini?..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*apakah ada topik seputar gaya hidup sehat[^.\n?!]*[.\n?!]*/iu',
-            // "Kita bisa mendiskusikan berbagai hal, seperti:..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*kita bisa (ngobrol|berdiskusi|mendiskusikan)[^.\n?!]*:?\s*/iu',
-            // "Saya siap membantu!..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*saya siap membantu[!.\s]*/iu',
-            // "Terima kasih sudah bertanya..."
-            '/^(\s|[\p{Emoji}\p{So}\p{Sk}])*terima kasih sudah (bertanya|menghubungi)[^.\n?!]*[.\n?!]*/iu',
-        ];
+        // 2. Strip emojis from AI responses for clean, professional reading
+        $text = preg_replace('/[\x{1F600}-\x{1F64F}\x{1F300}-\x{1F5FF}\x{1F680}-\x{1F6FF}\x{1F900}-\x{1F9FF}\x{1FA00}-\x{1FAFF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}\x{FE0F}\x{200D}]/u', '', $text);
+        $text = preg_replace('/[ ]{2,}/', ' ', $text);
+        $text = preg_replace('/ ([.,!?:;])/', '$1', $text);
 
-        // Peel multiple consecutive greeting sentences & leading emojis (up to 6 iterations)
-        for ($i = 0; $i < 6; $i++) {
-            $prev = $text;
-            // Strip leading emojis and whitespace
-            $text = preg_replace('/^[\s\p{Emoji}\p{So}\p{Sk}\p{C}]+/u', '', $text);
-            foreach ($openingPatterns as $pattern) {
-                $text = preg_replace($pattern, '', $text);
-                $text = preg_replace('/^[\s\p{Emoji}\p{So}\p{Sk}\p{C}]+/u', '', $text);
-            }
-            if ($text === $prev) {
-                break;
-            }
-        }
-
-        // 3. Remove trailing repetitive pleasantries if present at the end
-        $trailingPatterns = [
-            '/\s*semoga (informasi ini )?(membantu|bermanfaat)[\.!\s]*$/iu',
-            '/\s*apakah ada hal lain yang ingin (anda )?tanyakan[\.\?!?\s]*$/iu',
-            '/\s*saya siap membantu[\.!\s]*$/iu',
-            '/\s*tetap semangat menjaga kesehatan[\.!\s]*$/iu',
-        ];
-        foreach ($trailingPatterns as $tPattern) {
-            $text = preg_replace($tPattern, '', $text);
-        }
-
-        // 4. Normalize structured lists, bullet points, and headers so items are never squashed into a single paragraph
+        // 3. Normalize structured lists, bullet points, and headers
         // Ensure bullet points (- or •) are on their own lines with clear separation
         $text = preg_replace('/([^\n])\s*[-•]\s+/u', "$1\n- ", $text);
         // Ensure numbered list items (e.g. 1. , 2. ) are on their own lines
         $text = preg_replace('/([^\n])\s+(\d+)\.\s+/u', "$1\n$2. ", $text);
-        // Ensure section titles (lines ending with colon :) have a line break before them
+        // Ensure section titles (lines ending with colon :) have clean separation
         $text = preg_replace('/([^\n])\n([A-Z\p{Lu}][^\n:]{2,60}:)/u', "$1\n\n$2", $text);
 
+        // Remove excessive empty lines
         $text = trim(preg_replace("/\n{3,}/", "\n\n", $text));
 
-        // If stripped text became empty or only contains residual punctuation/emojis, provide direct guidance
-        $meaningfulContent = trim(preg_replace('/[\p{P}\s\p{Emoji}\p{So}\p{Sk}\p{C}]+/u', '', $text));
-        if (mb_strlen($meaningfulContent) < 10) {
-            $text = "Silakan tanyakan hal spesifik seputar gizi harian, kontrol kadar gula darah, pola tidur, atau aktivitas fisik preventif Anda.";
+        // If response is somehow empty, provide warm holistic welcome
+        if (empty($text)) {
+            $text = "Halo! Saya siap mendampingi Anda. Silakan ceritakan apa yang sedang Anda rasakan — baik seputar kesehatan fisik metabolik maupun curhat tentang pikiran dan emosi Anda.";
         }
 
         return $text;

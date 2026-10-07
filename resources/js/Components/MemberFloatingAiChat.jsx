@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
+import WhatsAppEmojiPicker from './WhatsAppEmojiPicker';
 
 export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: propOnClose }) {
     const [internalOpen, setInternalOpen] = useState(false);
@@ -10,6 +11,7 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
             propOnClose();
         }
         setInternalOpen(false);
+        setShowEmojiPicker(false);
     };
 
     const [messages, setMessages] = useState([]);
@@ -18,19 +20,40 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
     const [conversationId, setConversationId] = useState(null);
     const [activeProvider, setActiveProvider] = useState('Gemini 3.8 Flash');
     const [hasLoadedHistory, setHasLoadedHistory] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
     const quickPrompts = [
+        'Aku lagi capek mental dan butuh teman curhat...',
+        'Bagaimana cara menenangkan overthinking & cemas?',
         'Berapa batas aman konsumsi gula harian saya?',
         'Rekomendasi menu sarapan rendah lonjakan glikemik',
-        'Bagaimana cara mencegah kantuk berat setelah makan siang?',
-        'Tips menurunkan resistensi insulin secara alami',
-        'Berapa target hidrasi air putih untuk berat badan saya?',
+        'Kenapa stres pikiran bisa memicu lonjakan gula darah?',
+        'Tips relaksasi napas & tidur nyenyak malam ini',
     ];
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Insert emoji at cursor position like WhatsApp
+    const handleEmojiSelect = (emojiChar) => {
+        if (!inputRef.current) {
+            setInput((prev) => prev + emojiChar);
+            return;
+        }
+
+        const start = inputRef.current.selectionStart ?? input.length;
+        const end = inputRef.current.selectionEnd ?? input.length;
+        const nextVal = input.substring(0, start) + emojiChar + input.substring(end);
+        setInput(nextVal);
+
+        setTimeout(() => {
+            inputRef.current?.focus();
+            const nextPos = start + emojiChar.length;
+            inputRef.current?.setSelectionRange(nextPos, nextPos);
+        }, 10);
     };
 
     // Listen to global open-ai-chat event from anywhere (e.g. Dashboard hero card or sidebar)
@@ -47,16 +70,20 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
         return () => window.removeEventListener('open-ai-chat', handleOpenEvent);
     }, [conversationId]);
 
-    // Handle ESC key to close drawer
+    // Handle ESC key to close emoji picker or drawer
     useEffect(() => {
         const handleEsc = (e) => {
-            if (e.key === 'Escape' && isOpen) {
-                handleClose();
+            if (e.key === 'Escape') {
+                if (showEmojiPicker) {
+                    setShowEmojiPicker(false);
+                } else if (isOpen) {
+                    handleClose();
+                }
             }
         };
         window.addEventListener('keydown', handleEsc);
         return () => window.removeEventListener('keydown', handleEsc);
-    }, [isOpen]);
+    }, [isOpen, showEmojiPicker]);
 
     useEffect(() => {
         if (isOpen) {
@@ -97,7 +124,7 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                             id: 'welcome-1',
                             role: 'assistant',
                             content:
-                                'Saya Asisten AI Preventif AEVYRA. Silakan ketik pertanyaan seputar pola makan gizi seimbang, tidur, aktivitas fisik, atau strategi menjaga kestabilan glukosa harian Anda.',
+                                'Halo! Saya Asisten AI & Sahabat Curhat AEVYRA. 😊\n\nSaya hadir mendampingi kesehatan fisik metabolik Anda (nutrisi gizi seimbang, gula darah, tidur, aktivitas) sekaligus menjadi teman curhat hangat dan psikolog suportif jika Anda sedang merasa lelah, stres kerja, cemas, overthinking, atau butuh didengarkan tanpa menghakimi. 💙\n\nAda hal yang sedang Anda rasakan atau ingin kita diskusikan hari ini?',
                             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                             provider: 'Gemini 3.8 Flash',
                         },
@@ -113,6 +140,8 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
     const handleSendMessage = async (textToSend) => {
         const query = (textToSend || input).trim();
         if (!query || isLoading) return;
+
+        setShowEmojiPicker(false);
 
         const userMsg = {
             id: `user-${Date.now()}`,
@@ -195,12 +224,13 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                 id: `welcome-${Date.now()}`,
                 role: 'assistant',
                 content:
-                    'Percakapan telah direset. Silakan tanyakan hal baru seputar gaya hidup sehat, evaluasi makanan, atau tips metabolisme Anda.',
+                    'Percakapan telah direset. Silakan tanyakan hal baru seputar gaya hidup sehat, evaluasi nutrisi & gula darah, atau curhat apa saja yang sedang Anda rasakan hari ini. Saya siap mendengarkan. 😊',
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 provider: activeProvider,
             },
         ]);
         setConversationId(null);
+        setShowEmojiPicker(false);
     };
 
     // Helper to format clean text without asterisks, with dividers, bullets, and numbered badges
@@ -396,7 +426,7 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                                 </span>
                             ) : (
                                 <span className="text-[11px] text-[#d9fdd3] block leading-tight font-medium">
-                                    online • Konsultasi Terpandu Klinis
+                                    online • Sahabat Curhat &amp; Konselor Holistik
                                 </span>
                             )}
                         </div>
@@ -449,7 +479,7 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                             <span className="material-symbols-outlined text-[14px] text-[#b78103] shrink-0">
                                 lock
                             </span>
-                            <span>Percakapan preventif terenkripsi &amp; terpandu batas klinis IDI/Kemenkes.</span>
+                            <span>Percakapan preventif &amp; teman curhat terenkripsi. Dukungan fisik &amp; kesehatan mental.</span>
                         </div>
                     </div>
 
@@ -544,44 +574,66 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                     ))}
                 </div>
 
-                {/* 4. WhatsApp Bottom Input Bar */}
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSendMessage();
-                    }}
-                    className="p-2.5 sm:p-3 bg-[#f0f2f5] border-t border-[#d1d7db] flex items-center gap-2 shrink-0 z-20"
-                >
-                    <button
-                        type="button"
-                        onClick={() => setInput((prev) => prev + ' ')}
-                        className="p-1.5 rounded-full text-[#54656f] hover:text-[#111b21] transition-colors cursor-pointer shrink-0"
-                        title="Ekspresi & Emoji"
-                    >
-                        <span className="material-symbols-outlined text-[22px]">sentiment_satisfied</span>
-                    </button>
-
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        disabled={isLoading}
-                        placeholder="Ketik pesan konsultasi kesehatan..."
-                        className="flex-1 bg-white rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-[#111b21] placeholder-[#8696a0] border border-transparent focus:outline-none focus:ring-1 focus:ring-[#00a884] shadow-2xs transition-all"
+                {/* 4. WhatsApp Bottom Input Bar with Emoji Picker */}
+                <div className="relative shrink-0 z-20">
+                    <WhatsAppEmojiPicker
+                        isOpen={showEmojiPicker}
+                        onSelect={handleEmojiSelect}
+                        onClose={() => setShowEmojiPicker(false)}
                     />
 
-                    <button
-                        type="submit"
-                        disabled={isLoading || !input.trim()}
-                        className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-40 disabled:hover:bg-[#00a884] text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform cursor-pointer shrink-0"
-                        title="Kirim Pesan"
-                        aria-label="Kirim"
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSendMessage();
+                        }}
+                        className="p-2.5 sm:p-3 bg-[#f0f2f5] border-t border-[#d1d7db] flex items-center gap-2"
                     >
-                        <span className="material-symbols-outlined text-[19px]">send</span>
-                    </button>
-                </form>
+                        <button
+                            type="button"
+                            id="wa-emoji-trigger-btn"
+                            data-emoji-trigger="true"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowEmojiPicker((prev) => !prev);
+                            }}
+                            className={`p-1.5 rounded-full transition-all cursor-pointer shrink-0 ${
+                                showEmojiPicker
+                                    ? 'text-[#008069] bg-[#e7fed9] ring-2 ring-[#008069]/30'
+                                    : 'text-[#54656f] hover:text-[#111b21] hover:bg-black/5'
+                            }`}
+                            title={showEmojiPicker ? 'Tutup Pilihan Emoji' : 'Buka Pilihan Emoji WhatsApp'}
+                            aria-label="Pilih Emoji"
+                            aria-expanded={showEmojiPicker}
+                        >
+                            <span className="material-symbols-outlined text-[24px]">
+                                {showEmojiPicker ? 'keyboard' : 'sentiment_satisfied'}
+                            </span>
+                        </button>
+
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            disabled={isLoading}
+                            placeholder="Curhat perasaan, tanya kesehatan fisik, atau gaya hidup..."
+                            className="flex-1 bg-white rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-[#111b21] placeholder-[#8696a0] border border-transparent focus:outline-none focus:ring-1 focus:ring-[#00a884] shadow-2xs transition-all"
+                        />
+
+                        <button
+                            type="submit"
+                            disabled={isLoading || !input.trim()}
+                            className="w-10 h-10 rounded-full bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-40 disabled:hover:bg-[#00a884] text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform cursor-pointer shrink-0"
+                            title="Kirim Pesan"
+                            aria-label="Kirim"
+                        >
+                            <span className="material-symbols-outlined text-[19px]">send</span>
+                        </button>
+                    </form>
+                </div>
             </aside>
         </div>
     );

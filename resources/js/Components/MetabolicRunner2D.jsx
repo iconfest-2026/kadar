@@ -125,7 +125,7 @@ class SoundFx {
 
 const sfx = new SoundFx();
 
-export default function MetabolicRunner2D() {
+export default function MetabolicRunner2D({ onLeaderboardUpdate }) {
     const canvasRef = useRef(null);
     const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'gameover'
     const [selectedChar, setSelectedChar] = useState('dimas');
@@ -299,6 +299,24 @@ export default function MetabolicRunner2D() {
                     localStorage.setItem('aevyra_runner_highscore', stats.score.toString());
                 }
                 setGameState('gameover');
+
+                // Auto-sync real score to community leaderboard
+                if (stats.score > 0 && typeof window !== 'undefined' && window.axios) {
+                    window.axios
+                        .post('/arcade/scores', {
+                            score: stats.score,
+                            tir: `${stats.tir}%`,
+                            character: stats.character,
+                            distance: stats.distance,
+                            peak_glucose: stats.peakGlucose,
+                        })
+                        .then((res) => {
+                            if (res.data?.leaderboard && onLeaderboardUpdate) {
+                                onLeaderboardUpdate(res.data.leaderboard);
+                            }
+                        })
+                        .catch(() => {});
+                }
             }
         };
 
@@ -849,7 +867,7 @@ export default function MetabolicRunner2D() {
             </div>
 
             {/* Game Screen Canvas Container */}
-            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-[260px] sm:min-h-[340px] max-h-115 bg-[#f7faf8] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full aspect-4/3 sm:aspect-video min-h-65 sm:min-h-85 max-h-115 bg-[#f7faf8] flex items-center justify-center overflow-hidden">
                 <canvas
                     ref={canvasRef}
                     className="w-full h-full object-contain cursor-pointer select-none"

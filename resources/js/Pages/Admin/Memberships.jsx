@@ -49,6 +49,54 @@ export default function Memberships({
     // Payment Delete Modal
     const [deletingPayment, setDeletingPayment] = useState(null);
 
+    // Payment Midtrans Live Verify State
+    const [verifyingOrderId, setVerifyingOrderId] = useState(null);
+    const [verifyNotification, setVerifyNotification] = useState(null);
+
+    const handleVerifyPayment = async (payment) => {
+        if (!payment?.order_id) return;
+        setVerifyingOrderId(payment.order_id);
+        setVerifyNotification(null);
+
+        try {
+            const getCookie = (name) => {
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = metaToken || xsrfToken || '';
+
+            const res = await fetch('/member/memberships/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ order_id: payment.order_id }),
+            });
+
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.success) {
+                setVerifyNotification({ type: 'error', message: data.message || 'Gagal memverifikasi status pembayaran.' });
+            } else {
+                setVerifyNotification({
+                    type: 'success',
+                    message: `Order ${payment.order_id} berhasil disinkronkan ke Midtrans: Status ${data.payment_status} (${data.is_paid ? 'LUNAS' : 'BELUM LUNAS'}).`,
+                });
+                router.reload({ only: ['payments', 'memberships', 'stats'] });
+            }
+        } catch (e) {
+            setVerifyNotification({ type: 'error', message: e.message || 'Terjadi kesalahan jaringan saat memverifikasi ke Midtrans.' });
+        } finally {
+            setVerifyingOrderId(null);
+        }
+    };
+
     // Feature Tag Input Temp State
     const [createFeatureInput, setCreateFeatureInput] = useState('');
     const [editFeatureInput, setEditFeatureInput] = useState('');
@@ -496,14 +544,27 @@ export default function Memberships({
             label: 'Aksi',
             align: 'right',
             render: (row) => (
-                <button
-                    type="button"
-                    onClick={() => setDeletingPayment(row)}
-                    className="p-1.5 rounded-xl text-on-surface-variant hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                    title="Hapus Catatan Mutasi"
-                >
-                    <span className="material-symbols-outlined text-[17px]">delete</span>
-                </button>
+                <div className="flex items-center justify-end gap-1">
+                    <button
+                        type="button"
+                        onClick={() => handleVerifyPayment(row)}
+                        disabled={verifyingOrderId === row.order_id}
+                        className="p-1.5 rounded-xl text-teal-600 hover:bg-teal-500/10 transition-colors cursor-pointer"
+                        title="Verifikasi Status Langsung ke Midtrans"
+                    >
+                        <span className={`material-symbols-outlined text-[17px] ${verifyingOrderId === row.order_id ? 'animate-spin' : ''}`}>
+                            sync
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setDeletingPayment(row)}
+                        className="p-1.5 rounded-xl text-on-surface-variant hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                        title="Hapus Catatan Mutasi"
+                    >
+                        <span className="material-symbols-outlined text-[17px]">delete</span>
+                    </button>
+                </div>
             ),
         },
     ];
@@ -576,7 +637,7 @@ export default function Memberships({
                 </div>
 
                 {/* Midtrans Gateway Credentials & Integration Card */}
-                <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-white via-white/95 to-teal-50/40 dark:from-surface dark:to-surface-container-low border border-teal-500/20 shadow-xs relative overflow-hidden">
+                <div className="p-5 sm:p-6 rounded-3xl bg-linear-to-br from-white via-white/95 to-teal-50/40 dark:from-surface dark:to-surface-container-low border border-teal-500/20 shadow-xs relative overflow-hidden">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-teal-500/10">
                         <div className="flex items-center gap-3">
                             <div className="w-11 h-11 rounded-2xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-700">
@@ -760,7 +821,7 @@ export default function Memberships({
                                     }`}
                                 >
                                     {tier.is_popular && (
-                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-linear-to-r from-amber-500 to-amber-600 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm flex items-center gap-1">
                                             <span className="material-symbols-outlined text-[13px]">star</span>
                                             <span>Paling Direkomendasikan</span>
                                         </div>
@@ -887,7 +948,7 @@ export default function Memberships({
                         {/* Interactive "Tambah Paket Tier Baru" Card */}
                         <div
                             onClick={() => setIsCreateTierOpen(true)}
-                            className="p-6 rounded-3xl border-2 border-dashed border-primary/25 hover:border-primary bg-primary/5 hover:bg-primary/10 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer min-h-[360px] group"
+                            className="p-6 rounded-3xl border-2 border-dashed border-primary/25 hover:border-primary bg-primary/5 hover:bg-primary/10 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer min-h-90 group"
                         >
                             <div className="w-14 h-14 rounded-2xl bg-primary/10 group-hover:bg-primary text-primary group-hover:text-white flex items-center justify-center transition-all mb-3 shadow-xs">
                                 <span className="material-symbols-outlined text-3xl">add</span>
@@ -978,12 +1039,36 @@ export default function Memberships({
                             emptyIcon="card_membership"
                         />
                     ) : (
-                        <Table
-                            columns={paymentColumns}
-                            data={payments}
-                            emptyMessage="Belum ada catatan mutasi pembayaran Midtrans SaaS yang tercatat."
-                            emptyIcon="receipt_long"
-                        />
+                        <div className="space-y-4">
+                            {verifyNotification && (
+                                <div className={`p-3.5 rounded-2xl text-xs font-bold flex items-center justify-between gap-2 animate-fade-in ${
+                                    verifyNotification.type === 'success'
+                                        ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200'
+                                        : 'bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-200'
+                                }`}>
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-[18px]">
+                                            {verifyNotification.type === 'success' ? 'check_circle' : 'error'}
+                                        </span>
+                                        <span>{verifyNotification.message}</span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setVerifyNotification(null)}
+                                        className="text-on-surface-variant hover:text-on-surface cursor-pointer"
+                                    >
+                                        <span className="material-symbols-outlined text-[16px]">close</span>
+                                    </button>
+                                </div>
+                            )}
+
+                            <Table
+                                columns={paymentColumns}
+                                data={payments}
+                                emptyMessage="Belum ada catatan mutasi pembayaran Midtrans SaaS yang tercatat."
+                                emptyIcon="receipt_long"
+                            />
+                        </div>
                     )}
                 </div>
 

@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function QuickChatDialog() {
+    const page = usePage();
+    const authUser = page?.props?.auth?.user || null;
+
     const [isOpen, setIsOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -11,9 +15,26 @@ export default function QuickChatDialog() {
             id: 'init-1',
             sender: 'bot',
             time: 'Sekarang',
-            text: 'Halo! Saya Asisten Pintar AEVYRA. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
+            text: authUser
+                ? `Halo, ${authUser.name ? authUser.name.split(' ')[0] : 'Member'}! Anda telah masuk sebagai Member. Anda dapat memilih panduan fitur di bawah atau langsung membuka Chat AI Dashboard untuk konsultasi bebas & curhat kesehatan.`
+                : 'Halo! Saya Asisten Pintar EVYRA. Pilih pertanyaan seputar fitur PWA, Scanner, Tingkatan Member, atau Ambulan Darurat di bawah.',
         },
     ]);
+
+    // Update greeting if authUser changes
+    useEffect(() => {
+        if (authUser) {
+            setMessages((prev) => [
+                {
+                    id: 'init-1',
+                    sender: 'bot',
+                    time: 'Sekarang',
+                    text: `Halo, ${authUser.name ? authUser.name.split(' ')[0] : 'Member'}! Anda telah masuk sebagai Member. Anda dapat memilih panduan fitur di bawah atau langsung membuka Chat AI Dashboard untuk konsultasi bebas & curhat kesehatan.`,
+                },
+                ...prev.filter((m) => m.id !== 'init-1'),
+            ]);
+        }
+    }, [authUser?.id]);
 
     const messagesEndRef = useRef(null);
     const customDropdownRef = useRef(null);
@@ -153,7 +174,7 @@ export default function QuickChatDialog() {
                             </div>
                             <div>
                                 <span className="font-serif text-sm font-medium block leading-tight">
-                                    Konsultasi Fitur AEVYRA
+                                    Konsultasi Fitur &amp; Asisten AI
                                 </span>
                                 <span className="text-[10px] text-[#cbe5d8] block">
                                     Panduan Interaktif Klinis
@@ -170,6 +191,27 @@ export default function QuickChatDialog() {
                             <span className="material-symbols-outlined text-[15px]">close</span>
                         </button>
                     </div>
+
+                    {/* Authenticated Member Active Banner */}
+                    {authUser && (
+                        <div className="px-3.5 py-2 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between gap-2 text-[11px] text-emerald-900 shrink-0">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                                <span className="truncate">Login: <strong>{authUser.name}</strong></span>
+                            </div>
+                            <Link
+                                href="/member/dashboard?chat=ai"
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    window.dispatchEvent(new CustomEvent('open-ai-chat'));
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-container text-white text-[10px] font-bold shrink-0 flex items-center gap-1 shadow-2xs transition-colors"
+                            >
+                                <span>Buka Chat AI</span>
+                                <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+                            </Link>
+                        </div>
+                    )}
 
                     {/* Messages Body */}
                     <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-[#fafcfb]">
@@ -260,6 +302,20 @@ export default function QuickChatDialog() {
                         </div>
 
                         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                            {authUser && (
+                                <Link
+                                    href="/member/dashboard?chat=ai"
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        window.dispatchEvent(new CustomEvent('open-ai-chat'));
+                                    }}
+                                    className="shrink-0 px-2.5 py-1 rounded-lg bg-primary text-white text-[10px] font-bold border border-primary active:scale-95 transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                                >
+                                    <span className="material-symbols-outlined text-[12px]">chat</span>
+                                    <span>Chat AI Bebas</span>
+                                </Link>
+                            )}
+
                             {presetQuestions.slice(0, 3).map((q) => (
                                 <button
                                     key={q.id}
@@ -272,16 +328,30 @@ export default function QuickChatDialog() {
                             ))}
                         </div>
 
-                        {/* Note to login for free typing AI */}
+                        {/* Note to login for free typing AI OR Direct Dashboard link */}
                         <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-[#556963]">
                             <span>Chat bebas dengan AI?</span>
-                            <a
-                                href="/login"
-                                className="font-semibold text-primary hover:underline inline-flex items-center gap-0.5"
-                            >
-                                <span>Masuk ke Akun</span>
-                                <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
-                            </a>
+                            {authUser ? (
+                                <Link
+                                    href="/member/dashboard?chat=ai"
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        window.dispatchEvent(new CustomEvent('open-ai-chat'));
+                                    }}
+                                    className="font-bold text-primary hover:underline inline-flex items-center gap-0.5"
+                                >
+                                    <span>Buka Chat AI Dashboard</span>
+                                    <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+                                </Link>
+                            ) : (
+                                <Link
+                                    href="/login"
+                                    className="font-semibold text-primary hover:underline inline-flex items-center gap-0.5"
+                                >
+                                    <span>Masuk ke Akun</span>
+                                    <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -296,11 +366,11 @@ export default function QuickChatDialog() {
                         ? 'bg-white text-primary border-[#d6e5dc] hover:bg-[#f3f8f5]'
                         : 'bg-primary text-white border-primary hover:bg-primary-container'
                 }`}
-                aria-label="Tanya Asisten"
+                aria-label={authUser ? "Konsultasi Asisten AI" : "Tanya Asisten"}
             >
                 <span className="w-2 h-2 rounded-full bg-[#82d6b3]"></span>
                 <span className="text-xs font-medium">
-                    {isOpen ? 'Tutup Konseling' : 'Tanya Fitur Platform'}
+                    {isOpen ? 'Tutup Konseling' : authUser ? 'Tanya Fitur / Chat AI' : 'Tanya Fitur Platform'}
                 </span>
             </button>
         </div>

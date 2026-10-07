@@ -191,7 +191,7 @@ export default function Header() {
                         title="AEVYRA Healthcare"
                     >
                         <img
-                            src="/image/Logo_AEVYRA_Horizontal.png"
+                            src="/image/Logo_EVYRA_Horizontal.png"
                             alt="AEVYRA - Your Health, Ahead"
                             className="h-7 sm:h-8 w-auto object-contain shrink-0"
                         />
@@ -355,14 +355,14 @@ export default function Header() {
                     </nav>
 
                     {/* Right Actions: Authenticated vs Guest */}
-                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
                         {user ? (
                             /* Authenticated User Actions */
-                            <div className="flex items-center gap-2 sm:gap-2.5">
-                                {/* Direct Dashboard CTA Link */}
+                            <div className="flex items-center gap-2">
+                                {/* Direct Dashboard CTA Link (Desktop & Tablet) */}
                                 <Link
                                     href={dashboardHref}
-                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 min-h-9 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-container transition-all active:scale-95 shadow-2xs whitespace-nowrap select-none"
+                                    className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 min-h-9 rounded-full bg-primary text-white text-xs font-bold hover:bg-primary-container transition-all active:scale-95 shadow-2xs whitespace-nowrap select-none"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">
                                         {isAdmin ? 'admin_panel_settings' : isInstructor ? 'clinical_notes' : 'space_dashboard'}
@@ -370,8 +370,8 @@ export default function Header() {
                                     <span>{dashboardLabel}</span>
                                 </Link>
 
-                                {/* User Dropdown */}
-                                <div className="relative" ref={userDropdownRef}>
+                                {/* Desktop User Dropdown (lg+ screens) */}
+                                <div className="hidden lg:block relative" ref={userDropdownRef}>
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -385,7 +385,7 @@ export default function Header() {
                                         <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs">
                                             {user.name?.charAt(0) || 'U'}
                                         </div>
-                                        <span className="material-symbols-outlined text-[15px] text-on-surface-variant pr-0.5 hidden sm:block">
+                                        <span className="material-symbols-outlined text-[15px] text-on-surface-variant pr-0.5">
                                             {userDropdownOpen ? 'expand_less' : 'expand_more'}
                                         </span>
                                     </button>
@@ -513,138 +513,271 @@ export default function Header() {
                                         </div>
                                     )}
                                 </div>
+
+                                {/* Mobile Compact Dashboard Icon Button (< sm screens) */}
+                                <Link
+                                    href={dashboardHref}
+                                    className="sm:hidden flex items-center justify-center w-8.5 h-8.5 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all border border-primary/20 shadow-2xs"
+                                    title={`Buka ${dashboardLabel}`}
+                                    aria-label={dashboardLabel}
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">
+                                        {isAdmin ? 'admin_panel_settings' : isInstructor ? 'clinical_notes' : 'space_dashboard'}
+                                    </span>
+                                </Link>
                             </div>
                         ) : (
                             /* Guest Actions (Not Logged In) */
                             <>
                                 <Link
                                     href="/login"
-                                    className="text-xs text-[#52645f] hover:text-primary font-medium px-2.5 py-1.5 min-h-9.5 flex items-center transition-colors whitespace-nowrap select-none"
+                                    className="text-xs text-[#52645f] hover:text-primary font-medium px-2.5 py-1.5 min-h-9 flex items-center transition-colors whitespace-nowrap select-none"
                                 >
                                     Masuk
                                 </Link>
 
                                 <Link
                                     href="/register"
-                                    className="hidden sm:inline-flex items-center justify-center px-4 py-2 min-h-9.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-xs whitespace-nowrap select-none"
+                                    className="hidden sm:inline-flex items-center justify-center px-4 py-2 min-h-9 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-xs whitespace-nowrap select-none"
                                 >
                                     Mulai Skrining
                                 </Link>
                             </>
                         )}
 
-                        {/* Mobile Hamburger Toggle */}
+                        {/* Mobile Hamburger Toggle Button (ALWAYS cleanly visible and accessible on mobile) */}
                         <button
                             type="button"
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl text-primary hover:bg-[#edf5f0] transition-all cursor-pointer"
+                            onClick={() => {
+                                setMobileMenuOpen(!mobileMenuOpen);
+                                setUserDropdownOpen(false);
+                            }}
+                            className="lg:hidden w-8.5 h-8.5 sm:w-9.5 sm:h-9.5 flex items-center justify-center rounded-xl bg-white border border-[#d2e2d8] text-primary hover:bg-[#edf5f0] transition-all cursor-pointer shadow-2xs shrink-0"
                             aria-label="Menu navigasi"
                         >
-                            <span className="material-symbols-outlined text-[22px]">
+                            <span className="material-symbols-outlined text-[20px] sm:text-[22px]">
                                 {mobileMenuOpen ? 'close' : 'menu'}
                             </span>
                         </button>
                     </div>
                 </div>
 
-                {/* Mobile Drawer */}
+                {/* Mobile Drawer Backdrop & Menu */}
                 {mobileMenuOpen && (
-                    <div className="lg:hidden bg-white/98 backdrop-blur-xl border-b border-surface-container-high px-4 sm:px-6 py-4 space-y-4 animate-in fade-in duration-200 shadow-xl max-h-[85vh] overflow-y-auto">
-                        {/* Group 1: Member Health Features */}
-                        <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                Fitur &amp; Layanan Utama
-                            </span>
-                            {featureItems.map((item, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={item.href}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className={`px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs transition-all ${
-                                        item.href === '/arcade'
-                                            ? 'font-bold text-emerald-900 bg-[#edf5f0] hover:bg-[#e2efe8]'
-                                            : 'font-medium text-[#445652] hover:bg-[#edf5f0]'
-                                    }`}
-                                >
-                                    <div className="flex items-center gap-2.5">
-                                        <span className="material-symbols-outlined text-[18px] text-primary">
-                                            {item.icon}
-                                        </span>
-                                        <span>{item.name}</span>
+                    <>
+                        <div
+                            className="fixed inset-0 top-14 bg-black/30 backdrop-blur-xs z-30 lg:hidden animate-in fade-in duration-200"
+                            onClick={() => setMobileMenuOpen(false)}
+                            aria-hidden="true"
+                        />
+                        <div className="fixed top-14 left-0 right-0 z-40 lg:hidden bg-white/98 backdrop-blur-xl border-b border-surface-container-high px-4 sm:px-6 py-4 space-y-4 animate-in slide-in-from-top-2 duration-200 shadow-2xl max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+                            {/* Group 0: Authenticated User Profile Summary Card */}
+                            {user && (
+                                <div className="space-y-3">
+                                    <div className="p-3.5 bg-linear-to-r from-[#edf5f0] to-[#e4f0e8] border border-[#d2e5da] rounded-2xl flex items-center justify-between gap-3 shadow-2xs">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
+                                                {user.name?.charAt(0) || 'U'}
+                                            </div>
+                                            <div className="overflow-hidden space-y-0.5">
+                                                <div className="flex items-center gap-1.5">
+                                                    <p className="text-xs font-bold text-[#192b27] truncate">{user.name}</p>
+                                                    <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold uppercase border ${roleColor}`}>
+                                                        {roleBadge}
+                                                    </span>
+                                                </div>
+                                                <p className="text-[10px] text-[#556963] font-mono truncate">{user.email}</p>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href={dashboardHref}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="px-3 py-1.5 rounded-xl bg-primary text-white text-[11px] font-bold shrink-0 hover:bg-primary-container shadow-2xs flex items-center gap-1"
+                                        >
+                                            <span>{dashboardLabel}</span>
+                                            <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                        </Link>
                                     </div>
-                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-[#cfe2d7] text-primary font-mono font-bold">
-                                        {item.badge}
-                                    </span>
-                                </Link>
-                            ))}
-                        </div>
 
-                        {/* Group 2: Public Navigation */}
-                        <div className="pt-2 border-t border-surface-container space-y-1">
-                            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                Navigasi Platform
-                            </span>
-                            <Link
-                                href="/paket"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
-                            >
-                                <span className="material-symbols-outlined text-[18px] text-primary">card_membership</span>
-                                <span>Paket Keanggotaan (Silver, Gold, Platinum)</span>
-                            </Link>
-                            <Link
-                                href="/faq"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
-                            >
-                                <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
-                                <span>Pusat Tanya Jawab (FAQ)</span>
-                            </Link>
-                        </div>
+                                    {/* Quick Shortcut Buttons for Logged in Member */}
+                                    {isMember && (
+                                        <div className="space-y-2">
+                                            <Link
+                                                href="/member/dashboard?chat=ai"
+                                                onClick={() => {
+                                                    setMobileMenuOpen(false);
+                                                    window.dispatchEvent(new CustomEvent('open-ai-chat'));
+                                                }}
+                                                className="w-full p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 transition-all flex items-center justify-between text-xs font-bold text-emerald-950 border border-emerald-200 shadow-2xs"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-[18px] text-primary">smart_toy</span>
+                                                    <span>Chat &amp; Curhat AI Medis</span>
+                                                </div>
+                                                <span className="text-[10px] px-2 py-0.5 rounded-md bg-primary text-white font-mono font-medium flex items-center gap-1">
+                                                    Buka Chat
+                                                    <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+                                                </span>
+                                            </Link>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <Link
+                                                    href="/member/scanner"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px] text-primary">photo_camera</span>
+                                                    <span>Scanner Gizi</span>
+                                                </Link>
+                                                <Link
+                                                    href="/member/consultations-hub"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px] text-primary">video_camera_front</span>
+                                                    <span>Konsultasi Dokter</span>
+                                                </Link>
+                                                <Link
+                                                    href="/member/timeline"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px] text-primary">history_edu</span>
+                                                    <span>Riwayat Lab</span>
+                                                </Link>
+                                                <Link
+                                                    href="/member/challenges"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px] text-primary">military_tech</span>
+                                                    <span>Tantangan Sehat</span>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
-                        {/* Group 3: Reports & Governance */}
-                        <div className="pt-2 border-t border-surface-container space-y-1">
-                            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
-                                Portal Laporan &amp; Governance
-                            </span>
-                            {reportItems.map((r, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={r.href}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
-                                >
-                                    <div className="flex items-center gap-2.5">
-                                        <span className="material-symbols-outlined text-[18px] text-primary">
-                                            {r.icon}
+                            {/* Group 1: Member Health Features */}
+                            <div className="space-y-1">
+                                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
+                                    Fitur &amp; Layanan Utama
+                                </span>
+                                {featureItems.map((item, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={item.href}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className={`px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs transition-all ${
+                                            item.href === '/arcade'
+                                                ? 'font-bold text-emerald-900 bg-[#edf5f0] hover:bg-[#e2efe8]'
+                                                : 'font-medium text-[#445652] hover:bg-[#edf5f0]'
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-2.5">
+                                            <span className="material-symbols-outlined text-[18px] text-primary">
+                                                {item.icon}
+                                            </span>
+                                            <span>{item.name}</span>
+                                        </div>
+                                        <span className="text-[9px] px-2 py-0.5 rounded-md bg-[#cfe2d7] text-primary font-mono font-bold">
+                                            {item.badge}
                                         </span>
-                                        <span>{r.name}</span>
-                                    </div>
-                                    <span className="text-[9px] px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold">
-                                        {r.role}
-                                    </span>
-                                </Link>
-                            ))}
-                        </div>
+                                    </Link>
+                                ))}
+                            </div>
 
-                        {/* Group 4: Auth Buttons (if guest) */}
-                        {!user && (
-                            <div className="pt-3 border-t border-surface-container-high grid grid-cols-2 gap-3">
+                            {/* Group 2: Public Navigation */}
+                            <div className="pt-2 border-t border-surface-container space-y-1">
+                                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
+                                    Navigasi Platform
+                                </span>
                                 <Link
-                                    href="/login"
-                                    className="w-full min-h-11 flex items-center justify-center rounded-xl border border-surface-container-high text-xs text-[#52645f] font-medium hover:bg-[#edf5f0]"
+                                    href="/"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
                                 >
-                                    Masuk Akun
+                                    <span className="material-symbols-outlined text-[18px] text-primary">home</span>
+                                    <span>Beranda Utama</span>
                                 </Link>
                                 <Link
-                                    href="/register"
-                                    className="w-full min-h-11 flex items-center justify-center rounded-xl bg-primary text-white text-xs font-medium shadow-xs"
+                                    href="/paket"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
                                 >
-                                    Mulai Skrining
+                                    <span className="material-symbols-outlined text-[18px] text-primary">card_membership</span>
+                                    <span>Pilihan Paket Keanggotaan</span>
+                                </Link>
+                                <Link
+                                    href="/faq"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                                >
+                                    <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
+                                    <span>Pusat Bantuan &amp; FAQ Medis</span>
                                 </Link>
                             </div>
-                        )}
-                    </div>
+
+                            {/* Group 3: Reports & Governance */}
+                            <div className="pt-2 border-t border-surface-container space-y-1">
+                                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
+                                    Portal Laporan &amp; Governance
+                                </span>
+                                {reportItems.map((r, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={r.href}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                                    >
+                                        <div className="flex items-center gap-2.5">
+                                            <span className="material-symbols-outlined text-[18px] text-primary">
+                                                {r.icon}
+                                            </span>
+                                            <span>{r.name}</span>
+                                        </div>
+                                        <span className="text-[9px] px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold">
+                                            {r.role}
+                                        </span>
+                                    </Link>
+                                ))}
+                            </div>
+
+                            {/* Group 4: Auth Actions (Guest vs Logged In) */}
+                            {user ? (
+                                <div className="pt-2 border-t border-surface-container">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMobileMenuOpen(false);
+                                            handleLogout();
+                                        }}
+                                        className="w-full min-h-11 px-3 py-2.5 flex items-center justify-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold hover:bg-rose-100 transition-all cursor-pointer"
+                                    >
+                                        <span className="material-symbols-outlined text-[18px]">logout</span>
+                                        <span>Keluar Akun ({user.name})</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="pt-3 border-t border-surface-container-high grid grid-cols-2 gap-3">
+                                    <Link
+                                        href="/login"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="w-full min-h-11 flex items-center justify-center rounded-xl border border-surface-container-high text-xs text-[#52645f] font-medium hover:bg-[#edf5f0]"
+                                    >
+                                        Masuk Akun
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="w-full min-h-11 flex items-center justify-center rounded-xl bg-primary text-white text-xs font-medium shadow-xs"
+                                    >
+                                        Mulai Skrining
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    </>
                 )}
             </header>
         </>

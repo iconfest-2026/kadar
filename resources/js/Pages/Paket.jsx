@@ -210,10 +210,6 @@ export default function Paket(props) {
 
                     {/* Hero Header */}
                     <div className="text-center max-w-2xl mx-auto space-y-3.5">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                            <span>Transparansi Biaya • Standar Layanan Medis Terakreditasi</span>
-                        </div>
                         <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight tracking-tight">
                             Investasi preventif untuk kesehatan metabolik bebas komplikasi.
                         </h1>
@@ -273,11 +269,11 @@ export default function Paket(props) {
 
                                     <div className="space-y-4">
                                         {/* Card Header */}
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="font-serif text-2xl font-normal text-[#142320]">
+                                        <div className="flex items-start justify-between gap-2.5">
+                                            <h3 className="font-serif text-2xl font-normal text-[#142320] leading-snug">
                                                 {tier.name}
                                             </h3>
-                                            <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-medium ${tier.badgeStyle}`}>
+                                            <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-medium whitespace-nowrap shrink-0 mt-0.5 ${tier.badgeStyle}`}>
                                                 {tier.badge}
                                             </span>
                                         </div>
@@ -314,8 +310,8 @@ export default function Paket(props) {
                                                         key={idx}
                                                         className={`flex items-start gap-2.5 ${
                                                             f.included
-                                                                ? 'text-[#283c36]'
-                                                                : 'text-[#9ab1a7] line-through'
+                                                                ? 'text-[#20342e]'
+                                                                : 'text-[#5a736a] line-through decoration-[#8aa096]'
                                                         }`}
                                                     >
                                                         <span
@@ -324,12 +320,12 @@ export default function Paket(props) {
                                                                     ? f.highlight
                                                                         ? 'text-primary font-bold'
                                                                         : 'text-emerald-700'
-                                                                    : 'text-[#b5c7bf]'
+                                                                    : 'text-[#7e968d]'
                                                             }`}
                                                         >
                                                             {f.included ? 'check_circle' : 'remove_circle_outline'}
                                                         </span>
-                                                        <span className={f.highlight ? 'font-semibold text-primary' : ''}>
+                                                        <span className={f.highlight ? 'font-bold text-[#006057]' : ''}>
                                                             {f.text}
                                                         </span>
                                                     </li>

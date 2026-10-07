@@ -72,10 +72,10 @@ export default function AdminLayout({ children, title, activeNav }) {
 
             {/* Hardware-Accelerated Ambient Background Glow (Isolate Paint Layer) */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden gpu-layer contain-paint">
-                <div className="absolute -top-24 left-1/4 w-[650px] h-[350px] bg-gradient-to-tr from-primary-fixed-dim/30 via-primary-fixed/20 to-transparent blur-[80px] rounded-full gpu-layer" />
-                <div className="absolute top-[40%] -right-24 w-[500px] h-[450px] bg-gradient-to-bl from-secondary-fixed/25 via-primary-container/15 to-transparent blur-[80px] rounded-full gpu-layer" />
-                <div className="absolute bottom-10 left-1/3 w-[550px] h-[350px] bg-gradient-to-tr from-primary-fixed/25 to-transparent blur-[80px] rounded-full gpu-layer" />
-                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-[0.035]" />
+                <div className="absolute -top-24 left-1/4 w-162.5 h-87.5 bg-linear-to-tr from-primary-fixed-dim/30 via-primary-fixed/20 to-transparent blur-[80px] rounded-full gpu-layer" />
+                <div className="absolute top-[40%] -right-24 w-125 h-112.5 bg-linear-to-bl from-secondary-fixed/25 via-primary-container/15 to-transparent blur-[80px] rounded-full gpu-layer" />
+                <div className="absolute bottom-10 left-1/3 w-137.5 h-87.5 bg-linear-to-tr from-primary-fixed/25 to-transparent blur-[80px] rounded-full gpu-layer" />
+                <div className="absolute inset-0 bg-[radial-gradient(#00433e_1.5px,transparent_1.5px)] bg-size-[32px_32px] opacity-[0.035]" />
             </div>
 
             {/* Mobile Overlay */}
@@ -102,7 +102,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                         />
                         <div className="min-w-0">
                             <div className="flex items-center gap-2">
-                                <span className="font-heading font-black text-xl tracking-tight text-primary">AEVYRA</span>
+                                <span className="font-heading font-black text-xl tracking-tight text-primary">EVYRA</span>
                                 <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-primary/10 text-primary border border-primary/15 shrink-0">
                                     ADMIN
                                 </span>
@@ -378,7 +378,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                     <div className="flex flex-col items-center justify-center flex-1 -mt-6">
                         <Link
                             href="/admin/scanner"
-                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white active:scale-90 transition-transform ${
+                            className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white active:scale-90 transition-transform ${
                                 activeNav === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
                             }`}
                             title="Monitor OCR Scanner"
