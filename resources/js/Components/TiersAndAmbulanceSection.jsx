@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function TiersAndAmbulanceSection() {
-    const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'yearly'
+    const { membership } = usePage().props || {};
     const [ambulanceCalling, setAmbulanceCalling] = useState(false);
     const [coords, setCoords] = useState(null);
 
-    const tiers = [
+    const rawTiers = membership?.active_tiers && membership.active_tiers.length > 0 ? membership.active_tiers : [];
+
+    const fallbackTiers = [
         {
             name: 'Silver',
             tag: 'Akses Esensial',
             tagStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
             priceMonthly: 'Gratis',
-            priceYearly: 'Gratis',
             period: 'selamanya',
+            adminFee: 0,
             desc: 'Akses penuh pemindaian kemasan, obat BPOM, dan buku harian glukosa.',
             features: [
                 'Pemindai Kamera Makanan & Obat BPOM (Tanpa Batas)',
                 'Deteksi Beban Glikemik & Gramatur Gula Instan',
                 'Buku Catatan Biomarker Glukosa Darah Harian',
                 'Konsultasi Asisten AI Terverifikasi Medis 24/7',
-                'Akses Siaga Panggilan Darurat Ambulan 119',
+                'Akses Siaga Panggilan Darurat Ambulans 119',
             ],
             cta: 'Mulai Silver Gratis',
             isPopular: false,
@@ -29,16 +31,15 @@ export default function TiersAndAmbulanceSection() {
             name: 'Gold',
             tag: 'Paling Direkomendasikan',
             tagStyle: 'bg-primary text-white border-transparent',
-            priceMonthly: 'Rp 79.000',
-            priceYearly: 'Rp 63.000',
+            priceMonthly: 'Rp 103.000',
             period: '/ bulan',
-            savings: 'Hemat Rp 192.000/tahun',
+            adminFee: 4000,
             desc: 'Personalisasi menu gizi, evaluasi mingguan, dan bimbingan terstruktur.',
             features: [
                 'Semua kapabilitas dalam paket Silver',
                 'Prediksi Lonjakan Glikemik Makanan Spesifik',
                 'Rekomendasi Profil Presisi (Alergi, Garam, Tensi)',
-                'Program Kebiasaan Remisi 14–90 Hari Terpandu',
+                'Program Kebiasaan Remisi 14-90 Hari Terpandu',
                 '2x Jadwal Konsultasi Instruktur Gizi per Bulan',
                 'Laporan Evaluasi Progres Metabolik Otomatis',
             ],
@@ -49,10 +50,9 @@ export default function TiersAndAmbulanceSection() {
             name: 'Platinum',
             tag: 'Pendampingan Spesialis',
             tagStyle: 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]',
-            priceMonthly: 'Rp 199.000',
-            priceYearly: 'Rp 159.000',
+            priceMonthly: 'Rp 253.000',
             period: '/ bulan',
-            savings: 'Hemat Rp 480.000/tahun',
+            adminFee: 4000,
             desc: 'Bimbingan intensif 1-on-1 bersama Dokter Spesialis Penyakit Dalam (Sp.PD).',
             features: [
                 'Semua kapabilitas dalam paket Gold',
@@ -66,6 +66,37 @@ export default function TiersAndAmbulanceSection() {
             isPopular: false,
         },
     ];
+
+    const tiers = rawTiers.length > 0
+        ? rawTiers.map((t) => {
+            const basePrice = Number(t.price || 0);
+            const fee = Number(t.calculated_admin_fee ?? t.admin_fee ?? 0);
+            const total = Number(t.total_price || (basePrice + fee));
+            const isPopular = Boolean(t.is_popular);
+
+            let tagStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]';
+            if (isPopular) {
+                tagStyle = 'bg-primary text-white border-transparent';
+            } else if (basePrice >= 200000) {
+                tagStyle = 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]';
+            }
+
+            return {
+                name: t.name,
+                tag: t.badge_text || (isPopular ? 'Paling Direkomendasikan' : (total === 0 ? 'Akses Esensial' : 'Pilihan Populer')),
+                tagStyle,
+                priceMonthly: total === 0 ? 'Gratis' : `Rp ${total.toLocaleString('id-ID')}`,
+                adminFee: fee,
+                period: total === 0 ? 'selamanya' : '/ bulan',
+                desc: t.description || 'Layanan preventif metabolik komprehensif.',
+                features: Array.isArray(t.features) && t.features.length > 0
+                    ? t.features.slice(0, 6)
+                    : (fallbackTiers.find((ft) => ft.name.toLowerCase() === t.slug?.toLowerCase())?.features || fallbackTiers[0].features),
+                cta: total === 0 ? 'Mulai Gratis' : `Pilih ${t.name}`,
+                isPopular,
+            };
+        })
+        : fallbackTiers;
 
     const handleCallAmbulance = () => {
         setAmbulanceCalling(true);
@@ -110,40 +141,17 @@ export default function TiersAndAmbulanceSection() {
                             Mulai tanpa biaya untuk pemantauan mandiri, atau pilih bimbingan klinis terpadu bersama tim dokter spesialis kami.
                         </p>
 
-                        {/* Billing Switcher Toggle (Standard Touch Height 42px) */}
+                        {/* Fixed Pricing Transparency Assurance */}
                         <div className="pt-2 flex items-center justify-center">
-                            <div className="p-1 bg-[#f0f5f2] rounded-full border border-[#d8e7de] inline-flex items-center max-w-full overflow-x-auto">
-                                <button
-                                    type="button"
-                                    onClick={() => setBillingCycle('monthly')}
-                                    className={`min-h-9 sm:min-h-10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs transition-all whitespace-nowrap flex items-center justify-center ${
-                                        billingCycle === 'monthly'
-                                            ? 'bg-white text-primary font-medium shadow-xs'
-                                            : 'text-[#52645f] hover:text-primary'
-                                    }`}
-                                >
-                                    Tagihan Bulanan
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setBillingCycle('yearly')}
-                                    className={`min-h-9 sm:min-h-10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
-                                        billingCycle === 'yearly'
-                                            ? 'bg-white text-primary font-medium shadow-xs'
-                                            : 'text-[#52645f] hover:text-primary'
-                                    }`}
-                                >
-                                    <span>Tagihan Tahunan</span>
-                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#e8f2ec] text-[#1c6454] font-medium">
-                                        Hemat 20%
-                                    </span>
-                                </button>
+                            <div className="px-4 py-1.5 bg-[#f0f5f2] rounded-full border border-[#d8e7de] inline-flex items-center gap-2 text-xs text-[#283f38]">
+                                <span className="material-symbols-outlined text-[16px] text-primary">verified</span>
+                                <span>Tarif Resmi Fiks Transparan • Terhubung Midtrans Gateway</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Tier Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-stretch pt-1">
+                    <div className={`grid grid-cols-1 ${tiers.length >= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-4 sm:gap-5 items-stretch pt-1`}>
                         {tiers.map((t, idx) => (
                             <div
                                 key={idx}
@@ -169,15 +177,15 @@ export default function TiersAndAmbulanceSection() {
                                     <div className="pt-1">
                                         <div className="flex items-baseline gap-1">
                                             <span className="font-serif text-2xl sm:text-3xl font-normal text-[#182926]">
-                                                {billingCycle === 'yearly' ? t.priceYearly : t.priceMonthly}
+                                                {t.priceMonthly}
                                             </span>
                                             <span className="text-xs text-[#63746f]">
                                                 {t.period}
                                             </span>
                                         </div>
-                                        {billingCycle === 'yearly' && t.savings && (
-                                            <span className="text-[11px] text-[#1c6454] font-medium block mt-1">
-                                                {t.savings}
+                                        {t.adminFee > 0 && (
+                                            <span className="text-[10px] text-teal-800 font-medium block mt-0.5">
+                                                Sudah termasuk Biaya Gateway (+Rp {t.adminFee.toLocaleString('id-ID')})
                                             </span>
                                         )}
                                     </div>
@@ -201,7 +209,7 @@ export default function TiersAndAmbulanceSection() {
 
                                 <div className="pt-3">
                                     <Link
-                                        href="/register"
+                                        href="/paket"
                                         className={`w-full min-h-10 sm:min-h-11 py-2.5 rounded-full text-xs font-medium flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
                                             t.isPopular
                                                 ? 'bg-primary text-white hover:bg-primary-container shadow-[0_2px_12px_rgba(0,67,62,0.15)]'

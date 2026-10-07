@@ -73,11 +73,32 @@ Route::get('/faq', function () {
     return Inertia::render('Faq');
 })->name('faq');
 
-// Public Packages & Pricing Page (Silver, Gold, Platinum)
+// Public & Member Packages & Pricing Page
 Route::get('/paket', function () {
     $tiers = \App\Models\MembershipTier::where('status', 'ACTIVE')->orderBy('price', 'asc')->get();
+
+    $user = \Illuminate\Support\Facades\Auth::user();
+    $currentTier = null;
+    if ($user) {
+        $activeMembership = \App\Models\Membership::where('user_id', $user->id)
+            ->where('status', 'ACTIVE')
+            ->with('tier')
+            ->first();
+        $currentTier = $activeMembership?->tier ? [
+            'id' => $activeMembership->tier->id,
+            'name' => $activeMembership->tier->name,
+            'slug' => $activeMembership->tier->slug,
+        ] : null;
+    }
+
     return Inertia::render('Paket', [
         'tiersData' => $tiers,
+        'currentTier' => $currentTier,
+        'midtransConfig' => [
+            'client_key' => config('services.midtrans.client_key'),
+            'snap_url' => config('services.midtrans.snap_url'),
+            'is_production' => (bool) config('services.midtrans.is_production', false),
+        ],
     ]);
 })->name('paket');
 

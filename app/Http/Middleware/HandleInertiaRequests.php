@@ -56,6 +56,34 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
+            'membership' => function () use ($user) {
+                $activeTiers = \App\Models\MembershipTier::where('status', 'ACTIVE')->orderBy('price', 'asc')->get();
+                if (!$user) {
+                    return [
+                        'current_tier' => null,
+                        'current_tier_slug' => null,
+                        'active_tiers' => $activeTiers,
+                    ];
+                }
+                $active = \App\Models\Membership::where('user_id', $user->id)
+                    ->where('status', 'ACTIVE')
+                    ->with('tier')
+                    ->first();
+
+                return [
+                    'current_tier' => $active?->tier?->name ?? 'Silver',
+                    'current_tier_slug' => $active?->tier?->slug ?? 'silver',
+                    'tier_id' => $active?->tier?->id,
+                    'max_scanner' => $active?->tier?->max_scanner,
+                    'max_consultations' => $active?->tier?->max_consultations,
+                    'active_tiers' => $activeTiers,
+                ];
+            },
+            'midtrans' => [
+                'client_key' => config('services.midtrans.client_key', env('MIDTRANS_CLIENT_KEY', 'Mid-client-o8FP06N-oie4kS_V')),
+                'snap_url' => config('services.midtrans.snap_url', 'https://app.sandbox.midtrans.com/snap/snap.js'),
+                'is_production' => (bool) config('services.midtrans.is_production', false),
+            ],
         ];
     }
 }

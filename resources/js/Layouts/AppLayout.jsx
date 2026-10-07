@@ -8,14 +8,33 @@ import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 import AppSidebar from '../Components/Sidebar/AppSidebar';
 
 export default function AppLayout({ children, title, activeTab }) {
+
     const page = usePage();
-    const { auth, flash } = page.props;
+    const { auth, flash, membership } = page.props;
     const pageUrl = page.url || '';
     const user = auth?.user;
     const roles = auth?.roles || [];
     const isMember = roles.includes('member') || (!roles.includes('admin') && !roles.includes('instructor'));
     const isInstructor = roles.includes('instructor');
     const isAdmin = roles.includes('admin');
+
+    const currentTierName = membership?.current_tier || 'Silver';
+    const currentTierSlug = membership?.current_tier_slug || 'silver';
+    const activeTiers = membership?.active_tiers || [];
+
+    const currentTierObj = activeTiers.find((t) =>
+        (t.slug && currentTierSlug && t.slug.toLowerCase() === currentTierSlug.toLowerCase()) ||
+        (t.name && currentTierName && t.name.toLowerCase() === currentTierName.toLowerCase()) ||
+        (t.id && membership?.tier_id && t.id === membership.tier_id)
+    ) || null;
+
+    const scannerQuotaText = currentTierObj
+        ? (currentTierObj.max_scanner === -1 ? 'Unlimited scan kamera gizi' : (currentTierObj.max_scanner > 0 ? `${currentTierObj.max_scanner}x scan kamera gizi / hari` : 'Skrining dasar'))
+        : (membership?.max_scanner === -1 ? 'Unlimited scan kamera gizi' : (membership?.max_scanner > 0 ? `${membership.max_scanner}x scan kamera gizi / hari` : '10x scan gizi / hari'));
+
+    const consultationQuotaText = currentTierObj
+        ? (currentTierObj.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (currentTierObj.max_consultations > 0 ? `${currentTierObj.max_consultations} sesi konsultasi dokter / bln` : 'tanpa kuota konsultasi'))
+        : (membership?.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (membership?.max_consultations > 0 ? `${membership.max_consultations} sesi konsultasi dokter / bln` : '1 sesi konsultasi dokter'));
 
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
     const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
@@ -41,6 +60,85 @@ export default function AppLayout({ children, title, activeTab }) {
         router.post('/logout');
     };
 
+    const memberNavSections = [
+        {
+            title: 'Metabolisme & Biomarker',
+            items: [
+                { id: 'dashboard', name: 'Dashboard Baseline', href: '/member/dashboard', icon: 'monitoring', badge: 'HBE' },
+                { id: 'scanner', name: 'Scanner Gizi & BPOM', href: '/member/scanner', icon: 'photo_camera', badge: 'OCR' },
+                { id: 'timeline', name: 'Timeline & Riwayat', href: '/member/timeline', icon: 'history_edu' },
+            ],
+        },
+        {
+            title: 'Telemedisin & Tenaga Medis',
+            items: [
+                { id: 'consultations', name: 'Pusat Tele-Konsultasi', href: '/member/consultations-hub', icon: 'support_agent' },
+                { id: 'instructors', name: 'Tim Dokter Pendamping', href: '/member/instructors', icon: 'medical_services' },
+                { id: 'ai-consultation', name: 'Asisten AI', action: 'open_ai_chat', icon: 'smart_toy' },
+                { id: 'emergency', name: 'Siaga Ambulans GPS', href: '/demo/emergency', icon: 'emergency', badge: '119' },
+            ],
+        },
+        {
+            title: 'Program & Komunitas',
+            items: [
+                { id: 'challenges', name: 'Tantangan Sehat', href: '/member/challenges', icon: 'emoji_events', badge: '14-90 H' },
+                { id: 'community', name: 'Forum Komunitas', href: '/member/community', icon: 'groups' },
+                { id: 'arcade', name: 'Game Edukasi 2D', href: '/arcade', icon: 'sports_esports' },
+                { id: 'gender-vitality', name: 'Siklus & Vitalitas', href: '/demo/gender-vitality', icon: 'vital_signs', badge: 'AI' },
+            ],
+        },
+        {
+            title: 'Layanan & Bantuan',
+            items: [
+                { id: 'home', name: 'Beranda Utama Web', href: '/', icon: 'home', badge: 'Web' },
+                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium', badge: currentTierName },
+                { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
+            ],
+        },
+        {
+            title: 'Pengaturan & Akun',
+            items: [
+                { id: 'onboarding', name: 'Profil & Gaya Hidup', href: '/member/onboarding', icon: 'tune' },
+                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge', badge: 'Aktif' },
+            ],
+        },
+    ];
+
+    const instructorNavSections = [
+        {
+            title: 'Pengawasan Caseload & Sinyal',
+            items: [
+                { id: 'dashboard', name: 'Dashboard Caseload', href: '/instructor/dashboard', icon: 'dashboard' },
+                { id: 'members', name: 'Member Binaan', href: '/instructor/members', icon: 'groups', badge: 'Kohor' },
+            ],
+        },
+        {
+            title: 'Tindakan Klinis & Intervensi',
+            items: [
+                { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes', badge: 'HBE' },
+                { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
+            ],
+        },
+        {
+            title: 'Evaluasi & Laporan',
+            items: [
+                { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
+            ],
+        },
+    ];
+
+    const adminNavSections = [
+        {
+            title: 'Tata Kelola Platform',
+            items: [
+                { id: 'admin', name: 'Tata Kelola & Audit', href: '/admin/dashboard', icon: 'dashboard' },
+                { id: 'reports', name: 'Laporan & Ambulans', href: '/admin/reports', icon: 'analytics' },
+            ],
+        },
+    ];
+
+    const currentSections = isAdmin ? adminNavSections : isInstructor ? instructorNavSections : memberNavSections;
+
     return (
         <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
             
@@ -58,7 +156,6 @@ export default function AppLayout({ children, title, activeTab }) {
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
-
             {/* Modular Sidebar Component */}
             <AppSidebar
                 isOpen={sidebarOpen}
@@ -115,10 +212,11 @@ export default function AppLayout({ children, title, activeTab }) {
                         <button
                             type="button"
                             onClick={() => setIsAiChatOpen(true)}
-                            className="w-8 h-8 rounded-full bg-[#008069] text-white flex items-center justify-center font-bold text-xs shadow-xs cursor-pointer active:scale-95"
-                            title="Buka Chat AI WhatsApp"
+                            className="w-8 h-8 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary flex items-center justify-center font-bold text-xs shadow-2xs cursor-pointer active:scale-95 border border-surface-container"
+                            title="Asisten AI Preventif"
+                            aria-label="Buka Asisten AI"
                         >
-                            <span className="material-symbols-outlined text-[16px]">chat</span>
+                            <span className="material-symbols-outlined text-[17px]">smart_toy</span>
                         </button>
                     </div>
                 </header>
@@ -150,7 +248,7 @@ export default function AppLayout({ children, title, activeTab }) {
                 <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="font-medium text-center sm:text-left">
-                            © 2026 AEVYRA — Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
+                            © 2026 AEVYRA - Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
                         </p>
                         <div className="flex items-center gap-4 text-[11px]">
                             <span>UU PDP No. 27/2022 Patuh</span>
@@ -379,7 +477,8 @@ export default function AppLayout({ children, title, activeTab }) {
             <MembershipTierModal
                 isOpen={isTierModalOpen}
                 onClose={() => setIsTierModalOpen(false)}
-                currentTier="Gold"
+                currentTier={currentTierName}
+                availableTiers={activeTiers}
             />
 
             {/* Authenticated Member WhatsApp AI Chat Drawer */}

@@ -32,7 +32,7 @@ class ScannerController extends Controller
         // Check active membership tier
         $membership = $user->memberships()->where('status', 'ACTIVE')->with('tier')->first();
         $tierName = $membership?->tier?->name ?? 'Silver (Gratis)';
-        $dailyLimit = $membership?->tier?->slug === 'platinum' ? -1 : ($membership?->tier?->slug === 'gold' ? 50 : 10);
+        $dailyLimit = $membership?->tier ? (int) ($membership->tier->max_scanner ?? 10) : 10;
 
         // Count today's scans
         $todayScansCount = HealthRecord::where('user_id', $user->id)

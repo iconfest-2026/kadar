@@ -753,7 +753,7 @@ export default function Dashboard({
                         <div className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-amber-600 text-[20px]">workspace_premium</span>
                             <span className="font-heading font-black text-sm uppercase tracking-wider text-on-surface">
-                                Tingkatan Anda: <span className="text-amber-700 dark:text-amber-400">{membership?.tier || 'Gold Member'}</span>
+                                Tingkatan Anda: <span className="text-amber-700 dark:text-amber-400">{membership?.tier || 'Silver'}</span>
                             </span>
                         </div>
                         <p className="text-xs text-on-surface-variant">

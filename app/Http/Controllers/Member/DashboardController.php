@@ -85,17 +85,39 @@ class DashboardController extends Controller
             ->with('tier')
             ->first();
 
-        $tierSlug = strtolower($activeMembership?->tier?->slug ?? 'silver');
-        $allTiers = \App\Models\MembershipTier::all()->map(function ($t) use ($tierSlug) {
-            return [
-                'id' => $t->id,
-                'name' => $t->name,
-                'slug' => $t->slug,
-                'price' => (float) $t->price,
-                'description' => $t->description,
-                'is_current' => strtolower($t->slug) === $tierSlug,
-            ];
-        });
+        $currentTier = $activeMembership?->tier;
+        $tierSlug = strtolower($currentTier?->slug ?? 'silver');
+
+        $allTiers = \App\Models\MembershipTier::where('status', 'ACTIVE')
+            ->orderBy('price', 'asc')
+            ->get()
+            ->map(function ($t) use ($tierSlug) {
+                return [
+                    'id' => $t->id,
+                    'name' => $t->name,
+                    'slug' => $t->slug,
+                    'description' => $t->description,
+                    'price' => (float) $t->price,
+                    'admin_fee' => (float) $t->admin_fee,
+                    'admin_fee_type' => $t->admin_fee_type,
+                    'calculated_admin_fee' => (float) $t->calculated_admin_fee,
+                    'total_price' => (float) $t->total_price,
+                    'badge_text' => $t->badge_text,
+                    'is_popular' => (bool) $t->is_popular,
+                    'max_consultations' => (int) $t->max_consultations,
+                    'max_scanner' => (int) $t->max_scanner,
+                    'features' => $t->features ?? [],
+                    'is_current' => strtolower($t->slug) === $tierSlug,
+                ];
+            });
+
+        $scanLimit = $currentTier
+            ? ($currentTier->max_scanner === -1 ? 'Unlimited / hari' : ($currentTier->max_scanner > 0 ? "{$currentTier->max_scanner} / hari" : 'Tidak termasuk'))
+            : '10 / hari';
+
+        $consultationQuota = $currentTier
+            ? ($currentTier->max_consultations === -1 ? 'Bebas Batas' : ($currentTier->max_consultations > 0 ? "{$currentTier->max_consultations} Sesi / bulan" : 'Tanpa Kuota'))
+            : '0 Sesi / bulan';
 
         // 9. Achievements & Badges
         $userEarnedIds = $user->achievements()->pluck('achievements.id')->toArray();
@@ -130,11 +152,11 @@ class DashboardController extends Controller
             ] : ['current' => 1, 'best' => 1, 'last_activity' => $today->toDateString()],
             'totalPoints' => $totalPoints,
             'membership' => [
-                'tier' => $activeMembership?->tier?->name ?? 'Silver',
+                'tier' => $currentTier?->name ?? 'Silver',
                 'tier_slug' => $tierSlug,
                 'all_tiers' => $allTiers,
-                'scan_limit' => $tierSlug === 'platinum' ? 'Unlimited' : ($tierSlug === 'gold' ? '15 / hari' : '3 / hari'),
-                'consultation_quota' => $tierSlug === 'platinum' ? '8 Sesi / bulan' : ($tierSlug === 'gold' ? '4 Sesi / bulan' : '1 Sesi / bulan'),
+                'scan_limit' => $scanLimit,
+                'consultation_quota' => $consultationQuota,
             ],
             'achievements' => $achievements,
             'instructor' => $activeAssignment ? [
