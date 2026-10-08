@@ -10,59 +10,78 @@ export default function TiersAndAmbulanceSection() {
 
     const fallbackTiers = [
         {
-            name: 'Silver',
+            name: 'Gratis (Basic)',
             tag: 'Akses Esensial',
             tagStyle: 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]',
             priceMonthly: 'Gratis',
             period: 'selamanya',
             adminFee: 0,
-            desc: 'Akses penuh pemindaian kemasan, obat BPOM, dan buku harian glukosa.',
+            desc: 'Akses gratis seumur hidup dengan pemantauan baseline dasar dan tombol darurat 119.',
             features: [
-                'Pemindai Kamera Makanan & Obat BPOM (Tanpa Batas)',
-                'Deteksi Beban Glikemik & Gramatur Gula Instan',
-                'Buku Catatan Biomarker Glukosa Darah Harian',
-                'Konsultasi Asisten AI Terverifikasi Medis 24/7',
-                'Akses Siaga Panggilan Darurat Ambulans 119',
+                { text: 'Pemindai Kamera Makanan & Obat BPOM (10x / hari)', included: true },
+                { text: 'Deteksi Beban Glikemik & Gramatur Gula Instan (<0.4s)', included: true },
+                { text: 'Buku Harian Glukosa Darah & Log HBE Harian', included: true },
+                { text: 'Asisten AI Terverifikasi Medis 24/7 (Edukasi Dasar)', included: true },
+                { text: 'Akses Siaga Panggilan Darurat Ambulans 119', included: true },
+                { text: 'Akses Komunitas & Forum Diskusi Pasien Publik', included: true },
+                { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: false },
+                { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: false },
+                { text: 'Sesi Telekonsultasi Instruktur Gizi Klinis per Bulan', included: false },
+                { text: 'Jalur Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                { text: 'Analisis Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                { text: 'Dedicated Personal Health Coach 24/7', included: false },
             ],
-            cta: 'Mulai Silver Gratis',
+            cta: 'Mulai Gratis (Basic)',
             isPopular: false,
         },
         {
-            name: 'Gold',
+            name: 'Gold Preventif',
             tag: 'Paling Direkomendasikan',
             tagStyle: 'bg-primary text-white border-transparent',
-            priceMonthly: 'Rp 103.000',
+            priceMonthly: 'Rp 53.000',
             period: '/ bulan',
             adminFee: 4000,
-            desc: 'Personalisasi menu gizi, evaluasi mingguan, dan bimbingan terstruktur.',
+            desc: 'Untuk individu proaktif yang ingin mendeteksi deviasi metabolik dan tidur sejak dini.',
             features: [
-                'Semua kapabilitas dalam paket Silver',
-                'Prediksi Lonjakan Glikemik Makanan Spesifik',
-                'Rekomendasi Profil Presisi (Alergi, Garam, Tensi)',
-                'Program Kebiasaan Remisi 14-90 Hari Terpandu',
-                '2x Jadwal Konsultasi Instruktur Gizi per Bulan',
-                'Laporan Evaluasi Progres Metabolik Otomatis',
+                { text: 'Semua kapabilitas dalam paket Gratis & Dasar', included: true, highlight: true },
+                { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: true },
+                { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: true },
+                { text: 'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)', included: true },
+                { text: '2x Sesi Telekonsultasi Instruktur Gizi per Bulan', included: true },
+                { text: 'Laporan Evaluasi Progres Metabolik Bulanan (Format PDF)', included: true },
+                { text: 'Akses Penuh Seluruh Modul Gamifikasi & Resep Rendah Gula', included: true },
+                { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: false },
+                { text: 'Dedicated Personal Health Coach & Review Mingguan', included: false },
+                { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: false },
             ],
-            cta: 'Pilih Paket Gold',
+            cta: 'Pilih Paket Gold Preventif',
             isPopular: true,
         },
         {
-            name: 'Platinum',
-            tag: 'Pendampingan Spesialis',
+            name: 'Platinum Concierge',
+            tag: 'Pendampingan VIP',
             tagStyle: 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]',
-            priceMonthly: 'Rp 253.000',
+            priceMonthly: 'Rp 153.000',
             period: '/ bulan',
             adminFee: 4000,
-            desc: 'Bimbingan intensif 1-on-1 bersama Dokter Spesialis Penyakit Dalam (Sp.PD).',
+            desc: 'Pendampingan holistik dengan bimbingan langsung instruktur dan dokter preventif.',
             features: [
-                'Semua kapabilitas dalam paket Gold',
-                'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD',
-                'Integrasi Penuh Rekam Medis SatuSehat Kemenkes',
-                'Ekspor Resume Medis PDF Terstandar Faskes',
-                'Analisis Hasil Tes Laboratorium (HbA1c & Lipid)',
-                'Koordinasi Prioritas Tim Medis Siaga',
+                { text: 'Semua kapabilitas dalam paket Gold & Gratis', included: true, highlight: true },
+                { text: 'Pemindai Kamera OCR & Obat BPOM Bebas Batas (Unlimited)', included: true },
+                { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: true },
+                { text: '6x Sesi Telekonsultasi Dokter Spesialis per Bulan', included: true },
+                { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: true },
+                { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: true },
+                { text: 'Dedicated Personal Health Coach & Review Mingguan', included: true },
+                { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: true },
+                { text: 'Jalur Koordinasi Ambulans dengan Riwayat Klinis Instan', included: true },
+                { text: 'Rencana Intervensi Gizi & Menu Presisi Personal Khusus', included: true },
+                { text: 'Program Tantangan Remisi Intensif Klinis Terpandu', included: true },
+                { text: 'Akses Jalur Cepat Tindakan Klinis & Integrasi SatuSehat', included: true },
             ],
-            cta: 'Pilih Paket Platinum',
+            cta: 'Pilih Paket Platinum Concierge',
             isPopular: false,
         },
     ];
@@ -72,28 +91,75 @@ export default function TiersAndAmbulanceSection() {
             const basePrice = Number(t.price || 0);
             const fee = Number(t.calculated_admin_fee ?? t.admin_fee ?? 0);
             const total = Number(t.total_price || (basePrice + fee));
-            const isPopular = Boolean(t.is_popular);
+            const isPopular = Boolean(t.is_popular) || t.slug === 'gold' || t.name?.toLowerCase().includes('gold');
+            const isPlatinum = !isPopular && (t.slug === 'platinum' || t.name?.toLowerCase().includes('platinum') || basePrice >= 140000);
 
-            let tagStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]';
+            let tagStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd] font-medium';
             if (isPopular) {
-                tagStyle = 'bg-primary text-white border-transparent';
-            } else if (basePrice >= 200000) {
-                tagStyle = 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]';
+                tagStyle = 'bg-primary text-white border-transparent font-bold shadow-xs';
+            } else if (isPlatinum) {
+                tagStyle = 'bg-[#fbf7f0] text-[#785b34] border-[#ebdcc4] font-semibold';
             }
+
+            const defaultFeatures = (t.slug === 'gold' || t.name?.toLowerCase().includes('gold'))
+                ? [
+                    { text: 'Semua kapabilitas dalam paket Gratis & Dasar', included: true, highlight: true },
+                    { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: true },
+                    { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: true },
+                    { text: 'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)', included: true },
+                    { text: '2x Sesi Telekonsultasi Instruktur Gizi per Bulan', included: true },
+                    { text: 'Laporan Evaluasi Progres Metabolik Bulanan (Format PDF)', included: true },
+                    { text: 'Akses Penuh Seluruh Modul Gamifikasi & Resep Rendah Gula', included: true },
+                    { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                    { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                    { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: false },
+                    { text: 'Dedicated Personal Health Coach & Review Mingguan', included: false },
+                    { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: false },
+                ]
+                : isPlatinum
+                ? [
+                    { text: 'Semua kapabilitas dalam paket Gold & Gratis', included: true, highlight: true },
+                    { text: 'Pemindai Kamera OCR & Obat BPOM Bebas Batas (Unlimited)', included: true },
+                    { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: true },
+                    { text: '6x Sesi Telekonsultasi Dokter Spesialis per Bulan', included: true },
+                    { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: true },
+                    { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: true },
+                    { text: 'Dedicated Personal Health Coach & Review Mingguan', included: true },
+                    { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: true },
+                    { text: 'Jalur Koordinasi Ambulans dengan Riwayat Klinis Instan', included: true },
+                    { text: 'Rencana Intervensi Gizi & Menu Presisi Personal Khusus', included: true },
+                    { text: 'Program Tantangan Remisi Intensif Klinis Terpandu', included: true },
+                    { text: 'Akses Jalur Cepat Tindakan Klinis & Integrasi SatuSehat', included: true },
+                ]
+                : [
+                    { text: 'Pemindai Kamera Makanan & Obat BPOM (10x / hari)', included: true },
+                    { text: 'Deteksi Beban Glikemik & Gramatur Gula Instan (<0.4s)', included: true },
+                    { text: 'Buku Harian Glukosa Darah & Log HBE Harian', included: true },
+                    { text: 'Asisten AI Terverifikasi Medis 24/7 (Edukasi Dasar)', included: true },
+                    { text: 'Akses Siaga Panggilan Darurat Ambulans 119', included: true },
+                    { text: 'Akses Komunitas & Forum Diskusi Pasien Publik', included: true },
+                    { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: false },
+                    { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: false },
+                    { text: 'Sesi Telekonsultasi Instruktur Gizi Klinis per Bulan', included: false },
+                    { text: 'Jalur Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                    { text: 'Analisis Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                    { text: 'Dedicated Personal Health Coach 24/7', included: false },
+                ];
 
             return {
                 name: t.name,
-                tag: t.badge_text || (isPopular ? 'Paling Direkomendasikan' : (total === 0 ? 'Akses Esensial' : 'Pilihan Populer')),
+                tag: t.badge_text || (isPopular ? 'Paling Direkomendasikan' : (isPlatinum ? 'Pendampingan Spesialis VIP' : 'Akses Esensial Mandiri')),
                 tagStyle,
                 priceMonthly: total === 0 ? 'Gratis' : `Rp ${total.toLocaleString('id-ID')}`,
                 adminFee: fee,
                 period: total === 0 ? 'selamanya' : '/ bulan',
                 desc: t.description || 'Layanan preventif metabolik komprehensif.',
                 features: Array.isArray(t.features) && t.features.length > 0
-                    ? t.features.slice(0, 6)
-                    : (fallbackTiers.find((ft) => ft.name.toLowerCase() === t.slug?.toLowerCase())?.features || fallbackTiers[0].features),
-                cta: total === 0 ? 'Mulai Gratis' : `Pilih ${t.name}`,
+                    ? t.features
+                    : defaultFeatures,
+                cta: total === 0 ? 'Mulai Gratis' : (isPopular ? 'Pilih Paket Gold' : (isPlatinum ? 'Pilih Paket Platinum' : `Pilih ${t.name}`)),
                 isPopular,
+                isPlatinum,
             };
         })
         : fallbackTiers;
@@ -140,80 +206,123 @@ export default function TiersAndAmbulanceSection() {
                         <p className="text-[11px] sm:text-sm text-[#546661] max-w-lg mx-auto leading-relaxed">
                             Mulai tanpa biaya untuk pemantauan mandiri, atau pilih bimbingan klinis terpadu bersama tim dokter spesialis kami.
                         </p>
-
-                        {/* Fixed Pricing Transparency Assurance */}
-                        <div className="pt-2 flex items-center justify-center">
-                            <div className="px-4 py-1.5 bg-[#f0f5f2] rounded-full border border-[#d8e7de] inline-flex items-center gap-2 text-xs text-[#283f38]">
-                                <span className="material-symbols-outlined text-[16px] text-primary">verified</span>
-                                <span>Tarif Resmi Fiks Transparan • Terhubung Midtrans Gateway</span>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Tier Cards Grid */}
-                    <div className={`grid grid-cols-1 ${tiers.length >= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-4 sm:gap-5 items-stretch pt-1`}>
+                    <div className={`grid grid-cols-1 ${tiers.length >= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6 items-stretch pt-3`}>
                         {tiers.map((t, idx) => (
                             <div
                                 key={idx}
-                                className={`p-4 sm:p-5 lg:p-6 rounded-2xl border flex flex-col justify-between space-y-4 transition-all ${
+                                className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between space-y-5 transition-all duration-300 relative ${
                                     t.isPopular
-                                        ? 'bg-[#f0f7f3] border-2 border-[#1c6454] shadow-[0_8px_30px_rgba(0,67,62,0.06)] relative -translate-y-1 sm:-translate-y-1.5'
-                                        : 'bg-white/80 border-surface-container-high hover:border-[#cfe0d6] shadow-[0_4px_20px_rgba(0,40,36,0.02)]'
+                                        ? 'bg-linear-to-b from-[#f2f9f5] via-white to-[#eaf5ef]/70 border-2 border-primary shadow-[0_16px_45px_rgba(0,67,62,0.18)] ring-4 ring-primary/10 relative -translate-y-1.5 sm:-translate-y-2.5 z-10 scale-[1.02]'
+                                        : t.isPlatinum
+                                        ? 'bg-linear-to-b from-white via-[#fcfbfa] to-[#faf5ee]/60 border border-[#e2d8c9] shadow-md hover:shadow-lg hover:border-[#c8b79e]'
+                                        : 'bg-white/95 border-[#d8e6df] shadow-xs hover:border-[#b4cfc1]'
                                 }`}
                             >
+                                {/* Floating Top Ribbon */}
+                                {t.isPopular && (
+                                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-white text-[10px] font-bold tracking-wider uppercase shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                                        <span className="material-symbols-outlined text-[13px] text-amber-300">star</span>
+                                        <span>Rekomendasi Utama</span>
+                                    </div>
+                                )}
+                                {t.isPlatinum && !t.isPopular && (
+                                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#3d2e1b] text-[#ebdcc4] text-[10px] font-bold tracking-wider uppercase shadow-sm flex items-center gap-1 whitespace-nowrap border border-[#ebdcc4]/40">
+                                        <span className="material-symbols-outlined text-[12px] text-amber-300">workspace_premium</span>
+                                        <span>Tingkat Tertinggi VIP</span>
+                                    </div>
+                                )}
+
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <h3 className="font-serif text-lg sm:text-xl font-medium text-[#182926]">
-                                                {t.name}
-                                            </h3>
-                                            <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-medium mt-1 inline-block ${t.tagStyle}`}>
-                                                {t.tag}
-                                            </span>
-                                        </div>
+                                    <div className="flex items-center justify-between gap-2">
+                                        <h3 className={`font-serif text-xl sm:text-2xl text-[#142320] truncate ${t.isPopular ? 'font-bold' : 'font-normal'}`}>
+                                            {t.name}
+                                        </h3>
+                                        <span className={`text-[10px] px-2.5 py-0.5 rounded-full border shrink-0 ${t.tagStyle}`}>
+                                            {t.tag}
+                                        </span>
                                     </div>
 
                                     {/* Price Box */}
-                                    <div className="pt-1">
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="font-serif text-2xl sm:text-3xl font-normal text-[#182926]">
+                                    <div className={`py-2.5 border-y space-y-1.5 ${t.isPopular ? 'border-primary/20 bg-primary/5 -mx-6 px-6 sm:-mx-7 sm:px-7' : 'border-[#edf4f0]'}`}>
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className={`font-serif text-3xl font-normal ${t.isPopular ? 'text-primary font-bold text-3xl sm:text-4xl' : t.isPlatinum ? 'text-[#20322d]' : 'text-[#182926]'}`}>
                                                 {t.priceMonthly}
                                             </span>
-                                            <span className="text-xs text-[#63746f]">
+                                            <span className="text-xs text-[#637671] font-medium">
                                                 {t.period}
                                             </span>
                                         </div>
-                                        {t.adminFee > 0 && (
+                                        {t.adminFee > 0 ? (
                                             <span className="text-[10px] text-teal-800 font-medium block mt-0.5">
-                                                Sudah termasuk Biaya Gateway (+Rp {t.adminFee.toLocaleString('id-ID')})
+                                                Sudah termasuk Biaya Admin (+Rp {t.adminFee.toLocaleString('id-ID')})
+                                            </span>
+                                        ) : (
+                                            <span className="text-[10px] text-[#4d6b60] flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-[13px] text-emerald-700">lock_open</span>
+                                                <span>Akses tanpa biaya seumur hidup</span>
                                             </span>
                                         )}
                                     </div>
 
-                                    <p className="text-xs text-[#52645f] leading-relaxed">
+                                    <p className="text-xs text-[#52645f] leading-relaxed min-h-10">
                                         {t.desc}
                                     </p>
 
                                     {/* Features List with Calm Line Markers */}
-                                    <ul className="space-y-2.5 pt-4 border-t border-surface-container-high text-xs text-[#354843]">
-                                        {t.features.map((f, fIdx) => (
-                                            <li key={fIdx} className="flex items-start gap-2.5">
-                                                <span className="text-[#1c6454] shrink-0 mt-0.5">
-                                                    <span className="material-symbols-outlined text-[14px]">check</span>
-                                                </span>
-                                                <span className="leading-relaxed">{f}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <div className="space-y-2 pt-2 border-t border-surface-container-high">
+                                        <span className="text-[10px] font-semibold text-[#536762] uppercase tracking-wider block">
+                                            Kapabilitas Layanan:
+                                        </span>
+                                        <ul className="space-y-2 text-xs text-[#354843]">
+                                            {t.features.map((f, fIdx) => {
+                                                const text = typeof f === 'object' ? f.text : f;
+                                                const isIncluded = typeof f === 'object' ? f.included !== false : true;
+                                                const isHighlight = typeof f === 'object' ? Boolean(f.highlight) : false;
+
+                                                return (
+                                                    <li
+                                                        key={fIdx}
+                                                        className={`flex items-start gap-2.5 ${
+                                                            isIncluded
+                                                                ? 'text-[#20342e]'
+                                                                : 'text-[#8b9e97] line-through decoration-[#9cb0a8]'
+                                                        }`}
+                                                    >
+                                                        <span
+                                                            className={`material-symbols-outlined text-[16px] shrink-0 mt-0.5 ${
+                                                                isIncluded
+                                                                    ? t.isPopular
+                                                                        ? 'text-primary font-bold'
+                                                                        : t.isPlatinum
+                                                                        ? 'text-emerald-800'
+                                                                        : 'text-emerald-700'
+                                                                    : 'text-[#9ab1a7]'
+                                                            }`}
+                                                        >
+                                                            {isIncluded ? 'check_circle' : 'close'}
+                                                        </span>
+                                                        <span className={isIncluded && isHighlight ? 'font-bold text-[#006057]' : ''}>
+                                                            {text}
+                                                        </span>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
                                 </div>
 
-                                <div className="pt-3">
+                                <div className="pt-4">
                                     <Link
                                         href="/paket"
-                                        className={`w-full min-h-10 sm:min-h-11 py-2.5 rounded-full text-xs font-medium flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
+                                        className={`w-full min-h-12 py-3 px-5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs text-center cursor-pointer ${
                                             t.isPopular
-                                                ? 'bg-primary text-white hover:bg-primary-container shadow-[0_2px_12px_rgba(0,67,62,0.15)]'
-                                                : 'bg-white text-[#2a3d38] border border-[#d2dfd8] hover:bg-[#f4faf6]'
+                                                ? 'bg-primary text-white hover:bg-primary-container shadow-[0_6px_20px_rgba(0,67,62,0.28)] font-bold'
+                                                : t.isPlatinum
+                                                ? 'bg-[#162723] text-white hover:bg-[#253e38] shadow-sm font-semibold'
+                                                : 'bg-white text-primary border border-[#cbe0d5] hover:bg-[#edf5f0]'
                                         }`}
                                     >
                                         <span>{t.cta}</span>
@@ -232,44 +341,35 @@ export default function TiersAndAmbulanceSection() {
                     <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
-                        <div className="lg:col-span-7 space-y-4">
-                            {/* Live Clinical Beacon Header */}
-                            <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#edf5f0] border border-[#d2e5da] text-[#1c6454] text-[10px] sm:text-[11px] font-medium tracking-wide">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
-                                </span>
-                                <span>Akses Siaga Darurat 24 Jam • Integrasi Posko 119 Kemenkes RI</span>
-                            </div>
-
+                        <div className="lg:col-span-7 space-y-3.5 sm:space-y-4">
                             <h3 className="font-serif text-xl sm:text-2xl lg:text-[28px] font-normal text-[#142320] leading-tight">
                                 Panggilan darurat ambulan berbasis koordinat GPS faskes.
                             </h3>
 
                             <p className="text-[11px] sm:text-sm leading-relaxed max-w-xl text-[#52645f]">
-                                Saat terjadi penurunan glukosa drastis (hipoglikemia akut), nyeri dada mendadak, atau keluhan darurat di rumah, transmisi koordinat otomatis mempercepat kedatangan armada ambulan faskes terdekat tanpa kendala birokrasi.
+                                Transmisi koordinat otomatis mempercepat kedatangan armada ambulan faskes terdekat saat terjadi kondisi medis darurat di rumah.
                             </p>
 
                             {/* Medical Telemetry & Readiness Cards */}
-                            <div className="pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                <div className="p-2.5 rounded-2xl bg-[#edf5f0]/80 border border-[#cfe1d7] flex items-center gap-2.5 text-[#1c6454]">
-                                    <div className="w-7 h-7 rounded-xl bg-white text-[#1c6454] flex items-center justify-center shrink-0 shadow-2xs">
-                                        <span className="material-symbols-outlined text-[16px]">location_on</span>
+                            <div className="pt-0.5 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                <div className="p-2.5 sm:p-3 rounded-2xl bg-[#edf5f0]/80 border border-[#cfe1d7] flex items-center gap-2.5 text-[#1c6454]">
+                                    <div className="w-8 h-8 rounded-xl bg-white text-[#1c6454] flex items-center justify-center shrink-0 shadow-2xs">
+                                        <span className="material-symbols-outlined text-[17px]">location_on</span>
                                     </div>
                                     <div className="overflow-hidden">
-                                        <span className="font-bold block text-[11px]">Telemetri GPS Terkunci</span>
+                                        <span className="font-bold block text-xs">Telemetri GPS Terkunci</span>
                                         <span className="text-[10px] text-[#4d665f] block truncate">
                                             {coords ? `Lat: ${coords.lat}, Lng: ${coords.lng}` : 'Siaga otomatis saat tombol ditekan'}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="p-2.5 rounded-2xl bg-[#f8faf9] border border-surface-container-high flex items-center gap-2.5 text-[#2c3f3a]">
-                                    <div className="w-7 h-7 rounded-xl bg-white text-primary flex items-center justify-center shrink-0 border border-surface-container shadow-2xs">
-                                        <span className="material-symbols-outlined text-[16px]">local_hospital</span>
+                                <div className="p-2.5 sm:p-3 rounded-2xl bg-[#f8faf9] border border-surface-container-high flex items-center gap-2.5 text-[#2c3f3a]">
+                                    <div className="w-8 h-8 rounded-xl bg-white text-primary flex items-center justify-center shrink-0 border border-surface-container shadow-2xs">
+                                        <span className="material-symbols-outlined text-[17px]">local_hospital</span>
                                     </div>
                                     <div className="overflow-hidden">
-                                        <span className="font-bold block text-[11px]">Faskes &amp; IGD Terdekat</span>
+                                        <span className="font-bold block text-xs">Faskes &amp; IGD Terdekat</span>
                                         <span className="text-[10px] text-[#697d76] block truncate">
                                             Jejaring RS Rujukan (~1.4 km)
                                         </span>
@@ -277,33 +377,24 @@ export default function TiersAndAmbulanceSection() {
                                 </div>
                             </div>
 
-                            {/* Call Action Button & Live Status */}
-                            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                            {/* Call Action Buttons */}
+                            <div className="pt-1.5 flex flex-wrap items-center gap-3">
                                 <button
                                     type="button"
                                     onClick={handleCallAmbulance}
                                     disabled={ambulanceCalling}
-                                    className="min-h-12 px-7 py-3.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-all active:scale-95 shadow-[0_4px_18px_rgba(225,29,72,0.28)] hover:shadow-[0_6px_22px_rgba(225,29,72,0.36)] cursor-pointer flex items-center justify-center gap-2 shrink-0"
+                                    className="h-11 sm:h-12 px-6 sm:px-7 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all active:scale-95 shadow-[0_4px_18px_rgba(225,29,72,0.28)] hover:shadow-[0_6px_22px_rgba(225,29,72,0.36)] cursor-pointer flex items-center justify-center gap-2"
                                 >
                                     <span className="material-symbols-outlined text-[18px]">
                                         call
                                     </span>
                                     <span>{ambulanceCalling ? 'Memverifikasi Koordinat...' : 'Hubungi Ambulan Siaga 119'}</span>
                                 </button>
-                                <div className="flex flex-col justify-center gap-1">
-                                    <span className="text-xs font-semibold text-[#182926] flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                        Bebas Pulsa 24 Jam • Command Center 119
-                                    </span>
-                                    <span className="text-[11px] text-[#697c77]">
-                                        Terhubung langsung ke Posko Siaga Darurat Kemenkes RI
-                                    </span>
-                                </div>
                                 <Link
                                     href="/demo/emergency"
-                                    className="min-h-12 px-5 py-3 rounded-full bg-white/80 border border-[#ebdcd6] text-[#4d3d39] text-xs font-bold hover:bg-white transition-all active:scale-95 text-center flex items-center justify-center gap-1.5 shrink-0"
+                                    className="h-11 sm:h-12 px-5 sm:px-6 rounded-full bg-white border border-[#ebdcd6] text-[#4d3d39] hover:text-[#182926] text-xs sm:text-sm font-bold hover:bg-[#faf6f4] hover:border-[#dfceca] transition-all active:scale-95 text-center flex items-center justify-center gap-1.5 shadow-2xs"
                                 >
-                                    <span className="material-symbols-outlined text-[16px] text-rose-600">emergency</span>
+                                    <span className="material-symbols-outlined text-[17px] text-rose-600">emergency</span>
                                     <span>Buka Demo 119</span>
                                 </Link>
                             </div>

@@ -77,12 +77,6 @@ export default function HeroSection() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 {/* Left: Editorial Authority & Value Proposition */}
                 <div className="lg:col-span-6 space-y-5">
-                    {/* Soft Pill Tag */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide shadow-2xs">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] animate-pulse"></span>
-                        <span>Pencegahan Dini &amp; Skrining Nutrisi Mandiri</span>
-                    </div>
-
                     {/* Headline */}
                     <div className="space-y-2.5">
                         <h1 className="font-serif text-xl sm:text-3xl lg:text-[40px] font-normal text-[#142320] leading-[1.18] tracking-tight">
@@ -93,49 +87,49 @@ export default function HeroSection() {
                         </p>
                     </div>
 
-                    {/* Core Feature Bullet Highlights */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] sm:text-xs text-[#354843] pt-1">
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
+                    {/* Core Feature Bullet Highlights - 2 Kolom Sebaris di Mobile */}
+                    <div className="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-[#354843] pt-1">
+                        <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-white/70 border border-[#e2ede7] min-w-0">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                                <span className="material-symbols-outlined text-[12px] sm:text-[13px] font-bold">check</span>
                             </span>
-                            <span className="truncate">120.000+ Database BPOM</span>
+                            <span className="truncate font-medium">120.000+ Database BPOM</span>
                         </div>
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
+                        <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-white/70 border border-[#e2ede7] min-w-0">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                                <span className="material-symbols-outlined text-[12px] sm:text-[13px] font-bold">check</span>
                             </span>
-                            <span className="truncate">Deteksi Laser OCR &lt; 0.4 Detik</span>
+                            <span className="truncate font-medium">Deteksi Laser OCR &lt; 0.4 Detik</span>
                         </div>
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
+                        <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-white/70 border border-[#e2ede7] min-w-0">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                                <span className="material-symbols-outlined text-[12px] sm:text-[13px] font-bold">check</span>
                             </span>
-                            <span className="truncate">Estimasi Kurva Glukosa Darah</span>
+                            <span className="truncate font-medium">Estimasi Kurva Glukosa</span>
                         </div>
-                        <div className="flex items-center gap-2 p-2 rounded-xl bg-white/70 border border-[#e2ede7]">
+                        <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-white/70 border border-[#e2ede7] min-w-0">
                             <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                <span className="material-symbols-outlined text-[13px] font-bold">check</span>
+                                <span className="material-symbols-outlined text-[12px] sm:text-[13px] font-bold">check</span>
                             </span>
-                            <span className="truncate">Standar PERKENI &amp; SatuSehat</span>
+                            <span className="truncate font-medium">Standar PERKENI &amp; SatuSehat</span>
                         </div>
                     </div>
 
-                    {/* Primary Action Buttons */}
-                    <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    {/* Primary Action Buttons - 2 Kolom Sebaris di Mobile */}
+                    <div className="pt-1 grid grid-cols-2 sm:flex sm:flex-row items-center gap-2 sm:gap-3">
                         <Link
                             href="/demo/scanner"
-                            className="inline-flex items-center justify-center min-h-10.5 px-5 py-2.5 rounded-full bg-primary text-white text-[11px] sm:text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-2"
+                            className="inline-flex items-center justify-center min-h-9 sm:min-h-10.5 px-2.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary text-white text-[10px] sm:text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-[0_2px_12px_rgba(0,67,62,0.15)] text-center gap-1 sm:gap-2 truncate"
                         >
-                            <span className="material-symbols-outlined text-[16px]">photo_camera</span>
-                            <span>Buka Demo Scanner Kamera</span>
+                            <span className="material-symbols-outlined text-[14px] sm:text-[16px] shrink-0">photo_camera</span>
+                            <span className="truncate">Demo Scanner Kamera</span>
                         </Link>
                         <Link
                             href="/demo/consultations"
-                            className="inline-flex items-center justify-center min-h-10.5 px-4 py-2.5 rounded-full bg-white/80 text-[#31433f] text-[11px] sm:text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1.5"
+                            className="inline-flex items-center justify-center min-h-9 sm:min-h-10.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white/80 text-[#31433f] text-[10px] sm:text-xs font-medium hover:bg-white transition-all active:scale-95 border border-[#dce6e1] text-center gap-1 sm:gap-1.5 truncate"
                         >
-                            <span className="material-symbols-outlined text-[16px] text-emerald-700">health_and_safety</span>
-                            <span>Demo Konsultasi &amp; Dokter</span>
+                            <span className="material-symbols-outlined text-[14px] sm:text-[16px] text-emerald-700 shrink-0">health_and_safety</span>
+                            <span className="truncate">Demo Konsultasi Dokter</span>
                         </Link>
                     </div>
 
@@ -184,21 +178,8 @@ export default function HeroSection() {
 
                 {/* Right: Viewfinder Simulation */}
                 <div className="lg:col-span-6 bg-white/95 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-surface-container-high shadow-[0_8px_30px_rgba(0,40,36,0.04)]" id="scanner-demo">
-                    {/* Viewfinder Header */}
-                    <div className="flex items-center justify-between pb-2.5 border-b border-[#edf4f0]">
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-[#1c6454] animate-pulse"></span>
-                            <span className="text-xs font-medium text-[#2d3f3b] tracking-wide">
-                                Simulasi Pemindai Label Nutrisi
-                            </span>
-                        </div>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#edf5f0] text-[#1c6454] font-mono font-medium">
-                            Sensor Aktif
-                        </span>
-                    </div>
-
                     {/* Minimalist Sample Selector Tabs */}
-                    <div className="grid grid-cols-3 gap-1 my-2.5 p-1 bg-[#f3f7f5] rounded-xl border border-[#e4ede8]">
+                    <div className="grid grid-cols-3 gap-1 mb-2.5 p-1 bg-[#f3f7f5] rounded-xl border border-[#e4ede8]">
                         <button
                             type="button"
                             onClick={() => setActiveScanSample('drink')}
@@ -355,15 +336,15 @@ export default function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Bottom Link */}
-                    <div className="mt-2.5 flex items-center justify-between gap-2 text-[11px] text-[#637671]">
-                        <span>Dukungan kamera smartphone &amp; barcode BPOM</span>
+                    {/* Bottom Link - Rata Sebaris di Mobile */}
+                    <div className="mt-2.5 flex items-center justify-between gap-2 text-[10px] sm:text-[11px] text-[#637671]">
+                        <span className="truncate">Kamera smartphone &amp; barcode BPOM</span>
                         <Link
                             href="/demo/scanner"
-                            className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-primary text-white text-[11px] font-semibold hover:bg-primary-container transition-all active:scale-95"
+                            className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1 rounded-lg bg-primary text-white text-[10px] sm:text-[11px] font-semibold hover:bg-primary-container transition-all active:scale-95 whitespace-nowrap shadow-2xs"
                         >
                             <span>Buka Demo Scanner</span>
-                            <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                            <span className="material-symbols-outlined text-[12px] sm:text-[13px]">arrow_forward</span>
                         </Link>
                     </div>
                 </div>

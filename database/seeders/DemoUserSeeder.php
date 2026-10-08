@@ -66,37 +66,93 @@ class DemoUserSeeder extends Seeder
         ]);
 
         // =============================================================
-        // 2. ROLE INSTRUKTUR
+        // 2. ROLE INSTRUKTUR (5 SPESIALIS RESMI TERDAFTAR)
         // =============================================================
-        $instructor = User::firstOrCreate(
-            ['email' => 'instruktur@aevyra.health'],
+        $instructorsList = [
             [
+                'email' => 'bramantyo@aevyra.health',
+                'name' => 'dr. H. Bramantyo, Sp.PD, K-EMD, FINASIM',
+                'specialization' => 'Spesialis Penyakit Dalam & Konsultan Endokrinologi',
+                'str_number' => '31.1.1.100.2.21.098765',
+                'sip_number' => 'SIP.503/112/PD-09/2021',
+                'institution' => 'RSUPN Dr. Cipto Mangunkusumo',
+                'years_of_experience' => 14,
+                'bio' => 'Dokter spesialis penyakit dalam konsultan endokrinologi metabolik diabetes. Berfokus pada pembalikan resistensi insulin dan remisi pra-diabetes.',
+            ],
+            [
+                'email' => 'sarah.nindya@aevyra.health',
+                'name' => 'dr. Sarah Nindya, M.Gizi, Sp.GK, AIFO-K',
+                'specialization' => 'Spesialis Gizi Klinis & Terapi Nutrisi Medis',
+                'str_number' => '32.2.1.200.3.19.045612',
+                'sip_number' => 'SIP.503/446/GK-08/2022',
+                'institution' => 'RSUPN Dr. Cipto Mangunkusumo',
+                'years_of_experience' => 9,
+                'bio' => 'Dokter spesialis gizi klinis berfokus pada terapi nutrisi medis pra-diabetes, pembalikan fatty liver, dan desain piring glikemik seimbang.',
+            ],
+            [
+                'email' => 'rayhan.pratama@aevyra.health',
+                'name' => 'dr. Rayhan Pratama, Sp.JP, FIHA',
+                'specialization' => 'Spesialis Jantung & Pembuluh Darah (Kardiologi Preventif)',
+                'str_number' => '31.1.1.300.1.20.076543',
+                'sip_number' => 'SIP.503/218/JP-03/2023',
+                'institution' => 'RS Jantung dan Pembuluh Darah Harapan Kita',
+                'years_of_experience' => 11,
+                'bio' => 'Dokter spesialis jantung dan pembuluh darah dengan peminatan kardiologi preventif, proteksi vaskular endotel, dan manajemen dislipidemia.',
+            ],
+            [
+                'email' => 'nadia.salsabila@aevyra.health',
+                'name' => 'dr. Nadia Salsabila, Sp.OG, Subsp.FER',
+                'specialization' => 'Spesialis Obstetri & Ginekologi (Konsultan Fertilitas & Endokrin)',
+                'str_number' => '33.2.1.400.4.18.065432',
+                'sip_number' => 'SIP.503/329/OG-11/2020',
+                'institution' => 'RSUP Fatmawati Jakarta',
+                'years_of_experience' => 10,
+                'bio' => 'Konsultan endokrinologi reproduksi wanita, menangani resistensi insulin pada PCOS, sindrom metabolik gestasional, dan kesehatan metabolik hormonal.',
+            ],
+            [
+                'email' => 'instruktur@aevyra.health',
                 'name' => 'dr. Nabila Sarah, Sp.GK',
-                'password' => Hash::make('password'),
-                'status' => 'ACTIVE',
-                'email_verified_at' => now(),
-            ]
-        );
-        if ($instructorRole) {
-            $instructor->roles()->syncWithoutDetaching([$instructorRole->id]);
-        }
-
-        InstructorProfile::updateOrCreate(
-            ['user_id' => $instructor->id],
-            [
                 'specialization' => 'Dokter Spesialis Gizi Klinis (Sp.GK)',
                 'str_number' => '31.1.1.100.2.21.087654',
                 'sip_number' => 'SIP.503/446/GK-08/2023',
                 'institution' => 'RSUPN Dr. Cipto Mangunkusumo',
                 'years_of_experience' => 8,
                 'bio' => 'Dokter Spesialis Gizi Klinis berfokus pada pencegahan resistensi insulin, remisi pra-diabetes, dan modulasi gaya hidup metabolik berbasis bukti ilmiah.',
-                'is_verified' => true,
-                'verified_at' => now()->subMonths(6),
-                'verified_by' => $admin->id,
-                'is_recommended' => true,
-                'max_member_capacity' => 50,
-            ]
-        );
+            ],
+        ];
+
+        foreach ($instructorsList as $inst) {
+            $instructorUser = User::firstOrCreate(
+                ['email' => $inst['email']],
+                [
+                    'name' => $inst['name'],
+                    'password' => Hash::make('password'),
+                    'status' => 'ACTIVE',
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            if ($instructorRole) {
+                $instructorUser->roles()->syncWithoutDetaching([$instructorRole->id]);
+            }
+
+            InstructorProfile::updateOrCreate(
+                ['user_id' => $instructorUser->id],
+                [
+                    'specialization' => $inst['specialization'],
+                    'str_number' => $inst['str_number'],
+                    'sip_number' => $inst['sip_number'],
+                    'institution' => $inst['institution'],
+                    'years_of_experience' => $inst['years_of_experience'],
+                    'bio' => $inst['bio'],
+                    'is_verified' => true,
+                    'verified_at' => now()->subMonths(6),
+                    'verified_by' => $admin->id,
+                    'is_recommended' => true,
+                    'max_member_capacity' => 50,
+                ]
+            );
+        }
 
         // =============================================================
         // 3. ROLE MEMBER
@@ -175,14 +231,17 @@ class DemoUserSeeder extends Seeder
         );
 
         // Penugasan Instruktur ke Member (Relasi Binaan)
-        InstructorMemberAssignment::updateOrCreate(
-            ['member_id' => $member->id, 'instructor_id' => $instructor->id],
-            [
-                'status' => 'ACTIVE',
-                'starts_at' => now()->subDays(14),
-                'assigned_by' => $admin->id,
-            ]
-        );
+        $primaryInstructor = User::where('email', 'instruktur@aevyra.health')->first();
+        if ($primaryInstructor) {
+            InstructorMemberAssignment::updateOrCreate(
+                ['member_id' => $member->id, 'instructor_id' => $primaryInstructor->id],
+                [
+                    'status' => 'ACTIVE',
+                    'starts_at' => now()->subDays(14),
+                    'assigned_by' => $admin->id,
+                ]
+            );
+        }
 
         // Streak Harian
         UserStreak::updateOrCreate(

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import MarketingLayout from '@/Layouts/MarketingLayout';
 
-export default function ConsultationsDemo() {
+export default function ConsultationsDemo({ instructors = [] }) {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedQuestion, setSelectedQuestion] = useState('q1');
     const [selectedDoctor, setSelectedDoctor] = useState('bramantyo');
@@ -95,8 +95,8 @@ export default function ConsultationsDemo() {
             triageStyle: 'bg-emerald-100 text-emerald-950 border-emerald-300 font-bold',
             guidelineRef: 'Sports Medicine Review 2023: Postprandial Glycemic Attenuation',
             biomarkerHighlight: 'Potensi Reduksi Lonjakan: Hingga -32 mg/dL',
-            recommendedDoctorId: 'ilham',
-            recommendedAction: 'Ikuti program latihan jalan kaki terukur di tab Tantangan AEVYRA bersama Ners Ilham Wicaksono.',
+            recommendedDoctorId: 'nabila',
+            recommendedAction: 'Ikuti program latihan jalan kaki terukur di tab Tantangan AEVYRA bersama dr. Nabila Sarah, Sp.GK.',
         },
         q7: {
             id: 'q7',
@@ -137,96 +137,113 @@ export default function ConsultationsDemo() {
     const activeTriage = triageQuestions[selectedQuestion] || triageQuestions.q1;
 
     // =========================================================================
-    // 2. EXTENSIVE DOCTOR & CLINICAL BOARD DIRECTORY (5 Verified Specialists)
+    // 2. EXTENSIVE DOCTOR & CLINICAL BOARD DIRECTORY (Real Instructor Accounts from DB)
     // =========================================================================
-    const doctors = {
-        bramantyo: {
-            id: 'bramantyo',
-            name: 'dr. H. Bramantyo, Sp.PD, K-EMD, FINASIM',
-            role: 'Spesialis Penyakit Dalam & Konsultan Endokrin Metabolik',
-            specialtyCategory: 'internist',
-            str: 'STR No. 31.1.1.100.2.21.098765 (Terverifikasi IDI & SatuSehat)',
-            exp: '14 Tahun Pengalaman',
-            rating: 4.9,
-            sessions: '1.840+',
-            hospital: 'RSUPN Dr. Cipto Mangunkusumo & Lead Konsultan AEVYRA',
-            focus: 'Remisi Pra-Diabetes, Sindrom Metabolik, & Resistensi Insulin Lanjut',
-            avatar: '/image/doctor_bramantyo.jpg',
-            slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
-            tags: ['Penyakit Dalam', 'Endokrinologi', 'Remisi 90 Hari'],
-        },
-        sarah: {
-            id: 'sarah',
-            name: 'dr. Sarah Nindya, M.Gizi, Sp.GK, AIFO-K',
-            role: 'Spesialis Gizi Klinis & Terapi Nutrisi Medis',
-            specialtyCategory: 'nutritionist',
-            str: 'STR No. 32.2.1.200.3.22.112233 (Terverifikasi IDI & SatuSehat)',
-            exp: '10 Tahun Pengalaman',
-            rating: 5.0,
-            sessions: '1.420+',
-            hospital: 'RS Pelataran Medika & Instruktur Utama Gizi AEVYRA',
-            focus: 'Medical Nutrition Therapy (MNT), Diet Glikemik & Komposisi Lemak',
-            avatar: '/image/doctor_consultation.jpg',
-            slots: ['09:00', '10:30', '13:30', '15:00', '17:30'],
-            tags: ['Gizi Klinis', 'Food Sequencing', 'Nutrisi Terarah'],
-        },
-        rayhan: {
-            id: 'rayhan',
-            name: 'dr. Rayhan Pratama, Sp.JP, FIHA',
-            role: 'Spesialis Jantung & Pembuluh Darah (Kardiologi)',
-            specialtyCategory: 'cardiology',
-            str: 'STR No. 33.1.2.300.4.23.445566 (Terverifikasi IDI & SatuSehat)',
-            exp: '12 Tahun Pengalaman',
-            rating: 4.9,
-            sessions: '980+',
-            hospital: 'Pusat Jantung Nasional Harapan Kita & Konsultan AEVYRA',
-            focus: 'Pencegahan Plak Aterosklerosis, Hipertensi Metabolik, & Evaluasi EKG',
-            avatar: '/image/hero_lifestyle_scan.jpg',
-            slots: ['10:00', '14:30', '16:00', '18:30'],
-            tags: ['Kardiovaskular', 'Rekam EKG', 'Hipertensi'],
-        },
-        nadia: {
-            id: 'nadia',
-            name: 'dr. Nadia Salsabila, Sp.OG, Subsp. FER',
-            role: 'Spesialis Obstetri & Ginekologi (Konsultan Fertilitas Endokrin)',
-            specialtyCategory: 'women',
-            str: 'STR No. 34.3.1.400.1.20.778899 (Terverifikasi IDI & SatuSehat)',
-            exp: '11 Tahun Pengalaman',
-            rating: 4.9,
-            sessions: '1.150+',
-            hospital: 'RSIA Bunda Jakarta & Pakar Kesehatan Hormon Wanita AEVYRA',
-            focus: 'Sindrom Ovarium Polikistik (PCOS), Fluktuasi Luteal, & Pra-Konsepsi',
-            avatar: '/image/habit_morning_walk.jpg',
-            slots: ['08:30', '11:00', '15:30', '19:30'],
-            tags: ['Kesehatan Reproduksi', 'PCOS', 'Hormon Menstruasi'],
-        },
-        ilham: {
-            id: 'ilham',
-            name: 'Ns. Ilham Wicaksono, S.Kep., CDCES',
-            role: 'Edukator Diabetes Tersertifikasi BDI & Kemenkes RI',
-            specialtyCategory: 'lifestyle',
-            str: 'STR No. 35.4.1.500.2.19.334455 (PPNI & SatuSehat Terdaftar)',
-            exp: '8 Tahun Pengalaman',
-            rating: 4.8,
-            sessions: '2.100+',
-            hospital: 'Puskesmas Percontohan Inovasi & Edukator Klinis AEVYRA',
-            focus: 'Edukasi Glukometer Mandiri, Manajemen Hipoglikemia, & Rutinitas Gerak',
-            avatar: '/image/doctor_consultation.jpg',
-            slots: ['08:00', '10:00', '13:00', '16:00', '20:00'],
-            tags: ['Edukator Mandiri', 'Latihan Soleus', 'Glukometer'],
-        },
-    };
+    const doctorList = React.useMemo(() => {
+        if (Array.isArray(instructors) && instructors.length > 0) {
+            return instructors;
+        }
+        return [
+            {
+                id: 'bramantyo',
+                name: 'dr. H. Bramantyo, Sp.PD, K-EMD, FINASIM',
+                role: 'Spesialis Penyakit Dalam & Konsultan Endokrinologi',
+                specialtyCategory: 'internist',
+                str: 'STR No. 31.1.1.100.2.21.098765 (Terverifikasi IDI & SatuSehat)',
+                exp: '14 Tahun Pengalaman',
+                rating: 4.9,
+                sessions: '1.840+',
+                hospital: 'RSUPN Dr. Cipto Mangunkusumo & Konsultan AEVYRA',
+                focus: 'Remisi Pra-Diabetes, Sindrom Metabolik, & Resistensi Insulin Lanjut',
+                avatar: '/image/doctor_bramantyo.jpg',
+                slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
+                tags: ['Penyakit Dalam', 'Endokrinologi', 'Remisi 90 Hari'],
+            },
+            {
+                id: 'sarah',
+                name: 'dr. Sarah Nindya, M.Gizi, Sp.GK, AIFO-K',
+                role: 'Spesialis Gizi Klinis & Terapi Nutrisi Medis',
+                specialtyCategory: 'nutritionist',
+                str: 'STR No. 32.2.1.200.3.19.045612 (Terverifikasi IDI & SatuSehat)',
+                exp: '9 Tahun Pengalaman',
+                rating: 5.0,
+                sessions: '1.420+',
+                hospital: 'RSUPN Dr. Cipto Mangunkusumo & Konsultan AEVYRA',
+                focus: 'Medical Nutrition Therapy (MNT), Diet Glikemik & Komposisi Lemak',
+                avatar: '/image/doctor_consultation.jpg',
+                slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
+                tags: ['Gizi Klinis', 'Food Sequencing', 'Nutrisi Terarah'],
+            },
+            {
+                id: 'rayhan',
+                name: 'dr. Rayhan Pratama, Sp.JP, FIHA',
+                role: 'Spesialis Jantung & Pembuluh Darah (Kardiologi Preventif)',
+                specialtyCategory: 'cardiology',
+                str: 'STR No. 31.1.1.300.1.20.076543 (Terverifikasi IDI & SatuSehat)',
+                exp: '11 Tahun Pengalaman',
+                rating: 4.9,
+                sessions: '980+',
+                hospital: 'RS Jantung dan Pembuluh Darah Harapan Kita & Konsultan AEVYRA',
+                focus: 'Pencegahan Plak Aterosklerosis, Hipertensi Metabolik, & Evaluasi EKG',
+                avatar: '/image/hero_lifestyle_scan.jpg',
+                slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
+                tags: ['Kardiovaskular', 'Rekam EKG', 'Hipertensi'],
+            },
+            {
+                id: 'nadia',
+                name: 'dr. Nadia Salsabila, Sp.OG, Subsp.FER',
+                role: 'Spesialis Obstetri & Ginekologi (Konsultan Fertilitas & Endokrin)',
+                specialtyCategory: 'women',
+                str: 'STR No. 33.2.1.400.4.18.065432 (Terverifikasi IDI & SatuSehat)',
+                exp: '10 Tahun Pengalaman',
+                rating: 4.9,
+                sessions: '1.150+',
+                hospital: 'RSUP Fatmawati Jakarta & Konsultan AEVYRA',
+                focus: 'Konsultan endokrinologi reproduksi wanita, menangani resistensi insulin pada PCOS, sindrom metabolik gestasional, dan kesehatan metabolik hormonal.',
+                avatar: '/image/habit_morning_walk.jpg',
+                slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
+                tags: ['Kesehatan Reproduksi', 'PCOS', 'Hormon Menstruasi'],
+            },
+            {
+                id: 'nabila',
+                name: 'dr. Nabila Sarah, Sp.GK',
+                role: 'Dokter Spesialis Gizi Klinis (Sp.GK)',
+                specialtyCategory: 'nutritionist',
+                str: 'STR No. 31.1.1.100.2.21.087654 (Terverifikasi IDI & SatuSehat)',
+                exp: '8 Tahun Pengalaman',
+                rating: 4.9,
+                sessions: '1.200+',
+                hospital: 'RSUPN Dr. Cipto Mangunkusumo & Konsultan AEVYRA',
+                focus: 'Dokter Spesialis Gizi Klinis berfokus pada pencegahan resistensi insulin, remisi pra-diabetes, dan modulasi gaya hidup metabolik berbasis bukti ilmiah.',
+                avatar: '/image/doctor_consultation.jpg',
+                slots: ['09:30', '11:00', '14:00', '16:30', '19:00'],
+                tags: ['Gizi Klinis', 'Food Sequencing', 'Nutrisi Terarah'],
+            },
+        ];
+    }, [instructors]);
 
-    const activeDoc = doctors[selectedDoctor] || doctors.bramantyo;
+    const doctorsMap = React.useMemo(() => {
+        const map = {};
+        doctorList.forEach((d) => {
+            map[d.id] = d;
+            if (d.user_id) {
+                map[d.user_id] = d;
+            }
+        });
+        return map;
+    }, [doctorList]);
 
-    const filteredDoctorList = Object.values(doctors).filter((d) => {
+    const activeDoc = doctorsMap[selectedDoctor] || doctorList[0] || {};
+
+    const filteredDoctorList = doctorList.filter((d) => {
         if (doctorFilter === 'all') return true;
         return d.specialtyCategory === doctorFilter;
     });
 
     const handleSelectDoctorFromCard = (docId) => {
         setSelectedDoctor(docId);
-        setSelectedSlot(doctors[docId]?.slots[0] || '10:00');
+        const target = doctorsMap[docId];
+        setSelectedSlot(target?.slots?.[0] || '14:00');
         // Smooth scroll up to booking simulator
         window.scrollTo({ top: 380, behavior: 'smooth' });
     };
@@ -250,10 +267,6 @@ export default function ConsultationsDemo() {
 
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="space-y-2">
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold border border-emerald-500/20">
-                                <span className="material-symbols-outlined text-[16px]">verified</span>
-                                <span>STANDAR PERKENI &amp; TERLISENSI IDI RESMI</span>
-                            </div>
                             <h1 className="font-heading font-black text-2xl sm:text-4xl text-on-surface tracking-tight">
                                 Telemedisin &amp; AI Co-Pilot Klinis 24/7
                             </h1>
@@ -444,8 +457,11 @@ export default function ConsultationsDemo() {
                                                 type="button"
                                                 onClick={() => {
                                                     if (activeTriage.recommendedDoctorId) {
-                                                        setSelectedDoctor(activeTriage.recommendedDoctorId);
-                                                        setSelectedSlot(doctors[activeTriage.recommendedDoctorId]?.slots[0] || '14:00');
+                                                        const doc = doctorsMap[activeTriage.recommendedDoctorId] || doctorList[0];
+                                                        if (doc) {
+                                                            setSelectedDoctor(doc.id);
+                                                            setSelectedSlot(doc.slots?.[0] || '14:00');
+                                                        }
                                                     }
                                                 }}
                                                 className="px-4 py-2 rounded-xl bg-primary hover:bg-[#07664c] text-white text-xs font-bold inline-flex items-center gap-2 shadow-xs cursor-pointer transition-all active:scale-95"
@@ -487,16 +503,16 @@ export default function ConsultationsDemo() {
                                     <label className="text-xs font-bold text-[#152a24] block">
                                         Pilih Dokter Spesialis Konsultan:
                                     </label>
-                                    <span className="text-[11px] font-mono text-[#40564f] font-semibold">5 Spesialis Standby</span>
+                                    <span className="text-[11px] font-mono text-[#40564f] font-semibold">{doctorList.length} Spesialis Standby</span>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    {Object.values(doctors).slice(0, 4).map((doc) => (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                                    {doctorList.map((doc) => (
                                         <button
                                             key={doc.id}
                                             type="button"
                                             onClick={() => {
                                                 setSelectedDoctor(doc.id);
-                                                setSelectedSlot(doc.slots[0]);
+                                                setSelectedSlot(doc.slots?.[0] || '14:00');
                                             }}
                                             className={`p-2.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
                                                 selectedDoctor === doc.id
@@ -525,17 +541,17 @@ export default function ConsultationsDemo() {
                             {/* Doctor Detailed Credentials Card */}
                             <div className="p-4 rounded-2xl bg-[#f4f9f6] border border-[#cfe2d7] space-y-2.5 text-xs shadow-2xs">
                                 <div className="flex items-center justify-between flex-wrap gap-2">
-                                    <span className="font-bold text-[#10241f] text-sm">{activeDoc.name}</span>
+                                    <span className="font-bold text-[#10241f] text-sm">{activeDoc?.name || ''}</span>
                                     <span className="font-mono text-[10px] text-emerald-950 font-bold bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full shadow-2xs">
-                                        {activeDoc.exp}
+                                        {activeDoc?.exp || ''}
                                     </span>
                                 </div>
-                                <p className="text-[#2c473e] text-[11px] font-mono font-medium">{activeDoc.str}</p>
+                                <p className="text-[#2c473e] text-[11px] font-mono font-medium">{activeDoc?.str || ''}</p>
                                 <p className="text-[11px] text-[#085a42] font-semibold">
-                                    Afiliasi: {activeDoc.hospital}
+                                    Afiliasi: {activeDoc?.hospital || ''}
                                 </p>
                                 <p className="text-xs text-[#1e3831] pt-1.5 border-t border-[#cfe2d7] leading-relaxed">
-                                    <b className="text-[#10241f]">Fokus Klinis:</b> {activeDoc.focus}
+                                    <b className="text-[#10241f]">Fokus Klinis:</b> {activeDoc?.focus || ''}
                                 </p>
 
                                 {/* Verification Trust Badges */}
@@ -565,11 +581,11 @@ export default function ConsultationsDemo() {
                                         Pilih Waktu Sesi Konsultasi Hari Ini:
                                     </label>
                                     <span className="text-[11px] text-emerald-800 font-mono font-bold">
-                                        Tersedia {activeDoc.slots.length} Slot
+                                        Tersedia {(activeDoc?.slots || []).length} Slot
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-5 gap-1.5">
-                                    {activeDoc.slots.map((slot) => (
+                                    {(activeDoc?.slots || ['09:30', '11:00', '14:00', '16:30', '19:00']).map((slot) => (
                                         <button
                                             key={slot}
                                             type="button"
@@ -590,7 +606,7 @@ export default function ConsultationsDemo() {
                             <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
                                 <div className="space-y-0.5">
                                     <span className="text-xs font-bold text-emerald-950 block">
-                                        Sesi Siap: Hari Ini, {selectedSlot} WIB bersama {activeDoc.name.split(',')[0]}
+                                        Sesi Siap: Hari Ini, {selectedSlot} WIB bersama {(activeDoc?.name || '').split(',')[0]}
                                     </span>
                                     <span className="text-[10px] text-emerald-900 font-medium block">
                                         Enkripsi Medis Peer-to-Peer (WebRTC) • Rekam Medis Terhubung SatuSehat
@@ -753,7 +769,7 @@ export default function ConsultationsDemo() {
 
                                     {/* Tags */}
                                     <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                                        {doc.tags.map((t, idx) => (
+                                        {(doc.tags || []).map((t, idx) => (
                                             <span
                                                 key={idx}
                                                 className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/5 dark:bg-white/5 text-gray-700 dark:text-gray-300"
@@ -1047,7 +1063,7 @@ export default function ConsultationsDemo() {
                         <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 text-xs">
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-500">Dokter:</span>
-                                <span className="font-bold text-primary">{activeDoc.name}</span>
+                                <span className="font-bold text-primary">{activeDoc?.name || ''}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-500">Waktu Konsultasi:</span>

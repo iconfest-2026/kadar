@@ -59,7 +59,7 @@ export default function FaqSection() {
         <section className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8 max-w-7xl min-w-0 mx-auto" id="faq">
             <div className="space-y-5">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-2 border-b border-surface-container-high">
+                <div className="pb-2 border-b border-surface-container-high">
                     <div className="space-y-1">
                         <span className="text-[10px] sm:text-[11px] text-primary font-medium tracking-wide uppercase block">
                             FAQ • Transparansi &amp; Standar Medis
@@ -68,9 +68,6 @@ export default function FaqSection() {
                             Jawaban seputar pemindai, data klinis, dan privasi.
                         </h2>
                     </div>
-                    <p className="text-[11px] sm:text-sm text-[#546661] max-w-sm leading-relaxed">
-                        Ketahui cara kerja algoritma visi gizi, keabsahan data laboratorium, perlindungan data privasi, dan ketentuan paket keanggotaan.
-                    </p>
                 </div>
 
                 {/* Category Filters (Clean, No Emojis, Standard Touch Target) */}
@@ -196,24 +193,6 @@ export default function FaqSection() {
                         <span>Lihat Selengkapnya (Total 20 Pertanyaan FAQ)</span>
                         <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                     </Link>
-                </div>
-
-                {/* Direct Medical Counseling Support Card */}
-                <div className="p-4 sm:p-5 bg-[#f0f6f3] rounded-2xl border border-[#d6e7dd] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-                    <div className="space-y-0.5">
-                        <span className="font-serif text-sm sm:text-base font-medium text-[#182926] block">
-                            Punya pertanyaan klinis khusus seputar kondisi Anda?
-                        </span>
-                        <span className="text-xs text-[#52655f] block">
-                            Tim edukator dan dokter konsultan kami siap mengarahkan skrining yang tepat.
-                        </span>
-                    </div>
-                    <a
-                        href="mailto:care@aevyra.health"
-                        className="px-4.5 py-2 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 whitespace-nowrap shadow-xs"
-                    >
-                        Tanya Tim Dokter
-                    </a>
                 </div>
             </div>
         </section>

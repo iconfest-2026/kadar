@@ -59,9 +59,10 @@ export default function CtaBanner() {
                         )}
                         <a
                             href="mailto:care@aevyra.health"
-                            className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 transition-all active:scale-95 border border-white/20 text-center"
+                            className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold hover:bg-white/20 transition-all active:scale-95 border border-white/20 text-center gap-1.5"
                         >
-                            <span>Tanya Edukator Klinis</span>
+                            <span className="material-symbols-outlined text-[16px]">stethoscope</span>
+                            <span>Tanya Tim Dokter</span>
                         </a>
                     </div>
 

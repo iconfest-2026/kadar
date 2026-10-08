@@ -45,7 +45,83 @@ Route::get('/demo/scanner', function () {
 })->name('demo.scanner');
 
 Route::get('/demo/consultations', function () {
-    return Inertia::render('Demo/ConsultationsDemo');
+    $instructors = \App\Models\User::whereHas('roles', function ($q) {
+            $q->where('slug', 'instructor');
+        })
+        ->where('status', 'ACTIVE')
+        ->with('instructorProfile')
+        ->whereHas('instructorProfile', function ($q) {
+            $q->where('is_verified', true);
+        })
+        ->orderByRaw("CASE 
+            WHEN email = 'bramantyo@aevyra.health' THEN 1 
+            WHEN email = 'sarah.nindya@aevyra.health' THEN 2 
+            WHEN email = 'rayhan.pratama@aevyra.health' THEN 3 
+            WHEN email = 'nadia.salsabila@aevyra.health' THEN 4 
+            WHEN email = 'instruktur@aevyra.health' THEN 5 
+            ELSE 6 END")
+        ->get()
+        ->map(function ($doc) {
+            $profile = $doc->instructorProfile;
+            $slug = match ($doc->email) {
+                'bramantyo@aevyra.health' => 'bramantyo',
+                'sarah.nindya@aevyra.health' => 'sarah',
+                'rayhan.pratama@aevyra.health' => 'rayhan',
+                'nadia.salsabila@aevyra.health' => 'nadia',
+                'instruktur@aevyra.health' => 'nabila',
+                default => 'doc_' . $doc->id,
+            };
+
+            $specialtyCategory = match (true) {
+                str_contains(strtolower($doc->name . ' ' . ($profile?->specialization ?? '')), 'jantung') || str_contains(strtolower($profile?->specialization ?? ''), 'kardio') => 'cardiology',
+                str_contains(strtolower($doc->name . ' ' . ($profile?->specialization ?? '')), 'gizi') => 'nutritionist',
+                str_contains(strtolower($doc->name . ' ' . ($profile?->specialization ?? '')), 'obstetri') || str_contains(strtolower($profile?->specialization ?? ''), 'wanita') || str_contains(strtolower($profile?->specialization ?? ''), 'sp.og') => 'women',
+                str_contains(strtolower($doc->name . ' ' . ($profile?->specialization ?? '')), 'penyakit dalam') || str_contains(strtolower($profile?->specialization ?? ''), 'sp.pd') => 'internist',
+                default => 'lifestyle',
+            };
+
+            $avatar = match (true) {
+                str_contains(strtolower($doc->email), 'bramantyo') => '/image/doctor_bramantyo.jpg',
+                str_contains(strtolower($doc->email), 'sarah') => '/image/doctor_consultation.jpg',
+                str_contains(strtolower($doc->email), 'rayhan') => '/image/hero_lifestyle_scan.jpg',
+                str_contains(strtolower($doc->email), 'nadia') => '/image/habit_morning_walk.jpg',
+                default => '/image/doctor_consultation.jpg',
+            };
+
+            $tags = match ($specialtyCategory) {
+                'internist' => ['Penyakit Dalam', 'Endokrinologi', 'Remisi 90 Hari'],
+                'nutritionist' => ['Gizi Klinis', 'Food Sequencing', 'Nutrisi Terarah'],
+                'cardiology' => ['Kardiovaskular', 'Rekam EKG', 'Hipertensi'],
+                'women' => ['Kesehatan Reproduksi', 'PCOS', 'Hormon Menstruasi'],
+                default => ['Edukator Mandiri', 'Latihan Soleus', 'Glukometer'],
+            };
+
+            $slots = ['09:30', '11:00', '14:00', '16:30', '19:00'];
+
+            return [
+                'id' => $slug,
+                'user_id' => $doc->id,
+                'name' => $doc->name,
+                'email' => $doc->email,
+                'role' => $profile?->specialization ?? 'Dokter Spesialis Konsultan',
+                'specialtyCategory' => $specialtyCategory,
+                'str' => 'STR No. ' . ($profile?->str_number ?? '31.1.1.100.2.21.098765') . ' (Terverifikasi IDI & SatuSehat)',
+                'sip' => $profile?->sip_number ?? 'SIP Resmi Terdaftar',
+                'exp' => ($profile?->years_of_experience ?? 8) . ' Tahun Pengalaman',
+                'rating' => 4.9,
+                'sessions' => '1.200+',
+                'hospital' => ($profile?->institution ?? 'RSUPN Dr. Cipto Mangunkusumo') . ' & Konsultan AEVYRA',
+                'focus' => $profile?->bio ?? 'Pencegahan Resistensi Insulin, Remisi Pra-Diabetes, & Evaluasi Komprehensif',
+                'avatar' => $avatar,
+                'slots' => $slots,
+                'tags' => $tags,
+                'is_verified' => (bool) ($profile?->is_verified ?? true),
+            ];
+        });
+
+    return Inertia::render('Demo/ConsultationsDemo', [
+        'instructors' => $instructors,
+    ]);
 })->name('demo.consultations');
 
 Route::get('/demo/tracker', function () {

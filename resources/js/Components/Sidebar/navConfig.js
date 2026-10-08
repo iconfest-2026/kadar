@@ -68,5 +68,54 @@ export function getInstructorNavSections() {
                 { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
             ],
         },
+        {
+            title: 'Evaluasi & Laporan',
+            items: [
+                { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
+            ],
+        },
+    ];
+}
+
+export function getAdminNavSections() {
+    return [
+        {
+            title: 'Manajemen & Pengguna',
+            items: [
+                { id: 'dashboard', name: 'Panel Ringkasan', href: '/admin/dashboard', icon: 'dashboard' },
+                { id: 'users', name: 'Kelola Pengguna', href: '/admin/users', icon: 'group' },
+                { id: 'instructors', name: 'Verifikasi Instruktur', href: '/admin/instructors', icon: 'verified_user' },
+            ],
+        },
+        {
+            title: 'Layanan Medis & AI',
+            items: [
+                { id: 'scanner', name: 'Scanner Kamera OCR', href: '/admin/scanner', icon: 'document_scanner' },
+                { id: 'consultations', name: 'Konsultasi & Booking', href: '/admin/consultations', icon: 'forum' },
+                { id: 'health-tracker', name: 'Tracker & Rekam Medis', href: '/admin/health-tracker', icon: 'vital_signs' },
+                { id: 'recommendations', name: 'Rekomendasi & HBE', href: '/admin/recommendations', icon: 'psychology' },
+            ],
+        },
+        {
+            title: 'Program & Komunitas',
+            items: [
+                { id: 'programs', name: 'Program Kohor', href: '/admin/programs', icon: 'inventory_2' },
+                { id: 'challenges', name: 'Challenge Komunitas', href: '/admin/challenges', icon: 'emoji_events' },
+                { id: 'community', name: 'Forum & Diskusi', href: '/admin/community', icon: 'groups' },
+                { id: 'gamification', name: 'Badge & Gamifikasi', href: '/admin/gamification', icon: 'military_tech' },
+            ],
+        },
+        {
+            title: 'Monetisasi & Tata Kelola',
+            items: [
+                { id: 'subscriptions', name: 'Langganan SaaS & Member', href: '/admin/subscriptions', icon: 'card_membership' },
+                { id: 'memberships', name: 'Tier Membership', href: '/admin/memberships', icon: 'workspace_premium' },
+                { id: 'emergency', name: 'Tanggap Darurat 119', href: '/admin/emergency', icon: 'emergency' },
+                { id: 'reports', name: 'Laporan & Analitik', href: '/admin/reports', icon: 'analytics' },
+                { id: 'audit', name: 'Audit Trail Forensik', href: '/admin/audit', icon: 'shield' },
+                { id: 'settings', name: 'Konfigurasi Sistem', href: '/admin/settings', icon: 'tune' },
+                { id: 'logs', name: 'Log Error Server', href: '/admin/logs', icon: 'terminal' },
+            ],
+        },
     ];
 }

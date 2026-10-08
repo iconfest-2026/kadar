@@ -65,11 +65,11 @@ export default function Header() {
     // Core Features List with Direct Links for Quick Testing/Checking
     const featureItems = [
         {
-            name: 'Scanner Open Cam & BPOM',
+            name: 'Scanner Kamera & BPOM',
             desc: 'Analisis label makanan, minuman, dan izin obat',
             href: user ? '/member/scanner' : '/demo/scanner',
             icon: 'document_scanner',
-            badge: 'Kamera Live',
+            badge: 'AI Vision',
             color: 'text-primary bg-primary/10',
         },
         {
@@ -195,7 +195,6 @@ export default function Header() {
                                 type="button"
                                 onClick={() => {
                                     setClinicalDropdownOpen(!clinicalDropdownOpen);
-                                    setReportsDropdownOpen(false);
                                     setUserDropdownOpen(false);
                                 }}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
@@ -304,7 +303,6 @@ export default function Header() {
                                         onClick={() => {
                                             setUserDropdownOpen(!userDropdownOpen);
                                             setClinicalDropdownOpen(false);
-                                            setReportsDropdownOpen(false);
                                         }}
                                         className="flex items-center gap-1.5 p-1 rounded-full hover:bg-surface-container-low transition-all cursor-pointer border border-surface-container bg-white/80"
                                         title={user.name}
@@ -415,6 +413,14 @@ export default function Header() {
                                                     >
                                                         <span className="material-symbols-outlined text-[16px] text-primary">verified_user</span>
                                                         <span>Verifikasi Instruktur</span>
+                                                    </Link>
+                                                    <Link
+                                                        href="/admin/reports"
+                                                        onClick={() => setUserDropdownOpen(false)}
+                                                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
+                                                    >
+                                                        <span className="material-symbols-outlined text-[16px] text-primary">analytics</span>
+                                                        <span>Laporan &amp; Analitik</span>
                                                     </Link>
                                                     <Link
                                                         href="/admin/audit"
@@ -580,6 +586,82 @@ export default function Header() {
                                                     <span>Tantangan Sehat</span>
                                                 </Link>
                                             </div>
+                                        </div>
+                                    )}
+
+                                    {/* Quick Shortcut Buttons for Logged in Instructor */}
+                                    {isInstructor && (
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <Link
+                                                href="/instructor/members"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">groups</span>
+                                                <span>Member Binaan</span>
+                                            </Link>
+                                            <Link
+                                                href="/instructor/interventions"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">clinical_notes</span>
+                                                <span>Intervensi HBE</span>
+                                            </Link>
+                                            <Link
+                                                href="/instructor/consultations"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">calendar_month</span>
+                                                <span>Jadwal Konsul</span>
+                                            </Link>
+                                            <Link
+                                                href="/instructor/reports"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">monitoring</span>
+                                                <span>Laporan Klinis</span>
+                                            </Link>
+                                        </div>
+                                    )}
+
+                                    {/* Quick Shortcut Buttons for Logged in Admin */}
+                                    {isAdmin && (
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <Link
+                                                href="/admin/users"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">group</span>
+                                                <span>Kelola User</span>
+                                            </Link>
+                                            <Link
+                                                href="/admin/instructors"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">verified_user</span>
+                                                <span>Instruktur</span>
+                                            </Link>
+                                            <Link
+                                                href="/admin/reports"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">analytics</span>
+                                                <span>Laporan &amp; Analitik</span>
+                                            </Link>
+                                            <Link
+                                                href="/admin/audit"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="p-2.5 rounded-xl bg-[#f2f7f4] hover:bg-[#e7f1eb] transition-all flex items-center gap-2 text-xs font-semibold text-[#1f332d] border border-[#d8e8de]"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px] text-primary">shield</span>
+                                                <span>Audit Forensik</span>
+                                            </Link>
                                         </div>
                                     )}
                                 </div>

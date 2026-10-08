@@ -140,203 +140,215 @@ export default function PublicPromoSection() {
                     </p>
                 </div>
 
-                {/* Side-by-Side Comparative Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+                {/* Side-by-Side Comparative Cards (2 Columns on Both Mobile & Desktop) */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-6 items-stretch">
                     {/* Left: Conventional Reactive Approach */}
-                    <div className="p-4 sm:p-6 bg-[#faf8f7] rounded-3xl border border-[#ece3de] flex flex-col justify-between space-y-5 h-full">
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3 border-b border-[#ebdcd5]">
-                                <span className="text-[10px] sm:text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#9c5f51]"></span>
-                                    Pendekatan Konvensional (Reaktif)
+                    <div className="p-2.5 sm:p-6 bg-[#faf8f7] rounded-2xl sm:rounded-3xl border border-[#ece3de] flex flex-col h-full min-w-0">
+                        {/* Top Content: Header, Title, Points */}
+                        <div className="flex-1 flex flex-col space-y-2 sm:space-y-4">
+                            <div className="flex items-center justify-between gap-1 pb-1.5 sm:pb-3 border-b border-[#ebdcd5]">
+                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center gap-1.5 min-w-0">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#9c5f51] shrink-0"></span>
+                                    <span className="truncate">Konvensional</span>
                                 </span>
-                                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-white text-[#9c5f51] border border-[#ecdcd5] font-medium">
-                                    Tanpa Pemantauan
+                                <span className="text-[7.5px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full bg-white text-[#9c5f51] border border-[#ecdcd5] font-medium shrink-0">
+                                    Tanpa Pantau
                                 </span>
                             </div>
 
-                            <h3 className="font-serif text-lg sm:text-xl font-normal text-[#2b211e] leading-snug">
+                            <h3 className="font-serif text-xs sm:text-xl font-normal text-[#2b211e] leading-snug min-h-[32px] sm:min-h-14 flex items-center">
                                 Menunggu gejala fisik hingga diabetes menetap.
                             </h3>
 
-                            <div className="space-y-3 text-[11px] sm:text-xs text-[#5f514d] leading-relaxed pt-1">
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
+                            <div className="flex-1 space-y-1.5 sm:space-y-3 text-[9px] sm:text-xs text-[#5f514d] leading-relaxed pt-0.5 sm:pt-1">
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#a46e61] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
-                                        <strong className="text-[#2b211e] font-medium">Beban Gula Tersembunyi:</strong> Pemanis cair dan saus kemasan dikonsumsi tanpa panduan, memicu lonjakan glukosa harian yang tidak disadari.
+                                        <strong className="text-[#2b211e] font-medium">Beban Gula:</strong> Pemanis cair &amp; saus kemasan memicu lonjakan glukosa harian.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#a46e61] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
-                                        <strong className="text-[#2b211e] font-medium">Fluktuasi Energi Berulang:</strong> Rasa kantuk hebat dan lemas setelah makan sering diabaikan sebagai kelelahan biasa, padahal pertanda resistensi insulin.
+                                        <strong className="text-[#2b211e] font-medium">Fluktuasi Energi:</strong> Rasa kantuk &amp; lemas sehabis makan diabaikan.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#a46e61] font-mono text-sm leading-none shrink-0 mt-0.5">—</span>
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#a46e61] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">—</span>
                                     <span>
-                                        <strong className="text-[#2b211e] font-medium">Intervensi Terlambat:</strong> Baru berkonsultasi ke fasilitas medis saat komplikasi kardiovaskular atau neuropati telah muncul.
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Symmetrical Mini Telemetry Alert Card (Pure Typographic & Data Metric - No Dummy Images) */}
-                            <div className="p-3 rounded-2xl bg-white/85 border border-[#ebd8d0] flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-xl bg-[#fdf2ee] border border-[#f5d5cc] text-[#9c5f51] flex flex-col items-center justify-center shrink-0">
-                                    <span className="font-mono font-bold text-xs leading-none">24g+</span>
-                                    <span className="text-[8px] font-semibold uppercase tracking-wider mt-0.5">Gula</span>
-                                </div>
-                                <div className="text-xs overflow-hidden">
-                                    <span className="font-serif font-medium text-[#2b211e] block truncate">
-                                        Beban Pemanis Kemasan Bebas Deteksi
-                                    </span>
-                                    <span className="text-[11px] text-[#7d6560] block truncate">
-                                        Gula cair tersembunyi memicu lonjakan glukosa tajam tanpa rasa kenyang
+                                        <strong className="text-[#2b211e] font-medium">Terlambat:</strong> Baru periksa fasilitas saat komplikasi kronis muncul.
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-3.5 rounded-2xl bg-white/80 border border-[#eddcd5] flex items-center justify-between text-[11px] text-[#785044]">
-                            <span>Hasil Rata-rata: Beban metabolik meningkat</span>
-                            <span className="font-serif font-medium text-[#8c594c]">Progresi Volatil</span>
+                        {/* Symmetrical Bottom Section: Telemetry + Outcome */}
+                        <div className="mt-auto pt-2.5 sm:pt-4 space-y-2 sm:space-y-3">
+                            {/* Symmetrical Mini Telemetry Alert Card (Single Row / Sebaris) */}
+                            <div className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl sm:rounded-2xl bg-white/90 border border-[#ebd8d0] flex items-center justify-between gap-1.5 min-w-0 h-9 sm:h-11">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="px-1.5 py-0.5 rounded-md sm:rounded-lg bg-[#fdf2ee] border border-[#f5d5cc] text-[#9c5f51] font-mono font-bold text-[8.5px] sm:text-xs shrink-0 whitespace-nowrap min-w-12 sm:min-w-16 text-center">
+                                        24g+ Gula
+                                    </span>
+                                    <span className="font-serif font-medium text-[#2b211e] truncate text-[8.5px] sm:text-xs">
+                                        Beban Pemanis
+                                    </span>
+                                </div>
+                                <span className="text-[7.5px] sm:text-[10px] text-[#a46e61] font-mono shrink-0">
+                                    Volatil
+                                </span>
+                            </div>
+
+                            <div className="px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/80 border border-[#eddcd5] flex items-center justify-between text-[8px] sm:text-[11px] text-[#785044] gap-1 h-8 sm:h-10">
+                                <span className="truncate">Hasil: Beban naik</span>
+                                <span className="font-serif font-medium text-[#8c594c] shrink-0">Progresi Volatil</span>
+                            </div>
                         </div>
                     </div>
 
                     {/* Right: AEVYRA Guided Approach */}
-                    <div className="p-4 sm:p-6 bg-[#f2f7f4] rounded-3xl border border-[#cfe1d7] shadow-[0_4px_24px_rgba(0,67,62,0.04)] flex flex-col justify-between space-y-5 h-full">
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between pb-3 border-b border-[#d6e7dd]">
-                                <span className="text-[10px] sm:text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                                    Pendekatan AEVYRA (Preventif)
+                    <div className="p-2.5 sm:p-6 bg-[#f2f7f4] rounded-2xl sm:rounded-3xl border border-[#cfe1d7] shadow-[0_4px_24px_rgba(0,67,62,0.04)] flex flex-col h-full min-w-0">
+                        {/* Top Content: Header, Title, Points */}
+                        <div className="flex-1 flex flex-col space-y-2 sm:space-y-4">
+                            <div className="flex items-center justify-between gap-1 pb-1.5 sm:pb-3 border-b border-[#d6e7dd]">
+                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center gap-1.5 min-w-0">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] shrink-0"></span>
+                                    <span className="truncate">AEVYRA (Preventif)</span>
                                 </span>
-                                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-white text-[#1c6454] border border-[#cbe0d4] font-medium">
+                                <span className="text-[7.5px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full bg-white text-[#1c6454] border border-[#cbe0d4] font-medium shrink-0">
                                     Protokol Presisi
                                 </span>
                             </div>
 
-                            <h3 className="font-serif text-lg sm:text-xl font-normal text-[#122824] leading-snug">
+                            <h3 className="font-serif text-xs sm:text-xl font-normal text-[#122824] leading-snug min-h-[32px] sm:min-h-14 flex items-center">
                                 Deteksi 0.4 detik &amp; bimbingan gaya hidup terpadu.
                             </h3>
 
-                            <div className="space-y-3 text-[11px] sm:text-xs text-[#3f5751] leading-relaxed pt-1">
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
+                            <div className="flex-1 space-y-1.5 sm:space-y-3 text-[9px] sm:text-xs text-[#3f5751] leading-relaxed pt-0.5 sm:pt-1">
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#1c6454] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
-                                        <strong className="text-[#122824] font-medium">Transparansi Sebelum Makan:</strong> Kamera membedah gramatur sukrosa bebas, garam, dan kalori secara instan sebelum suapan pertama.
+                                        <strong className="text-[#122824] font-medium">Transparansi:</strong> Kamera membedah gramatur gula &amp; kalori sebelum santap.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#1c6454] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
-                                        <strong className="text-[#122824] font-medium">Kurva Glukosa Terjaga:</strong> Alternatif pangan yang disarankan dokter membantu menjaga kestabilan energi tanpa rasa lapar berlebih.
+                                        <strong className="text-[#122824] font-medium">Kurva Glukosa:</strong> Alternatif pangan menjaga kestabilan energi harian.
                                     </span>
                                 </div>
-                                <div className="flex items-start gap-2.5">
-                                    <span className="text-[#1c6454] font-mono text-sm leading-none shrink-0 mt-0.5">+</span>
+                                <div className="flex items-start gap-1.5 sm:gap-2.5">
+                                    <span className="text-[#1c6454] font-mono text-xs sm:text-sm leading-none shrink-0 mt-0.5">+</span>
                                     <span>
-                                        <strong className="text-[#122824] font-medium">Remisi Bertahap 90 Hari:</strong> Program kebiasaan mikro terukur dan sinkronisasi data SatuSehat untuk dokter faskes Anda.
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Symmetrical Mini Telemetry Preview Card (Pure Typographic & Data Metric - No Dummy Images) */}
-                            <div className="p-3 rounded-2xl bg-white/85 border border-[#cbe0d4] flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-xl bg-[#edf5f0] border border-[#cde2d6] text-[#1c6454] flex flex-col items-center justify-center shrink-0">
-                                    <span className="font-mono font-bold text-xs leading-none">&lt;10</span>
-                                    <span className="text-[8px] font-semibold uppercase tracking-wider mt-0.5">GL</span>
-                                </div>
-                                <div className="text-xs overflow-hidden">
-                                    <span className="font-serif font-medium text-[#122824] block truncate">
-                                        Nutrisi Presisi Rendah Glikemik
-                                    </span>
-                                    <span className="text-[11px] text-[#4d665f] block truncate">
-                                        Stabilisasi glukosa postprandial tanpa lonjakan insulin drastis
+                                        <strong className="text-[#122824] font-medium">Remisi 90 Hari:</strong> Program kebiasaan mikro terukur &amp; SatuSehat.
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-3.5 rounded-2xl bg-white/80 border border-[#cbe0d4] flex items-center justify-between text-[11px] text-[#1c6454]">
-                            <span>Target Terukur: Stabilitas glukosa terjaga</span>
-                            <span className="font-serif font-medium text-primary">Remisi HbA1c &lt; 5.7%</span>
+                        {/* Symmetrical Bottom Section: Telemetry + Outcome */}
+                        <div className="mt-auto pt-2.5 sm:pt-4 space-y-2 sm:space-y-3">
+                            {/* Symmetrical Mini Telemetry Preview Card (Single Row / Sebaris) */}
+                            <div className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl sm:rounded-2xl bg-white/90 border border-[#cbe0d4] flex items-center justify-between gap-1.5 min-w-0 h-9 sm:h-11">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="px-1.5 py-0.5 rounded-md sm:rounded-lg bg-[#edf5f0] border border-[#cde2d6] text-[#1c6454] font-mono font-bold text-[8.5px] sm:text-xs shrink-0 whitespace-nowrap min-w-12 sm:min-w-16 text-center">
+                                        &lt;10 GL
+                                    </span>
+                                    <span className="font-serif font-medium text-[#122824] truncate text-[8.5px] sm:text-xs">
+                                        Nutrisi Presisi
+                                    </span>
+                                </div>
+                                <span className="text-[7.5px] sm:text-[10px] text-emerald-700 font-mono shrink-0">
+                                    Stabil
+                                </span>
+                            </div>
+
+                            <div className="px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/80 border border-[#cfe1d7] flex items-center justify-between text-[8px] sm:text-[11px] text-[#1c6454] gap-1 h-8 sm:h-10">
+                                <span className="truncate">Target: Terjaga</span>
+                                <span className="font-serif font-medium text-primary shrink-0">HbA1c &lt; 5.7%</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* 100% Real Empirical Research Citation Card (Pure Typographic & Scientific Data - ZERO DUMMY IMAGES) */}
                 <div
-                    className="p-5 sm:p-7 lg:p-8 bg-white/95 rounded-3xl border border-surface-container-high shadow-[0_4px_24px_rgba(0,40,36,0.03)] space-y-6 transition-all duration-300 relative overflow-hidden"
+                    className="p-3.5 sm:p-7 lg:p-8 bg-white/95 rounded-2xl sm:rounded-3xl border border-surface-container-high shadow-[0_4px_24px_rgba(0,40,36,0.03)] space-y-3 sm:space-y-6 transition-all duration-300 relative overflow-hidden"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
                     onTouchStart={() => setIsPaused(true)}
                     onTouchEnd={() => setIsPaused(false)}
                 >
-                    {/* Top Bar: Category Filter Pills + Carousel Navigation */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container-high/80">
-                        {/* Source Quick-Select Tabs */}
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-                            <span className="text-[10px] text-[#788883] font-semibold uppercase tracking-wider mr-1 shrink-0 flex items-center gap-1.5">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Korpus Riset:
+
+
+                    {/* Mobile-Optimized Compact Research Card (Fits in 1 Screen without long scrolling) */}
+                    <div
+                        className={`sm:hidden space-y-2.5 transition-all duration-200 ${
+                            isTransitioning ? 'opacity-30 translate-y-1' : 'opacity-100 translate-y-0'
+                        }`}
+                    >
+                        {/* Source Header + Key Metric Badge */}
+                        <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#f4f9f6] border border-[#d6e7dc]">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center shrink-0 shadow-2xs">
+                                    <span className="material-symbols-outlined text-[16px]">
+                                        {activeItem.icon}
+                                    </span>
+                                </div>
+                                <div className="min-w-0">
+                                    <span className="text-[8px] uppercase tracking-wider text-[#637d74] font-semibold block leading-none">
+                                        Basis Riset &amp; Data
+                                    </span>
+                                    <h3 className="font-bold text-[11px] text-[#182926] truncate mt-0.5">
+                                        {activeItem.sourceName}
+                                    </h3>
+                                </div>
+                            </div>
+                            <span className="px-2 py-0.5 rounded-lg text-[9px] font-bold bg-primary text-white shrink-0 shadow-2xs">
+                                {activeItem.keyMetric}
                             </span>
-                            {clinicalResearchLibrary.map((item, idx) => {
-                                const isActive = idx === activeIdx;
-                                return (
-                                    <button
-                                        key={item.id}
-                                        type="button"
-                                        onClick={() => changeSlide(idx)}
-                                        className={`px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all shrink-0 cursor-pointer ${
-                                            isActive
-                                                ? 'bg-primary text-white shadow-sm'
-                                                : 'bg-surface-container-low text-[#4f645f] hover:bg-surface-container hover:text-[#182926]'
-                                        }`}
-                                    >
-                                        {item.sourceName}
-                                    </button>
-                                );
-                            })}
                         </div>
 
-                        {/* Prev / Next & Pause Indicator */}
-                        <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-                            <span className="text-[10px] sm:text-[11px] text-[#6e807b]">
-                                {isPaused ? (
-                                    <span className="text-amber-700 font-medium">Jeda (Disorot)</span>
-                                ) : (
-                                    <span className="text-[#6e807b]">Rujukan {activeIdx + 1} dari {clinicalResearchLibrary.length}</span>
-                                )}
+                        {/* Metadata Tag Row */}
+                        <div className="flex items-center gap-1.5 text-[8.5px] text-[#556963] overflow-x-auto scrollbar-none">
+                            <span className="px-1.5 py-0.5 rounded bg-white border border-[#d2e4d9] font-mono text-primary font-semibold shrink-0">
+                                {activeItem.tag}
                             </span>
-                            <div className="flex items-center gap-1.5">
-                                <button
-                                    type="button"
-                                    onClick={handlePrev}
-                                    aria-label="Riset Klinis Sebelumnya"
-                                    className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
-                                >
-                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleNext}
-                                    aria-label="Riset Klinis Selanjutnya"
-                                    className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
-                                >
-                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </button>
-                            </div>
+                            <span className="px-1.5 py-0.5 rounded bg-[#edf5f1] border border-[#cde3d6] text-[#1c6454] font-medium shrink-0">
+                                {activeItem.sampleSize}
+                            </span>
+                        </div>
+
+                        {/* Title & Evidence Level */}
+                        <div className="space-y-0.5">
+                            <span className="text-[8.5px] font-bold text-primary uppercase tracking-wider block">
+                                {activeItem.evidenceLevel}
+                            </span>
+                            <h4 className="text-[11px] font-bold text-[#142622] leading-snug line-clamp-2">
+                                {activeItem.evidenceTitle}
+                            </h4>
+                        </div>
+
+                        {/* Empirical Quote (Compact & Clear) */}
+                        <blockquote className="font-serif italic text-[11px] text-[#1a332e] leading-relaxed pl-2.5 border-l-2 border-primary/60 line-clamp-3 bg-[#fbfdfc] py-1 rounded-r-lg">
+                            &ldquo;{activeItem.quote}&rdquo;
+                        </blockquote>
+
+                        {/* Verification Standards Single Row */}
+                        <div className="pt-2 border-t border-surface-container/70 flex items-center justify-between text-[8.5px] text-[#1c6454] font-medium">
+                            <span className="inline-flex items-center gap-1 truncate">
+                                <span className="material-symbols-outlined text-[13px] text-emerald-600 shrink-0">verified</span>
+                                <span className="truncate">{activeItem.standards[0]}</span>
+                            </span>
+                            <span className="text-[8px] text-[#768984] italic shrink-0">
+                                {activeItem.studyNote.length > 35 ? activeItem.studyNote.slice(0, 35) + '...' : activeItem.studyNote}
+                            </span>
                         </div>
                     </div>
 
-                    {/* Active Empirical Research Block (Pure Typographic Citation Card - No Photos) */}
+                    {/* Desktop Full Scholarly Grid */}
                     <div
-                        className={`grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all duration-200 ${
+                        className={`hidden sm:grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-all duration-200 ${
                             isTransitioning ? 'opacity-30 translate-y-1' : 'opacity-100 translate-y-0'
                         }`}
                     >
@@ -437,24 +449,60 @@ export default function PublicPromoSection() {
                         </div>
                     </div>
 
-                    {/* Bottom Indicator Dots with Clickable Jump */}
-                    <div className="flex items-center justify-center gap-2 pt-2 border-t border-surface-container/60">
-                        {clinicalResearchLibrary.map((item, dotIdx) => {
-                            const isCurrent = dotIdx === activeIdx;
-                            return (
-                                <button
-                                    key={item.id}
-                                    type="button"
-                                    onClick={() => changeSlide(dotIdx)}
-                                    aria-label={`Lihat ${item.sourceName}`}
-                                    className={`transition-all duration-300 rounded-full cursor-pointer ${
-                                        isCurrent
-                                            ? 'w-7 h-2 bg-primary shadow-xs'
-                                            : 'w-2 h-2 bg-[#d1ded7] hover:bg-[#a6bcb1]'
-                                    }`}
-                                />
-                            );
-                        })}
+                    {/* Bottom Scroller Navigation (Prev, Clickable Dots/Counter, Next) */}
+                    <div className="flex items-center justify-between gap-3 pt-2.5 sm:pt-4 border-t border-surface-container/60">
+                        <button
+                            type="button"
+                            onClick={handlePrev}
+                            aria-label="Riset Klinis Sebelumnya"
+                            className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] text-[11px] sm:text-xs font-medium transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
+                        >
+                            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            <span className="hidden xs:inline">Sebelumnya</span>
+                        </button>
+
+                        {/* Indicator Dots & Counter */}
+                        <div className="flex items-center gap-2 sm:gap-2.5">
+                            <div className="flex items-center gap-1.5">
+                                {clinicalResearchLibrary.map((item, dotIdx) => {
+                                    const isCurrent = dotIdx === activeIdx;
+                                    return (
+                                        <button
+                                            key={item.id}
+                                            type="button"
+                                            onClick={() => changeSlide(dotIdx)}
+                                            aria-label={`Lihat ${item.sourceName}`}
+                                            className={`transition-all duration-300 rounded-full cursor-pointer ${
+                                                isCurrent
+                                                    ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-primary shadow-xs'
+                                                    : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-[#d1ded7] hover:bg-[#a6bcb1]'
+                                            }`}
+                                        />
+                                    );
+                                })}
+                            </div>
+                            <span className="text-[10px] sm:text-xs text-[#71847f] font-medium min-w-9 text-right">
+                                {isPaused ? (
+                                    <span className="text-amber-700 font-semibold">Jeda</span>
+                                ) : (
+                                    <span>{activeIdx + 1}/{clinicalResearchLibrary.length}</span>
+                                )}
+                            </span>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            aria-label="Riset Klinis Selanjutnya"
+                            className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-surface-container-high bg-white/90 hover:bg-primary hover:text-white hover:border-primary text-[#324541] text-[11px] sm:text-xs font-medium transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
+                        >
+                            <span className="hidden xs:inline">Selanjutnya</span>
+                            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>

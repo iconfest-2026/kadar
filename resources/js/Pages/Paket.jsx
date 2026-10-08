@@ -18,7 +18,7 @@ export default function Paket(props) {
     // Fallback preset features if tier has no features in database
     const getDefaultFeaturesForSlug = (slug) => {
         const s = (slug || '').toLowerCase();
-        if (s === 'silver') {
+        if (s === 'silver' || s === 'free' || s === 'basic' || s.includes('gratis')) {
             return [
                 { text: 'Pemindai Kamera Makanan & Obat BPOM (10x / hari)', included: true },
                 { text: 'Deteksi Beban Glikemik & Gramatur Gula Instan (<0.4s)', included: true },
@@ -26,6 +26,12 @@ export default function Paket(props) {
                 { text: 'Asisten AI Terverifikasi Medis 24/7 (Edukasi Dasar)', included: true },
                 { text: 'Akses Siaga Panggilan Darurat Ambulans 119', included: true },
                 { text: 'Akses Komunitas & Forum Diskusi Pasien Publik', included: true },
+                { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: false },
+                { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: false },
+                { text: 'Sesi Telekonsultasi Instruktur Gizi Klinis per Bulan', included: false },
+                { text: 'Jalur Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                { text: 'Analisis Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                { text: 'Dedicated Personal Health Coach 24/7', included: false },
             ];
         }
         if (s === 'perak') {
@@ -36,27 +42,39 @@ export default function Paket(props) {
                 { text: 'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)', included: true },
                 { text: 'Prediksi Lonjakan Glikemik Makanan (Kurva 2 Jam)', included: true },
                 { text: 'Laporan Evaluasi Progres Metabolik Bulanan (Format PDF)', included: true },
+                { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Lipid)', included: false },
             ];
         }
-        if (s === 'gold') {
+        if (s === 'gold' || s.includes('gold')) {
             return [
-                { text: 'Semua kapabilitas dalam paket Silver & Perak', included: true, highlight: true },
+                { text: 'Semua kapabilitas dalam paket Gratis & Dasar', included: true, highlight: true },
                 { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', included: true },
                 { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', included: true },
                 { text: 'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)', included: true },
                 { text: '2x Sesi Telekonsultasi Instruktur Gizi per Bulan', included: true },
                 { text: 'Laporan Evaluasi Progres Metabolik Bulanan (Format PDF)', included: true },
                 { text: 'Akses Penuh Seluruh Modul Gamifikasi & Resep Rendah Gula', included: true },
+                { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: false },
+                { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: false },
+                { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: false },
+                { text: 'Dedicated Personal Health Coach & Review Mingguan', included: false },
+                { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: false },
             ];
         }
         return [
-            { text: 'Semua kapabilitas dalam paket Gold', included: true, highlight: true },
+            { text: 'Semua kapabilitas dalam paket Gold & Gratis', included: true, highlight: true },
+            { text: 'Pemindai Kamera OCR & Obat BPOM Bebas Batas (Unlimited)', included: true },
             { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', included: true },
+            { text: '6x Sesi Telekonsultasi Dokter Spesialis per Bulan', included: true },
             { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', included: true },
             { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', included: true },
             { text: 'Dedicated Personal Health Coach & Review Mingguan', included: true },
             { text: 'Hotline Tim Medis Siaga Prioritas 24/7', included: true },
             { text: 'Jalur Koordinasi Ambulans dengan Riwayat Klinis Instan', included: true },
+            { text: 'Rencana Intervensi Gizi & Menu Presisi Personal Khusus', included: true },
+            { text: 'Program Tantangan Remisi Intensif Klinis Terpandu', included: true },
+            { text: 'Akses Jalur Cepat Tindakan Klinis & Integrasi SatuSehat', included: true },
         ];
     };
 
@@ -75,17 +93,27 @@ export default function Paket(props) {
                 (props.currentTier?.id && props.currentTier.id === t.id)
             );
 
+            const isPopular = Boolean(t.is_popular) || t.slug === 'gold' || t.name?.toLowerCase().includes('gold');
+            const isPlatinum = !isPopular && (t.slug === 'platinum' || t.name?.toLowerCase().includes('platinum') || basePrice >= 140000);
+            const isFree = basePrice === 0 || t.slug === 'free' || t.slug === 'silver';
+
             // Determine badge style
-            let badgeStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd]';
-            if (t.is_popular) {
-                badgeStyle = 'bg-primary text-white border-transparent shadow-xs';
-            } else if (basePrice >= 200000) {
-                badgeStyle = 'bg-[#f4efe8] text-[#785b34] border-[#e7ddd0]';
+            let badge = t.badge_text;
+            let badgeStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd] font-medium';
+            if (isPopular) {
+                badge = t.badge_text || 'Paling Direkomendasikan';
+                badgeStyle = 'bg-primary text-white border-transparent shadow-xs font-bold';
+            } else if (isPlatinum) {
+                badge = t.badge_text || 'Pendampingan Spesialis VIP';
+                badgeStyle = 'bg-[#fbf7f0] text-[#785b34] border-[#ebdcc4] font-semibold';
+            } else {
+                badge = t.badge_text || 'Akses Esensial Mandiri';
+                badgeStyle = 'bg-[#edf5f0] text-[#1c6454] border-[#d4e8dd] font-medium';
             }
 
             const rawFeatures = Array.isArray(t.features) && t.features.length > 0
                 ? t.features.map((feat) => ({ text: feat, included: true }))
-                : getDefaultFeaturesForSlug(t.slug);
+                : getDefaultFeaturesForSlug(t.slug || t.name);
 
             return {
                 id: t.id,
@@ -99,9 +127,11 @@ export default function Paket(props) {
                 adminFeeFormatted: adminFee === 0 ? 'Rp 0' : `Rp ${adminFee.toLocaleString('id-ID')}`,
                 period: basePrice === 0 ? 'selamanya' : '/ bulan',
                 desc: t.description || 'Program kesehatan preventif terstruktur untuk evaluasi dan perbaikan biomarker metabolik Anda.',
-                badge: t.badge_text || (t.is_popular ? 'Paling Direkomendasikan' : (basePrice === 0 ? 'Akses Esensial' : 'Pilihan Populer')),
+                badge,
                 badgeStyle,
-                isPopular: Boolean(t.is_popular),
+                isPopular,
+                isPlatinum,
+                isFree,
                 maxConsultations: t.max_consultations,
                 maxScanner: t.max_scanner,
                 features: rawFeatures,
@@ -383,15 +413,15 @@ export default function Paket(props) {
     const packageFaqs = [
         {
             q: 'Apakah harga paket yang tercantum sudah fiks dan transparan?',
-            a: 'Ya, harga yang tercantum adalah tarif fiks yang mencakup biaya pokok layanan bulanan ditambah biaya administrasi resmi payment gateway Midtrans. Tidak ada biaya tersembunyi ataupun tagihan tambahan tanpa persetujuan Anda.',
+            a: 'Ya, harga yang tercantum adalah tarif fiks yang mencakup biaya pokok layanan bulanan ditambah biaya administrasi resmi. Tidak ada biaya tersembunyi ataupun tagihan tambahan tanpa persetujuan Anda.',
         },
         {
             q: 'Apakah paket Silver benar-benar bebas biaya tanpa batas waktu?',
             a: 'Ya, 100% gratis selamanya. Anda dapat membuat akun, memindai kemasan makanan dan obat dengan kamera, mencatat glukosa darah harian, serta berdiskusi dengan asisten AI tanpa kewajiban memasukkan nomor kartu kredit.',
         },
         {
-            q: 'Bagaimana alur pembayaran paket melalui Payment Gateway Midtrans?',
-            a: 'Ketika Anda memilih paket, jendela pembayaran resmi Midtrans Snap akan langsung terbuka di layar. Anda dapat memilih metode pembayaran instan seperti QRIS (GoPay, OVO, Dana, ShopeePay), Virtual Account Bank (BCA, Mandiri, BNI, BRI, Permata), maupun Kartu Kredit/Debit. Setelah pembayaran berhasil, status langganan langsung aktif secara otomatis.',
+            q: 'Bagaimana alur pembayaran paket langganan?',
+            a: 'Ketika Anda memilih paket, jendela pembayaran resmi akan langsung terbuka di layar. Anda dapat memilih metode pembayaran instan seperti QRIS (GoPay, OVO, Dana, ShopeePay), Virtual Account Bank (BCA, Mandiri, BNI, BRI, Permata), maupun Kartu Debit/Kredit. Setelah pembayaran berhasil, status langganan langsung aktif secara otomatis.',
         },
         {
             q: 'Kapan saya dapat membatalkan atau mengubah paket keanggotaan?',
@@ -429,26 +459,13 @@ export default function Paket(props) {
                     </nav>
 
                     {/* Hero Header */}
-                    <div className="text-center max-w-2xl mx-auto space-y-3.5">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide shadow-2xs">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]" />
-                            <span>Koneksi Gateway Resmi Midtrans • Standar Medis Terakreditasi</span>
-                        </div>
+                    <div className="text-center max-w-2xl mx-auto space-y-3">
                         <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight tracking-tight">
                             Investasi preventif untuk kesehatan metabolik bebas komplikasi.
                         </h1>
                         <p className="text-xs sm:text-sm text-[#4a5e57] leading-relaxed">
-                            Pilih tingkatan pendampingan klinis yang sesuai dengan target kesehatan Anda. Tarif fiks dan transparan sesuai konfigurasi resmi, didukung gerbang pembayaran Midtrans.
+                            Pilih tingkatan pendampingan klinis yang sesuai dengan target kesehatan Anda.
                         </p>
-
-                        {/* Fixed Pricing Transparency Assurance Badge */}
-                        <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#d6e5dd] shadow-2xs text-xs text-[#2b413a]">
-                                <span className="material-symbols-outlined text-[16px] text-primary">verified</span>
-                                <span className="font-semibold text-primary">Tarif Resmi Fiks:</span>
-                                <span className="text-[#4e635c]">Tagihan bulanan transparan sesuai input Admin &amp; Midtrans Gateway</span>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Status Alert Notification */}
@@ -497,29 +514,39 @@ export default function Paket(props) {
                         {tiers.map((tier) => {
                             const isProcessing = processingTierId === tier.id;
 
+                            let cardContainerStyle = 'bg-white/95 border-[#d8e6df] shadow-xs hover:border-[#b4cfc1]';
+                            if (tier.isCurrent) {
+                                cardContainerStyle = 'bg-white border-[#1c6454]/60 shadow-md ring-2 ring-[#1c6454]/30';
+                            } else if (tier.isPopular) {
+                                cardContainerStyle = 'bg-linear-to-b from-[#f2f9f5] via-white to-[#eaf5ef]/70 border-2 border-primary shadow-[0_16px_45px_rgba(0,67,62,0.18)] ring-4 ring-primary/10 lg:-translate-y-2.5 z-10 scale-[1.02]';
+                            } else if (tier.isPlatinum) {
+                                cardContainerStyle = 'bg-linear-to-b from-white via-[#fcfbfa] to-[#faf5ee]/60 border border-[#e2d8c9] shadow-md hover:shadow-lg hover:border-[#c8b79e]';
+                            }
+
                             return (
                                 <div
                                     key={tier.id || tier.slug}
-                                    className={`p-6 rounded-3xl border flex flex-col justify-between transition-all duration-300 relative ${
-                                        tier.isPopular
-                                            ? 'bg-white border-primary/50 shadow-[0_8px_35px_rgba(0,67,62,0.12)] ring-2 ring-primary/20'
-                                            : tier.isCurrent
-                                            ? 'bg-white border-[#1c6454]/40 shadow-sm ring-1 ring-[#1c6454]/30'
-                                            : 'bg-white/90 border-[#d8e6df] shadow-xs hover:border-[#b4cfc1]'
-                                    }`}
+                                    className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between transition-all duration-300 relative ${cardContainerStyle}`}
                                 >
                                     {/* Popular or Recommendation Badge */}
                                     {tier.isPopular && (
-                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-primary text-white text-[10px] font-bold tracking-wider uppercase shadow-md flex items-center gap-1 whitespace-nowrap">
-                                            <span className="material-symbols-outlined text-[13px] text-emerald-300">star</span>
+                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-white text-[10px] font-bold tracking-wider uppercase shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                                            <span className="material-symbols-outlined text-[13px] text-amber-300">star</span>
                                             <span>Rekomendasi Utama</span>
+                                        </div>
+                                    )}
+
+                                    {tier.isPlatinum && !tier.isPopular && (
+                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-[#3d2e1b] text-[#ebdcc4] text-[10px] font-bold tracking-wider uppercase shadow-sm flex items-center gap-1 whitespace-nowrap border border-[#ebdcc4]/40">
+                                            <span className="material-symbols-outlined text-[12px] text-amber-300">workspace_premium</span>
+                                            <span>Tingkat Tertinggi VIP</span>
                                         </div>
                                     )}
 
                                     <div className="space-y-4">
                                         {/* Card Header */}
                                         <div className="flex items-center justify-between gap-2">
-                                            <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#142320] truncate">
+                                            <h3 className={`font-serif text-xl sm:text-2xl text-[#142320] truncate ${tier.isPopular ? 'font-bold' : 'font-normal'}`}>
                                                 {tier.name}
                                             </h3>
                                             {tier.isCurrent ? (
@@ -527,7 +554,7 @@ export default function Paket(props) {
                                                     Paket Aktif
                                                 </span>
                                             ) : (
-                                                <span className={`text-[10px] px-2.5 py-0.5 rounded-full border font-medium shrink-0 ${tier.badgeStyle}`}>
+                                                <span className={`text-[10px] px-2.5 py-0.5 rounded-full border shrink-0 ${tier.badgeStyle}`}>
                                                     {tier.badge}
                                                 </span>
                                             )}
@@ -538,9 +565,9 @@ export default function Paket(props) {
                                         </p>
 
                                         {/* Price Display */}
-                                        <div className="py-2.5 border-y border-[#edf4f0] space-y-1.5">
+                                        <div className={`py-2.5 border-y space-y-1.5 ${tier.isPopular ? 'border-primary/20 bg-primary/5 -mx-6 px-6 sm:-mx-7 sm:px-7' : 'border-[#edf4f0]'}`}>
                                             <div className="flex items-baseline gap-1.5">
-                                                <span className="font-serif text-3xl font-normal text-primary">
+                                                <span className={`font-serif text-3xl font-normal ${tier.isPopular ? 'text-primary font-bold text-3xl sm:text-4xl' : tier.isPlatinum ? 'text-[#20322d]' : 'text-[#182926]'}`}>
                                                     {tier.priceFormatted}
                                                 </span>
                                                 <span className="text-xs text-[#637671] font-medium">
@@ -550,35 +577,41 @@ export default function Paket(props) {
 
                                             {/* Price Breakdown from Admin input */}
                                             {tier.basePrice > 0 ? (
-                                                <div className="p-2 rounded-xl bg-[#f4f8f5] border border-[#dbe9e1] flex flex-col gap-0.5 text-[11px]">
+                                                <div className={`p-2 rounded-xl border flex flex-col justify-center gap-0.5 text-[11px] h-11.5 ${tier.isPopular ? 'bg-emerald-50/90 border-emerald-200/80' : tier.isPlatinum ? 'bg-[#fcf7ee] border-[#ebdcc4]' : 'bg-[#f4f8f5] border-[#dbe9e1]'}`}>
                                                     <div className="flex items-center justify-between text-[#475b55]">
                                                         <span>Harga Pokok Layanan:</span>
                                                         <strong className="text-[#192b27] font-mono">{tier.basePriceFormatted}</strong>
                                                     </div>
                                                     <div className="flex items-center justify-between text-teal-800 font-medium">
-                                                        <span>Biaya Gateway (Midtrans):</span>
+                                                        <span>Biaya Admin:</span>
                                                         <span className="font-mono">+{tier.adminFeeFormatted}</span>
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="text-[11px] text-[#4d6b60] flex items-center gap-1">
+                                                <div className="p-2 rounded-xl border border-[#dbe9e1] bg-[#f4f8f5] flex items-center gap-1.5 text-[11px] text-[#4d6b60] h-11.5">
                                                     <span className="material-symbols-outlined text-[14px] text-emerald-700">lock_open</span>
-                                                    <span>Gratis selamanya tanpa biaya admin gateway</span>
+                                                    <span>Gratis selamanya tanpa biaya admin</span>
                                                 </div>
                                             )}
                                         </div>
 
                                         {/* Quotas Box */}
-                                        <div className="grid grid-cols-2 gap-2 p-2.5 rounded-2xl bg-[#f0f6f2]/80 border border-[#dbe7e0] text-xs">
+                                        <div className={`grid grid-cols-2 gap-2 p-2.5 rounded-2xl border text-xs ${
+                                            tier.isPopular 
+                                                ? 'bg-[#e2f2e8] border-[#b8dfc8]' 
+                                                : tier.isPlatinum 
+                                                ? 'bg-[#faf5ee] border-[#ede2d2]' 
+                                                : 'bg-[#f0f6f2]/80 border-[#dbe7e0]'
+                                        }`}>
                                             <div>
                                                 <span className="text-[10px] text-[#556963] font-medium block">Konsultasi Medis:</span>
-                                                <span className="font-mono font-bold text-primary">
+                                                <span className={`font-mono font-bold ${tier.isPopular ? 'text-primary' : tier.isPlatinum ? 'text-[#785b34]' : 'text-[#284138]'}`}>
                                                     {tier.maxConsultations === -1 ? 'Bebas Batas' : (tier.maxConsultations > 0 ? `${tier.maxConsultations}x / bulan` : 'Tanpa Kuota')}
                                                 </span>
                                             </div>
                                             <div>
                                                 <span className="text-[10px] text-[#556963] font-medium block">Pemindai Kamera:</span>
-                                                <span className="font-mono font-bold text-primary">
+                                                <span className={`font-mono font-bold ${tier.isPopular ? 'text-primary' : tier.isPlatinum ? 'text-[#785b34]' : 'text-[#284138]'}`}>
                                                     {tier.maxScanner === -1 ? 'Unlimited' : (tier.maxScanner > 0 ? `${tier.maxScanner}x / hari` : '10x / hari')}
                                                 </span>
                                             </div>
@@ -596,21 +629,23 @@ export default function Paket(props) {
                                                         className={`flex items-start gap-2.5 ${
                                                             f.included
                                                                 ? 'text-[#20342e]'
-                                                                : 'text-[#5a736a] line-through decoration-[#8aa096]'
+                                                                : 'text-[#8b9e97] line-through decoration-[#9cb0a8]'
                                                         }`}
                                                     >
                                                         <span
                                                             className={`material-symbols-outlined text-[16px] shrink-0 mt-0.5 ${
                                                                 f.included
-                                                                    ? f.highlight
+                                                                    ? tier.isPopular
                                                                         ? 'text-primary font-bold'
+                                                                        : tier.isPlatinum
+                                                                        ? 'text-emerald-800'
                                                                         : 'text-emerald-700'
-                                                                    : 'text-[#7e968d]'
+                                                                    : 'text-[#9ab1a7]'
                                                             }`}
                                                         >
-                                                            {f.included ? 'check_circle' : 'remove_circle_outline'}
+                                                            {f.included ? 'check_circle' : 'close'}
                                                         </span>
-                                                        <span className={f.highlight ? 'font-bold text-[#006057]' : ''}>
+                                                        <span className={f.included && f.highlight ? 'font-bold text-[#006057]' : ''}>
                                                             {f.text}
                                                         </span>
                                                     </li>
@@ -637,7 +672,9 @@ export default function Paket(props) {
                                                 disabled={processingTierId !== null}
                                                 className={`w-full min-h-12 py-3 px-5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs text-center cursor-pointer ${
                                                     tier.isPopular
-                                                        ? 'bg-primary text-white hover:bg-[#003833] shadow-md'
+                                                        ? 'bg-primary text-white hover:bg-primary-container shadow-[0_6px_20px_rgba(0,67,62,0.28)] font-bold'
+                                                        : tier.isPlatinum
+                                                        ? 'bg-[#162723] text-white hover:bg-[#253e38] shadow-sm font-semibold'
                                                         : 'bg-white text-primary border border-[#cbe0d5] hover:bg-[#edf5f0]'
                                                 }`}
                                             >
@@ -664,11 +701,13 @@ export default function Paket(props) {
                                                     href={`/register?tier=${tier.slug || tier.id}`}
                                                     className={`w-full min-h-12 py-3 px-5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs text-center cursor-pointer ${
                                                         tier.isPopular
-                                                            ? 'bg-primary text-white hover:bg-[#003833] shadow-md'
+                                                            ? 'bg-primary text-white hover:bg-primary-container shadow-[0_6px_20px_rgba(0,67,62,0.28)] font-bold'
+                                                            : tier.isPlatinum
+                                                            ? 'bg-[#162723] text-white hover:bg-[#253e38] shadow-sm font-semibold'
                                                             : 'bg-white text-primary border border-[#cbe0d5] hover:bg-[#edf5f0]'
                                                     }`}
                                                 >
-                                                    <span>{tier.totalPrice === 0 ? `Mulai ${tier.name} Gratis` : `Pilih Paket ${tier.name}`}</span>
+                                                    <span>{tier.totalPrice === 0 ? `Mulai ${tier.name}` : `Pilih Paket ${tier.name}`}</span>
                                                     <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                                                 </Link>
                                                 <Link

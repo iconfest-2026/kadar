@@ -75,7 +75,12 @@ const getDefaultFeatures = (t) => {
             { text: 'Konsultasi Asisten AI Preventif Medis Terverifikasi', active: true },
             { text: 'Akses Siaga Panggilan Darurat SPGDT 119', active: true },
             { text: 'Forum Diskusi Komunitas & Edukasi Pasien Publik', active: true },
-            { text: 'Konsultasi Terjadwal Bersama Dokter Spesialis', active: false },
+            { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', active: false },
+            { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', active: false },
+            { text: 'Sesi Telekonsultasi Instruktur Gizi Klinis per Bulan', active: false },
+            { text: 'Jalur Prioritas Dokter Spesialis Sp.PD (1-on-1)', active: false },
+            { text: 'Analisis Hasil Lab Darah (HbA1c & Profil Lipid)', active: false },
+            { text: 'Dedicated Personal Health Coach 24/7', active: false },
         ];
     }
 
@@ -88,30 +93,42 @@ const getDefaultFeatures = (t) => {
             { text: 'Prediksi Lonjakan Glikemik Makanan (Kurva 2 Jam)', active: true },
             { text: 'Laporan Evaluasi Progres Bulanan Format PDF', active: true },
             { text: maxConsultations > 0 ? `${maxConsultations}x Sesi Telekonsultasi Dokter / bln` : 'Jadwal Konsultasi Dokter Spesialis Terjadwal', active: maxConsultations > 0 },
+            { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', active: false },
+            { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Lipid)', active: false },
         ];
     }
 
     if (slug === 'gold') {
         return [
-            { text: 'Semua kapabilitas paket Silver & Perak', active: true },
+            { text: 'Semua kapabilitas paket Silver & Dasar', active: true },
             { text: maxScanner === -1 ? 'Scan Kamera OCR Tanpa Batas' : `${maxScanner > 0 ? maxScanner : 50}x Scan Nutrisi & BPOM / hari`, active: true },
             { text: `${maxConsultations > 0 ? maxConsultations : 2}x Sesi Konsultasi Dokter Spesialis / bln`, active: true },
             { text: 'Rencana Intervensi Gizi & Menu Presisi Personal', active: true },
             { text: 'Akses Penuh Program Tantangan Remisi 14-90 Hari', active: true },
             { text: 'Prediksi Lonjakan Glikemik & Analisis Kurva 2 Jam', active: true },
             { text: 'Laporan Perkembangan Bulanan Terstandar Medis', active: true },
+            { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', active: false },
+            { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)', active: false },
+            { text: 'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan', active: false },
+            { text: 'Dedicated Personal Health Coach & Review Mingguan', active: false },
+            { text: 'Hotline Tim Medis Siaga Prioritas 24/7', active: false },
         ];
     }
 
     if (slug === 'platinum') {
         return [
-            { text: 'Semua kapabilitas komprehensif paket Gold', active: true },
+            { text: 'Semua kapabilitas komprehensif paket Gold & Dasar', active: true },
             { text: 'Scan Nutrisi & Obat BPOM UNLIMITED Bebas Batas', active: true },
-            { text: `${maxConsultations > 0 ? maxConsultations : 6}x Sesi Konsultasi Dokter Spesialis (1-on-1)`, active: true },
-            { text: 'Dedicated Personal Health Coach Medis Berpengalaman', active: true },
-            { text: 'Jalur Koordinasi Ambulans 119 dengan Riwayat Klinis Instan', active: true },
+            { text: 'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)', active: true },
+            { text: `${maxConsultations > 0 ? maxConsultations : 6}x Sesi Konsultasi Dokter Spesialis / bln`, active: true },
             { text: 'Analisis Mendalam Hasil Lab Darah (HbA1c & Lipid)', active: true },
             { text: 'Resume Medis PDF Terstandar Rumah Sakit & Rujukan', active: true },
+            { text: 'Dedicated Personal Health Coach & Review Mingguan', active: true },
+            { text: 'Hotline Tim Medis Siaga Prioritas 24/7', active: true },
+            { text: 'Jalur Koordinasi Ambulans 119 dengan Riwayat Klinis Instan', active: true },
+            { text: 'Rencana Intervensi Gizi & Menu Presisi Personal Khusus', active: true },
+            { text: 'Program Tantangan Remisi Intensif Klinis Terpandu', active: true },
+            { text: 'Akses Jalur Cepat Tindakan Klinis & Integrasi SatuSehat', active: true },
         ];
     }
 
@@ -412,7 +429,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                             Tingkatan Akses & Kuota Layanan AEVYRA
                         </h3>
                         <p className="text-xs text-on-surface-variant line-clamp-2 sm:line-clamp-none">
-                            Tarif resmi fiks sesuai input admin dan terintegrasi langsung dengan Midtrans Payment Gateway.
+                            Pilihan tingkatan keanggotaan dan pendampingan kesehatan preventif AEVYRA.
                         </p>
                     </div>
                     <button
@@ -505,14 +522,14 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                                         Pokok: <strong className="text-on-surface">{t.basePriceFormatted}</strong>
                                                     </span>
                                                     <span className="text-teal-700 dark:text-teal-400 font-mono font-bold">
-                                                        + Fee: {t.adminFeeFormatted}
+                                                        + Biaya Admin: {t.adminFeeFormatted}
                                                     </span>
                                                 </div>
                                             )}
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-[11px] text-on-surface-variant leading-relaxed min-h-[30px]">
+                                        <p className="text-[11px] text-on-surface-variant leading-relaxed min-h-7.5">
                                             {t.description}
                                         </p>
 
@@ -546,7 +563,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                                     <span className={`material-symbols-outlined text-[16px] shrink-0 ${
                                                         feat.active ? 'text-primary' : 'text-surface-container'
                                                     }`}>
-                                                        {feat.active ? 'check_circle' : 'cancel'}
+                                                        {feat.active ? 'check_circle' : 'close'}
                                                     </span>
                                                     <span className="text-[11px] leading-tight">{feat.text}</span>
                                                 </div>
@@ -580,7 +597,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                                 {isProcessingThis ? (
                                                     <>
                                                         <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
-                                                        <span>Menghubungkan Midtrans...</span>
+                                                        <span>Menghubungkan Pembayaran...</span>
                                                     </>
                                                 ) : t.totalPrice === 0 ? (
                                                     <span>Aktifkan {t.name}</span>
@@ -600,7 +617,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                 <div className="p-4 bg-surface-container-low border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-on-surface-variant text-center sm:text-left shrink-0">
                     <span className="flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-[16px] text-primary shrink-0">lock</span>
-                        <span>Transaksi terlindungi Midtrans Payment Gateway & enkripsi perbankan berizin Bank Indonesia.</span>
+                        <span>Transaksi aman terenkripsi perbankan berizin Bank Indonesia.</span>
                     </span>
                     <button
                         type="button"
