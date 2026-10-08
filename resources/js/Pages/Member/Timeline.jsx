@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 
@@ -91,6 +91,18 @@ const METRIC_CONFIG = {
         category: 'Keseimbangan Glukosa',
         formatValue: (val) => `Skor Beban Glikemik ${val}`,
     },
+    FOOD_LOG: {
+        label: 'Pindai Makanan & Gizi',
+        icon: 'photo_camera',
+        category: 'Jurnal Nutrisi Kamera AI',
+        formatValue: (val) => `${Number(val || 0).toLocaleString('id-ID')} kkal`,
+    },
+    food_log: {
+        label: 'Pindai Makanan & Gizi',
+        icon: 'photo_camera',
+        category: 'Jurnal Nutrisi Kamera AI',
+        formatValue: (val) => `${Number(val || 0).toLocaleString('id-ID')} kkal`,
+    },
 };
 
 // Dictionary mapping for signals
@@ -156,6 +168,8 @@ const SOURCE_CONFIG = {
     google_fit: 'Google Health Connect',
     ocr_scan: 'Pemindai Kamera Gizi & BPOM',
     camera_scanner: 'Pemindai Kamera Gizi & BPOM',
+    scanner: 'Pemindai Kamera AI & BPOM',
+    SCANNER: 'Pemindai Kamera AI & BPOM',
     doctor_entry: 'Entri Dokter Spesialis',
     ai_estimation: 'Estimasi AI Preventif',
 };
@@ -172,26 +186,31 @@ const STATUS_CONFIG = {
 };
 
 export default function Timeline({ timelineItems = [], currentFilter, days = 30 }) {
+    const [selectedItem, setSelectedItem] = useState(null);
+
     const getBadge = (type) => {
         switch (type) {
             case 'HEALTH_RECORD':
-                return { bg: 'bg-primary/10 text-primary', icon: 'edit_note', label: 'Catatan Metrik' };
+                return { bg: 'bg-primary/10 text-primary', icon: 'edit_note', label: 'Metrik' };
             case 'BEHAVIOR_SIGNAL':
-                return { bg: 'bg-amber-500/10 text-amber-700 dark:text-amber-300', icon: 'insights', label: 'Sinyal HBE' };
+                return { bg: 'bg-amber-500/10 text-amber-700 dark:text-amber-300', icon: 'insights', label: 'Sinyal' };
             case 'INTERVENTION':
-                return { bg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300', icon: 'task_alt', label: 'Intervensi Aktif' };
+                return { bg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300', icon: 'task_alt', label: 'Intervensi' };
             default:
-                return { bg: 'bg-surface-container text-on-surface-variant', icon: 'info', label: 'Peristiwa' };
+                return { bg: 'bg-surface-container text-on-surface-variant', icon: 'info', label: 'Catatan' };
         }
     };
 
     const formatReadableTitle = (item) => {
         if (item.type === 'HEALTH_RECORD') {
+            if (item.metric_type === 'FOOD_LOG' || item.metric_type === 'food_log') {
+                return item.value_text || item.metadata?.food_name || 'Makanan / Minuman';
+            }
             const conf = METRIC_CONFIG[item.metric_type];
-            if (conf) return `Catatan ${conf.label}`;
-            if (item.metric_label) return `Catatan ${item.metric_label}`;
+            if (conf) return conf.label;
+            if (item.metric_label) return item.metric_label;
             const clean = (item.metric_type || '').replace(/_/g, ' ');
-            return `Catatan ${clean.charAt(0).toUpperCase() + clean.slice(1)}`;
+            return clean.charAt(0).toUpperCase() + clean.slice(1);
         }
         if (item.type === 'BEHAVIOR_SIGNAL') {
             const conf = SIGNAL_CONFIG[item.signal_type];
@@ -199,10 +218,13 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
             const clean = (item.signal_type || '').replace(/_/g, ' ').toLowerCase();
             return clean.charAt(0).toUpperCase() + clean.slice(1);
         }
-        return item.title ? item.title.replace(/_/g, ' ') : 'Program Intervensi Perilaku';
+        return item.title ? item.title.replace(/_/g, ' ') : 'Program Intervensi';
     };
 
     const formatItemValue = (item) => {
+        if (item.metric_type === 'FOOD_LOG' || item.metric_type === 'food_log') {
+            return `${Math.round(item.value || 0)} kkal`;
+        }
         if (item.formatted_value) return item.formatted_value;
         const conf = METRIC_CONFIG[item.metric_type];
         if (conf && conf.formatValue) {
@@ -226,214 +248,213 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
         return STATUS_CONFIG[statKey.toUpperCase()] || { label: statKey.replace(/_/g, ' '), bg: 'bg-surface-container text-on-surface-variant' };
     };
 
-    const getMetricIcon = (metricType) => {
-        return METRIC_CONFIG[metricType]?.icon || 'monitoring';
+    const getItemIcon = (item) => {
+        if (item.type === 'HEALTH_RECORD') {
+            return METRIC_CONFIG[item.metric_type]?.icon || 'monitoring';
+        }
+        if (item.type === 'BEHAVIOR_SIGNAL') {
+            return SIGNAL_CONFIG[item.signal_type]?.icon || 'insights';
+        }
+        return 'task_alt';
     };
 
     return (
-        <AppLayout title="Timeline & Riwayat Kesehatan" activeTab="timeline">
-            <Head title="Timeline Kesehatan & Riwayat Intervensi - AEVYRA" />
+        <AppLayout title="Riwayat & Aktivitas" activeTab="timeline">
+            <Head title="Riwayat Kesehatan - AEVYRA" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5 space-y-4">
                 
-                {/* Hero Header Banner */}
-                <div className="relative rounded-3xl bg-linear-to-r from-primary via-[#005a54] to-primary-container p-6 sm:p-8 text-white overflow-hidden shadow-lg">
-                    <div className="absolute -right-8 -top-8 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div className="relative z-10 max-w-2xl space-y-3">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-semibold">
-                            <span className="material-symbols-outlined text-[15px] text-emerald-300">history_edu</span>
-                            <span>AUDIT TRAIL • REKAM JEJAK KRONOLOGIS TERVERIFIKASI</span>
-                        </div>
-                        <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight leading-tight">
-                            Timeline Perilaku &amp; Intervensi Kesehatan
+                {/* Mobile-Style Clean Header */}
+                <div className="flex items-center justify-between pb-1">
+                    <div>
+                        <h1 className="font-heading font-black text-xl sm:text-2xl text-on-surface tracking-tight">
+                            Riwayat Aktivitas
                         </h1>
-                        <p className="text-white/85 text-xs sm:text-sm leading-relaxed">
-                            Arsip kronologis yang mencatat entri metrik, kualifikasi sinyal HBE, intervensi mikro, dan interaksi pendampingan secara transparan serta terenkripsi sesuai standar SatuSehat Kemenkes RI.
+                        <p className="text-xs text-on-surface-variant">
+                            Klik kartu untuk melihat rincian &amp; wawasan klinis lengkap
                         </p>
                     </div>
+
+                    <Link
+                        href="/member/scanner"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-primary text-white text-xs font-bold shadow-xs hover:bg-primary-container transition-all"
+                    >
+                        <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                        <span className="hidden sm:inline">Pindai Baru</span>
+                    </Link>
                 </div>
 
-                {/* Filter Chips */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-surface-container">
+                {/* Filter Chips - Compact Mobile Scroll */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                     <Link
                         href="/member/timeline"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
                             !currentFilter
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
-                        Semua Peristiwa ({timelineItems.length})
+                        Semua ({timelineItems.length})
                     </Link>
                     <Link
-                        href="/member/timeline?metric=sleep_duration"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
-                            currentFilter === 'sleep_duration'
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                        href="/member/timeline?metric=FOOD_LOG"
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
+                            currentFilter === 'FOOD_LOG'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
-                        <span className="material-symbols-outlined text-[15px]">bedtime</span>
-                        <span>Durasi Tidur</span>
-                    </Link>
-                    <Link
-                        href="/member/timeline?metric=water_intake"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
-                            currentFilter === 'water_intake'
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined text-[15px]">water_drop</span>
-                        <span>Asupan Air</span>
+                        <span className="material-symbols-outlined text-[15px]">document_scanner</span>
+                        <span>Makanan / Scanner</span>
                     </Link>
                     <Link
                         href="/member/timeline?metric=blood_glucose"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
                             currentFilter === 'blood_glucose'
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
                         <span className="material-symbols-outlined text-[15px]">bloodtype</span>
                         <span>Gula Darah</span>
                     </Link>
                     <Link
+                        href="/member/timeline?metric=sleep_duration"
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
+                            currentFilter === 'sleep_duration'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <span className="material-symbols-outlined text-[15px]">bedtime</span>
+                        <span>Tidur</span>
+                    </Link>
+                    <Link
                         href="/member/timeline?metric=steps"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
                             currentFilter === 'steps'
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
                         <span className="material-symbols-outlined text-[15px]">directions_walk</span>
-                        <span>Langkah Kaki</span>
+                        <span>Langkah</span>
                     </Link>
                     <Link
-                        href="/member/timeline?metric=mood_score"
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
-                            currentFilter === 'mood_score'
-                                ? 'bg-primary text-white shadow-2xs'
-                                : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+                        href="/member/timeline?metric=water_intake"
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 ${
+                            currentFilter === 'water_intake'
+                                ? 'bg-primary text-white shadow-xs'
+                                : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
-                        <span className="material-symbols-outlined text-[15px]">sentiment_satisfied</span>
-                        <span>Kesejahteraan (Mood)</span>
+                        <span className="material-symbols-outlined text-[15px]">water_drop</span>
+                        <span>Air</span>
                     </Link>
                 </div>
 
-                {/* Timeline Stream */}
-                <div className="relative border-l-2 border-primary/30 ml-4 sm:ml-6 space-y-6 pb-8">
+                {/* Mobile-Style Simple Card List */}
+                <div className="space-y-2.5">
                     {timelineItems && timelineItems.length > 0 ? (
                         timelineItems.map((item, idx) => {
-                            const badge = getBadge(item.type);
-                            const displayTitle = formatReadableTitle(item);
-                            const metricConfig = METRIC_CONFIG[item.metric_type];
-                            const signalConfig = SIGNAL_CONFIG[item.signal_type];
-                            const severity = formatSeverity(item.severity);
-                            const status = formatStatus(item.status);
+                            const isFood = item.metric_type === 'FOOD_LOG' || item.metric_type === 'food_log';
+                            const title = formatReadableTitle(item);
+                            const valText = formatItemValue(item);
+                            const icon = getItemIcon(item);
+                            const isHealthRecord = item.type === 'HEALTH_RECORD';
+                            const detailHref = isHealthRecord ? `/member/timeline/${item.id}` : null;
 
-                            return (
-                                <div key={idx} className="relative pl-6 sm:pl-8 group">
-                                    {/* Timeline Node Dot */}
-                                    <div className="absolute -left-2.25 top-2.5 w-4 h-4 rounded-full bg-white dark:bg-surface border-2 border-primary flex items-center justify-center shadow-xs">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                                    </div>
-
-                                    {/* Item Card */}
-                                    <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3 group-hover:border-primary/40 transition-colors">
-                                        
-                                        {/* Card Header */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-surface-container/60 pb-3">
-                                            <div className="flex flex-wrap items-center gap-2">
-                                                <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-label-mono font-bold flex items-center gap-1 ${badge.bg}`}>
-                                                    <span className="material-symbols-outlined text-[13px]">{badge.icon}</span>
-                                                    <span>{badge.label}</span>
-                                                </span>
-                                                <h3 className="text-xs sm:text-sm font-bold text-on-surface flex items-center gap-1.5">
-                                                    {item.type === 'HEALTH_RECORD' && (
-                                                        <span className="material-symbols-outlined text-primary text-[17px]">
-                                                            {getMetricIcon(item.metric_type)}
-                                                        </span>
-                                                    )}
-                                                    {item.type === 'BEHAVIOR_SIGNAL' && (
-                                                        <span className="material-symbols-outlined text-amber-600 text-[17px]">
-                                                            {signalConfig?.icon || 'insights'}
-                                                        </span>
-                                                    )}
-                                                    {item.type === 'INTERVENTION' && (
-                                                        <span className="material-symbols-outlined text-emerald-600 text-[17px]">
-                                                            task_alt
-                                                        </span>
-                                                    )}
-                                                    <span>{displayTitle}</span>
-                                                </h3>
-                                            </div>
-                                            <span className="text-[11px] font-label-mono text-on-surface-variant shrink-0">
-                                                {item.display_date}
-                                            </span>
+                            const CardInner = () => (
+                                <>
+                                    {/* Left: Icon & Main Info */}
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
+                                            isFood
+                                                ? 'bg-emerald-500/10 text-emerald-600'
+                                                : item.type === 'BEHAVIOR_SIGNAL'
+                                                ? 'bg-amber-500/10 text-amber-600'
+                                                : item.type === 'INTERVENTION'
+                                                ? 'bg-teal-500/10 text-teal-600'
+                                                : 'bg-primary/10 text-primary'
+                                        }`}>
+                                            <span className="material-symbols-outlined text-[22px]">{icon}</span>
                                         </div>
 
-                                        {/* 1. Content for HEALTH_RECORD */}
-                                        {item.type === 'HEALTH_RECORD' && (
-                                            <div className="space-y-2">
-                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-2xl bg-surface-container-low border border-surface-container">
-                                                    <div>
-                                                        <span className="text-[10px] text-on-surface-variant block uppercase font-label-mono font-semibold">
-                                                            {metricConfig?.category || 'Nilai Pengukuran Terverifikasi'}
-                                                        </span>
-                                                        <span className="text-on-surface font-black text-base sm:text-lg font-mono">
-                                                            {formatItemValue(item)}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-[10px] font-label-mono px-2.5 py-1 rounded-xl bg-white dark:bg-surface border border-surface-container text-on-surface-variant font-medium">
-                                                            Sumber: <strong className="text-on-surface">{item.source_label || formatSource(item.source)}</strong>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-1.5">
+                                                <h3 className="font-heading font-bold text-sm text-on-surface truncate">
+                                                    {title}
+                                                </h3>
+                                                {isFood && item.metadata?.glycemic_load_level && (
+                                                    <span className={`px-2 py-0.2 rounded-full font-label-mono text-[9px] font-bold shrink-0 ${
+                                                        item.metadata.glycemic_load_level === 'TINGGI'
+                                                            ? 'bg-rose-500/10 text-rose-700'
+                                                            : item.metadata.glycemic_load_level === 'RENDAH'
+                                                            ? 'bg-emerald-500/10 text-emerald-700'
+                                                            : 'bg-amber-500/10 text-amber-700'
+                                                    }`}>
+                                                        GL {item.metadata.glycemic_load_level}
+                                                    </span>
+                                                )}
+                                            </div>
 
-                                                {item.notes && (
-                                                    <p className="text-xs text-on-surface-variant italic px-1">
-                                                        Catatan: "{item.notes}"
-                                                    </p>
+                                            <p className="text-[11px] text-on-surface-variant flex items-center gap-1 mt-0.5">
+                                                <span>{item.display_date}</span>
+                                                <span>•</span>
+                                                <span className="truncate">{item.source_label || formatSource(item.source)}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Right: Value & Chevron Arrow */}
+                                    <div className="flex items-center gap-2.5 shrink-0">
+                                        {item.type === 'HEALTH_RECORD' && (
+                                            <div className="text-right">
+                                                <span className="font-mono font-bold text-sm text-on-surface block">
+                                                    {valText}
+                                                </span>
+                                                {isFood && item.metadata?.sugar_g !== undefined && (
+                                                    <span className="text-[10px] text-on-surface-variant font-label-mono block">
+                                                        Gula {item.metadata.sugar_g}g
+                                                    </span>
                                                 )}
                                             </div>
                                         )}
 
-                                        {/* 2. Content for BEHAVIOR_SIGNAL */}
                                         {item.type === 'BEHAVIOR_SIGNAL' && (
-                                            <div className="p-3.5 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-2">
-                                                <div className="flex flex-wrap items-center justify-between gap-2">
-                                                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold border ${severity.bg}`}>
-                                                        {item.severity_label || severity.label}
-                                                    </span>
-                                                    {item.priority_score && (
-                                                        <span className="text-[10px] font-label-mono text-on-surface-variant">
-                                                            Skor Prioritas Klinis: <strong className="text-primary font-bold">{item.priority_score}</strong>
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <p className="text-xs text-on-surface leading-relaxed font-medium">
-                                                    {item.explanation || signalConfig?.category || 'Terdeteksi deviasi pola kebiasaan terhadap baseline stabilitas 14-hari.'}
-                                                </p>
-                                            </div>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-label-mono ${formatSeverity(item.severity).bg}`}>
+                                                {formatSeverity(item.severity).label}
+                                            </span>
                                         )}
 
-                                        {/* 3. Content for INTERVENTION */}
                                         {item.type === 'INTERVENTION' && (
-                                            <div className="p-3.5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 space-y-2">
-                                                <p className="text-xs text-on-surface leading-relaxed">
-                                                    {item.description}
-                                                </p>
-                                                <div className="flex items-center justify-between pt-1">
-                                                    <span className={`inline-block text-[10px] font-label-mono px-2.5 py-0.5 rounded-full font-bold ${status.bg}`}>
-                                                        Status: {item.status_label || status.label}
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-label-mono ${formatStatus(item.status).bg}`}>
+                                                {formatStatus(item.status).label}
+                                            </span>
                                         )}
+
+                                        <span className="material-symbols-outlined text-on-surface-variant/60 group-hover:text-primary transition-colors text-[20px]">
+                                            chevron_right
+                                        </span>
                                     </div>
+                                </>
+                            );
+
+                            return detailHref ? (
+                                <Link
+                                    key={idx}
+                                    href={detailHref}
+                                    className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-surface border border-surface-container hover:border-primary/50 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between gap-3 group active:scale-[0.99] block"
+                                >
+                                    <CardInner />
+                                </Link>
+                            ) : (
+                                <div
+                                    key={idx}
+                                    onClick={() => setSelectedItem(item)}
+                                    className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-surface border border-surface-container hover:border-primary/50 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between gap-3 group active:scale-[0.99]"
+                                >
+                                    <CardInner />
                                 </div>
                             );
                         })
@@ -441,17 +462,193 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
                         <div className="p-8 text-center rounded-3xl border border-dashed border-surface-container bg-surface-container-low space-y-3">
                             <span className="material-symbols-outlined text-4xl text-on-surface-variant">event_busy</span>
                             <p className="text-xs text-on-surface-variant max-w-sm mx-auto">
-                                Belum ada riwayat aktivitas atau catatan kesehatan untuk filter ini.
+                                Belum ada riwayat tercatat untuk kategori ini.
                             </p>
                             <Link
                                 href="/member/timeline"
                                 className="inline-block px-4 py-2 bg-primary text-white text-xs font-bold rounded-xl shadow-xs"
                             >
-                                Lihat Semua Peristiwa
+                                Tampilkan Semua
                             </Link>
                         </div>
                     )}
                 </div>
+
+                {/* ========================================================================= */}
+                {/* DETAIL MODAL / BOTTOM SHEET (POP-UP SAAT CARD DI-KLIK)                    */}
+                {/* ========================================================================= */}
+                {selectedItem && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+                        <div 
+                            className="bg-white dark:bg-surface w-full max-w-lg rounded-3xl p-5 sm:p-6 shadow-2xl border border-surface-container space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Modal Header */}
+                            <div className="flex items-center justify-between border-b border-surface-container pb-3">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-[20px]">
+                                            {getItemIcon(selectedItem)}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-heading font-black text-base text-on-surface">
+                                            {formatReadableTitle(selectedItem)}
+                                        </h3>
+                                        <p className="text-[11px] font-label-mono text-on-surface-variant">
+                                            {selectedItem.display_date} • {selectedItem.source_label || formatSource(selectedItem.source)}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedItem(null)}
+                                    className="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">close</span>
+                                </button>
+                            </div>
+
+                            {/* Modal Body: Food Log Scanner Details */}
+                            {(selectedItem.metric_type === 'FOOD_LOG' || selectedItem.metric_type === 'food_log') && (
+                                <div className="space-y-4">
+                                    {/* Primary Value Card */}
+                                    <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+                                        <div>
+                                            <span className="text-[10px] font-label-mono uppercase text-emerald-800 dark:text-emerald-300 font-bold block">
+                                                Estimasi Energi Makanan
+                                            </span>
+                                            <span className="font-heading font-black text-2xl text-emerald-900 dark:text-emerald-200">
+                                                {Math.round(selectedItem.value || 0)} <span className="text-sm font-normal">kkal</span>
+                                            </span>
+                                        </div>
+                                        {selectedItem.metadata?.glycemic_load_level && (
+                                            <div className="text-right">
+                                                <span className="text-[10px] font-label-mono uppercase text-emerald-800 dark:text-emerald-300 font-bold block">
+                                                    Beban Glikemik
+                                                </span>
+                                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold font-label-mono bg-white dark:bg-surface text-emerald-800 shadow-2xs">
+                                                    {selectedItem.metadata.glycemic_load_level} ({selectedItem.metadata.glycemic_load ?? '-'})
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* BPOM Registration */}
+                                    {selectedItem.metadata?.bpom && selectedItem.metadata.bpom !== '-' && (
+                                        <div className="p-3 rounded-xl bg-surface-container-low border border-surface-container flex items-center justify-between text-xs">
+                                            <span className="text-on-surface-variant font-medium">Registrasi BPOM RI:</span>
+                                            <span className="font-mono font-bold text-primary">{selectedItem.metadata.bpom}</span>
+                                        </div>
+                                    )}
+
+                                    {/* Nutrition Macros Grid */}
+                                    {selectedItem.metadata && (
+                                        <div className="space-y-1.5">
+                                            <span className="text-xs font-bold text-on-surface">Rincian Makronutrisi:</span>
+                                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                                <div className="p-3 rounded-2xl bg-surface-container-low border border-surface-container text-center">
+                                                    <span className="text-[10px] text-on-surface-variant font-label-mono uppercase block">Gula</span>
+                                                    <span className="text-sm font-bold font-mono text-on-surface">{selectedItem.metadata.sugar_g ?? '-'} g</span>
+                                                </div>
+                                                <div className="p-3 rounded-2xl bg-surface-container-low border border-surface-container text-center">
+                                                    <span className="text-[10px] text-on-surface-variant font-label-mono uppercase block">Karbohidrat</span>
+                                                    <span className="text-sm font-bold font-mono text-on-surface">{selectedItem.metadata.carbs_g ?? '-'} g</span>
+                                                </div>
+                                                <div className="p-3 rounded-2xl bg-surface-container-low border border-surface-container text-center">
+                                                    <span className="text-[10px] text-on-surface-variant font-label-mono uppercase block">Protein</span>
+                                                    <span className="text-sm font-bold font-mono text-on-surface">{selectedItem.metadata.protein_g ?? '-'} g</span>
+                                                </div>
+                                                <div className="p-3 rounded-2xl bg-surface-container-low border border-surface-container text-center">
+                                                    <span className="text-[10px] text-on-surface-variant font-label-mono uppercase block">Natrium</span>
+                                                    <span className="text-sm font-bold font-mono text-on-surface">{selectedItem.metadata.sodium_mg ?? '-'} mg</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Clinical Insight AI */}
+                                    {(selectedItem.metadata?.clinical_note || selectedItem.notes) && (
+                                        <div className="p-4 rounded-2xl bg-surface-container-low border border-primary/20 space-y-1.5">
+                                            <h4 className="font-bold text-xs text-primary flex items-center gap-1">
+                                                <span className="material-symbols-outlined text-[16px]">tips_and_updates</span>
+                                                <span>Analisis AI &amp; Anjuran Klinis</span>
+                                            </h4>
+                                            <p className="text-xs text-on-surface leading-relaxed">
+                                                {selectedItem.metadata?.clinical_note || selectedItem.notes}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Modal Body: Standard Health Record */}
+                            {selectedItem.type === 'HEALTH_RECORD' && selectedItem.metric_type !== 'FOOD_LOG' && selectedItem.metric_type !== 'food_log' && (
+                                <div className="space-y-3">
+                                    <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container text-center space-y-1">
+                                        <span className="text-[10px] font-label-mono uppercase text-on-surface-variant">Hasil Pengukuran</span>
+                                        <div className="font-heading font-black text-3xl text-on-surface font-mono">
+                                            {formatItemValue(selectedItem)}
+                                        </div>
+                                    </div>
+                                    {selectedItem.notes && (
+                                        <div className="p-3.5 rounded-2xl bg-surface-container-low text-xs text-on-surface">
+                                            <strong className="text-on-surface-variant block mb-1">Catatan Tambahan:</strong>
+                                            "{selectedItem.notes}"
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Modal Body: Behavior Signal */}
+                            {selectedItem.type === 'BEHAVIOR_SIGNAL' && (
+                                <div className="space-y-3">
+                                    <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold font-label-mono ${formatSeverity(selectedItem.severity).bg}`}>
+                                                {selectedItem.severity_label || formatSeverity(selectedItem.severity).label}
+                                            </span>
+                                            {selectedItem.priority_score && (
+                                                <span className="text-xs font-mono font-bold text-on-surface">
+                                                    Prioritas: {selectedItem.priority_score}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-on-surface leading-relaxed">
+                                            {selectedItem.explanation || 'Terdeteksi deviasi pola kebiasaan terhadap baseline stabilitas.'}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Modal Body: Intervention */}
+                            {selectedItem.type === 'INTERVENTION' && (
+                                <div className="space-y-3">
+                                    <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-2">
+                                        <p className="text-xs text-on-surface leading-relaxed">
+                                            {selectedItem.description}
+                                        </p>
+                                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold font-label-mono ${formatStatus(selectedItem.status).bg}`}>
+                                            Status: {selectedItem.status_label || formatStatus(selectedItem.status).label}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Modal Footer */}
+                            <div className="pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedItem(null)}
+                                    className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold transition-all cursor-pointer"
+                                >
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

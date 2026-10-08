@@ -238,6 +238,11 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('member.dashboard');
     })->name('dashboard');
 
+    // Auto-redirect /scanner to /member/scanner
+    Route::get('/scanner', function () {
+        return redirect()->route('member.scanner');
+    });
+
     // -------------------------------------------------------------
     // MEMBER ROUTES
     // -------------------------------------------------------------
@@ -246,14 +251,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
         Route::post('/onboarding', [OnboardingController::class, 'store']);
 
+        // Member Menu & Profile Hub
+        Route::get('/menu', [\App\Http\Controllers\Member\MenuController::class, 'index'])->name('menu');
+        Route::post('/menu/profile', [\App\Http\Controllers\Member\MenuController::class, 'updateProfile'])->name('menu.profile');
+
         // Member Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Quick Health Log & HBE Trigger
         Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log');
 
-        // Health Timeline Feed
+        // Health Timeline Feed & Detail
         Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline');
+        Route::get('/timeline/{id}', [TimelineController::class, 'show'])->name('timeline.show');
 
         // Instructors Directory & Multi-Instructor Assignment (Max 3, Optional)
         Route::get('/instructors', [MemberInstructorController::class, 'index'])->name('instructors.index');

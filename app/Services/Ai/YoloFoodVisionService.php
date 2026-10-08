@@ -235,13 +235,20 @@ class YoloFoodVisionService
 
         // 2. Try Vision AI if available and imageData provided
         if (!empty($imageData)) {
-            $aiDetected = $this->detectWithGroqVision($imageData, $rawText);
-            if ($aiDetected) {
-                return $this->formatYoloResult($aiDetected, 'YOLO_VISION_NEURAL_AI');
+            // Priority 1: Google Gemini Multimodal Vision (from .env)
+            $geminiDetected = $this->detectWithGeminiVision($imageData, $rawText);
+            if ($geminiDetected) {
+                return $this->formatYoloResult($geminiDetected, 'GEMINI_VISION_NEURAL_AI');
+            }
+
+            // Priority 2: Groq High-Speed Vision
+            $groqDetected = $this->detectWithGroqVision($imageData, $rawText);
+            if ($groqDetected) {
+                return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
             }
         }
 
-        // 3. Fallback to heuristic Food Vision Matching
+        // 3. Fallback to heuristic Food Vision Matching (TKPI knowledge base)
         $detectedClass = $this->matchFoodHeuristic($imageData, $rawText);
         return $this->formatYoloResult($detectedClass, 'YOLO_OBJECT_DETECTION');
     }
@@ -277,6 +284,102 @@ class YoloFoodVisionService
 
         // Default direct food detection sample
         return $this->yoloFoodClasses['nasi_putih_ayam_goreng'];
+    }
+
+    /**
+     * Google Gemini Multimodal Vision detection (Primary AI from .env)
+     */
+    protected function detectWithGeminiVision(string $imageData, ?string $rawText = null): ?array
+    {
+        $apiKey = env('GEMINI_API_KEY');
+        if (empty($apiKey)) {
+            return null;
+        }
+
+        // Parse base64 and mime-type
+        $mimeType = 'image/jpeg';
+        $base64 = $imageData;
+        if (preg_match('/^data:(image\/[a-zA-Z0-9\+\-\.]+);base64,(.*)$/s', $imageData, $matches)) {
+            $mimeType = $matches[1];
+            $base64 = $matches[2];
+        }
+
+        // Clean spaces / newlines in base64
+        $base64 = preg_replace('/\s+/', '', $base64);
+        if (empty($base64) || strlen($base64) < 100) {
+            return null;
+        }
+
+        $models = [
+            env('GEMINI_MODEL_VISION', 'gemini-2.5-flash'),
+            env('GEMINI_MODEL', 'gemini-2.0-flash'),
+            'gemini-1.5-flash',
+            'gemini-3-flash-preview',
+        ];
+
+        $prompt = "Identifikasi makanan, minuman, atau produk nutrisi/farmasi pada gambar ini untuk estimasi kalori dan beban glikemik Indonesia. Format JSON murni tanpa markdown:\n"
+            . "{\n"
+            . "  \"name\": \"Nama Makanan / Produk Lengkap\",\n"
+            . "  \"category\": \"Kategori Makanan / Minuman\",\n"
+            . "  \"portion\": \"1 porsi (misal 200g atau 1 mangkok/piring)\",\n"
+            . "  \"calories\": 350,\n"
+            . "  \"carbs_g\": 42.0,\n"
+            . "  \"sugar_g\": 3.5,\n"
+            . "  \"protein_g\": 18.0,\n"
+            . "  \"fat_g\": 12.0,\n"
+            . "  \"fiber_g\": 3.2,\n"
+            . "  \"sodium_mg\": 380,\n"
+            . "  \"glycemic_index\": 60,\n"
+            . "  \"glycemic_load_score\": 25.2,\n"
+            . "  \"glycemic_load_level\": \"TINGGI / SEDANG / RENDAH\",\n"
+            . "  \"confidence\": 0.96,\n"
+            . "  \"bpom_number\": \"-\",\n"
+            . "  \"warning\": \"Catatan peringatan jika tinggi gula/natrium (opsional)\",\n"
+            . "  \"clinical_note\": \"Analisis klinis respon gula darah postprandial 2 jam dan saran konsumsi ramah metabolik\"\n"
+            . "}\n"
+            . (!empty($rawText) ? "Petunjuk tambahan: " . mb_substr($rawText, 0, 300) : "");
+
+        foreach ($models as $model) {
+            try {
+                $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($apiKey);
+
+                $response = Http::timeout(10)->post($endpoint, [
+                    'contents' => [
+                        [
+                            'role' => 'user',
+                            'parts' => [
+                                ['text' => $prompt],
+                                [
+                                    'inline_data' => [
+                                        'mime_type' => $mimeType,
+                                        'data' => $base64,
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'response_mime_type' => 'application/json',
+                        'temperature' => 0.1,
+                    ]
+                ]);
+
+                if ($response->successful()) {
+                    $text = $response->json('candidates.0.content.parts.0.text');
+                    if ($text) {
+                        $cleanJson = preg_replace('/^```(?:json)?\s*|\s*```$/m', '', trim($text));
+                        $decoded = json_decode($cleanJson, true);
+                        if (is_array($decoded) && !empty($decoded['name'])) {
+                            return $decoded;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Gemini Vision failed on {$model}: " . $e->getMessage());
+            }
+        }
+
+        return null;
     }
 
     /**
