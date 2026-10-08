@@ -93,7 +93,7 @@ export default function AppLayout({ children, title, activeTab }) {
             />
 
             {/* Main Application Shell (Shifted for sidebar on desktop) */}
-            <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
+            <div className="lg:pl-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
                 
                 {/* Top Header Bar - HANYA untuk mobile (< lg). Di desktop (lg), navbar dihapus karena menggunakan sidebar permanen */}
                 <header className="lg:hidden sticky top-0 z-30 h-14 bg-white/90 dark:bg-surface/90 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-4 min-w-0 w-full">
@@ -160,23 +160,23 @@ export default function AppLayout({ children, title, activeTab }) {
                     </div>
                 )}
 
-                {/* Main Content View with mobile bottom bar padding */}
-                <main className="flex-1 w-full pb-24 lg:pb-8">
+                {/* Main Content View */}
+                <main className="flex-1 w-full pb-2 lg:pb-6">
                     {children}
                 </main>
 
-                {/* Footer */}
-                <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <p className="font-medium text-center sm:text-left">
-                            © 2026 AEVYRA - Platform Kesehatan Preventif Berbasis Perilaku & Intervensi Dini.
+                {/* Footer (Compact Mobile-Friendly) */}
+                <footer className="border-t border-surface-container/60 py-2.5 mb-14 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
+                        <p className="font-medium text-[10.5px]">
+                            © 2026 AEVYRA • Platform Kesehatan Preventif
                         </p>
-                        <div className="flex items-center gap-4 text-[11px]">
-                            <span>UU PDP No. 27/2022 Patuh</span>
+                        <div className="flex items-center justify-center gap-2 text-[9.5px] text-on-surface-variant/60">
+                            <span>UU PDP No. 27/2022</span>
                             <span>•</span>
                             <span>Non-Diagnostik</span>
                             <span>•</span>
-                            <span>SPGDT 119 Terhubung</span>
+                            <span>SPGDT 119</span>
                         </div>
                     </div>
                 </footer>
@@ -305,26 +305,25 @@ export default function AppLayout({ children, title, activeTab }) {
                                 <span className="text-[10px] mt-0.5 tracking-tight font-medium">Konsultasi</span>
                             </Link>
 
-                            <button
-                                type="button"
-                                onClick={() => setSidebarOpen(true)}
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all cursor-pointer ${
-                                    sidebarOpen || ['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab)
+                            <Link
+                                href="/member/menu"
+                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
+                                    activeTab === 'menu' || activeTab === 'onboarding' || activeTab === 'profile'
                                         ? 'text-primary font-bold'
                                         : 'text-on-surface-variant hover:text-on-surface'
                                 }`}
-                                aria-label="Buka Menu Lengkap"
+                                aria-label="Menu & Profil Lengkap"
                             >
                                 <div className="relative flex items-center justify-center">
                                     <span className="material-symbols-outlined text-[22px]">
                                         grid_view
                                     </span>
-                                    {['challenges', 'community', 'arcade', 'onboarding'].includes(activeTab) && (
+                                    {(activeTab === 'menu' || activeTab === 'onboarding' || activeTab === 'profile') && (
                                         <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
                                     )}
                                 </div>
                                 <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
-                            </button>
+                            </Link>
                         </>
                     )}
                 </div>

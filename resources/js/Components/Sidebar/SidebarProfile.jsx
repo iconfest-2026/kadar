@@ -1,58 +1,31 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 
-export default function SidebarProfile({ user, isMember, onOpenTierModal }) {
+export default function SidebarProfile({ user, isMember }) {
     if (!user) return null;
 
-    if (isMember) {
-        return (
-            <div className="p-4 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2.5 shrink-0">
-                <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
-                        {user?.name?.charAt(0) || 'M'}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-on-surface truncate">
-                            {user?.name || 'Member Sehat'}
-                        </p>
-                        <p className="text-[10px] text-on-surface-variant truncate">
-                            {user?.email}
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1 border-t border-surface-container/80">
-                    <button
-                        type="button"
-                        onClick={onOpenTierModal}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-all cursor-pointer shrink-0"
-                        title="Lihat Kuota & Tingkatan Member"
-                    >
-                        <span className="material-symbols-outlined text-[13px] text-amber-600">workspace_premium</span>
-                        <span>Gold Member</span>
-                    </button>
-                    <Link
-                        href="/member/onboarding"
-                        className="text-[10px] text-primary font-semibold hover:underline shrink-0"
-                    >
-                        Edit Profil
-                    </Link>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="p-3.5 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2 shrink-0">
-            <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
+        <div className="px-2.5 pt-2 pb-0.5 shrink-0">
+            <Link
+                href={isMember ? '/member/menu' : '/dashboard'}
+                className="flex items-center gap-2 p-1.5 rounded-xl bg-surface-container-low/70 hover:bg-surface-container border border-surface-container/60 transition-colors group"
+                title="Buka Menu & Pengaturan Akun"
+            >
+                <div className="w-7 h-7 rounded-lg bg-linear-to-tr from-primary to-[#005a54] text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
                     {user?.name?.charAt(0) || 'U'}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-on-surface truncate">{user?.name}</p>
-                    <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
+                    <p className="text-[11.5px] font-bold text-on-surface truncate group-hover:text-primary transition-colors">
+                        {user?.name || 'Member'}
+                    </p>
+                    <p className="text-[9.5px] text-on-surface-variant/80 truncate">
+                        {isMember ? 'Lihat Akun & Profil' : user?.email}
+                    </p>
                 </div>
-            </div>
+                <span className="material-symbols-outlined text-[15px] text-on-surface-variant/40 group-hover:text-primary transition-colors shrink-0">
+                    chevron_right
+                </span>
+            </Link>
         </div>
     );
 }

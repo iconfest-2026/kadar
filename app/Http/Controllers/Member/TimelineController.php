@@ -37,6 +37,8 @@ class TimelineController extends Controller
             'body_weight' => 'Berat Badan',
             'calories' => 'Asupan Kalori',
             'glycemic_load' => 'Beban Glikemik (GL)',
+            'FOOD_LOG' => 'Pemindaian Makanan & Nutrisi (AI OCR)',
+            'food_log' => 'Pemindaian Makanan & Nutrisi (AI OCR)',
         ];
 
         $sourceLabels = [
@@ -47,6 +49,7 @@ class TimelineController extends Controller
             'google_fit' => 'Google Health Connect',
             'ocr_scan' => 'Pemindai Kamera Gizi & BPOM',
             'camera_scanner' => 'Pemindai Kamera Gizi & BPOM',
+            'scanner' => 'Pemindai Kamera Gizi & BPOM (AI)',
             'doctor_entry' => 'Entri Dokter Spesialis',
             'ai_estimation' => 'Estimasi AI Preventif',
         ];
@@ -116,26 +119,31 @@ class TimelineController extends Controller
             } elseif ($metricKey === 'mood_score') {
                 $moodDesc = $val >= 4 ? 'Sangat Baik' : ($val == 3 ? 'Cukup' : 'Butuh Perhatian');
                 $formattedValue = "Skor {$val} / 5 ({$moodDesc})";
+            } elseif ($metricKey === 'FOOD_LOG' || $metricKey === 'food_log') {
+                $foodName = $rec->value_text ?: ($rec->metadata['food_name'] ?? 'Makanan / Minuman');
+                $formattedValue = "{$foodName} (" . number_format($val, 0, ',', '.') . ' kkal)';
             } else {
                 $formattedValue = $rec->unit ? "{$val} {$rec->unit}" : (string)$val;
             }
 
             $sourceKey = strtolower((string)$rec->source);
             $sourceLabel = $sourceLabels[$sourceKey] ?? ($sourceKey ? ucwords(str_replace('_', ' ', $sourceKey)) : 'Input Mandiri');
-            $notes = $rec->notes ?? $rec->metadata['notes'] ?? null;
+            $notes = $rec->notes ?? $rec->metadata['notes'] ?? $rec->metadata['clinical_note'] ?? null;
 
             return [
                 'type' => 'HEALTH_RECORD',
                 'id' => $rec->id,
                 'metric_type' => $metricKey,
                 'metric_label' => $humanLabel,
-                'title' => "Catatan {$humanLabel}",
+                'title' => ($metricKey === 'FOOD_LOG' || $metricKey === 'food_log') ? "Log Makanan: " . ($rec->value_text ?: 'Pindai Kamera') : "Catatan {$humanLabel}",
                 'value' => $val,
+                'value_text' => $rec->value_text,
                 'formatted_value' => $formattedValue,
                 'unit' => $rec->unit,
                 'source' => $sourceKey,
                 'source_label' => $sourceLabel,
                 'notes' => $notes,
+                'metadata' => $rec->metadata,
                 'timestamp' => $rec->recorded_at->toIso8601String(),
                 'display_date' => $rec->recorded_at->translatedFormat('d M Y, H:i'),
             ];
@@ -202,6 +210,74 @@ class TimelineController extends Controller
             'timelineItems' => $timelineItems,
             'currentFilter' => $filterMetric,
             'days' => $days,
+        ]);
+    }
+
+    /**
+     * Dedicated Detail View for a Timeline Health Record
+     */
+    public function show(string $id)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $record = HealthRecord::where('user_id', $user->id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $metricKey = (string)$record->metric_type;
+        $val = (float)($record->value_numeric ?? $record->value ?? 0);
+
+        $metricLabels = [
+            'sleep_duration' => 'Durasi Tidur',
+            'water_intake' => 'Asupan Air Minum',
+            'blood_glucose' => 'Gula Darah Puasa',
+            'steps' => 'Langkah Kaki Harian',
+            'mood_score' => 'Kesejahteraan Mental (Mood)',
+            'heart_rate' => 'Denyut Jantung',
+            'blood_pressure_systolic' => 'Tekanan Darah Sistolik',
+            'blood_pressure_diastolic' => 'Tekanan Darah Diastolik',
+            'weight' => 'Berat Badan',
+            'body_weight' => 'Berat Badan',
+            'calories' => 'Asupan Kalori',
+            'glycemic_load' => 'Beban Glikemik (GL)',
+            'FOOD_LOG' => 'Pemindaian Makanan & Nutrisi (AI OCR)',
+            'food_log' => 'Pemindaian Makanan & Nutrisi (AI OCR)',
+        ];
+
+        $sourceLabels = [
+            'manual' => 'Input Mandiri',
+            'device' => 'Sinkronisasi Jam Pintar / Wearable',
+            'wearable' => 'Jam Pintar / Wearable',
+            'apple_health' => 'Apple Health',
+            'google_fit' => 'Google Health Connect',
+            'ocr_scan' => 'Pemindai Kamera Gizi & BPOM',
+            'camera_scanner' => 'Pemindai Kamera Gizi & BPOM',
+            'scanner' => 'Pemindai Kamera Gizi & BPOM (AI)',
+            'doctor_entry' => 'Entri Dokter Spesialis',
+            'ai_estimation' => 'Estimasi AI Preventif',
+        ];
+
+        $sourceKey = strtolower((string)$record->source);
+        $sourceLabel = $sourceLabels[$sourceKey] ?? ($sourceKey ? ucwords(str_replace('_', ' ', $sourceKey)) : 'Input Mandiri');
+
+        return Inertia::render('Member/TimelineDetail', [
+            'record' => [
+                'id' => $record->id,
+                'metric_type' => $metricKey,
+                'metric_label' => $metricLabels[$metricKey] ?? ucwords(str_replace('_', ' ', $metricKey)),
+                'title' => ($metricKey === 'FOOD_LOG' || $metricKey === 'food_log') ? ($record->value_text ?: 'Pindai Makanan') : ($metricLabels[$metricKey] ?? 'Catatan Kesehatan'),
+                'value' => $val,
+                'value_text' => $record->value_text,
+                'unit' => $record->unit,
+                'source' => $sourceKey,
+                'source_label' => $sourceLabel,
+                'notes' => $record->notes ?? $record->metadata['notes'] ?? $record->metadata['clinical_note'] ?? null,
+                'metadata' => $record->metadata,
+                'confidence_score' => $record->confidence_score,
+                'recorded_at' => $record->recorded_at->toIso8601String(),
+                'display_date' => $record->recorded_at->translatedFormat('l, d F Y - H:i'),
+            ],
         ]);
     }
 }

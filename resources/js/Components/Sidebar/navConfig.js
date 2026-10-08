@@ -9,44 +9,27 @@
 export function getMemberNavSections() {
     return [
         {
-            title: 'Metabolisme & Biomarker',
+            title: 'Menu Utama',
             items: [
-                { id: 'dashboard', name: 'Dashboard Baseline', href: '/member/dashboard', icon: 'monitoring', badge: 'HBE' },
-                { id: 'scanner', name: 'Scanner Gizi & BPOM', href: '/member/scanner', icon: 'photo_camera', badge: 'OCR' },
-                { id: 'timeline', name: 'Timeline & Riwayat', href: '/member/timeline', icon: 'history_edu' },
+                { id: 'dashboard', name: 'Dashboard', href: '/member/dashboard', icon: 'monitoring' },
+                { id: 'scanner', name: 'Scanner Gizi (AI)', href: '/member/scanner', icon: 'photo_camera' },
+                { id: 'timeline', name: 'Riwayat & Timeline', href: '/member/timeline', icon: 'history_edu' },
+                { id: 'consultations', name: 'Konsultasi Dokter', href: '/member/consultations-hub', icon: 'support_agent' },
             ],
         },
         {
-            title: 'Telemedisin & Tenaga Medis',
+            title: 'Aktivitas & Komunitas',
             items: [
-                { id: 'consultations', name: 'Pusat Tele-Konsultasi', href: '/member/consultations-hub', icon: 'support_agent' },
-                { id: 'instructors', name: 'Tim Dokter Pendamping', href: '/member/instructors', icon: 'medical_services' },
-                { id: 'ai-consultation', name: 'Chat AI (WhatsApp)', action: 'open_ai_chat', icon: 'chat', badge: 'Online' },
-                { id: 'emergency', name: 'Siaga Ambulans GPS', href: '/demo/emergency', icon: 'emergency', badge: '119' },
-            ],
-        },
-        {
-            title: 'Program & Komunitas',
-            items: [
-                { id: 'challenges', name: 'Tantangan Sehat', href: '/member/challenges', icon: 'emoji_events', badge: '14-90 H' },
+                { id: 'challenges', name: 'Tantangan Sehat', href: '/member/challenges', icon: 'emoji_events' },
                 { id: 'community', name: 'Forum Komunitas', href: '/member/community', icon: 'groups' },
-                { id: 'arcade', name: 'Game Edukasi 2D', href: '/arcade', icon: 'sports_esports' },
-                { id: 'gender-vitality', name: 'Siklus & Vitalitas', href: '/demo/gender-vitality', icon: 'vital_signs', badge: 'AI' },
+                { id: 'ai-consultation', name: 'Chat AI Asisten', action: 'open_ai_chat', icon: 'smart_toy', badge: 'AI' },
             ],
         },
         {
-            title: 'Layanan & Bantuan',
+            title: 'Layanan & Akun',
             items: [
-                { id: 'home', name: 'Beranda Utama Web', href: '/', icon: 'home', badge: 'Web' },
-                { id: 'packages', name: 'Paket Langganan', href: '/paket', icon: 'workspace_premium' },
+                { id: 'menu', name: 'Menu & Akun', href: '/member/menu', icon: 'grid_view' },
                 { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
-            ],
-        },
-        {
-            title: 'Pengaturan & Akun',
-            items: [
-                { id: 'onboarding', name: 'Profil & Gaya Hidup', href: '/member/onboarding', icon: 'tune' },
-                { id: 'tier', name: 'Kelola Paket Member', action: 'tier_modal', icon: 'badge' },
             ],
         },
     ];
