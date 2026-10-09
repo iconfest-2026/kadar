@@ -69,6 +69,20 @@ class ScannerController extends Controller
         // 1. Process Vision & Nutritional AI
         $result = $this->yoloService->analyze($input);
 
+        // Check if not food or unrecognized
+        if (
+            (isset($result['status']) && in_array($result['status'], ['not_food', 'unrecognized', 'error'])) ||
+            (isset($result['is_food']) && $result['is_food'] === false) ||
+            (isset($result['success']) && $result['success'] === false)
+        ) {
+            return response()->json([
+                'status' => 'not_food',
+                'success' => false,
+                'is_food' => false,
+                'message' => $result['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi gizi. Silakan arahkan kamera ke makanan atau label gizi dengan jelas.',
+            ]);
+        }
+
         // 2. Extract food and nutritional parameters
         $resData = $result['result'] ?? $result;
         $productName = $resData['product_name'] ?? $resData['name'] ?? 'Pangan Nutrisi Terdeteksi';

@@ -23,6 +23,8 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
     const [pointsEarned, setPointsEarned] = useState(15);
     const [viewMode, setViewMode] = useState('camera'); // 'camera' | 'result'
     const [showPresets, setShowPresets] = useState(false);
+    const [scanToast, setScanToast] = useState(null); // { type: 'warning'|'error', title: string, message: string }
+    const toastTimerRef = useRef(null);
 
     // Sample Presets for instant fallback / testing
     const samplePresets = [
@@ -218,6 +220,25 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
 
             const data = res.data;
 
+            // KONDISI: Objek tidak terdeteksi sebagai makanan / gizi (Layaknya QRIS E-Wallet)
+            if (data.status === 'not_food' || data.is_food === false || (!data.success && !data.result)) {
+                if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+                setScanToast({
+                    type: 'warning',
+                    title: 'Tidak Terdeteksi',
+                    message: data.message || 'Objek tidak terdeteksi sebagai makanan atau informasi gizi. Silakan arahkan kamera ke makanan atau label gizi dengan jelas.',
+                });
+
+                // Auto dismiss toast setelah 4 detik
+                toastTimerRef.current = setTimeout(() => {
+                    setScanToast(null);
+                }, 4000);
+
+                // Pastikan video camera tetap berjalan lancar tanpa redirect
+                videoRef.current?.play()?.catch(() => {});
+                return;
+            }
+
             setAnalysisStep('Menyimpan otomatis ke database jurnal nutrisi & memvalidasi glukosa...');
 
             if (data.status === 'success' || data.success) {
@@ -241,7 +262,15 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                 alert('Sesi keamanan Anda telah berakhir. Halaman akan dimuat ulang...');
                 window.location.reload();
             } else {
-                alert('Gagal menganalisis citra: ' + errMsg);
+                if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+                setScanToast({
+                    type: 'error',
+                    title: 'Gagal Memproses',
+                    message: errMsg,
+                });
+                toastTimerRef.current = setTimeout(() => {
+                    setScanToast(null);
+                }, 4000);
             }
         } finally {
             setIsAnalyzing(false);
@@ -405,6 +434,44 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                             </button>
                         </div>
                     </div>
+
+                    {/* QRIS / E-WALLET STYLE FLOATING NOTIFICATION TOAST */}
+                    {scanToast && (
+                        <div className="absolute top-20 inset-x-4 z-40 flex justify-center pointer-events-none animate-in fade-in slide-in-from-top-4 duration-300">
+                            <div className={`backdrop-blur-xl text-white rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm pointer-events-auto border ${
+                                scanToast.type === 'error'
+                                    ? 'bg-rose-950/90 border-rose-500/50 shadow-rose-950/50'
+                                    : 'bg-neutral-950/90 border-amber-500/60 shadow-amber-950/50'
+                            }`}>
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                                    scanToast.type === 'error'
+                                        ? 'bg-rose-500/20 text-rose-400'
+                                        : 'bg-amber-500/20 text-amber-400'
+                                }`}>
+                                    <span className="material-symbols-outlined text-[22px]">
+                                        {scanToast.type === 'error' ? 'error' : 'search_off'}
+                                    </span>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className={`text-xs font-bold leading-tight ${
+                                        scanToast.type === 'error' ? 'text-rose-300' : 'text-amber-300'
+                                    }`}>
+                                        {scanToast.title || 'Objek Tidak Terdeteksi'}
+                                    </p>
+                                    <p className="text-[11px] text-gray-200 leading-snug mt-0.5">
+                                        {scanToast.message}
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setScanToast(null)}
+                                    className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors cursor-pointer shrink-0"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">close</span>
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* CENTER VIEWFINDER & TITIK FOKUS */}
                     <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pointer-events-none">
