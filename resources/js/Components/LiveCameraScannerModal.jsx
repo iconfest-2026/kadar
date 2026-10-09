@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { router } from '@inertiajs/react';
+import axios from 'axios';
 
 export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
     const videoRef = useRef(null);
@@ -276,26 +277,33 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         }
 
         try {
-            const csrfToken =
-                document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const getCookie = (name) => {
+                if (typeof document === 'undefined') return null;
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') : '';
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = xsrfToken || metaToken || '';
 
-            const res = await fetch('/member/scanner/analyze', {
-                method: 'POST',
+            const res = await axios.post('/member/scanner/analyze', {
+                scan_mode: scanMode,
+                image_data: dataUrl,
+                ocr_text: extractedText,
+                preset_key: presetKey,
+                sample_key: presetKey,
+            }, {
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
-                body: JSON.stringify({
-                    scan_mode: scanMode,
-                    image_data: dataUrl,
-                    ocr_text: extractedText,
-                    preset_key: presetKey,
-                    sample_key: presetKey,
-                }),
+                withCredentials: true,
             });
 
-            const data = await res.json();
+            const data = res.data;
             if ((data.status === 'success' || data.success) && data.result) {
                 // Ensure detection_mode and detected_objects are preserved
                 const resultPayload = {
@@ -361,25 +369,33 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         setSaving(true);
 
         try {
-            const csrfToken =
-                document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const res = await fetch('/member/scanner/save', {
-                method: 'POST',
+            const getCookie = (name) => {
+                if (typeof document === 'undefined') return null;
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') : '';
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = xsrfToken || metaToken || '';
+
+            const res = await axios.post('/member/scanner/save', {
+                product_name: scanResult.product_name,
+                category: scanResult.category,
+                nutrition: scanResult.nutrition,
+                glycemic_load: scanResult.glycemic_load,
+                notes: scanResult.warning || scanResult.clinical_note,
+            }, {
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
-                body: JSON.stringify({
-                    product_name: scanResult.product_name,
-                    category: scanResult.category,
-                    nutrition: scanResult.nutrition,
-                    glycemic_load: scanResult.glycemic_load,
-                    notes: scanResult.warning || scanResult.clinical_note,
-                }),
+                withCredentials: true,
             });
 
-            const data = await res.json();
+            const data = res.data;
             if (data.status === 'success' || data.success) {
                 setSaveSuccess(true);
                 setTimeout(() => {

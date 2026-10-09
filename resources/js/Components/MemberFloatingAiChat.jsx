@@ -155,16 +155,25 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
         setIsLoading(true);
 
         try {
-            const csrfToken =
-                document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const getCookie = (name) => {
+                if (typeof document === 'undefined') return null;
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') : '';
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = xsrfToken || metaToken || '';
 
             const res = await fetch('/member/ai-chat/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json',
                 },
+                credentials: 'same-origin',
                 body: JSON.stringify({
                     message: query,
                     conversation_id: conversationId,

@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'midtrans/notification',
             'api/midtrans/notification',
+            'member/scanner/analyze',
+            'member/scanner/save',
+            'member/ai-chat/send',
         ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
