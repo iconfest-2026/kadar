@@ -227,7 +227,7 @@ class YoloFoodVisionService
      */
     protected function processYoloPipeline(?string $imageData, ?string $presetKey = null, ?string $rawText = null): array
     {
-        // 1. If preset provided
+        // 1. If preset provided explicitly
         if ($presetKey && isset($this->yoloFoodClasses[$presetKey])) {
             $food = $this->yoloFoodClasses[$presetKey];
             return $this->formatYoloResult($food, 'YOLO_OBJECT_DETECTION');
@@ -238,27 +238,62 @@ class YoloFoodVisionService
             // Priority 1: Google Gemini Multimodal Vision (from .env)
             $geminiDetected = $this->detectWithGeminiVision($imageData, $rawText);
             if ($geminiDetected) {
-                return $this->formatYoloResult($geminiDetected, 'GEMINI_VISION_NEURAL_AI');
+                if (isset($geminiDetected['is_food']) && $geminiDetected['is_food'] === false) {
+                    return [
+                        'status' => 'not_food',
+                        'success' => false,
+                        'is_food' => false,
+                        'message' => $geminiDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
+                    ];
+                }
+                if (!empty($geminiDetected['name'])) {
+                    return $this->formatYoloResult($geminiDetected, 'GEMINI_VISION_NEURAL_AI');
+                }
             }
 
             // Priority 2: Groq High-Speed Vision
             $groqDetected = $this->detectWithGroqVision($imageData, $rawText);
             if ($groqDetected) {
-                return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
+                if (isset($groqDetected['is_food']) && $groqDetected['is_food'] === false) {
+                    return [
+                        'status' => 'not_food',
+                        'success' => false,
+                        'is_food' => false,
+                        'message' => $groqDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
+                    ];
+                }
+                if (!empty($groqDetected['name'])) {
+                    return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
+                }
             }
         }
 
-        // 3. Fallback to heuristic Food Vision Matching (TKPI knowledge base)
-        $detectedClass = $this->matchFoodHeuristic($imageData, $rawText);
-        return $this->formatYoloResult($detectedClass, 'YOLO_OBJECT_DETECTION');
+        // 3. Fallback to heuristic text matching ONLY IF rawText has recognizable keywords
+        if (!empty($rawText)) {
+            $matched = $this->matchFoodFromTextKeywords($rawText);
+            if ($matched) {
+                return $this->formatYoloResult($matched, 'KEYWORD_OCR_DETECTION');
+            }
+        }
+
+        // If not food or no food recognized, DO NOT default to sample! Return not_food.
+        return [
+            'status' => 'not_food',
+            'success' => false,
+            'is_food' => false,
+            'message' => 'Objek tidak terdeteksi sebagai makanan atau informasi gizi. Silakan arahkan kamera ke makanan atau label gizi dengan jelas.',
+        ];
     }
 
     /**
-     * Match food heuristically using image features or keyword tokens.
+     * Match food from text keywords if OCR detected food names.
      */
-    protected function matchFoodHeuristic(?string $imageData, ?string $rawText = null): array
+    protected function matchFoodFromTextKeywords(?string $rawText = null): ?array
     {
         $textLower = strtolower($rawText ?? '');
+        if (empty($textLower)) {
+            return null;
+        }
 
         if (str_contains($textLower, 'salad') || str_contains($textLower, 'sayur')) {
             return $this->yoloFoodClasses['salad_sayur_telur'];
@@ -282,8 +317,7 @@ class YoloFoodVisionService
             return $this->yoloFoodClasses['sate_ayam_lontong'];
         }
 
-        // Default direct food detection sample
-        return $this->yoloFoodClasses['nasi_putih_ayam_goreng'];
+        return null;
     }
 
     /**
@@ -310,18 +344,29 @@ class YoloFoodVisionService
             return null;
         }
 
-        $models = [
-            env('GEMINI_MODEL_VISION', 'gemini-2.5-flash'),
-            env('GEMINI_MODEL', 'gemini-2.0-flash'),
-            'gemini-1.5-flash',
+        $models = array_unique(array_filter([
+            env('GEMINI_MODEL_VISION'),
+            env('GEMINI_MODEL'),
+            'gemini-3.8-flash',
+            'gemini-3.5-flash',
+            'gemini-flash-latest',
             'gemini-3-flash-preview',
-        ];
+        ]));
 
-        $prompt = "Identifikasi makanan, minuman, atau produk nutrisi/farmasi pada gambar ini untuk estimasi kalori dan beban glikemik Indonesia. Format JSON murni tanpa markdown:\n"
+        $prompt = "Tugas: Analisis citra makanan atau label gizi untuk aplikasi kesehatan Indonesia AEVYRA.\n"
+            . "Periksa gambar ini secara seksama:\n"
+            . "1. Apakah gambar ini menampilkan MAKANAN, MINUMAN, BUAH, SAYUR, KEMASAN PANGAN, atau TABEL INFORMASI NILAI GIZI / BPOM?\n"
+            . "2. Jika BUKAN makanan/minuman (misalnya: wajah/orang, ruangan, meja kosong, laptop/gadget, pakaian, kendaraan, hewan bukan hidangan, pemandangan, atau gambar buram/tidak jelas), maka jawab persis format JSON ini:\n"
             . "{\n"
-            . "  \"name\": \"Nama Makanan / Produk Lengkap\",\n"
+            . "  \"is_food\": false,\n"
+            . "  \"message\": \"Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.\"\n"
+            . "}\n\n"
+            . "3. Jika BENAR merupakan makanan, minuman, atau produk pangan/gizi, identifikasi hidangannya secara akurat sesuai yang tampak di gambar (JANGAN MENGARANG ATAU DEFAULT KE NASI JIKA BUKAN NASI), lalu kembalikan JSON murni:\n"
+            . "{\n"
+            . "  \"is_food\": true,\n"
+            . "  \"name\": \"Nama Makanan / Minuman Nyata Sesuai Gambar\",\n"
             . "  \"category\": \"Kategori Makanan / Minuman\",\n"
-            . "  \"portion\": \"1 porsi (misal 200g atau 1 mangkok/piring)\",\n"
+            . "  \"portion\": \"1 porsi (misal 200g atau 1 mangkok/piring/gelas)\",\n"
             . "  \"calories\": 350,\n"
             . "  \"carbs_g\": 42.0,\n"
             . "  \"sugar_g\": 3.5,\n"
@@ -334,8 +379,8 @@ class YoloFoodVisionService
             . "  \"glycemic_load_level\": \"TINGGI / SEDANG / RENDAH\",\n"
             . "  \"confidence\": 0.96,\n"
             . "  \"bpom_number\": \"-\",\n"
-            . "  \"warning\": \"Catatan peringatan jika tinggi gula/natrium (opsional)\",\n"
-            . "  \"clinical_note\": \"Analisis klinis respon gula darah postprandial 2 jam dan saran konsumsi ramah metabolik\"\n"
+            . "  \"warning\": \"Catatan peringatan jika ada (opsional)\",\n"
+            . "  \"clinical_note\": \"Analisis respon gula darah postprandial 2 jam dan saran gizi\"\n"
             . "}\n"
             . (!empty($rawText) ? "Petunjuk tambahan: " . mb_substr($rawText, 0, 300) : "");
 
@@ -369,8 +414,17 @@ class YoloFoodVisionService
                     if ($text) {
                         $cleanJson = preg_replace('/^```(?:json)?\s*|\s*```$/m', '', trim($text));
                         $decoded = json_decode($cleanJson, true);
-                        if (is_array($decoded) && !empty($decoded['name'])) {
-                            return $decoded;
+                        if (is_array($decoded)) {
+                            if (isset($decoded['is_food']) && $decoded['is_food'] === false) {
+                                return [
+                                    'is_food' => false,
+                                    'message' => $decoded['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
+                                ];
+                            }
+                            if (!empty($decoded['name'])) {
+                                $decoded['is_food'] = true;
+                                return $decoded;
+                            }
                         }
                     }
                 }
