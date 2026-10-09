@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
+import axios from 'axios';
 
 export default function Scanner({ tier, profile, recentScans = [] }) {
     const videoRef = useRef(null);
@@ -188,27 +189,34 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         setAnalysisStep('Menghubungkan ke Gemini AI Vision & Model Gizi TKPI...');
 
         try {
-            const csrfToken =
-                document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const getCookie = (name) => {
+                if (typeof document === 'undefined') return null;
+                const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return match ? decodeURIComponent(match[3]) : null;
+            };
+            const metaToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') : '';
+            const xsrfToken = getCookie('XSRF-TOKEN');
+            const csrfToken = xsrfToken || metaToken || '';
 
             setAnalysisStep('Mendeteksi objek makanan, takaran porsi, dan komposisi gizi...');
 
-            const res = await fetch('/member/scanner/analyze', {
-                method: 'POST',
+            const res = await axios.post('/member/scanner/analyze', {
+                scan_mode: 'multi',
+                image_data: dataUrl,
+                preset_key: presetKey,
+                sample_key: presetKey,
+            }, {
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': xsrfToken || csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
-                body: JSON.stringify({
-                    scan_mode: 'multi',
-                    image_data: dataUrl,
-                    preset_key: presetKey,
-                    sample_key: presetKey,
-                }),
+                withCredentials: true,
             });
 
-            const data = await res.json();
+            const data = res.data;
 
             setAnalysisStep('Menyimpan otomatis ke database jurnal nutrisi & memvalidasi glukosa...');
 
@@ -228,7 +236,13 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
             }
         } catch (err) {
             console.error('Scan error:', err);
-            alert('Gagal menganalisis citra: ' + (err.message || 'Silakan coba lagi atau gunakan gambar yang lebih jelas.'));
+            const errMsg = err.response?.data?.message || err.message || 'Silakan coba lagi atau gunakan gambar yang lebih jelas.';
+            if (err.response?.status === 419) {
+                alert('Sesi keamanan Anda telah berakhir. Halaman akan dimuat ulang...');
+                window.location.reload();
+            } else {
+                alert('Gagal menganalisis citra: ' + errMsg);
+            }
         } finally {
             setIsAnalyzing(false);
             setAnalysisStep('');
