@@ -61,7 +61,8 @@ export default function Header() {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const handleLogout = () => {
-        setUserMenuOpen(false);
+        setUserDropdownOpen(false);
+        setMobileMenuOpen(false);
         setIsLogoutModalOpen(true);
     };
 

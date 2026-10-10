@@ -12,8 +12,13 @@ export default function LogoutConfirmModal({
     cancelText = 'Batal',
     userRole,
 }) {
-    const page = usePage();
-    const currentUser = page?.props?.auth?.user;
+    let currentUser = null;
+    try {
+        const page = usePage();
+        currentUser = page?.props?.auth?.user;
+    } catch {
+        currentUser = null;
+    }
     const [mounted, setMounted] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
