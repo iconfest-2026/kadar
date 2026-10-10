@@ -262,6 +262,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log');
 
         // Health Timeline Feed & Detail
+        Route::get('/timeline/feed', [TimelineController::class, 'feed'])->name('timeline.feed');
         Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline');
         Route::get('/timeline/{id}', [TimelineController::class, 'show'])->name('timeline.show');
 

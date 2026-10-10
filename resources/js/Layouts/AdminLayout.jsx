@@ -326,7 +326,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                 </main>
 
                 {/* Footer */}
-                <footer className="mt-auto border-t border-primary/10 py-5 mb-16 lg:mb-0 bg-white/60 text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
+                <footer className="mt-auto border-t border-primary/10 py-5 mb-24 lg:mb-0 bg-white/60 text-xs text-on-surface-variant px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                         <p className="font-medium text-center sm:text-left">
                             © 2026 AEVYRA — Sistem Tata Kelola Kesehatan Preventif & Medis.

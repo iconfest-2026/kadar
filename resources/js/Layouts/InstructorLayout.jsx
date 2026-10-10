@@ -316,7 +316,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 </main>
 
                 {/* Footer */}
-                <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
+                <footer className="border-t border-surface-container py-5 mb-24 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="font-medium text-center sm:text-left">
                             © 2026 AEVYRA — Ruang Bimbingan Klinis & Human-in-the-Loop.

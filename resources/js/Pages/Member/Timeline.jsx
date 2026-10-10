@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 
@@ -185,8 +185,96 @@ const STATUS_CONFIG = {
     RESOLVED: { label: 'Terselesaikan', bg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' },
 };
 
-export default function Timeline({ timelineItems = [], currentFilter, days = 30 }) {
+export default function Timeline({
+    timelineItems = [],
+    hasMoreInitial = false,
+    nextPageInitial = null,
+    totalItems = 0,
+    currentFilter,
+    days = 30,
+}) {
+    const [items, setItems] = useState(timelineItems);
+    const [hasMore, setHasMore] = useState(hasMoreInitial);
+    const [nextPage, setNextPage] = useState(nextPageInitial);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [loadError, setLoadError] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
+    const observerTarget = useRef(null);
+
+    // Sync state when props change (e.g. navigation / filter change)
+    useEffect(() => {
+        setItems(timelineItems);
+        setHasMore(hasMoreInitial);
+        setNextPage(nextPageInitial);
+        setIsLoadingMore(false);
+        setLoadError(null);
+    }, [timelineItems, hasMoreInitial, nextPageInitial, currentFilter]);
+
+    // Asynchronous loader for next batch like X (Twitter)
+    const loadMore = useCallback(async () => {
+        if (isLoadingMore || !hasMore || !nextPage) return;
+
+        setIsLoadingMore(true);
+        setLoadError(null);
+
+        try {
+            const params = new URLSearchParams();
+            if (currentFilter) params.append('metric', currentFilter);
+            if (days) params.append('days', days);
+            params.append('page', nextPage);
+            params.append('feed', '1');
+
+            const res = await fetch(`/member/timeline/feed?${params.toString()}`, {
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (!res.ok) throw new Error('Gagal memuat aktivitas');
+
+            const data = await res.json();
+            const newItems = data.items || [];
+
+            setItems((prev) => {
+                const existingKeys = new Set(prev.map((i) => `${i.type}-${i.id}`));
+                const filteredNew = newItems.filter((i) => !existingKeys.has(`${i.type}-${i.id}`));
+                return [...prev, ...filteredNew];
+            });
+
+            setHasMore(Boolean(data.has_more));
+            setNextPage(data.next_page || null);
+        } catch (err) {
+            console.error('Failed to load more timeline items:', err);
+            setLoadError('Gagal memuat aktivitas berikutnya. Silakan coba lagi.');
+        } finally {
+            setIsLoadingMore(false);
+        }
+    }, [isLoadingMore, hasMore, nextPage, currentFilter, days]);
+
+    // IntersectionObserver for auto-triggering infinite scroll before reaching the bottom
+    useEffect(() => {
+        if (!hasMore || isLoadingMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    loadMore();
+                }
+            },
+            { threshold: 0.1, rootMargin: '300px' }
+        );
+
+        const target = observerTarget.current;
+        if (target) {
+            observer.observe(target);
+        }
+
+        return () => {
+            if (target) {
+                observer.unobserve(target);
+            }
+        };
+    }, [hasMore, isLoadingMore, loadMore]);
 
     const getBadge = (type) => {
         switch (type) {
@@ -294,7 +382,7 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
                                 : 'bg-surface-container text-on-surface-variant hover:text-on-surface'
                         }`}
                     >
-                        Semua ({timelineItems.length})
+                        Semua ({totalItems > 0 ? totalItems : items.length})
                     </Link>
                     <Link
                         href="/member/timeline?metric=FOOD_LOG"
@@ -355,8 +443,8 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
 
                 {/* Mobile-Style Simple Card List */}
                 <div className="space-y-2.5">
-                    {timelineItems && timelineItems.length > 0 ? (
-                        timelineItems.map((item, idx) => {
+                    {items && items.length > 0 ? (
+                        items.map((item, idx) => {
                             const isFood = item.metric_type === 'FOOD_LOG' || item.metric_type === 'food_log';
                             const title = formatReadableTitle(item);
                             const valText = formatItemValue(item);
@@ -409,7 +497,7 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
                                     {/* Right: Value & Chevron Arrow */}
                                     <div className="flex items-center gap-2.5 shrink-0">
                                         {item.type === 'HEALTH_RECORD' && (
-                                            <div className="text-right">
+                                             <div className="text-right">
                                                 <span className="font-mono font-bold text-sm text-on-surface block">
                                                     {valText}
                                                 </span>
@@ -442,7 +530,7 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
 
                             return detailHref ? (
                                 <Link
-                                    key={idx}
+                                    key={`${item.type}-${item.id}-${idx}`}
                                     href={detailHref}
                                     className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-surface border border-surface-container hover:border-primary/50 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between gap-3 group active:scale-[0.99] block"
                                 >
@@ -450,7 +538,7 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
                                 </Link>
                             ) : (
                                 <div
-                                    key={idx}
+                                    key={`${item.type}-${item.id}-${idx}`}
                                     onClick={() => setSelectedItem(item)}
                                     className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-surface border border-surface-container hover:border-primary/50 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between gap-3 group active:scale-[0.99]"
                                 >
@@ -473,6 +561,49 @@ export default function Timeline({ timelineItems = [], currentFilter, days = 30 
                         </div>
                     )}
                 </div>
+
+                {/* Infinite Scroll Sentinel & Loading States (Like X / Twitter) */}
+                <div ref={observerTarget} className="w-full">
+                    {isLoadingMore && (
+                        <div className="py-6 flex flex-col items-center justify-center gap-2 text-on-surface-variant">
+                            <div className="w-6 h-6 border-2 border-primary/25 border-t-primary rounded-full animate-spin" />
+                            <span className="text-[11px] font-label-mono text-on-surface-variant font-medium">
+                                Memuat aktivitas lainnya...
+                            </span>
+                        </div>
+                    )}
+
+                    {loadError && (
+                        <div className="py-4 text-center space-y-2">
+                            <p className="text-xs text-rose-500 font-medium">{loadError}</p>
+                            <button
+                                type="button"
+                                onClick={loadMore}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-colors cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[15px]">refresh</span>
+                                <span>Muat Ulang</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* End of Feed indicator (Like X: "You're all caught up") */}
+                {!hasMore && items.length > 0 && (
+                    <div className="py-8 text-center border-t border-surface-container/60 mt-4 space-y-2">
+                        <div className="w-9 h-9 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center shadow-2xs">
+                            <span className="material-symbols-outlined text-[20px]">check</span>
+                        </div>
+                        <div>
+                            <h4 className="text-xs font-bold text-on-surface">
+                                Semua Aktivitas Telah Dimuat
+                            </h4>
+                            <p className="text-[11px] text-on-surface-variant mt-0.5">
+                                Menampilkan total {items.length} riwayat dalam {days} hari terakhir
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* ========================================================================= */}
                 {/* DETAIL MODAL / BOTTOM SHEET (POP-UP SAAT CARD DI-KLIK)                    */}

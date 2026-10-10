@@ -161,12 +161,12 @@ export default function AppLayout({ children, title, activeTab }) {
                 )}
 
                 {/* Main Content View */}
-                <main className="flex-1 w-full pb-2 lg:pb-6">
+                <main className="flex-1 w-full pb-4 lg:pb-6">
                     {children}
                 </main>
 
-                {/* Footer (Compact Mobile-Friendly) */}
-                <footer className="border-t border-surface-container/60 py-2.5 mb-14 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
+                {/* Footer (Compact Mobile-Friendly with clearance for fixed bottom nav) */}
+                <footer className="border-t border-surface-container/60 py-3.5 mb-24 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
                         <p className="font-medium text-[10.5px]">
                             © 2026 AEVYRA • Platform Kesehatan Preventif
