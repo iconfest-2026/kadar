@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
+import Table from '@/Components/UI/Table';
 
 const SIGNAL_MAP = {
     SLEEP_DEFICIT: 'Defisit Durasi Tidur',
@@ -26,6 +27,75 @@ const SEVERITY_MAP = {
 };
 
 export default function Dashboard({ assignedMembers = [], pendingSignals = [], upcomingConsultations = [], stats = {} }) {
+
+    const signalColumns = [
+        {
+            key: 'member',
+            label: 'Member Binaan',
+            render: (_, signal) => (
+                <span className="font-bold text-on-surface">
+                    {signal.user?.name || signal.member_name || 'Member Binaan'}
+                </span>
+            ),
+        },
+        {
+            key: 'severity',
+            label: 'Tingkat Urgensi',
+            render: (_, signal) => {
+                const isAttention = signal.severity === 'ATTENTION';
+                const isNotice = signal.severity === 'NOTICE' || signal.severity === 'FOLLOW_UP';
+                return (
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold ${
+                        isAttention 
+                        ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20' 
+                        : isNotice 
+                        ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20' 
+                        : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+                    }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                            isAttention ? 'bg-rose-500' : isNotice ? 'bg-amber-500' : 'bg-emerald-500'
+                        }`} />
+                        <span>{SEVERITY_MAP[signal.severity] || signal.severity}</span>
+                    </span>
+                );
+            },
+        },
+        {
+            key: 'metric',
+            label: 'Metrik Terdampak',
+            render: (_, signal) => (
+                <span className="font-semibold text-primary text-xs">
+                    {SIGNAL_MAP[signal.metric || signal.signal_type] || (signal.metric || signal.signal_type ? (signal.metric || signal.signal_type).replace(/_/g, ' ') : 'Pola Tidur / Glukosa')}
+                </span>
+            ),
+        },
+        {
+            key: 'detected_at',
+            label: 'Waktu Deteksi',
+            render: (_, signal) => (
+                <span className="text-on-surface-variant font-mono">
+                    {signal.detected_at || 'Baru Saja'}
+                </span>
+            ),
+        },
+        {
+            key: 'actions',
+            label: 'Tindakan Klinis',
+            className: 'text-right',
+            render: (_, signal) => (
+                <div className="flex justify-end">
+                    <Link
+                        href={`/instructor/members/${signal.user_id || signal.member_id || 1}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-white hover:bg-primary-container text-xs font-bold rounded-xl shadow-2xs transition-all cursor-pointer"
+                    >
+                        <span>Tinjau Konteks</span>
+                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                    </Link>
+                </div>
+            ),
+        },
+    ];
+
     return (
         <InstructorLayout activeNav="dashboard" title="Dashboard Pendampingan">
             <Head title="Instruktur Dashboard - AEVYRA" />
@@ -116,74 +186,15 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                         </span>
                     </div>
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left text-xs">
-                            <thead className="bg-surface-container-low text-on-surface-variant font-semibold border-b border-surface-container font-label-mono text-[11px]">
-                                <tr>
-                                    <th className="py-3 px-6">Member Binaan</th>
-                                    <th className="py-3 px-6">Tingkat Urgensi</th>
-                                    <th className="py-3 px-6">Metrik Terdampak</th>
-                                    <th className="py-3 px-6">Waktu Deteksi</th>
-                                    <th className="py-3 px-6 text-right">Tindakan Klinis</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-surface-container">
-                                {pendingSignals.map((signal) => {
-                                    const isAttention = signal.severity === 'ATTENTION';
-                                    const isNotice = signal.severity === 'NOTICE' || signal.severity === 'FOLLOW_UP';
-
-                                    return (
-                                        <tr key={signal.id} className="hover:bg-surface-container-low/60 transition-colors">
-                                            <td className="py-3.5 px-6 font-bold text-on-surface">
-                                                {signal.user?.name || signal.member_name || 'Member Binaan'}
-                                            </td>
-                                            <td className="py-3.5 px-6">
-                                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold ${
-                                                    isAttention 
-                                                    ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20' 
-                                                    : isNotice 
-                                                    ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20' 
-                                                    : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
-                                                }`}>
-                                                    <span className={`w-1.5 h-1.5 rounded-full ${
-                                                        isAttention ? 'bg-rose-500' : isNotice ? 'bg-amber-500' : 'bg-emerald-500'
-                                                    }`} />
-                                                    <span>{SEVERITY_MAP[signal.severity] || signal.severity}</span>
-                                                </span>
-                                            </td>
-                                            <td className="py-3.5 px-6 font-semibold text-primary text-xs">
-                                                {SIGNAL_MAP[signal.metric || signal.signal_type] || (signal.metric || signal.signal_type ? (signal.metric || signal.signal_type).replace(/_/g, ' ') : 'Pola Tidur / Glukosa')}
-                                            </td>
-                                            <td className="py-3.5 px-6 text-on-surface-variant font-mono">
-                                                {signal.detected_at || 'Baru Saja'}
-                                            </td>
-                                            <td className="py-3.5 px-6 text-right">
-                                                <Link
-                                                    href={`/instructor/members/${signal.user_id || signal.member_id || 1}`}
-                                                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-white hover:bg-primary-container text-xs font-bold rounded-xl shadow-2xs transition-all cursor-pointer"
-                                                >
-                                                    <span>Tinjau Konteks</span>
-                                                    <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-
-                                {pendingSignals.length === 0 && (
-                                    <tr>
-                                        <td colSpan="5" className="py-10 text-center text-on-surface-variant">
-                                            <div className="flex flex-col items-center justify-center space-y-1.5">
-                                                <span className="material-symbols-outlined text-4xl text-emerald-600">verified</span>
-                                                <p className="text-xs font-semibold text-on-surface">Semua sinyal binaan dalam kondisi stabil.</p>
-                                                <p className="text-[11px] text-on-surface-variant">Tidak ada deviasi kritis yang memerlukan triase darurat.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                    <Table
+                        columns={signalColumns}
+                        data={pendingSignals}
+                        searchable={true}
+                        searchPlaceholder="Cari sinyal atau member binaan..."
+                        pageSize={5}
+                        emptyMessage="Semua sinyal binaan dalam kondisi stabil. Tidak ada deviasi kritis yang memerlukan triase darurat."
+                        emptyIcon="verified"
+                    />
                 </div>
 
                 {/* Bottom 2-Column Section */}

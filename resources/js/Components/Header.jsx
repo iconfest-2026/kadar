@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
+import LogoutConfirmModal from './LogoutConfirmModal';
 
 export default function Header() {
     let authUser = null;
@@ -57,9 +58,11 @@ export default function Header() {
 
     const clinicalRef = useRef(null);
     const userDropdownRef = useRef(null);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setUserMenuOpen(false);
+        setIsLogoutModalOpen(true);
     };
 
     // Core Features List with Direct Links for Quick Testing/Checking
@@ -764,6 +767,13 @@ export default function Header() {
                     </>
                 )}
             </header>
+
+            {/* Confirmation Alert / Modal for Logout */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole={roleBadge}
+            />
         </>
     );
 }

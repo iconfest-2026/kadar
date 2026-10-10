@@ -289,6 +289,7 @@ export default function Users({
                     data={users}
                     emptyMessage="Tidak ada pengguna yang cocok dengan kriteria pencarian."
                     emptyIcon="person_search"
+                    searchable={false}
                 />
 
                 {/* Create User Modal */}

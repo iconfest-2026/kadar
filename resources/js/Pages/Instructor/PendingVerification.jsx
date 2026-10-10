@@ -1,13 +1,14 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { Button, Alert, Badge } from '@/Components/UI';
+import { Button, Alert, Badge, LogoutConfirmModal } from '@/Components/UI';
 
 export default function PendingVerification({ status = 'PENDING_VERIFICATION', profile }) {
     const isSuspended = status === 'SUSPENDED';
     const isRejected = status === 'REJECTED' || Boolean(profile?.rejection_reason);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setIsLogoutModalOpen(true);
     };
 
     return (
@@ -134,6 +135,13 @@ export default function PendingVerification({ status = 'PENDING_VERIFICATION', p
                     </Button>
                 </div>
             </div>
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole="Instruktur"
+            />
         </div>
     );
 }

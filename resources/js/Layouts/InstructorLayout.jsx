@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
+import LogoutConfirmModal from '../Components/LogoutConfirmModal';
 
 export default function InstructorLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -8,9 +9,11 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setUserMenuOpen(false);
+        setIsLogoutModalOpen(true);
     };
 
     const navSections = [
@@ -88,20 +91,15 @@ export default function InstructorLayout({ children, title, activeNav }) {
             >
                 {/* Brand Header */}
                 <div className="h-16 flex items-center justify-between px-5 border-b border-surface-container shrink-0">
-                    <Link href="/instructor/dashboard" className="flex items-center gap-2.5 group min-w-0">
+                    <Link href="/instructor/dashboard" className="flex items-center gap-2 group min-w-0">
                         <img
-                            src="/image/Logo_AEVYRA_Icon.png"
-                            alt="AEVYRA Logo"
-                            className="w-8 h-8 rounded-xl object-contain shadow-2xs group-hover:scale-105 transition-transform shrink-0"
+                            src="/image/Logo_EVYRA_Horizontal.png"
+                            alt="AEVYRA Healthcare"
+                            className="h-7 sm:h-7.5 w-auto object-contain shrink-0 group-hover:opacity-90 transition-opacity"
                         />
-                        <div className="min-w-0">
-                            <div className="flex items-center gap-1.5">
-                                <span className="font-heading font-black text-lg text-primary tracking-tight">EVYRA</span>
-                                <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
-                                    INSTRUKTUR
-                                </span>
-                            </div>
-                        </div>
+                        <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
+                            INSTRUKTUR
+                        </span>
                     </Link>
 
                     <button 
@@ -415,6 +413,13 @@ export default function InstructorLayout({ children, title, activeNav }) {
                     </button>
                 </div>
             </nav>
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole="Instruktur"
+            />
         </div>
     );
 }

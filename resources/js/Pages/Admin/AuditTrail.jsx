@@ -157,6 +157,7 @@ export default function AuditTrail({ auditLogs = { data: [], links: [] }, filter
                     data={auditLogs}
                     emptyMessage="Tidak ada rekaman audit log yang cocok."
                     emptyIcon="policy"
+                    searchable={false}
                 />
 
                 {/* Payload Inspection Modal */}

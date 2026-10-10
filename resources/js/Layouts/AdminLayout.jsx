@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import AdminBadge from '../Components/Admin/AdminBadge';
+import LogoutConfirmModal from '../Components/LogoutConfirmModal';
 
 export default function AdminLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -9,6 +10,7 @@ export default function AdminLayout({ children, title, activeNav }) {
 
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const navRef = useRef(null);
 
     // Restore sidebar scroll position across page transitions
@@ -24,7 +26,8 @@ export default function AdminLayout({ children, title, activeNav }) {
     };
 
     const handleLogout = () => {
-        router.post('/logout');
+        setUserMenuOpen(false);
+        setIsLogoutModalOpen(true);
     };
 
     const navSections = [
@@ -95,22 +98,16 @@ export default function AdminLayout({ children, title, activeNav }) {
                 }`}
             >
                 {/* Brand Header */}
-                <div className="h-20 flex items-center justify-between px-6 border-b border-primary/10 shrink-0 bg-white/60">
-                    <Link href="/admin/dashboard" className="flex items-center gap-3 group min-w-0">
+                <div className="h-20 flex items-center justify-between px-5 border-b border-primary/10 shrink-0 bg-white/60">
+                    <Link href="/admin/dashboard" className="flex items-center gap-2.5 group min-w-0">
                         <img
-                            src="/image/Logo_AEVYRA_Icon.png"
-                            alt="AEVYRA Logo"
-                            className="w-10 h-10 rounded-2xl object-contain shadow-xs group-hover:scale-105 transition-transform shrink-0"
+                            src="/image/Logo_EVYRA_Horizontal.png"
+                            alt="AEVYRA Healthcare"
+                            className="h-8 w-auto object-contain shrink-0 group-hover:opacity-90 transition-opacity"
                         />
-                        <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                                <span className="font-heading font-black text-xl tracking-tight text-primary">EVYRA</span>
-                                <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-primary/10 text-primary border border-primary/15 shrink-0">
-                                    ADMIN
-                                </span>
-                            </div>
-                            <p className="text-[11px] text-on-surface-variant font-medium truncate">Tata Kelola & 11 Modul</p>
-                        </div>
+                        <span className="px-2 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded-full bg-primary/10 text-primary border border-primary/15 shrink-0">
+                            ADMIN
+                        </span>
                     </Link>
                     <button 
                         className="lg:hidden p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors shrink-0"
@@ -420,6 +417,13 @@ export default function AdminLayout({ children, title, activeNav }) {
                     </button>
                 </div>
             </nav>
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole="Administrator"
+            />
         </div>
     );
 }

@@ -6,6 +6,7 @@ import LiveCameraScannerModal from '../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../Components/MembershipTierModal';
 import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 import AppSidebar from '../Components/Sidebar/AppSidebar';
+import LogoutConfirmModal from '../Components/LogoutConfirmModal';
 
 export default function AppLayout({ children, title, activeTab }) {
 
@@ -43,11 +44,17 @@ export default function AppLayout({ children, title, activeTab }) {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     useEffect(() => {
         const handleOpenAiChat = () => setIsAiChatOpen(true);
+        const handleOpenLogout = () => setIsLogoutModalOpen(true);
         window.addEventListener('open-ai-chat', handleOpenAiChat);
-        return () => window.removeEventListener('open-ai-chat', handleOpenAiChat);
+        window.addEventListener('open-logout-modal', handleOpenLogout);
+        return () => {
+            window.removeEventListener('open-ai-chat', handleOpenAiChat);
+            window.removeEventListener('open-logout-modal', handleOpenLogout);
+        };
     }, []);
 
     useEffect(() => {
@@ -57,7 +64,7 @@ export default function AppLayout({ children, title, activeTab }) {
     }, [pageUrl]);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setIsLogoutModalOpen(true);
     };
 
     return (
@@ -362,6 +369,13 @@ export default function AppLayout({ children, title, activeTab }) {
                     onClose={() => setIsAiChatOpen(false)}
                 />
             )}
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole={isMember ? 'Member' : (isInstructor ? 'Instruktur' : (isAdmin ? 'Admin' : undefined))}
+            />
         </div>
     );
 }

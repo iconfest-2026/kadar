@@ -242,6 +242,7 @@ export default function Community({
                     data={dataTableSource}
                     emptyMessage="Tidak ada topik forum diskusi yang ditemukan."
                     emptyIcon="forum"
+                    searchable={false}
                 />
 
                 {/* Create Official Announcement Modal */}

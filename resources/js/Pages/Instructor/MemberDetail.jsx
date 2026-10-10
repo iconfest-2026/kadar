@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
+import Table from '@/Components/UI/Table';
 
 const METRIC_LABELS = {
     sleep_duration: 'Durasi Tidur',
@@ -58,7 +59,7 @@ const INTERVENTION_TYPE_LABELS = {
 };
 
 export default function MemberDetail({
-    member,
+    member = {},
     baselines = [],
     recentRecords = [],
     signals = [],
@@ -68,6 +69,60 @@ export default function MemberDetail({
     const [activeTab, setActiveTab] = useState('overview');
     const [showInterventionModal, setShowInterventionModal] = useState(false);
     const [showConsultationModal, setShowConsultationModal] = useState(false);
+
+    const recordColumns = [
+        {
+            key: 'recorded_at',
+            label: 'Waktu Pencatatan',
+            render: (r) => (
+                <span className="font-mono text-on-surface-variant text-[11px]">
+                    {r.recorded_at ? new Date(r.recorded_at).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) : '-'}
+                </span>
+            )
+        },
+        {
+            key: 'metric_type',
+            label: 'Jenis Metrik',
+            render: (r) => (
+                <span className="font-bold text-primary">
+                    {METRIC_LABELS[r.metric_type] || (r.metric_type ? String(r.metric_type).replace(/_/g, ' ') : '-')}
+                </span>
+            )
+        },
+        {
+            key: 'value',
+            label: 'Nilai Kuantitatif',
+            render: (r) => (
+                <span className="font-mono font-bold text-on-surface">
+                    {r.value !== undefined && r.value !== null ? `${r.value} ${r.unit || ''}` : '-'}
+                </span>
+            )
+        },
+        {
+            key: 'context',
+            label: 'Konteks / Catatan Tambahan',
+            render: (r) => (
+                <span className="text-on-surface-variant max-w-xs truncate block">
+                    {r.context || r.notes || '-'}
+                </span>
+            )
+        },
+        {
+            key: 'data_quality_score',
+            label: 'Integritas DQS',
+            render: (r) => (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                    {r.data_quality_score ? `${r.data_quality_score}%` : 'TERVERIFIKASI'}
+                </span>
+            )
+        }
+    ];
 
     // Intervention Form
     const interventionForm = useForm({
@@ -298,55 +353,15 @@ export default function MemberDetail({
                                 </span>
                             </div>
 
-                            <div className="overflow-x-auto max-h-96 overflow-y-auto">
-                                <table className="w-full text-left text-xs">
-                                    <thead className="bg-surface-container-low text-on-surface-variant font-semibold border-b border-surface-container font-label-mono text-[11px] sticky top-0">
-                                        <tr>
-                                            <th className="py-3 px-5">Waktu Pencatatan</th>
-                                            <th className="py-3 px-5">Jenis Metrik</th>
-                                            <th className="py-3 px-5">Nilai Kuantitatif</th>
-                                            <th className="py-3 px-5">Konteks / Catatan Tambahan</th>
-                                            <th className="py-3 px-5">Integritas DQS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-surface-container">
-                                        {recentRecords.map((r) => (
-                                            <tr key={r.id} className="hover:bg-surface-container-low/60 transition-colors">
-                                                <td className="py-3 px-5 font-mono text-on-surface-variant text-[11px]">
-                                                    {r.recorded_at ? new Date(r.recorded_at).toLocaleDateString('id-ID', {
-                                                        day: 'numeric',
-                                                        month: 'short',
-                                                        year: 'numeric',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    }) : '-'}
-                                                </td>
-                                                <td className="py-3 px-5 font-bold text-primary">
-                                                    {METRIC_LABELS[r.metric_type] || (r.metric_type ? r.metric_type.replace(/_/g, ' ') : '-')}
-                                                </td>
-                                                <td className="py-3 px-5 font-mono font-bold text-on-surface">
-                                                    {r.value} {r.unit || ''}
-                                                </td>
-                                                <td className="py-3 px-5 text-on-surface-variant max-w-xs truncate">
-                                                    {r.context || r.notes || '-'}
-                                                </td>
-                                                <td className="py-3 px-5">
-                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
-                                                        {r.data_quality_score ? `${r.data_quality_score}%` : 'TERVERIFIKASI'}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        {recentRecords.length === 0 && (
-                                            <tr>
-                                                <td colSpan={5} className="py-8 text-center text-on-surface-variant text-xs">
-                                                    Belum ada catatan biomarker terkini untuk member ini.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <Table
+                                columns={recordColumns}
+                                data={recentRecords}
+                                searchable={true}
+                                searchPlaceholder="Cari catatan biometrik..."
+                                pageSize={10}
+                                emptyMessage="Belum ada catatan biomarker terkini untuk member ini."
+                                emptyIcon="history"
+                            />
                         </div>
                     </div>
                 )}

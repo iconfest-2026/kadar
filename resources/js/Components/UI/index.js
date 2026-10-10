@@ -15,4 +15,5 @@ export { default as Table, default as AdminDataTable } from './Table';
 export { default as DropdownAction, default as DropdownActions } from './DropdownAction';
 export { default as AdminDeleteConfirmModal, default as DeleteConfirmModal } from '../Admin/AdminDeleteConfirmModal';
 export { default as AdminBadge } from '../Admin/AdminBadge';
+export { default as LogoutConfirmModal } from '../LogoutConfirmModal';
 
