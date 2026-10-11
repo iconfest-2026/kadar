@@ -6,6 +6,7 @@ import LiveCameraScannerModal from '../../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../../Components/MembershipTierModal';
 import MenstrualTrackerCard from '../../Components/MenstrualTrackerCard';
 import MaleVitalityCard from '../../Components/MaleVitalityCard';
+import DashboardNotificationFeed from '../../Components/DashboardNotificationFeed';
 
 export default function Dashboard({
     user,
@@ -113,6 +114,9 @@ export default function Dashboard({
                         <span className="text-[11px] font-bold text-on-surface truncate w-full">Dokter</span>
                     </Link>
                 </div>
+
+                {/* Notifications & Actionable Reminders Feed */}
+                <DashboardNotificationFeed role="member" maxItems={3} />
 
                 {/* 3. Biomarkers Vitals 4-Grid (Data Inti Kesehatan) */}
                 <div className="space-y-2">

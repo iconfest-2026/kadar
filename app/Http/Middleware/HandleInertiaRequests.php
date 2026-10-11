@@ -79,6 +79,18 @@ class HandleInertiaRequests extends Middleware
                     'active_tiers' => $activeTiers,
                 ];
             },
+            'notifications' => function () use ($user) {
+                if (!$user) {
+                    return [
+                        'unread_count' => 0,
+                        'recent' => [],
+                    ];
+                }
+                return [
+                    'unread_count' => \App\Models\Notification::where('user_id', $user->id)->whereNull('read_at')->count(),
+                    'recent' => \App\Models\Notification::where('user_id', $user->id)->latest()->take(8)->get(),
+                ];
+            },
             'midtrans' => [
                 'client_key' => config('services.midtrans.client_key', env('MIDTRANS_CLIENT_KEY', 'Mid-client-o8FP06N-oie4kS_V')),
                 'snap_url' => config('services.midtrans.snap_url', 'https://app.sandbox.midtrans.com/snap/snap.js'),

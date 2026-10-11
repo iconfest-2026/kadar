@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             MembershipTierSeeder::class,
             ChallengeAndAchievementSeeder::class,
             DemoUserSeeder::class,
+            NotificationSeeder::class,
         ]);
     }
 }

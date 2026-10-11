@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import LogoutConfirmModal from '../Components/LogoutConfirmModal';
+import NotificationDropdown from '../Components/NotificationDropdown';
 
 export default function InstructorLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -233,6 +234,9 @@ export default function InstructorLayout({ children, title, activeNav }) {
                             <span className="text-[11px] font-medium text-on-surface-variant">Kredensial STR:</span>
                             {renderStatusBadge(userStatus)}
                         </div>
+
+                        {/* Notification Bell Dropdown */}
+                        <NotificationDropdown align="right" />
 
                         {/* User Dropdown */}
                         <div className="relative shrink-0">

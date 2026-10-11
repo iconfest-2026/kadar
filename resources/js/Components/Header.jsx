@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import LogoutConfirmModal from './LogoutConfirmModal';
+import NotificationDropdown from './NotificationDropdown';
 
 export default function Header() {
     let authUser = null;
@@ -299,6 +300,9 @@ export default function Header() {
                                     </span>
                                     <span>{dashboardLabel}</span>
                                 </Link>
+
+                                {/* Notifications Dropdown */}
+                                <NotificationDropdown align="right" />
 
                                 {/* Desktop User Dropdown (lg+ screens) */}
                                 <div className="hidden lg:block relative" ref={userDropdownRef}>

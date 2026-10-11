@@ -182,6 +182,26 @@ class User extends Authenticatable
         return $this->hasMany(Consent::class);
     }
 
+    public function communityPosts(): HasMany
+    {
+        return $this->hasMany(CommunityPost::class);
+    }
+
+    public function communityComments(): HasMany
+    {
+        return $this->hasMany(CommunityComment::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    public function unreadNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->whereNull('read_at')->latest();
+    }
+
     /**
      * Active assignments from this member to their chosen instructors
      */
