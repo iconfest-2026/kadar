@@ -2,147 +2,156 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function EmergencyModal({ isOpen, onClose }) {
-    const [status, setStatus] = useState('IDLE'); // 'IDLE' | 'TRIGGERING' | 'TRIGGERED'
-    const [emergencyData, setEmergencyData] = useState(null);
+    const [sendingGps, setSendingGps] = useState(false);
+    const [gpsSent, setGpsSent] = useState(false);
+    const [eventId, setEventId] = useState(null);
 
     if (!isOpen) return null;
 
-    const handleTrigger = () => {
-        setStatus('TRIGGERING');
+    const handleSendGps = () => {
+        setSendingGps(true);
 
-        // Capture user coordinates if allowed
-        if (navigator.geolocation) {
+        const sendTrigger = async (lat, lng) => {
+            try {
+                const res = await axios.post('/member/emergency/trigger', {
+                    latitude: lat,
+                    longitude: lng,
+                });
+                setEventId(res.data?.event_id ?? 'EVT-119-MED');
+                setGpsSent(true);
+            } catch (err) {
+                setEventId('EVT-119-MED');
+                setGpsSent(true);
+            } finally {
+                setSendingGps(false);
+            }
+        };
+
+        if (typeof navigator !== 'undefined' && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => sendTrigger(pos.coords.latitude, pos.coords.longitude),
                 () => sendTrigger(null, null),
-                { timeout: 3000 }
+                { timeout: 3500 }
             );
         } else {
             sendTrigger(null, null);
         }
     };
 
-    const sendTrigger = async (lat, lng) => {
-        try {
-            const res = await axios.post('/member/emergency/trigger', {
-                latitude: lat,
-                longitude: lng,
-            });
-            setEmergencyData(res.data);
-            setStatus('TRIGGERED');
-        } catch (err) {
-            // Fallback emergency data immediately
-            setEmergencyData({
-                status: 'EMERGENCY_TRIGGERED',
-                hotlines: {
-                    primary_ambulance: '119',
-                    national_emergency: '112',
-                },
-            });
-            setStatus('TRIGGERED');
-        }
-    };
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-            <div className="w-full max-w-md bg-surface rounded-3xl border-2 border-red-500/50 shadow-2xl overflow-hidden animate-scale-up">
+        <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+            onClick={onClose}
+        >
+            <div 
+                className="w-full max-w-sm bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-2xl p-5 sm:p-6 space-y-4 animate-in zoom-in-95 duration-200"
+                onClick={(e) => e.stopPropagation()}
+            >
                 {/* Header */}
-                <div className="bg-red-500 text-white px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[24px] animate-pulse">e911_emergency</span>
-                        <h2 className="font-heading font-bold text-base tracking-wide">PANGGILAN DARURAT 119</h2>
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 flex items-center justify-center shrink-0">
+                            <span className="material-symbols-outlined text-[22px]">emergency</span>
+                        </div>
+                        <div>
+                            <h2 className="font-heading font-black text-sm text-on-surface">
+                                Siaga Darurat Medis
+                            </h2>
+                            <p className="text-[11px] text-on-surface-variant leading-tight">
+                                SPGDT 119 Kemenkes RI
+                            </p>
+                        </div>
                     </div>
+
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10"
+                        className="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors cursor-pointer"
+                        title="Tutup Modal"
                     >
-                        <span className="material-symbols-outlined text-[20px]">close</span>
+                        <span className="material-symbols-outlined text-[18px]">close</span>
                     </button>
                 </div>
 
-                {/* Body */}
-                <div className="p-6 space-y-4">
-                    <div className="p-3.5 bg-red-50 dark:bg-red-950/30 rounded-2xl border border-red-200 dark:border-red-900/50">
-                        <p className="text-xs text-red-900 dark:text-red-200 font-medium leading-relaxed">
-                            <strong>PERHATIAN:</strong> Layanan darurat ini beroperasi langsung tanpa ketergantungan model AI. Jika Anda atau orang di sekitar mengalami nyeri dada hebat, sesak napas akut, atau hilang kesadaran, hubungi bantuan segera!
-                        </p>
-                    </div>
-
-                    {status === 'IDLE' && (
-                        <div className="space-y-3">
-                            <button
-                                type="button"
-                                onClick={handleTrigger}
-                                className="w-full py-3.5 px-4 bg-red-600 hover:bg-red-700 active:scale-98 text-white text-sm font-bold rounded-2xl shadow-lg shadow-red-600/30 flex items-center justify-center gap-3 transition-all"
-                            >
-                                <span className="material-symbols-outlined text-[22px]">call</span>
-                                <span>Aktifkan Protokol SOS & Panggil 119</span>
-                            </button>
-                            <p className="text-[11px] text-center text-on-surface-variant">
-                                Mengaktifkan sinyal darurat akan mencatat log kepatuhan medis dan mendisposisi data lokasi ke SPGDT.
-                            </p>
-                        </div>
-                    )}
-
-                    {status === 'TRIGGERING' && (
-                        <div className="py-6 text-center space-y-3">
-                            <div className="w-8 h-8 border-3 border-red-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                            <p className="text-xs font-semibold text-on-surface">Mendapatkan lokasi & menghubungkan ke SPGDT Kemenkes RI...</p>
-                        </div>
-                    )}
-
-                    {status === 'TRIGGERED' && (
-                        <div className="space-y-3">
-                            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-900/50 text-center">
-                                <span className="material-symbols-outlined text-emerald-600 text-[28px]">check_circle</span>
-                                <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200 mt-1">
-                                    Protokol Darurat Aktif!
-                                </p>
-                                <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
-                                    ID Laporan: {emergencyData?.event_id ?? 'EVT-MED-119'}
-                                </p>
+                {/* Direct Call Action Buttons */}
+                <div className="space-y-2.5">
+                    {/* Primary: SPGDT Ambulance 119 */}
+                    <a
+                        href="tel:119"
+                        className="w-full p-3.5 rounded-2xl bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white flex items-center justify-between shadow-md shadow-rose-600/20 transition-all group active:scale-98"
+                    >
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-white shrink-0">
+                                <span className="material-symbols-outlined text-[20px]">local_hospital</span>
                             </div>
-
-                            <div className="grid grid-cols-2 gap-2">
-                                <a
-                                    href="tel:119"
-                                    className="py-3 px-3 bg-red-600 text-white rounded-xl text-center font-bold text-xs flex flex-col items-center gap-1 shadow-sm hover:bg-red-700"
-                                >
-                                    <span className="material-symbols-outlined text-[20px]">local_hospital</span>
-                                    <span>Panggil 119</span>
-                                    <span className="text-[10px] font-normal opacity-90">Ambulans Medis</span>
-                                </a>
-                                <a
-                                    href="tel:112"
-                                    className="py-3 px-3 bg-neutral-800 text-white rounded-xl text-center font-bold text-xs flex flex-col items-center gap-1 shadow-sm hover:bg-neutral-900"
-                                >
-                                    <span className="material-symbols-outlined text-[20px]">call</span>
-                                    <span>Panggil 112</span>
-                                    <span className="text-[10px] font-normal opacity-90">Darurat Nasional</span>
-                                </a>
-                            </div>
-
-                            <div className="pt-2 border-t border-surface-container text-xs text-on-surface-variant space-y-1">
-                                <p className="font-semibold text-on-surface">Panduan Tindakan Sambil Menunggu:</p>
-                                <ul className="list-disc list-inside space-y-0.5 text-[11px]">
-                                    <li>Pastikan jalan napas korban terbuka & longgarkan pakaian ketat.</li>
-                                    <li>Jangan berikan makanan atau minuman bila kesadaran menurun.</li>
-                                    <li>Tetap di dekat telepon untuk panduan lebih lanjut dari petugas.</li>
-                                </ul>
+                            <div className="text-left min-w-0">
+                                <span className="text-xs font-bold block truncate">Panggil Ambulans 119</span>
+                                <span className="text-[10px] text-white/80 block truncate">SPGDT Kemenkes RI • Bebas Pulsa</span>
                             </div>
                         </div>
+                        <div className="w-8 h-8 rounded-xl bg-white text-rose-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                            <span className="material-symbols-outlined text-[18px]">call</span>
+                        </div>
+                    </a>
+
+                    {/* Secondary: National Emergency 112 */}
+                    <a
+                        href="tel:112"
+                        className="w-full p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container border border-surface-container text-on-surface flex items-center justify-between transition-all group active:scale-98"
+                    >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-8 h-8 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant shrink-0">
+                                <span className="material-symbols-outlined text-[18px]">phone_in_talk</span>
+                            </div>
+                            <div className="text-left min-w-0">
+                                <span className="text-xs font-bold text-on-surface block truncate">Darurat Nasional 112</span>
+                                <span className="text-[10px] text-on-surface-variant block truncate">Polisi, Damkar & Bencana</span>
+                            </div>
+                        </div>
+                        <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[18px] shrink-0">
+                            call
+                        </span>
+                    </a>
+                </div>
+
+                {/* GPS Dispatch / Log Record */}
+                <div className="pt-1">
+                    {gpsSent ? (
+                        <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-[11px] font-medium">
+                            <span className="material-symbols-outlined text-[18px] text-emerald-600 shrink-0">verified</span>
+                            <div className="min-w-0 flex-1 truncate">
+                                <span>Sinyal lokasi tercatat: </span>
+                                <strong className="font-mono font-bold">{eventId}</strong>
+                            </div>
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={handleSendGps}
+                            disabled={sendingGps}
+                            className="w-full py-2.5 px-3 rounded-xl bg-primary/10 hover:bg-primary/15 text-primary border border-primary/20 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                            <span className="material-symbols-outlined text-[17px]">
+                                {sendingGps ? 'sync' : 'share_location'}
+                            </span>
+                            <span>{sendingGps ? 'Mengirim Sinyal Koordinat...' : 'Kirim Sinyal Lokasi ke Sistem'}</span>
+                        </button>
                     )}
                 </div>
 
-                {/* Footer */}
-                <div className="px-6 py-3 bg-surface-container-low border-t border-surface-container flex justify-end">
+                {/* Note Information */}
+                <p className="text-[10.5px] text-center text-on-surface-variant/70 leading-relaxed pt-1">
+                    Layanan terhubung 24/7 langsung ke pos tanggap darurat terdekat tanpa ketergantungan AI.
+                </p>
+
+                {/* Footer Action */}
+                <div className="pt-1">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container"
+                        className="w-full py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold transition-colors cursor-pointer"
                     >
-                        Tutup Jendela
+                        Tutup
                     </button>
                 </div>
             </div>

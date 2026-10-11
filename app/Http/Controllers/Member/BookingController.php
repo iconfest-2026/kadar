@@ -166,9 +166,9 @@ class BookingController extends Controller
 
         $validated = $request->validate([
             'instructor_id' => 'required|exists:users,id',
-            'scheduled_date' => 'required|date|after_or_equal:today',
+            'scheduled_date' => 'required|date',
             'scheduled_time' => 'required|string',
-            'purpose' => 'required|string|min:5|max:500',
+            'purpose' => 'required|string|min:3|max:500',
             'health_context' => 'nullable|string|max:500',
         ]);
 
@@ -220,10 +220,11 @@ class BookingController extends Controller
         // Award +10 Gamification Points for booking preventive consultation
         PointsLedger::create([
             'user_id' => $user->id,
+            'event_type' => 'CONSULTATION_BOOKED',
             'points' => 10,
-            'source' => 'CONSULTATION_BOOKED',
-            'source_id' => (string) $consultation->id,
-            'note' => 'Pemesanan konsultasi klinis terjadwal bersama dokter/instruktur',
+            'reference_type' => 'Consultation',
+            'reference_id' => (string) $consultation->id,
+            'created_at' => now(),
         ]);
 
         // Audit Log

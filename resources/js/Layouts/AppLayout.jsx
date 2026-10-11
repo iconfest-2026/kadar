@@ -8,6 +8,7 @@ import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 import AppSidebar from '../Components/Sidebar/AppSidebar';
 import LogoutConfirmModal from '../Components/LogoutConfirmModal';
 import NotificationDropdown from '../Components/NotificationDropdown';
+import Alert from '../Components/UI/Alert';
 
 export default function AppLayout({ children, title, activeTab }) {
 
@@ -154,18 +155,16 @@ export default function AppLayout({ children, title, activeTab }) {
                 {/* Flash Messages */}
                 {flash?.success && (
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
-                        <div className="p-3.5 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 text-xs font-semibold rounded-2xl border border-emerald-500/30 flex items-center gap-2 shadow-2xs">
-                            <span className="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
-                            <span>{flash.success}</span>
-                        </div>
+                        <Alert variant="success" dismissible>
+                            {flash.success}
+                        </Alert>
                     </div>
                 )}
                 {flash?.error && (
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
-                        <div className="p-3.5 bg-rose-500/10 text-rose-900 dark:text-rose-200 text-xs font-semibold rounded-2xl border border-rose-500/30 flex items-center gap-2 shadow-2xs">
-                            <span className="material-symbols-outlined text-[18px] text-rose-600">error</span>
-                            <span>{flash.error}</span>
-                        </div>
+                        <Alert variant="destructive" dismissible>
+                            {flash.error}
+                        </Alert>
                     </div>
                 )}
 

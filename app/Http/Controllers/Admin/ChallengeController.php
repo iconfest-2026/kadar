@@ -16,7 +16,7 @@ class ChallengeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Challenge::with('program')
+        $query = Challenge::with(['program', 'tasks'])
             ->withCount('participations')
             ->latest();
 
@@ -33,7 +33,11 @@ class ChallengeController extends Controller
         }
 
         if ($request->filled('status') && $request->status !== 'ALL') {
-            $query->where('status', $request->status);
+            if ($request->status === 'ACTIVE') {
+                $query->whereIn('status', ['ACTIVE', 'PUBLISHED']);
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
         $challenges = $query->paginate(12)->withQueryString();
@@ -41,7 +45,7 @@ class ChallengeController extends Controller
 
         $stats = [
             'totalChallenges' => Challenge::count(),
-            'activeChallenges' => Challenge::where('status', 'PUBLISHED')->orWhere('status', 'ACTIVE')->count(),
+            'activeChallenges' => Challenge::whereIn('status', ['ACTIVE', 'PUBLISHED'])->count(),
             'totalParticipations' => ChallengeParticipation::count(),
             'totalRewardsAwarded' => (int) Challenge::sum('points_reward'),
         ];
@@ -66,6 +70,11 @@ class ChallengeController extends Controller
             'status' => ['required', 'in:DRAFT,PUBLISHED,ACTIVE,ARCHIVED'],
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
+            'tasks' => ['nullable', 'array'],
+            'tasks.*.title' => ['required', 'string', 'max:255'],
+            'tasks.*.type' => ['nullable', 'string', 'max:50'],
+            'tasks.*.target_value' => ['nullable', 'numeric'],
+            'tasks.*.target_unit' => ['nullable', 'string', 'max:30'],
         ]);
 
         $baseSlug = Str::slug($validated['name']);
@@ -75,10 +84,26 @@ class ChallengeController extends Controller
             $slug = $baseSlug . '-' . $counter++;
         }
 
-        $validated['slug'] = $slug;
-        $validated['created_by'] = Auth::id();
+        $challengeData = collect($validated)->except('tasks')->toArray();
+        $challengeData['slug'] = $slug;
+        $challengeData['created_by'] = Auth::id();
 
-        $challenge = Challenge::create($validated);
+        $challenge = Challenge::create($challengeData);
+
+        // Create tasks if provided
+        if (!empty($validated['tasks'])) {
+            foreach ($validated['tasks'] as $index => $taskData) {
+                if (!empty(trim($taskData['title'] ?? ''))) {
+                    $challenge->tasks()->create([
+                        'title' => trim($taskData['title']),
+                        'type' => $taskData['type'] ?? $challenge->goal_type,
+                        'target_value' => !empty($taskData['target_value']) ? (float)$taskData['target_value'] : 1,
+                        'target_unit' => $taskData['target_unit'] ?? 'kali',
+                        'sort_order' => $index + 1,
+                    ]);
+                }
+            }
+        }
 
         AuditLog::log(
             Auth::id(),
@@ -104,6 +129,11 @@ class ChallengeController extends Controller
             'status' => ['required', 'in:DRAFT,PUBLISHED,ACTIVE,ARCHIVED'],
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
+            'tasks' => ['nullable', 'array'],
+            'tasks.*.title' => ['required', 'string', 'max:255'],
+            'tasks.*.type' => ['nullable', 'string', 'max:50'],
+            'tasks.*.target_value' => ['nullable', 'numeric'],
+            'tasks.*.target_unit' => ['nullable', 'string', 'max:30'],
         ]);
 
         if ($challenge->name !== $validated['name']) {
@@ -113,10 +143,27 @@ class ChallengeController extends Controller
             while (Challenge::where('slug', $slug)->where('id', '!=', $challenge->id)->exists()) {
                 $slug = $baseSlug . '-' . $counter++;
             }
-            $validated['slug'] = $slug;
+            $challenge->slug = $slug;
         }
 
-        $challenge->update($validated);
+        $challengeData = collect($validated)->except('tasks')->toArray();
+        $challenge->update($challengeData);
+
+        // Sync tasks if provided
+        if (isset($validated['tasks'])) {
+            $challenge->tasks()->delete();
+            foreach ($validated['tasks'] as $index => $taskData) {
+                if (!empty(trim($taskData['title'] ?? ''))) {
+                    $challenge->tasks()->create([
+                        'title' => trim($taskData['title']),
+                        'type' => $taskData['type'] ?? $challenge->goal_type,
+                        'target_value' => !empty($taskData['target_value']) ? (float)$taskData['target_value'] : 1,
+                        'target_unit' => $taskData['target_unit'] ?? 'kali',
+                        'sort_order' => $index + 1,
+                    ]);
+                }
+            }
+        }
 
         AuditLog::log(
             Auth::id(),

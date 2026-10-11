@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
+import Alert from '../../Components/UI/Alert';
 
 export default function ConsultationsHub({ instructors = [], consultations = [], membership = {}, defaultSlots = [] }) {
+    const { flash } = usePage().props;
     const [activeTab, setActiveTab] = useState('booking'); // 'booking', 'my_consultations', 'ai_chat'
     
     // Booking Form State
@@ -16,6 +18,7 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
     const [availableSlots, setAvailableSlots] = useState(defaultSlots.length > 0 ? defaultSlots : ['09:00', '10:30', '14:00', '16:00']);
     const [complaint, setComplaint] = useState('');
     const [bookingSubmitting, setBookingSubmitting] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
 
     // AI Chat State
     const [messages, setMessages] = useState([]);
@@ -130,19 +133,41 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
     };
 
     const handleConfirmBooking = (e) => {
-        e.preventDefault();
-        if (!selectedDoctor || !complaint.trim() || !bookingDate || !selectedSlot) return;
+        if (e && e.preventDefault) e.preventDefault();
+        setFormErrors({});
+
+        if (!selectedDoctor) {
+            setFormErrors({ general: 'Silakan pilih dokter terlebih dahulu.' });
+            return;
+        }
+        if (!bookingDate) {
+            setFormErrors({ scheduled_date: 'Silakan pilih tanggal konsultasi.' });
+            return;
+        }
+        if (!selectedSlot) {
+            setFormErrors({ scheduled_time: 'Silakan pilih jam konsultasi.' });
+            return;
+        }
+        if (!complaint.trim()) {
+            setFormErrors({ purpose: 'Mohon tuliskan keluhan atau topik konsultasi minimal singkat.' });
+            return;
+        }
 
         setBookingSubmitting(true);
         router.post('/member/booking/store', {
             instructor_id: selectedDoctor.id,
             scheduled_date: bookingDate,
             scheduled_time: selectedSlot,
-            purpose: complaint,
+            purpose: complaint.trim(),
         }, {
+            preserveScroll: true,
             onSuccess: () => {
                 setComplaint('');
+                setFormErrors({});
                 setActiveTab('my_consultations');
+            },
+            onError: (errs) => {
+                setFormErrors(errs || {});
             },
             onFinish: () => setBookingSubmitting(false),
         });
@@ -275,11 +300,36 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
 
                         {/* Booking Form Card */}
                         <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container space-y-3.5 shadow-2xs">
-                            <span className="text-xs font-bold text-on-surface block">
-                                Reservasi bersama {selectedDoctor?.name?.split(',')[0] || 'Dokter'}
-                            </span>
+                            <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold text-on-surface block">
+                                    Reservasi bersama {selectedDoctor?.name?.split(',')[0] || 'Dokter'}
+                                </span>
+                                {selectedDoctor?.specialty && (
+                                    <span className="text-[10px] text-primary font-medium">
+                                        {selectedDoctor.specialty}
+                                    </span>
+                                )}
+                            </div>
 
-                            <form onSubmit={handleConfirmBooking} className="space-y-3">
+                            {/* Flash or Form Errors Alert */}
+                            {(Object.keys(formErrors).length > 0 || flash?.error) && (
+                                <Alert variant="destructive" dismissible>
+                                    <div className="space-y-0.5">
+                                        {flash?.error && <p className="font-semibold">{flash.error}</p>}
+                                        {Object.values(formErrors).map((err, idx) => (
+                                            <p key={idx}>{err}</p>
+                                        ))}
+                                    </div>
+                                </Alert>
+                            )}
+
+                            {flash?.success && (
+                                <Alert variant="success" dismissible>
+                                    {flash.success}
+                                </Alert>
+                            )}
+
+                            <form action="#" method="POST" onSubmit={handleConfirmBooking} className="space-y-3">
                                 {/* Date & Slots */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="space-y-1">

@@ -4,8 +4,6 @@ import AppLayout from '../../Layouts/AppLayout';
 import QuickLogModal from '../../Components/QuickLogModal';
 import LiveCameraScannerModal from '../../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../../Components/MembershipTierModal';
-import MenstrualTrackerCard from '../../Components/MenstrualTrackerCard';
-import MaleVitalityCard from '../../Components/MaleVitalityCard';
 import DashboardNotificationFeed from '../../Components/DashboardNotificationFeed';
 
 export default function Dashboard({
@@ -13,6 +11,7 @@ export default function Dashboard({
     profile,
     lifestyle,
     baselines,
+    recentHistory,
     todayRecords,
     activeSignals,
     activeInsights,
@@ -200,13 +199,95 @@ export default function Dashboard({
                     </div>
                 </div>
 
-                {/* 4. Gender Specific Tracking (Siklus / Vitalitas) */}
-                <div className="pt-1">
-                    {profile?.sex === 'FEMALE' ? (
-                        <MenstrualTrackerCard />
-                    ) : (
-                        <MaleVitalityCard />
-                    )}
+                {/* 3b. Ringkasan Singkat & Shortcut: Tracker & Tren Baseline (Fitur 03) */}
+                <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-2xs space-y-3">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                                <span className="material-symbols-outlined text-[18px]">monitoring</span>
+                            </div>
+                            <div>
+                                <h3 className="font-heading font-bold text-xs sm:text-sm text-on-surface leading-tight">
+                                    Tracker &amp; Tren Baseline
+                                </h3>
+                                <p className="text-[10px] text-on-surface-variant">
+                                    Rolling 14-Hari HBE Engine
+                                </p>
+                            </div>
+                        </div>
+                        <Link
+                            href="/member/tracker"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold transition-all active:scale-95"
+                        >
+                            <span>Buka Grafik Penuh</span>
+                            <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container">
+                            <span className="text-[10px] text-on-surface-variant block">Baseline Glukosa</span>
+                            <span className="font-mono font-bold text-primary text-sm">
+                                {baselines?.blood_glucose?.value_primary ? Math.round(baselines.blood_glucose.value_primary) : 95} mg/dL
+                            </span>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container">
+                            <span className="text-[10px] text-on-surface-variant block">Baseline Langkah</span>
+                            <span className="font-mono font-bold text-emerald-600 text-sm">
+                                {baselines?.steps?.value_primary ? Number(Math.round(baselines.steps.value_primary)).toLocaleString('id-ID') : '7.500'}
+                            </span>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container">
+                            <span className="text-[10px] text-on-surface-variant block">Baseline Tidur</span>
+                            <span className="font-mono font-bold text-indigo-600 text-sm">
+                                {baselines?.sleep_duration?.value_primary ? (parseFloat(baselines.sleep_duration.value_primary) / 60).toFixed(1) : '7.2'} jam
+                            </span>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-surface-container-low border border-surface-container">
+                            <span className="text-[10px] text-on-surface-variant block">Baseline Air</span>
+                            <span className="font-mono font-bold text-sky-600 text-sm">
+                                {baselines?.water_intake?.value_primary ? Number(Math.round(baselines.water_intake.value_primary)).toLocaleString('id-ID') : '2.200'} ml
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 4. Ringkasan Singkat & Shortcut: Kesehatan Spesifik Gender (Fitur 12) */}
+                <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-2xs flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${
+                            profile?.sex === 'FEMALE' ? 'bg-primary/10 text-primary' : 'bg-sky-500/10 text-sky-600'
+                        }`}>
+                            <span className="material-symbols-outlined text-[22px]">
+                                {profile?.sex === 'FEMALE' ? 'calendar_month' : 'fitness_center'}
+                            </span>
+                        </div>
+                        <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <h3 className="font-heading font-bold text-xs sm:text-sm text-on-surface truncate">
+                                    {profile?.sex === 'FEMALE' ? 'Siklus Hormonal & Haid' : 'Skrining Lemak Viseral & Vitalitas'}
+                                </h3>
+                                <span className={`px-2 py-0.2 rounded-full text-[9px] font-label-mono font-bold uppercase ${
+                                    profile?.sex === 'FEMALE' ? 'bg-primary/10 text-primary' : 'bg-sky-500/10 text-sky-600'
+                                }`}>
+                                    {profile?.sex === 'FEMALE' ? 'Wanita' : 'Pria'}
+                                </span>
+                            </div>
+                            <p className="text-[11px] text-on-surface-variant truncate mt-0.5">
+                                {profile?.sex === 'FEMALE'
+                                    ? 'Kalender prediksi haid, fase ovulasi & toleransi insulin'
+                                    : 'Pemantauan rasio lingkar pinggang (WHtR) & aktivasi GLUT-4'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <Link
+                        href="/member/vitality"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary text-xs font-bold shrink-0 transition-all active:scale-95"
+                    >
+                        <span>Kelola</span>
+                        <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+                    </Link>
                 </div>
 
                 {/* 5. Health Insight Snippet (Jika Ada Sinyal Penting) */}

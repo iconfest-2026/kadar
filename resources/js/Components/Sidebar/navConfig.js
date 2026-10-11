@@ -11,7 +11,9 @@ export function getMemberNavSections() {
         {
             title: 'Menu Utama',
             items: [
-                { id: 'dashboard', name: 'Dashboard', href: '/member/dashboard', icon: 'monitoring' },
+                { id: 'dashboard', name: 'Dashboard', href: '/member/dashboard', icon: 'space_dashboard' },
+                { id: 'tracker', name: 'Tracker & Baseline', href: '/member/tracker', icon: 'monitoring' },
+                { id: 'vitality', name: 'Kesehatan Spesifik Gender', href: '/member/vitality', icon: 'vital_signs' },
                 { id: 'scanner', name: 'Scanner Gizi (AI)', href: '/member/scanner', icon: 'photo_camera' },
                 { id: 'timeline', name: 'Riwayat & Timeline', href: '/member/timeline', icon: 'history_edu' },
                 { id: 'consultations', name: 'Konsultasi Dokter', href: '/member/consultations-hub', icon: 'support_agent' },

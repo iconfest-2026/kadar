@@ -25,7 +25,7 @@ class ChallengeMemberController extends Controller
             $this->seedCanonicalChallenges($user->id);
         }
 
-        $allChallenges = Challenge::where('status', 'ACTIVE')
+        $allChallenges = Challenge::whereIn('status', ['ACTIVE', 'PUBLISHED'])
             ->with('tasks')
             ->get();
 
@@ -72,28 +72,57 @@ class ChallengeMemberController extends Controller
         }
 
         $validated = $request->validate([
-            'progress_percent' => 'required|numeric|min:0|max:100',
+            'progress_percent' => 'nullable|numeric|min:0|max:100',
+            'task_id' => 'nullable|integer|exists:challenge_tasks,id',
         ]);
 
-        $participation->progress_percent = $validated['progress_percent'];
+        // Toggle specific task if task_id provided
+        if (!empty($validated['task_id'])) {
+            $taskId = (int) $validated['task_id'];
+            $isCompleted = $participation->completedTasks()->where('challenge_task_id', $taskId)->exists();
+
+            if ($isCompleted) {
+                $participation->completedTasks()->detach($taskId);
+            } else {
+                $participation->completedTasks()->attach($taskId, ['completed_at' => Carbon::now()]);
+            }
+
+            // Recalculate progress based on tasks
+            $totalTasks = $participation->challenge->tasks()->count();
+            if ($totalTasks > 0) {
+                $doneTasks = $participation->completedTasks()->count();
+                $participation->progress_percent = round(($doneTasks / $totalTasks) * 100, 2);
+            }
+        } elseif (isset($validated['progress_percent'])) {
+            $participation->progress_percent = $validated['progress_percent'];
+        }
+
         if ($participation->progress_percent >= 100 && $participation->status !== 'COMPLETED') {
             $participation->status = 'COMPLETED';
             $participation->completed_at = Carbon::now();
 
             // Award reward points
             $reward = $participation->challenge->points_reward ?? 50;
-            PointsLedger::create([
-                'user_id' => $user->id,
-                'event_type' => 'CHALLENGE_REWARD',
-                'points' => $reward,
-                'reference_type' => 'challenges',
-                'reference_id' => (string) $participation->challenge_id,
-                'created_at' => Carbon::now(),
-            ]);
+            PointsLedger::firstOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'event_type' => 'CHALLENGE_REWARD',
+                    'reference_type' => 'challenges',
+                    'reference_id' => (string) $participation->challenge_id,
+                ],
+                [
+                    'points' => $reward,
+                    'created_at' => Carbon::now(),
+                ]
+            );
+        } elseif ($participation->progress_percent < 100 && $participation->status === 'COMPLETED') {
+            $participation->status = 'IN_PROGRESS';
+            $participation->completed_at = null;
         }
+
         $participation->save();
 
-        return redirect()->back()->with('success', 'Progress tantangan berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Target tantangan berhasil diperbarui!');
     }
 
     private function seedCanonicalChallenges($userId)

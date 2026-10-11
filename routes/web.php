@@ -13,11 +13,13 @@ use App\Http\Controllers\Instructor\InstructorCaseloadController;
 use App\Http\Controllers\Instructor\InterventionController;
 use App\Http\Controllers\Instructor\ReportsController as InstructorReportsController;
 use App\Http\Controllers\Member\AiChatController;
+use App\Http\Controllers\Member\BaselineTrackerController;
 use App\Http\Controllers\Member\BookingController;
 use App\Http\Controllers\Member\ChallengeMemberController;
 use App\Http\Controllers\Member\CommunityController;
 use App\Http\Controllers\Member\DashboardController;
 use App\Http\Controllers\Member\EmergencyController;
+use App\Http\Controllers\Member\GenderVitalityController;
 use App\Http\Controllers\Member\InsightController;
 use App\Http\Controllers\Member\MemberInstructorController;
 use App\Http\Controllers\Member\MenstrualCycleController;
@@ -270,6 +272,12 @@ Route::middleware(['auth'])->group(function () {
         // Member Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+        // Feature 3: Dedicated Tracker & Baseline Trend Analytics Page
+        Route::get('/tracker', [BaselineTrackerController::class, 'index'])->name('tracker');
+
+        // Feature 12: Dedicated Gender Health & Vitality Page
+        Route::get('/vitality', [GenderVitalityController::class, 'index'])->name('vitality');
+
         // Quick Health Log & HBE Trigger
         Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log');
 
@@ -304,6 +312,7 @@ Route::middleware(['auth'])->group(function () {
         // Feature 2 & 6: Dual Consultation Hub & Scheduled Booking
         Route::get('/consultations-hub', [BookingController::class, 'index'])->name('consultations.index');
         Route::get('/booking/slots/{instructor}', [BookingController::class, 'getSlots'])->name('booking.slots');
+        Route::get('/booking/store', fn() => redirect()->route('member.consultations.index'));
         Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
         Route::post('/booking/{consultation}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
@@ -466,5 +475,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/logs', [AdminGovernanceController::class, 'logs'])->name('logs');
         Route::post('/logs/clear', [AdminGovernanceController::class, 'clearLogs'])->name('logs.clear');
         Route::get('/logs/download', [AdminGovernanceController::class, 'downloadLogs'])->name('logs.download');
+
+        // Pengiriman & Siaran Notifikasi (Broadcast ke Member & Instruktur)
+        Route::get('/notifications-broadcast', [\App\Http\Controllers\Admin\NotificationBroadcastController::class, 'index'])->name('notifications.broadcast');
+        Route::post('/notifications-broadcast', [\App\Http\Controllers\Admin\NotificationBroadcastController::class, 'store'])->name('notifications.broadcast.store');
+        Route::delete('/notifications-broadcast/{notification}', [\App\Http\Controllers\Admin\NotificationBroadcastController::class, 'destroy'])->name('notifications.broadcast.destroy');
     });
 });
