@@ -19,6 +19,18 @@ class PointsLedger extends Model
         'created_at',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->event_type)) {
+                $model->event_type = 'GENERAL_ACTIVITY';
+            }
+            if (empty($model->created_at)) {
+                $model->created_at = now();
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

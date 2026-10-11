@@ -291,6 +291,7 @@ Route::middleware(['auth'])->group(function () {
         // Feature 2 & 6: Dual Consultation Hub & Scheduled Booking
         Route::get('/consultations-hub', [BookingController::class, 'index'])->name('consultations.index');
         Route::get('/booking/slots/{instructor}', [BookingController::class, 'getSlots'])->name('booking.slots');
+        Route::get('/booking/store', fn() => redirect()->route('member.consultations.index'));
         Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
         Route::post('/booking/{consultation}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
