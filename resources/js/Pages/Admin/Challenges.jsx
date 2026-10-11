@@ -315,6 +315,7 @@ export default function Challenges({
                         data={challenges}
                         emptyMessage="Tidak ada tantangan gamifikasi yang ditemukan."
                         emptyIcon="emoji_events"
+                        searchable={false}
                     />
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

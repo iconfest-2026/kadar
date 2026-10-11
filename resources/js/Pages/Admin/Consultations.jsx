@@ -264,6 +264,7 @@ export default function Consultations({
                     data={consultations}
                     emptyMessage="Tidak ada sesi konsultasi yang cocok dengan kriteria pencarian."
                     emptyIcon="event_busy"
+                    searchable={false}
                 />
 
                 {/* Create Consultation Modal */}

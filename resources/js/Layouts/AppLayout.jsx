@@ -6,6 +6,8 @@ import LiveCameraScannerModal from '../Components/LiveCameraScannerModal';
 import MembershipTierModal from '../Components/MembershipTierModal';
 import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 import AppSidebar from '../Components/Sidebar/AppSidebar';
+import LogoutConfirmModal from '../Components/LogoutConfirmModal';
+import NotificationDropdown from '../Components/NotificationDropdown';
 
 export default function AppLayout({ children, title, activeTab }) {
 
@@ -43,11 +45,17 @@ export default function AppLayout({ children, title, activeTab }) {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     useEffect(() => {
         const handleOpenAiChat = () => setIsAiChatOpen(true);
+        const handleOpenLogout = () => setIsLogoutModalOpen(true);
         window.addEventListener('open-ai-chat', handleOpenAiChat);
-        return () => window.removeEventListener('open-ai-chat', handleOpenAiChat);
+        window.addEventListener('open-logout-modal', handleOpenLogout);
+        return () => {
+            window.removeEventListener('open-ai-chat', handleOpenAiChat);
+            window.removeEventListener('open-logout-modal', handleOpenLogout);
+        };
     }, []);
 
     useEffect(() => {
@@ -57,7 +65,7 @@ export default function AppLayout({ children, title, activeTab }) {
     }, [pageUrl]);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setIsLogoutModalOpen(true);
     };
 
     return (
@@ -120,6 +128,7 @@ export default function AppLayout({ children, title, activeTab }) {
 
                     {/* Right: Quick Action & SOS */}
                     <div className="flex items-center gap-1.5 shrink-0">
+                        <NotificationDropdown align="right" />
                         <button
                             type="button"
                             onClick={() => setIsEmergencyOpen(true)}
@@ -161,12 +170,12 @@ export default function AppLayout({ children, title, activeTab }) {
                 )}
 
                 {/* Main Content View */}
-                <main className="flex-1 w-full pb-2 lg:pb-6">
+                <main className="flex-1 w-full pb-4 lg:pb-6">
                     {children}
                 </main>
 
-                {/* Footer (Compact Mobile-Friendly) */}
-                <footer className="border-t border-surface-container/60 py-2.5 mb-14 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
+                {/* Footer (Compact Mobile-Friendly with clearance for fixed bottom nav) */}
+                <footer className="border-t border-surface-container/60 py-3.5 mb-24 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
                         <p className="font-medium text-[10.5px]">
                             © 2026 AEVYRA • Platform Kesehatan Preventif
@@ -362,6 +371,13 @@ export default function AppLayout({ children, title, activeTab }) {
                     onClose={() => setIsAiChatOpen(false)}
                 />
             )}
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole={isMember ? 'Member' : (isInstructor ? 'Instruktur' : (isAdmin ? 'Admin' : undefined))}
+            />
         </div>
     );
 }

@@ -329,6 +329,7 @@ export default function Instructors({ instructors = { data: [], links: [] }, sta
                     data={instructors}
                     emptyMessage="Belum ada instruktur yang terdaftar sesuai kriteria pencarian."
                     emptyIcon="school"
+                    searchable={false}
                 />
 
                 {/* Detail & Verification Modal */}

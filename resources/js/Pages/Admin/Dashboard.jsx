@@ -5,6 +5,7 @@ import AdminStatCard from '@/Components/Admin/AdminStatCard';
 import AdminDataTable from '@/Components/Admin/AdminDataTable';
 import AdminBadge from '@/Components/Admin/AdminBadge';
 import { DropdownAction } from '@/Components/UI';
+import DashboardNotificationFeed from '@/Components/DashboardNotificationFeed';
 
 export default function Dashboard({
     kpis = {},
@@ -153,6 +154,9 @@ export default function Dashboard({
                         color="indigo"
                     />
                 </div>
+
+                {/* Operational & Governance Notifications Feed */}
+                <DashboardNotificationFeed role="admin" maxItems={4} />
 
                 {/* Growth Chart Card */}
                 <div className="bg-white rounded-3xl p-6 sm:p-7 shadow-2xs border border-primary/15">

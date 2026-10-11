@@ -16,6 +16,39 @@ class TimelineController extends Controller
 {
     public function index(Request $request)
     {
+        $data = $this->getTimelineData($request);
+
+        return Inertia::render('Member/Timeline', [
+            'timelineItems' => $data['items'],
+            'hasMoreInitial' => $data['has_more'],
+            'nextPageInitial' => $data['next_page'],
+            'totalItems' => $data['total'],
+            'currentFilter' => $data['current_filter'],
+            'days' => $data['days'],
+        ]);
+    }
+
+    /**
+     * Dedicated JSON Feed Endpoint for Infinite Scroll
+     */
+    public function feed(Request $request)
+    {
+        $data = $this->getTimelineData($request);
+
+        return response()->json([
+            'items' => $data['items'],
+            'has_more' => $data['has_more'],
+            'next_page' => $data['next_page'],
+            'total' => $data['total'],
+            'page' => $data['page'],
+        ]);
+    }
+
+    /**
+     * Build Paginated Timeline Dataset
+     */
+    protected function getTimelineData(Request $request): array
+    {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $filterMetric = $request->query('metric');
@@ -92,7 +125,7 @@ class TimelineController extends Controller
             $recordsQuery->where('metric_type', $filterMetric);
         }
 
-        $records = $recordsQuery->take(50)->get()->map(function ($rec) use ($metricLabels, $sourceLabels) {
+        $records = $recordsQuery->take(250)->get()->map(function ($rec) use ($metricLabels, $sourceLabels) {
             $metricKey = (string)$rec->metric_type;
             $humanLabel = $metricLabels[$metricKey] ?? ucwords(str_replace('_', ' ', $metricKey));
             
@@ -149,68 +182,85 @@ class TimelineController extends Controller
             ];
         });
 
-        // 3. Fetch Behavior Signals
-        $signals = BehaviorSignal::where('user_id', $user->id)
-            ->where('created_at', '>=', $startDate)
-            ->latest()
-            ->take(20)
-            ->get()
-            ->map(function ($sig) use ($signalLabels, $severityLabels, $statusLabels) {
-                $sigKey = (string)$sig->signal_type;
-                $humanSignal = $signalLabels[$sigKey] ?? ucwords(str_replace('_', ' ', strtolower($sigKey)));
-                $sevKey = (string)$sig->severity;
-                $humanSeverity = $severityLabels[$sevKey] ?? $sevKey;
-                $statKey = (string)$sig->status;
-                $humanStatus = $statusLabels[$statKey] ?? $statKey;
+        // 3. Fetch Behavior Signals & Interventions (only when not filtering by specific metric)
+        $signals = collect();
+        $interventions = collect();
 
-                return [
-                    'type' => 'BEHAVIOR_SIGNAL',
-                    'id' => $sig->id,
-                    'signal_type' => $sigKey,
-                    'title' => "Sinyal: {$humanSignal}",
-                    'severity' => $sevKey,
-                    'severity_label' => $humanSeverity,
-                    'status' => $statKey,
-                    'status_label' => $humanStatus,
-                    'priority_score' => $sig->priority_score,
-                    'explanation' => $sig->explanation,
-                    'timestamp' => $sig->created_at->toIso8601String(),
-                    'display_date' => $sig->created_at->translatedFormat('d M Y, H:i'),
-                ];
-            });
+        if (!$filterMetric) {
+            $signals = BehaviorSignal::where('user_id', $user->id)
+                ->where('created_at', '>=', $startDate)
+                ->latest()
+                ->take(50)
+                ->get()
+                ->map(function ($sig) use ($signalLabels, $severityLabels, $statusLabels) {
+                    $sigKey = (string)$sig->signal_type;
+                    $humanSignal = $signalLabels[$sigKey] ?? ucwords(str_replace('_', ' ', strtolower($sigKey)));
+                    $sevKey = (string)$sig->severity;
+                    $humanSeverity = $severityLabels[$sevKey] ?? $sevKey;
+                    $statKey = (string)$sig->status;
+                    $humanStatus = $statusLabels[$statKey] ?? $statKey;
 
-        // 4. Fetch Interventions
-        $interventions = Intervention::where('user_id', $user->id)
-            ->where('created_at', '>=', $startDate)
-            ->latest()
-            ->take(15)
-            ->get()
-            ->map(function ($intv) use ($statusLabels) {
-                $statKey = (string)$intv->status;
-                $humanStatus = $statusLabels[$statKey] ?? $statKey;
+                    return [
+                        'type' => 'BEHAVIOR_SIGNAL',
+                        'id' => $sig->id,
+                        'signal_type' => $sigKey,
+                        'title' => "Sinyal: {$humanSignal}",
+                        'severity' => $sevKey,
+                        'severity_label' => $humanSeverity,
+                        'status' => $statKey,
+                        'status_label' => $humanStatus,
+                        'priority_score' => $sig->priority_score,
+                        'explanation' => $sig->explanation,
+                        'timestamp' => $sig->created_at->toIso8601String(),
+                        'display_date' => $sig->created_at->translatedFormat('d M Y, H:i'),
+                    ];
+                });
 
-                return [
-                    'type' => 'INTERVENTION',
-                    'id' => $intv->id,
-                    'title' => $intv->title ?: 'Program Intervensi Perilaku',
-                    'description' => $intv->description,
-                    'status' => $statKey,
-                    'status_label' => $humanStatus,
-                    'timestamp' => $intv->created_at->toIso8601String(),
-                    'display_date' => $intv->created_at->translatedFormat('d M Y, H:i'),
-                ];
-            });
+            $interventions = Intervention::where('user_id', $user->id)
+                ->where('created_at', '>=', $startDate)
+                ->latest()
+                ->take(30)
+                ->get()
+                ->map(function ($intv) use ($statusLabels) {
+                    $statKey = (string)$intv->status;
+                    $humanStatus = $statusLabels[$statKey] ?? $statKey;
+
+                    return [
+                        'type' => 'INTERVENTION',
+                        'id' => $intv->id,
+                        'title' => $intv->title ?: 'Program Intervensi Perilaku',
+                        'description' => $intv->description,
+                        'status' => $statKey,
+                        'status_label' => $humanStatus,
+                        'timestamp' => $intv->created_at->toIso8601String(),
+                        'display_date' => $intv->created_at->translatedFormat('d M Y, H:i'),
+                    ];
+                });
+        }
 
         // Merge and sort all items chronologically descending
-        $timelineItems = $records->concat($signals)->concat($interventions)
+        $allTimelineItems = $records->concat($signals)->concat($interventions)
             ->sortByDesc('timestamp')
             ->values();
 
-        return Inertia::render('Member/Timeline', [
-            'timelineItems' => $timelineItems,
-            'currentFilter' => $filterMetric,
+        // Infinite Scroll Pagination (12 items per batch like X/Twitter feed)
+        $page = max(1, (int) $request->query('page', 1));
+        $perPage = (int) $request->query('per_page', 12);
+        $total = $allTimelineItems->count();
+
+        $pageItems = $allTimelineItems->forPage($page, $perPage)->values();
+        $hasMore = ($page * $perPage) < $total;
+        $nextPage = $hasMore ? $page + 1 : null;
+
+        return [
+            'items' => $pageItems,
+            'has_more' => $hasMore,
+            'next_page' => $nextPage,
+            'total' => $total,
+            'page' => $page,
+            'current_filter' => $filterMetric,
             'days' => $days,
-        ]);
+        ];
     }
 
     /**

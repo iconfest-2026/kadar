@@ -18,16 +18,16 @@ export default function MaleVitalityCard() {
             
             {/* Top Tag & Switcher */}
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-surface-container pb-4">
-                <div className="flex items-center gap-3">
+                <div className="flex items-start sm:items-center gap-3 min-w-0">
                     <div className="w-10 h-10 rounded-2xl bg-sky-500/10 text-sky-700 dark:text-sky-400 flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[22px]">fitness_center</span>
                     </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <h3 className="font-heading font-bold text-base text-on-surface">
+                    <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="font-heading font-bold text-sm sm:text-base text-on-surface">
                                 Skrining Lemak Viseral & Vitalitas Pria
                             </h3>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-sky-500/10 text-sky-700 dark:text-sky-400 uppercase">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-sky-500/10 text-sky-700 dark:text-sky-400 uppercase whitespace-nowrap shrink-0">
                                 Akun Pria
                             </span>
                         </div>

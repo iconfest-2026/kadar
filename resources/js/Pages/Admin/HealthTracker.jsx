@@ -286,6 +286,7 @@ export default function HealthTracker({
                     data={records}
                     emptyMessage="Tidak ada catatan metrik kesehatan yang ditemukan."
                     emptyIcon="vital_signs"
+                    searchable={false}
                 />
 
                 {/* Create Health Record Modal */}

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
+import LogoutConfirmModal from '../../Components/LogoutConfirmModal';
 
 export default function MenuHub({ user, profile, membership, streak, totalPoints }) {
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         name: user?.name || '',
@@ -21,9 +23,7 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
     };
 
     const handleLogout = () => {
-        if (confirm('Apakah Anda yakin ingin keluar dari akun?')) {
-            router.post('/logout');
-        }
+        setIsLogoutModalOpen(true);
     };
 
     const menuSections = [
@@ -318,6 +318,13 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                         </div>
                     </div>
                 )}
+
+                {/* Logout Confirmation Modal */}
+                <LogoutConfirmModal
+                    isOpen={isLogoutModalOpen}
+                    onClose={() => setIsLogoutModalOpen(false)}
+                    userRole="Member"
+                />
             </div>
         </AppLayout>
     );

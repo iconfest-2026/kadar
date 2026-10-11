@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
+import LogoutConfirmModal from './LogoutConfirmModal';
+import NotificationDropdown from './NotificationDropdown';
 
 export default function Header() {
     let authUser = null;
@@ -57,9 +59,12 @@ export default function Header() {
 
     const clinicalRef = useRef(null);
     const userDropdownRef = useRef(null);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setUserDropdownOpen(false);
+        setMobileMenuOpen(false);
+        setIsLogoutModalOpen(true);
     };
 
     // Core Features List with Direct Links for Quick Testing/Checking
@@ -295,6 +300,9 @@ export default function Header() {
                                     </span>
                                     <span>{dashboardLabel}</span>
                                 </Link>
+
+                                {/* Notifications Dropdown */}
+                                <NotificationDropdown align="right" />
 
                                 {/* Desktop User Dropdown (lg+ screens) */}
                                 <div className="hidden lg:block relative" ref={userDropdownRef}>
@@ -764,6 +772,13 @@ export default function Header() {
                     </>
                 )}
             </header>
+
+            {/* Confirmation Alert / Modal for Logout */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole={roleBadge}
+            />
         </>
     );
 }

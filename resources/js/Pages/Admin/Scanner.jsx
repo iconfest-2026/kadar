@@ -264,6 +264,7 @@ export default function Scanner({
                     data={records}
                     emptyMessage="Tidak ada data pemindaian OCR yang ditemukan."
                     emptyIcon="document_scanner"
+                    searchable={false}
                 />
 
                 {/* Detail Inspection Modal */}

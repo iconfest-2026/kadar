@@ -25,6 +25,7 @@ use App\Http\Controllers\Member\OnboardingController;
 use App\Http\Controllers\Member\QuickLogController;
 use App\Http\Controllers\Member\ScannerController;
 use App\Http\Controllers\Member\TimelineController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -243,6 +244,17 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('member.scanner');
     });
 
+    // Auto-redirect /community to /member/community
+    Route::get('/community', function () {
+        return redirect()->route('member.community.index');
+    });
+
+    // Centralized Notifications (All Roles)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
     // -------------------------------------------------------------
     // MEMBER ROUTES
     // -------------------------------------------------------------
@@ -262,6 +274,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log');
 
         // Health Timeline Feed & Detail
+        Route::get('/timeline/feed', [TimelineController::class, 'feed'])->name('timeline.feed');
         Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline');
         Route::get('/timeline/{id}', [TimelineController::class, 'show'])->name('timeline.show');
 
@@ -303,8 +316,12 @@ Route::middleware(['auth'])->group(function () {
         // Feature 7: Komunitas / Forum Diskusi
         Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
         Route::post('/community/post', [CommunityController::class, 'storePost'])->name('community.post');
+        Route::patch('/community/posts/{post}', [CommunityController::class, 'updatePost'])->name('community.posts.update');
+        Route::delete('/community/posts/{post}', [CommunityController::class, 'destroyPost'])->name('community.posts.destroy');
         Route::post('/community/comment', [CommunityController::class, 'storeComment'])->name('community.comment');
+        Route::delete('/community/comments/{comment}', [CommunityController::class, 'destroyComment'])->name('community.comments.destroy');
         Route::post('/community/react', [CommunityController::class, 'toggleReaction'])->name('community.react');
+        Route::post('/community/posts/{post}/report', [CommunityController::class, 'storeReport'])->name('community.posts.report');
 
         // Feature 12: Catatan Haid (Wanita) & Prediksi AI vs Vitalitas (Pria)
         Route::get('/menstrual/summary', [MenstrualCycleController::class, 'getSummary'])->name('menstrual.summary');
@@ -398,6 +415,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/community/posts', [AdminGovernanceController::class, 'storeCommunityPost'])->name('community.posts.store');
         Route::patch('/community/posts/{post}/status', [AdminGovernanceController::class, 'updateCommunityPostStatus'])->name('community.posts.status');
         Route::delete('/community/posts/{post}', [AdminGovernanceController::class, 'destroyCommunityPost'])->name('community.posts.destroy');
+        Route::delete('/community/comments/{comment}', [AdminGovernanceController::class, 'destroyCommunityComment'])->name('community.comments.destroy');
+        Route::patch('/community/reports/{report}/resolve', [AdminGovernanceController::class, 'resolveCommunityReport'])->name('community.reports.resolve');
+        Route::patch('/community/reports/{report}/dismiss', [AdminGovernanceController::class, 'dismissCommunityReport'])->name('community.reports.dismiss');
 
         // Gamification
         Route::get('/gamification', [AdminGovernanceController::class, 'gamification'])->name('gamification');

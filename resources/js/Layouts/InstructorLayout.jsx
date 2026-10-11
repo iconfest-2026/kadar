@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
+import LogoutConfirmModal from '../Components/LogoutConfirmModal';
+import NotificationDropdown from '../Components/NotificationDropdown';
 
 export default function InstructorLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -8,9 +10,11 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const handleLogout = () => {
-        router.post('/logout');
+        setUserMenuOpen(false);
+        setIsLogoutModalOpen(true);
     };
 
     const navSections = [
@@ -88,20 +92,15 @@ export default function InstructorLayout({ children, title, activeNav }) {
             >
                 {/* Brand Header */}
                 <div className="h-16 flex items-center justify-between px-5 border-b border-surface-container shrink-0">
-                    <Link href="/instructor/dashboard" className="flex items-center gap-2.5 group min-w-0">
+                    <Link href="/instructor/dashboard" className="flex items-center gap-2 group min-w-0">
                         <img
-                            src="/image/Logo_AEVYRA_Icon.png"
-                            alt="AEVYRA Logo"
-                            className="w-8 h-8 rounded-xl object-contain shadow-2xs group-hover:scale-105 transition-transform shrink-0"
+                            src="/image/Logo_EVYRA_Horizontal.png"
+                            alt="AEVYRA Healthcare"
+                            className="h-7 sm:h-7.5 w-auto object-contain shrink-0 group-hover:opacity-90 transition-opacity"
                         />
-                        <div className="min-w-0">
-                            <div className="flex items-center gap-1.5">
-                                <span className="font-heading font-black text-lg text-primary tracking-tight">EVYRA</span>
-                                <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
-                                    INSTRUKTUR
-                                </span>
-                            </div>
-                        </div>
+                        <span className="px-1.5 py-0.5 text-[9px] font-label-mono font-bold uppercase rounded bg-primary/10 text-primary shrink-0">
+                            INSTRUKTUR
+                        </span>
                     </Link>
 
                     <button 
@@ -236,6 +235,9 @@ export default function InstructorLayout({ children, title, activeNav }) {
                             {renderStatusBadge(userStatus)}
                         </div>
 
+                        {/* Notification Bell Dropdown */}
+                        <NotificationDropdown align="right" />
+
                         {/* User Dropdown */}
                         <div className="relative shrink-0">
                             <button
@@ -316,7 +318,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 </main>
 
                 {/* Footer */}
-                <footer className="border-t border-surface-container py-6 mb-16 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
+                <footer className="border-t border-surface-container py-5 mb-24 lg:mb-0 bg-white/50 dark:bg-surface/50 text-xs text-on-surface-variant">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="font-medium text-center sm:text-left">
                             © 2026 AEVYRA — Ruang Bimbingan Klinis & Human-in-the-Loop.
@@ -415,6 +417,13 @@ export default function InstructorLayout({ children, title, activeNav }) {
                     </button>
                 </div>
             </nav>
+
+            {/* Logout Confirmation Alert / Modal */}
+            <LogoutConfirmModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                userRole="Instruktur"
+            />
         </div>
     );
 }

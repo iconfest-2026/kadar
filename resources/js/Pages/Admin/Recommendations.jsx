@@ -313,6 +313,7 @@ export default function Recommendations({
                             data={insights}
                             emptyMessage="Tidak ada wawasan perilaku aktif yang ditemukan."
                             emptyIcon="psychology"
+                            searchable={false}
                         />
                     </TabsContent>
 
@@ -323,6 +324,7 @@ export default function Recommendations({
                             data={signals}
                             emptyMessage="Belum ada sinyal anomali perilaku yang terdeteksi."
                             emptyIcon="notifications_none"
+                            searchable={false}
                         />
                     </TabsContent>
                 </Tabs>

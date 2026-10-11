@@ -48,6 +48,39 @@ export default function Reports({
         setTimeout(() => setExportNotice(false), 3000);
     };
 
+
+    const auditColumns = [
+        {
+            key: 'actor',
+            label: 'Aktor Pengguna',
+            render: (log) => <span className="font-bold text-on-surface">{log.actor_name || log.actor?.name || 'Sistem'}</span>,
+        },
+        {
+            key: 'action',
+            label: 'Tindakan Sistem',
+            render: (log) => <span className="font-mono text-primary font-semibold">{log.action || '-'}</span>,
+        },
+        {
+            key: 'target_type',
+            label: 'Target Entitas',
+            render: (log) => <span className="text-on-surface-variant">{log.target_type || 'Platform'}</span>,
+        },
+        {
+            key: 'result',
+            label: 'Status Hasil',
+            render: (log) => (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                    {log.result || 'SUCCESS'}
+                </span>
+            ),
+        },
+        {
+            key: 'created_at',
+            label: 'Waktu Eksekusi',
+            render: (log) => <span className="font-mono text-on-surface-variant">{log.created_at || '-'}</span>,
+        },
+    ];
+
     const cohortColumns = [
         {
             key: 'title',
@@ -309,41 +342,15 @@ export default function Reports({
                                 <span className="text-xs text-on-surface-variant">Standar HL7 FHIR & UU PDP No. 27/2022</span>
                             </div>
 
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left text-xs">
-                                    <thead className="bg-surface-container-low text-on-surface-variant font-bold border-b border-primary/10">
-                                        <tr>
-                                            <th className="p-4">Aktor Pengguna</th>
-                                            <th className="p-4">Tindakan Sistem</th>
-                                            <th className="p-4">Target Entitas</th>
-                                            <th className="p-4">Status Hasil</th>
-                                            <th className="p-4">Waktu Eksekusi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-primary/5">
-                                        {recentAuditLogs.map((log) => (
-                                            <tr key={log.id} className="hover:bg-primary/5 transition-colors">
-                                                <td className="p-4 font-bold text-on-surface">{log.actor_name || log.actor?.name || 'Sistem'}</td>
-                                                <td className="p-4 font-mono text-primary font-semibold">{log.action}</td>
-                                                <td className="p-4 text-on-surface-variant">{log.target_type || 'Platform'}</td>
-                                                <td className="p-4">
-                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                                                        {log.result || 'SUCCESS'}
-                                                    </span>
-                                                </td>
-                                                <td className="p-4 font-mono text-on-surface-variant">{log.created_at}</td>
-                                            </tr>
-                                        ))}
-                                        {recentAuditLogs.length === 0 && (
-                                            <tr>
-                                                <td colSpan="5" className="p-8 text-center text-xs text-on-surface-variant">
-                                                    Belum ada rekaman audit log.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <Table
+                            columns={auditColumns}
+                            data={recentAuditLogs}
+                            searchable={true}
+                            searchPlaceholder="Cari log audit aktor, tindakan..."
+                            pageSize={10}
+                            emptyMessage="Belum ada rekaman audit log."
+                            emptyIcon="security"
+                        />
                         </div>
                     </TabsContent>
                 </Tabs>
