@@ -35,4 +35,10 @@ class CommunityPost extends Model
         return $this->hasMany(CommunityReaction::class, 'reactable_id')
             ->where('reactable_type', self::class);
     }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(CommunityReport::class, 'target_id')
+            ->where('target_type', self::class);
+    }
 }

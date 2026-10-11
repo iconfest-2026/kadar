@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import AdminBadge from '../Components/Admin/AdminBadge';
 import LogoutConfirmModal from '../Components/LogoutConfirmModal';
+import NotificationDropdown from '../Components/NotificationDropdown';
 
 export default function AdminLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -237,10 +238,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                         </div>
 
                         {/* Notifications */}
-                        <button className="p-2.5 rounded-xl bg-white/90 text-on-surface-variant hover:text-primary hover:bg-white border border-primary/10 shadow-xs transition-all relative">
-                            <span className="material-symbols-outlined text-[20px]">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full ring-2 ring-white"></span>
-                        </button>
+                        <NotificationDropdown align="right" />
                         
                         {/* User Dropdown */}
                         <div className="relative">

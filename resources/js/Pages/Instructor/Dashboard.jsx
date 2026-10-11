@@ -2,6 +2,7 @@ import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import Table from '@/Components/UI/Table';
+import DashboardNotificationFeed from '@/Components/DashboardNotificationFeed';
 
 const SIGNAL_MAP = {
     SLEEP_DEFICIT: 'Defisit Durasi Tidur',
@@ -168,6 +169,9 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                         </div>
                     </div>
                 </div>
+
+                {/* Clinical Caseload & Signal Notifications Feed */}
+                <DashboardNotificationFeed role="instructor" maxItems={3} />
 
                 {/* Sinyal Perilaku Yang Membutuhkan Triase */}
                 <div className="rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs overflow-hidden space-y-0">

@@ -10,6 +10,8 @@ use App\Models\BehaviorSignal;
 use App\Models\Challenge;
 use App\Models\CommunityComment;
 use App\Models\CommunityPost;
+use App\Models\CommunityReport;
+use App\Models\ModerationAction;
 use App\Models\Consultation;
 use App\Models\EmergencyEvent;
 use App\Models\HealthBaseline;
@@ -568,8 +570,10 @@ class AdminGovernanceController extends Controller
     // 7. Komunitas & Forum Diskusi
     public function community(Request $request)
     {
-        $query = CommunityPost::with(['user.roles'])
-            ->withCount(['comments', 'reactions'])
+        $activeTab = $request->query('tab', 'posts');
+
+        $query = CommunityPost::with(['user.roles', 'comments.user.roles'])
+            ->withCount(['comments', 'reactions', 'reports'])
             ->latest();
 
         if ($request->filled('search')) {
@@ -585,37 +589,80 @@ class AdminGovernanceController extends Controller
             $query->where('status', $request->status);
         }
 
-        $posts = $query->paginate(10)->withQueryString();
+        if ($request->filled('category_id') && $request->category_id !== 'ALL') {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $posts = $query->paginate(10, ['*'], 'posts_page')->withQueryString();
+
+        // Moderation Queue: Reports from members
+        $reportQuery = CommunityReport::with(['reporter', 'reviewer'])
+            ->latest();
+
+        if ($request->filled('report_status') && $request->report_status !== 'ALL') {
+            $reportQuery->where('status', $request->report_status);
+        }
+
+        $reports = $reportQuery->paginate(10, ['*'], 'reports_page')->withQueryString();
+
+        // Attach reported post/comment targets
+        $reports->getCollection()->transform(function ($report) {
+            if ($report->target_type === CommunityPost::class || $report->target_type === 'CommunityPost' || str_ends_with($report->target_type, 'CommunityPost')) {
+                $report->post = CommunityPost::withTrashed()->with('user')->find($report->target_id);
+            }
+            return $report;
+        });
+
+        // Audit Trail: Recent moderation actions
+        $recentActions = ModerationAction::with('moderator')->latest()->take(10)->get();
 
         $stats = [
             'totalThreads' => CommunityPost::count(),
             'activeDiscussions' => CommunityPost::where('status', 'PUBLISHED')->count(),
-            'flaggedPosts' => CommunityPost::where('status', 'like', '%FLAG%')->orWhere('status', 'UNDER_REVIEW')->count(),
+            'flaggedPosts' => CommunityPost::where('status', 'UNDER_REVIEW')->orWhere('status', 'HIDDEN')->count(),
+            'pendingReports' => CommunityReport::where('status', 'PENDING')->count(),
             'totalComments' => CommunityComment::count(),
-            'sentimentPositive' => '95.2%',
+            'sentimentPositive' => '96.2%',
         ];
 
         return Inertia::render('Admin/Community', [
             'posts' => $posts,
+            'reports' => $reports,
+            'recentActions' => $recentActions,
             'stats' => $stats,
-            'filters' => $request->only('search', 'status'),
+            'filters' => $request->only('search', 'status', 'tab', 'report_status', 'category_id'),
+            'activeTab' => $activeTab,
         ]);
     }
 
     public function storeCommunityPost(Request $request)
     {
+        $body = $request->input('body', $request->input('content'));
+        $request->merge(['body' => $body]);
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:200'],
             'body' => ['required', 'string'],
+            'category_id' => ['nullable', 'integer', 'in:1,2,3,4,5'],
             'status' => ['required', 'in:PUBLISHED,UNDER_REVIEW,HIDDEN'],
         ]);
 
-        CommunityPost::create([
+        $post = CommunityPost::create([
             'user_id' => Auth::id(),
+            'category_id' => $validated['category_id'] ?? 5, // Default to 5: Pengumuman Resmi
             'title' => $validated['title'],
             'body' => $validated['body'],
             'status' => $validated['status'],
             'visibility' => 'PUBLIC',
+        ]);
+
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityPost::class,
+            'target_id' => $post->id,
+            'action' => 'CREATE_ANNOUNCEMENT',
+            'reason' => 'Publikasi pengumuman / edukasi resmi oleh Administrator',
+            'created_at' => Carbon::now(),
         ]);
 
         return back()->with('success', 'Thread pengumuman resmi komunitas berhasil diterbitkan.');
@@ -624,18 +671,129 @@ class AdminGovernanceController extends Controller
     public function updateCommunityPostStatus(Request $request, CommunityPost $post)
     {
         $validated = $request->validate([
-            'status' => ['required', 'string'],
+            'status' => ['required', 'in:PUBLISHED,UNDER_REVIEW,HIDDEN'],
+            'reason' => ['nullable', 'string', 'max:500'],
         ]);
 
+        $oldStatus = $post->status;
         $post->update(['status' => $validated['status']]);
+
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityPost::class,
+            'target_id' => $post->id,
+            'action' => $validated['status'] === 'HIDDEN' ? 'HIDE_POST' : ($validated['status'] === 'PUBLISHED' ? 'RESTORE_POST' : 'REVIEW_POST'),
+            'reason' => $validated['reason'] ?? "Perubahan status moderasi dari {$oldStatus} ke {$validated['status']}",
+            'created_at' => Carbon::now(),
+        ]);
+
         return back()->with('success', "Status moderasi postingan berhasil diperbarui menjadi {$validated['status']}.");
     }
 
     public function destroyCommunityPost(CommunityPost $post)
     {
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityPost::class,
+            'target_id' => $post->id,
+            'action' => 'DELETE_POST',
+            'reason' => 'Penghapusan permanen postingan oleh Administrator',
+            'created_at' => Carbon::now(),
+        ]);
+
+        // Resolve any related pending reports
+        CommunityReport::where('target_type', CommunityPost::class)
+            ->where('target_id', $post->id)
+            ->where('status', 'PENDING')
+            ->update([
+                'status' => 'RESOLVED',
+                'resolution' => 'CONTENT_DELETED',
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => Carbon::now(),
+            ]);
+
         $post->comments()->delete();
         $post->delete();
-        return back()->with('success', 'Postingan komunitas berhasil dihapus permanen.');
+
+        return back()->with('success', 'Postingan komunitas beserta komentarnya berhasil dihapus.');
+    }
+
+    public function destroyCommunityComment(CommunityComment $comment)
+    {
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityComment::class,
+            'target_id' => $comment->id,
+            'action' => 'DELETE_COMMENT',
+            'reason' => 'Penghapusan komentar melanggar pedoman oleh Administrator',
+            'created_at' => Carbon::now(),
+        ]);
+
+        $comment->delete();
+
+        return back()->with('success', 'Komentar komunitas berhasil dihapus.');
+    }
+
+    public function resolveCommunityReport(Request $request, CommunityReport $report)
+    {
+        $validated = $request->validate([
+            'action' => ['required', 'in:HIDE_POST,DELETE_POST,WARN_USER,DISMISS'],
+            'resolution_notes' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $post = CommunityPost::find($report->target_id);
+
+        if ($validated['action'] === 'HIDE_POST' && $post) {
+            $post->update(['status' => 'HIDDEN']);
+            $resolution = 'CONTENT_HIDDEN';
+        } elseif ($validated['action'] === 'DELETE_POST' && $post) {
+            $post->comments()->delete();
+            $post->delete();
+            $resolution = 'CONTENT_DELETED';
+        } elseif ($validated['action'] === 'WARN_USER') {
+            $resolution = 'USER_WARNED';
+        } else {
+            $resolution = 'DISMISSED';
+        }
+
+        $report->update([
+            'status' => $validated['action'] === 'DISMISS' ? 'DISMISSED' : 'RESOLVED',
+            'resolution' => $resolution,
+            'reviewed_by' => Auth::id(),
+            'reviewed_at' => Carbon::now(),
+        ]);
+
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityReport::class,
+            'target_id' => $report->id,
+            'action' => 'RESOLVE_REPORT_' . $validated['action'],
+            'reason' => $validated['resolution_notes'] ?? "Penyelesaian laporan pelanggaran dengan tindakan {$validated['action']}",
+            'created_at' => Carbon::now(),
+        ]);
+
+        return back()->with('success', "Laporan pelanggaran berhasil diproses ({$resolution}).");
+    }
+
+    public function dismissCommunityReport(Request $request, CommunityReport $report)
+    {
+        $report->update([
+            'status' => 'DISMISSED',
+            'resolution' => 'DISMISSED',
+            'reviewed_by' => Auth::id(),
+            'reviewed_at' => Carbon::now(),
+        ]);
+
+        ModerationAction::create([
+            'moderator_id' => Auth::id(),
+            'target_type' => CommunityReport::class,
+            'target_id' => $report->id,
+            'action' => 'DISMISS_REPORT',
+            'reason' => 'Laporan ditolak karena tidak terbukti melanggar pedoman',
+            'created_at' => Carbon::now(),
+        ]);
+
+        return back()->with('success', 'Laporan telah ditolak.');
     }
 
     // 8. Badge & Gamifikasi

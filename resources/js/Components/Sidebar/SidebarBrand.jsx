@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
+import NotificationDropdown from '../NotificationDropdown';
 
 export default function SidebarBrand({ isAdmin, isInstructor, onClose }) {
     const roleBadge = isAdmin ? 'Admin' : isInstructor ? 'Instruktur' : 'Member';
@@ -17,7 +18,8 @@ export default function SidebarBrand({ isAdmin, isInstructor, onClose }) {
                 </span>
             </Link>
 
-            <div className="flex items-center gap-0.5">
+            <div className="flex items-center gap-1">
+                <NotificationDropdown align="left" />
                 <Link
                     href="/"
                     className="p-1 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors shrink-0"

@@ -7,6 +7,7 @@ import MembershipTierModal from '../Components/MembershipTierModal';
 import MemberFloatingAiChat from '../Components/MemberFloatingAiChat';
 import AppSidebar from '../Components/Sidebar/AppSidebar';
 import LogoutConfirmModal from '../Components/LogoutConfirmModal';
+import NotificationDropdown from '../Components/NotificationDropdown';
 
 export default function AppLayout({ children, title, activeTab }) {
 
@@ -127,6 +128,7 @@ export default function AppLayout({ children, title, activeTab }) {
 
                     {/* Right: Quick Action & SOS */}
                     <div className="flex items-center gap-1.5 shrink-0">
+                        <NotificationDropdown align="right" />
                         <button
                             type="button"
                             onClick={() => setIsEmergencyOpen(true)}

@@ -57,22 +57,22 @@ export function TabsTrigger({ value, children, icon, badge, className = '', disa
             onClick={() => context.setActiveTab(value)}
             className={`
                 inline-flex items-center justify-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl
-                transition-all duration-200 cursor-pointer select-none focus:outline-none
+                transition-all duration-200 cursor-pointer select-none focus:outline-none shrink-0
                 disabled:opacity-50 disabled:cursor-not-allowed
                 ${
                     isActive
-                        ? 'bg-white text-primary shadow-xs font-bold'
-                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/50'
+                        ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                        : 'text-on-surface-variant hover:text-on-surface hover:bg-white/50 dark:hover:bg-surface/50'
                 }
                 ${className}
             `.replace(/\s+/g, ' ').trim()}
             {...props}
         >
-            {icon && <span className="material-symbols-outlined text-[18px]">{icon}</span>}
-            <span>{children}</span>
+            {icon && <span className="material-symbols-outlined text-[18px] shrink-0 leading-none">{icon}</span>}
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap">{children}</span>
             {badge !== undefined && (
                 <span
-                    className={`px-1.5 py-0.5 text-[10px] font-bold rounded-full ${
+                    className={`px-1.5 py-0.5 text-[10px] font-bold rounded-full shrink-0 font-mono ${
                         isActive ? 'bg-primary/10 text-primary' : 'bg-surface-container text-on-surface-variant'
                     }`}
                 >
