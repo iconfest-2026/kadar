@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "dev:all": "concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"vite\" --names=server,queue,vite"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -22,5 +23,9 @@
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
         "tesseract.js": "^7.0.0"
+    },
+    "allowScripts": {
+        "esbuild@0.28.2": true,
+        "tesseract.js@7.0.0": true
     }
 }

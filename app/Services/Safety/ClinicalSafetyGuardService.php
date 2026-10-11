@@ -58,7 +58,7 @@ class ClinicalSafetyGuardService
             return [
                 'is_safe' => false,
                 'trigger_type' => 'DIAGNOSTIC_VERDICT_REFUSAL',
-                'safe_response' => "Kami dapat membantu Anda mengamati pola kebiasaan, tren metabolisme tubuh, serta mendengarkan curhat dan emosi Anda. Namun AEVYRA bukan pengganti pemeriksaan medis langsung dan tidak dapat mengeluarkan diagnosis definitif penyakit tertentu. Jika ada keluhan fisik yang mengkhawatirkan, disarankan untuk berkonsultasi ke fasilitas layanan kesehatan resmi.",
+                'safe_response' => "Kami dapat membantu Anda mengamati pola kebiasaan, tren metabolisme tubuh, serta mendengarkan curhat dan emosi Anda. Namun AEVYRA bukan pengganti konsultasi medis langsung dan tidak dapat mengeluarkan diagnosis definitif penyakit tertentu. Jika ada keluhan fisik yang mengkhawatirkan, disarankan untuk berkonsultasi ke fasilitas layanan kesehatan resmi.",
                 'action_required' => 'NON_DIAGNOSTIC_REDIRECT',
             ];
         }
