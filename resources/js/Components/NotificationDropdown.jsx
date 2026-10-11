@@ -98,6 +98,12 @@ export default function NotificationDropdown({ align = 'right', className = '' }
         }
 
         switch (cat) {
+            case 'maintenance':
+                return { icon: 'build', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' };
+            case 'announcement':
+                return { icon: 'campaign', color: 'bg-primary/10 text-primary border-primary/20' };
+            case 'system':
+                return { icon: 'settings_alert', color: 'bg-teal-500/10 text-teal-600 border-teal-500/20' };
             case 'clinical':
                 return { icon: 'warning', color: 'bg-rose-500/10 text-rose-600 border-rose-500/20' };
             case 'emergency':

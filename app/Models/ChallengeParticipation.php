@@ -44,4 +44,9 @@ class ChallengeParticipation extends Model
             ->withPivot('completed_at')
             ->withTimestamps();
     }
+
+    public function taskCompletions(): BelongsToMany
+    {
+        return $this->completedTasks();
+    }
 }

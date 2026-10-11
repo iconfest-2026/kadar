@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
+import Alert from '../../Components/UI/Alert';
 
 export default function ConsultationsHub({ instructors = [], consultations = [], membership = {}, defaultSlots = [] }) {
     const { flash } = usePage().props;
@@ -312,22 +313,20 @@ export default function ConsultationsHub({ instructors = [], consultations = [],
 
                             {/* Flash or Form Errors Alert */}
                             {(Object.keys(formErrors).length > 0 || flash?.error) && (
-                                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
-                                    <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5">error</span>
+                                <Alert variant="destructive" dismissible>
                                     <div className="space-y-0.5">
                                         {flash?.error && <p className="font-semibold">{flash.error}</p>}
                                         {Object.values(formErrors).map((err, idx) => (
                                             <p key={idx}>{err}</p>
                                         ))}
                                     </div>
-                                </div>
+                                </Alert>
                             )}
 
                             {flash?.success && (
-                                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-[16px] shrink-0">check_circle</span>
-                                    <p className="font-semibold">{flash.success}</p>
-                                </div>
+                                <Alert variant="success" dismissible>
+                                    {flash.success}
+                                </Alert>
                             )}
 
                             <form action="#" method="POST" onSubmit={handleConfirmBooking} className="space-y-3">

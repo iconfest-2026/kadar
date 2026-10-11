@@ -47,8 +47,8 @@ class AdminGovernanceController extends Controller
             ->whereHas('roles', fn($q) => $q->where('slug', 'instructor'))
             ->count();
             
-        $activePrograms = Program::where('status', 'PUBLISHED')->count();
-        $activeChallenges = Challenge::where('status', 'PUBLISHED')->count();
+        $activePrograms = Program::whereIn('status', ['PUBLISHED', 'ACTIVE'])->count();
+        $activeChallenges = Challenge::whereIn('status', ['ACTIVE', 'PUBLISHED'])->count();
         $emergencyCount = EmergencyEvent::whereDate('created_at', today())->count();
         $consultationsToday = Consultation::whereDate('scheduled_start', today())->count();
         $healthRecordsCount = HealthRecord::count();

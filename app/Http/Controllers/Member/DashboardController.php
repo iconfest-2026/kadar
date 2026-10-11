@@ -43,6 +43,25 @@ class DashboardController extends Controller
             ->get()
             ->keyBy('metric_type');
 
+        // 2b. Fetch recent 14-day history for baseline trend charting
+        $recentHistory = HealthRecord::where('user_id', $user->id)
+            ->whereIn('metric_type', $coreMetrics)
+            ->where('recorded_at', '>=', Carbon::now()->subDays(14)->startOfDay())
+            ->orderBy('recorded_at', 'asc')
+            ->get(['id', 'metric_type', 'value_numeric', 'unit', 'recorded_at'])
+            ->groupBy('metric_type')
+            ->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'value' => (float)$item->value_numeric,
+                        'unit' => $item->unit,
+                        'date' => Carbon::parse($item->recorded_at)->format('Y-m-d'),
+                        'label' => Carbon::parse($item->recorded_at)->translatedFormat('d M'),
+                    ];
+                });
+            });
+
         // 3. Fetch today's health records
         $todayRecords = HealthRecord::where('user_id', $user->id)
             ->whereDate('recorded_at', $today)
@@ -142,6 +161,7 @@ class DashboardController extends Controller
             'profile' => $profile,
             'lifestyle' => $user->lifestyleProfile,
             'baselines' => $baselines,
+            'recentHistory' => $recentHistory,
             'todayRecords' => $todayRecords,
             'activeSignals' => $activeSignals,
             'activeInsights' => $activeInsights,

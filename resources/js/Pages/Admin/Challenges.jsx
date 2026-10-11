@@ -32,9 +32,12 @@ export default function Challenges({
         duration_days: 7,
         points_reward: 100,
         program_id: '',
-        status: 'PUBLISHED',
+        status: 'ACTIVE',
         starts_at: '',
         ends_at: '',
+        tasks: [
+            { title: '', target_value: 1, target_unit: 'kali' },
+        ],
     });
 
     // Edit Form
@@ -45,10 +48,47 @@ export default function Challenges({
         duration_days: 7,
         points_reward: 100,
         program_id: '',
-        status: 'PUBLISHED',
+        status: 'ACTIVE',
         starts_at: '',
         ends_at: '',
+        tasks: [],
     });
+
+    const addCreateTask = () => {
+        createForm.setData('tasks', [
+            ...createForm.data.tasks,
+            { title: '', target_value: 1, target_unit: 'kali' },
+        ]);
+    };
+
+    const removeCreateTask = (index) => {
+        const next = createForm.data.tasks.filter((_, idx) => idx !== index);
+        createForm.setData('tasks', next);
+    };
+
+    const updateCreateTask = (index, field, value) => {
+        const next = [...createForm.data.tasks];
+        next[index] = { ...next[index], [field]: value };
+        createForm.setData('tasks', next);
+    };
+
+    const addEditTask = () => {
+        editForm.setData('tasks', [
+            ...editForm.data.tasks,
+            { title: '', target_value: 1, target_unit: 'kali' },
+        ]);
+    };
+
+    const removeEditTask = (index) => {
+        const next = editForm.data.tasks.filter((_, idx) => idx !== index);
+        editForm.setData('tasks', next);
+    };
+
+    const updateEditTask = (index, field, value) => {
+        const next = [...editForm.data.tasks];
+        next[index] = { ...next[index], [field]: value };
+        editForm.setData('tasks', next);
+    };
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -77,6 +117,13 @@ export default function Challenges({
 
     const openEditModal = (ch) => {
         setEditingChallenge(ch);
+        const existingTasks = (ch.tasks || []).map((t) => ({
+            id: t.id,
+            title: t.title || '',
+            target_value: t.target_value ?? 1,
+            target_unit: t.target_unit || 'kali',
+        }));
+
         editForm.setData({
             name: ch.name || '',
             description: ch.description || '',
@@ -84,9 +131,10 @@ export default function Challenges({
             duration_days: ch.duration_days || 7,
             points_reward: ch.points_reward || 100,
             program_id: ch.program_id || '',
-            status: ch.status || 'PUBLISHED',
+            status: ch.status === 'PUBLISHED' ? 'ACTIVE' : (ch.status || 'ACTIVE'),
             starts_at: ch.starts_at ? ch.starts_at.split('T')[0] : '',
             ends_at: ch.ends_at ? ch.ends_at.split('T')[0] : '',
+            tasks: existingTasks.length > 0 ? existingTasks : [{ title: '', target_value: 1, target_unit: 'kali' }],
         });
     };
 
@@ -162,11 +210,27 @@ export default function Challenges({
             ),
         },
         {
+            key: 'tasks',
+            label: 'Target Harian',
+            render: (row) => (
+                <div className="space-y-1">
+                    <span className="font-semibold text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full inline-block">
+                        {row.tasks?.length || 0} Target Mikro
+                    </span>
+                    {row.tasks && row.tasks.length > 0 && (
+                        <p className="text-[11px] text-on-surface-variant line-clamp-1 max-w-[200px]" title={row.tasks.map(t => t.title).join(', ')}>
+                            {row.tasks[0]?.title} {row.tasks.length > 1 ? `(+${row.tasks.length - 1} lainnya)` : ''}
+                        </p>
+                    )}
+                </div>
+            ),
+        },
+        {
             key: 'status',
             label: 'Status',
             render: (row) => (
-                <AdminBadge variant={row.status === 'PUBLISHED' || row.status === 'ACTIVE' ? 'active' : 'draft'} size="xs">
-                    {row.status || 'PUBLISHED'}
+                <AdminBadge variant={row.status === 'ACTIVE' || row.status === 'PUBLISHED' ? 'active' : 'draft'} size="xs">
+                    {row.status === 'ACTIVE' || row.status === 'PUBLISHED' ? 'AKTIF' : row.status}
                 </AdminBadge>
             ),
         },
@@ -294,7 +358,7 @@ export default function Challenges({
                             onChange: setStatus,
                             options: [
                                 { label: 'Semua Status', value: '' },
-                                { label: 'Diterbitkan (PUBLISHED / ACTIVE)', value: 'PUBLISHED' },
+                                { label: 'Aktif (ACTIVE)', value: 'ACTIVE' },
                                 { label: 'Draf (DRAFT)', value: 'DRAFT' },
                                 { label: 'Diarsipkan (ARCHIVED)', value: 'ARCHIVED' },
                             ],
@@ -372,6 +436,13 @@ export default function Challenges({
                                     </div>
                                     <div className="flex items-center justify-between text-on-surface-variant">
                                         <span className="flex items-center gap-1.5">
+                                            <span className="material-symbols-outlined text-[16px] text-primary">checklist</span>
+                                            Target Harian:
+                                        </span>
+                                        <span className="font-label-mono font-bold text-primary">{ch.tasks?.length || 0} Target Mikro</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-on-surface-variant">
+                                        <span className="flex items-center gap-1.5">
                                             <span className="material-symbols-outlined text-[16px] text-teal-600">group</span>
                                             Partisipan Aktif:
                                         </span>
@@ -388,9 +459,9 @@ export default function Challenges({
                     isOpen={isCreateOpen}
                     onClose={() => setIsCreateOpen(false)}
                     title="Buat Tantangan Gamifikasi Baru"
-                    subtitle="Rancang tantangan berhadiah poin untuk memicu konsistensi member."
+                    subtitle="Rancang tantangan berhadiah poin dan target mikro harian untuk konsistensi member."
                     icon="add_task"
-                    maxWidth="md"
+                    maxWidth="lg"
                     footer={
                         <div className="flex items-center justify-end gap-2 w-full">
                             <Button
@@ -476,6 +547,79 @@ export default function Challenges({
                             />
                         </div>
 
+                        {/* Target Harian / Mikro-Kebiasaan */}
+                        <div className="rounded-2xl border border-primary/20 bg-surface-container-low/50 p-4 space-y-3">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                                        <span className="material-symbols-outlined text-[16px] text-primary">checklist</span>
+                                        Target Harian (Poin-Poin Capaian Mikro)
+                                    </h4>
+                                    <p className="text-[11px] text-on-surface-variant mt-0.5">
+                                        Poin-poin aktivitas mikro yang perlu dicapai member setiap hari selama tantangan.
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={addCreateTask}
+                                    className="px-2.5 py-1 rounded-xl text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 flex items-center gap-1 transition-all cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[14px]">add</span>
+                                    Tambah Target
+                                </button>
+                            </div>
+
+                            <div className="space-y-2">
+                                {createForm.data.tasks.map((task, idx) => (
+                                    <div key={idx} className="flex items-center gap-2 bg-white rounded-xl p-2 border border-surface-container">
+                                        <div className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0">
+                                            {idx + 1}
+                                        </div>
+                                        <div className="flex-1">
+                                            <input
+                                                type="text"
+                                                placeholder="Nama target (misal: Jalan kaki 5.000 langkah, Minum air 2 liter)"
+                                                value={task.title}
+                                                onChange={(e) => updateCreateTask(idx, 'title', e.target.value)}
+                                                className="w-full text-xs font-medium text-on-surface bg-transparent focus:outline-hidden"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="w-20 shrink-0">
+                                            <input
+                                                type="number"
+                                                min="0.1"
+                                                step="any"
+                                                placeholder="Target"
+                                                value={task.target_value}
+                                                onChange={(e) => updateCreateTask(idx, 'target_value', e.target.value)}
+                                                className="w-full text-xs text-center font-mono font-bold text-on-surface bg-surface-container-low rounded-lg px-2 py-1 border border-surface-container focus:outline-hidden"
+                                            />
+                                        </div>
+                                        <div className="w-24 shrink-0">
+                                            <input
+                                                type="text"
+                                                placeholder="Satuan (langkah, gelas)"
+                                                value={task.target_unit}
+                                                onChange={(e) => updateCreateTask(idx, 'target_unit', e.target.value)}
+                                                className="w-full text-xs text-center text-on-surface bg-surface-container-low rounded-lg px-2 py-1 border border-surface-container focus:outline-hidden"
+                                            />
+                                        </div>
+                                        {createForm.data.tasks.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeCreateTask(idx)}
+                                                className="p-1 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors shrink-0"
+                                                title="Hapus Target"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">close</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         <Textarea
                             label="Deskripsi Tantangan & Syarat Keberhasilan"
                             placeholder="Jelaskan apa yang harus dicatat member setiap hari untuk menyelesaikan tantangan ini..."
@@ -492,7 +636,7 @@ export default function Challenges({
                             onChange={(e) => createForm.setData('status', e.target.value)}
                             error={createForm.errors.status}
                             options={[
-                                { value: 'PUBLISHED', label: 'Diterbitkan (PUBLISHED)' },
+                                { value: 'ACTIVE', label: 'Aktif (ACTIVE)' },
                                 { value: 'DRAFT', label: 'Draf (DRAFT)' },
                                 { value: 'ARCHIVED', label: 'Diarsipkan (ARCHIVED)' },
                             ]}
@@ -505,9 +649,9 @@ export default function Challenges({
                     isOpen={!!editingChallenge}
                     onClose={() => setEditingChallenge(null)}
                     title={`Edit Tantangan: ${editingChallenge?.name || ''}`}
-                    subtitle="Perbarui target, durasi, imbalan poin, atau status publikasi."
+                    subtitle="Perbarui target harian, durasi, imbalan poin, atau status publikasi."
                     icon="edit"
-                    maxWidth="md"
+                    maxWidth="lg"
                     footer={
                         <div className="flex items-center justify-end gap-2 w-full">
                             <Button
@@ -578,6 +722,79 @@ export default function Challenges({
                             />
                         </div>
 
+                        {/* Target Harian / Mikro-Kebiasaan di Edit Modal */}
+                        <div className="rounded-2xl border border-primary/20 bg-surface-container-low/50 p-4 space-y-3">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                                        <span className="material-symbols-outlined text-[16px] text-primary">checklist</span>
+                                        Target Harian (Poin-Poin Capaian Mikro)
+                                    </h4>
+                                    <p className="text-[11px] text-on-surface-variant mt-0.5">
+                                        Sesuaikan poin capaian mikro harian yang harus diselesaikan peserta.
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={addEditTask}
+                                    className="px-2.5 py-1 rounded-xl text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 flex items-center gap-1 transition-all cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[14px]">add</span>
+                                    Tambah Target
+                                </button>
+                            </div>
+
+                            <div className="space-y-2">
+                                {editForm.data.tasks.map((task, idx) => (
+                                    <div key={idx} className="flex items-center gap-2 bg-white rounded-xl p-2 border border-surface-container">
+                                        <div className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0">
+                                            {idx + 1}
+                                        </div>
+                                        <div className="flex-1">
+                                            <input
+                                                type="text"
+                                                placeholder="Nama target (misal: 10.000 langkah, 8 gelas air)"
+                                                value={task.title}
+                                                onChange={(e) => updateEditTask(idx, 'title', e.target.value)}
+                                                className="w-full text-xs font-medium text-on-surface bg-transparent focus:outline-hidden"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="w-20 shrink-0">
+                                            <input
+                                                type="number"
+                                                min="0.1"
+                                                step="any"
+                                                placeholder="Target"
+                                                value={task.target_value}
+                                                onChange={(e) => updateEditTask(idx, 'target_value', e.target.value)}
+                                                className="w-full text-xs text-center font-mono font-bold text-on-surface bg-surface-container-low rounded-lg px-2 py-1 border border-surface-container focus:outline-hidden"
+                                            />
+                                        </div>
+                                        <div className="w-24 shrink-0">
+                                            <input
+                                                type="text"
+                                                placeholder="Satuan (kali, langkah)"
+                                                value={task.target_unit}
+                                                onChange={(e) => updateEditTask(idx, 'target_unit', e.target.value)}
+                                                className="w-full text-xs text-center text-on-surface bg-surface-container-low rounded-lg px-2 py-1 border border-surface-container focus:outline-hidden"
+                                            />
+                                        </div>
+                                        {editForm.data.tasks.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeEditTask(idx)}
+                                                className="p-1 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors shrink-0"
+                                                title="Hapus Target"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">close</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         <Textarea
                             label="Deskripsi Tantangan"
                             value={editForm.data.description}
@@ -593,7 +810,7 @@ export default function Challenges({
                             onChange={(e) => editForm.setData('status', e.target.value)}
                             error={editForm.errors.status}
                             options={[
-                                { value: 'PUBLISHED', label: 'Diterbitkan (PUBLISHED)' },
+                                { value: 'ACTIVE', label: 'Aktif (ACTIVE)' },
                                 { value: 'DRAFT', label: 'Draf (DRAFT)' },
                                 { value: 'ARCHIVED', label: 'Diarsipkan (ARCHIVED)' },
                             ]}

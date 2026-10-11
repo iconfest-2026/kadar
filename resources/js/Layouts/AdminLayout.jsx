@@ -3,6 +3,7 @@ import { Head, Link, usePage, router } from '@inertiajs/react';
 import AdminBadge from '../Components/Admin/AdminBadge';
 import LogoutConfirmModal from '../Components/LogoutConfirmModal';
 import NotificationDropdown from '../Components/NotificationDropdown';
+import Alert from '../Components/UI/Alert';
 
 export default function AdminLayout({ children, title, activeNav }) {
     const { auth, flash } = usePage().props;
@@ -38,6 +39,7 @@ export default function AdminLayout({ children, title, activeNav }) {
                 { key: 'dashboard', label: 'Dashboard Ringkasan', icon: 'dashboard', href: '/admin/dashboard' },
                 { key: 'users', label: 'Pengguna & Peran', icon: 'group', href: '/admin/users' },
                 { key: 'instructors', label: 'Verifikasi Instruktur', icon: 'verified_user', href: '/admin/instructors' },
+                { key: 'notifications-broadcast', label: 'Broadcast Notifikasi', icon: 'campaign', href: '/admin/notifications-broadcast' },
             ],
         },
         {
@@ -301,20 +303,14 @@ export default function AdminLayout({ children, title, activeNav }) {
                 <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 content-visibility-auto pb-24 lg:pb-8">
                     {/* Flash Messages */}
                     {flash?.success && (
-                        <div className="p-4 bg-emerald-50 text-emerald-900 text-xs font-semibold rounded-2xl border border-emerald-200 flex items-center gap-3 shadow-xs animate-in slide-in-from-top duration-200">
-                            <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
-                                <span className="material-symbols-outlined text-[20px]">check_circle</span>
-                            </div>
-                            <span className="flex-1">{flash.success}</span>
-                        </div>
+                        <Alert variant="success" dismissible className="animate-in slide-in-from-top duration-200">
+                            {flash.success}
+                        </Alert>
                     )}
                     {flash?.error && (
-                        <div className="p-4 bg-rose-50 text-rose-900 text-xs font-semibold rounded-2xl border border-rose-200 flex items-center gap-3 shadow-xs animate-in slide-in-from-top duration-200">
-                            <div className="w-8 h-8 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
-                                <span className="material-symbols-outlined text-[20px]">error</span>
-                            </div>
-                            <span className="flex-1">{flash.error}</span>
-                        </div>
+                        <Alert variant="destructive" dismissible className="animate-in slide-in-from-top duration-200">
+                            {flash.error}
+                        </Alert>
                     )}
 
                     {children}

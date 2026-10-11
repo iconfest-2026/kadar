@@ -78,13 +78,34 @@ class MenstrualCycleController extends Controller
         $fertileStart = $nextOvulationDate->copy()->subDays(4);
         $fertileEnd = $nextOvulationDate->copy()->addDay();
 
+        // Generate calendar cycle predictions (past 1 cycle and next 4 cycles)
+        $cycleEvents = [];
+        $cycleStartCursor = $lastPeriod->copy()->subDays($cycleLength);
+        for ($c = 0; $c < 5; $c++) {
+            $cPeriodStart = $cycleStartCursor->copy()->addDays($c * $cycleLength);
+            $cPeriodEnd = $cPeriodStart->copy()->addDays($periodLength - 1);
+            $cOvulationDate = $cPeriodStart->copy()->addDays($cycleLength - 14);
+            $cFertileStart = $cOvulationDate->copy()->subDays(4);
+            $cFertileEnd = $cOvulationDate->copy()->addDay();
+
+            $cycleEvents[] = [
+                'period_start' => $cPeriodStart->toDateString(),
+                'period_end' => $cPeriodEnd->toDateString(),
+                'ovulation_date' => $cOvulationDate->toDateString(),
+                'fertile_start' => $cFertileStart->toDateString(),
+                'fertile_end' => $cFertileEnd->toDateString(),
+            ];
+        }
+
         // Recent logs
         $logs = MenstrualLog::where('user_id', $user->id)
             ->orderBy('log_date', 'desc')
-            ->take(14)
+            ->take(30)
             ->get();
 
         return response()->json([
+            'status' => 'success',
+            'success' => true,
             'settings' => $settings,
             'summary' => [
                 'current_cycle_day' => (int) $currentCycleDay,
@@ -95,6 +116,7 @@ class MenstrualCycleController extends Controller
                 'phase_desc' => $phaseDesc,
                 'glycemic_impact' => $glycemicImpact,
                 'nutritional_tip' => $nutritionalTip,
+                'last_period_date' => $lastPeriod->toDateString(),
                 'next_period_date' => $nextPeriodDate->toDateString(),
                 'days_until_next_period' => (int) $daysUntilNextPeriod,
                 'next_ovulation_date' => $nextOvulationDate->toDateString(),
@@ -103,6 +125,7 @@ class MenstrualCycleController extends Controller
                     'end' => $fertileEnd->toDateString(),
                 ],
             ],
+            'cycle_events' => $cycleEvents,
             'recent_logs' => $logs,
         ]);
     }

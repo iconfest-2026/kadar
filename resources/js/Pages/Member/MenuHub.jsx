@@ -52,6 +52,20 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                     color: 'bg-indigo-500/10 text-indigo-600',
                 },
                 {
+                    name: 'Tracker & Tren Baseline',
+                    desc: 'Grafik interaktif kurva biologis personal 14-hari',
+                    href: '/member/tracker',
+                    icon: 'monitoring',
+                    color: 'bg-primary/10 text-primary',
+                },
+                {
+                    name: 'Kesehatan Spesifik Gender',
+                    desc: 'Siklus haid wanita & skrining vitalitas pria',
+                    href: '/member/vitality',
+                    icon: 'vital_signs',
+                    color: 'bg-rose-500/10 text-rose-600',
+                },
+                {
                     name: 'Dokter Pendamping Binaan',
                     desc: 'Daftar instruktur & tim klinis',
                     href: '/member/instructors',
