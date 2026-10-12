@@ -222,7 +222,7 @@ export default function NotificationsBroadcast({
                 />
 
                 {/* KPI Stat Cards */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                     <AdminStatCard
                         title="Total Siaran Terkirim"
                         value={stats.totalBroadcasts}
@@ -258,7 +258,7 @@ export default function NotificationsBroadcast({
                     searchPlaceholder="Cari berdasarkan judul, pesan, atau nama penerima..."
                     searchValue={search}
                     onSearchChange={setSearch}
-                    selectFilters={[
+                    filters={[
                         {
                             label: 'Target Penerima',
                             value: targetRole,
@@ -309,7 +309,7 @@ export default function NotificationsBroadcast({
                     icon="campaign"
                     maxWidth="lg"
                     footer={
-                        <div className="flex items-center justify-end gap-2 w-full">
+                        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 w-full">
                             <Button
                                 type="button"
                                 variant="outline"
@@ -336,7 +336,7 @@ export default function NotificationsBroadcast({
                         {/* Target Role Selector */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-bold text-on-surface">Target Penerima Peran (Role)</label>
-                            <div className="grid grid-cols-3 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 {[
                                     { value: 'all', label: 'Semua (Member & Instruktur)', icon: 'groups' },
                                     { value: 'member', label: 'Khusus Member', icon: 'person' },
@@ -370,7 +370,7 @@ export default function NotificationsBroadcast({
                         />
 
                         {/* Category & Severity */}
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <Select
                                 label="Kategori Pesan"
                                 required

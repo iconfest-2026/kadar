@@ -7,8 +7,16 @@ export default function NotificationDropdown({ align = 'right', className = '' }
     const [filter, setFilter] = useState('all'); // 'all', 'unread'
     const dropdownRef = useRef(null);
 
-    const unreadCount = notifData.unread_count || 0;
-    const recentList = notifData.recent || [];
+    const [localUnreadCount, setLocalUnreadCount] = useState(notifData.unread_count || 0);
+    const [localRecent, setLocalRecent] = useState(notifData.recent || []);
+
+    useEffect(() => {
+        setLocalUnreadCount(notifData.unread_count || 0);
+        setLocalRecent(notifData.recent || []);
+    }, [notifData.unread_count, notifData.recent]);
+
+    const unreadCount = localUnreadCount;
+    const recentList = localRecent;
 
     // Filter displayed notifications
     const displayedNotifications = recentList.filter((n) => {
@@ -30,6 +38,10 @@ export default function NotificationDropdown({ align = 'right', className = '' }
     const handleMarkAsRead = (e, notif) => {
         e.stopPropagation();
         e.preventDefault();
+        setLocalUnreadCount((prev) => Math.max(0, prev - 1));
+        setLocalRecent((prev) =>
+            prev.map((n) => (n.id === notif.id ? { ...n, read_at: new Date().toISOString() } : n))
+        );
         router.patch(`/notifications/${notif.id}/read`, {}, {
             preserveScroll: true,
             preserveState: true,
@@ -37,7 +49,14 @@ export default function NotificationDropdown({ align = 'right', className = '' }
     };
 
     const handleMarkAllAsRead = (e) => {
-        e.preventDefault();
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        setLocalUnreadCount(0);
+        setLocalRecent((prev) =>
+            prev.map((n) => ({ ...n, read_at: n.read_at || new Date().toISOString() }))
+        );
         router.post('/notifications/mark-all-read', {}, {
             preserveScroll: true,
             preserveState: true,
@@ -47,6 +66,10 @@ export default function NotificationDropdown({ align = 'right', className = '' }
     const handleDelete = (e, notif) => {
         e.stopPropagation();
         e.preventDefault();
+        if (!notif.read_at) {
+            setLocalUnreadCount((prev) => Math.max(0, prev - 1));
+        }
+        setLocalRecent((prev) => prev.filter((n) => n.id !== notif.id));
         router.delete(`/notifications/${notif.id}`, {
             preserveScroll: true,
             preserveState: true,
@@ -54,16 +77,24 @@ export default function NotificationDropdown({ align = 'right', className = '' }
     };
 
     const handleItemClick = (notif) => {
-        // If unread, mark read first
-        if (!notif.read_at) {
-            router.patch(`/notifications/${notif.id}/read`, {}, {
-                preserveScroll: true,
-                preserveState: true,
-            });
-        }
         setIsOpen(false);
         const targetUrl = notif.data?.action_url;
-        if (targetUrl) {
+        if (!notif.read_at) {
+            // Optimistically mark as read and remove badge
+            setLocalUnreadCount((prev) => Math.max(0, prev - 1));
+            setLocalRecent((prev) =>
+                prev.map((n) => (n.id === notif.id ? { ...n, read_at: new Date().toISOString() } : n))
+            );
+            router.patch(`/notifications/${notif.id}/read`, {}, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    if (targetUrl) router.visit(targetUrl);
+                },
+                onError: () => {
+                    if (targetUrl) router.visit(targetUrl);
+                },
+            });
+        } else if (targetUrl) {
             router.visit(targetUrl);
         }
     };
@@ -145,15 +176,24 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                 )}
             </button>
 
+            {/* Mobile Backdrop */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/25 backdrop-blur-2xs z-40 sm:hidden"
+                    onClick={() => setIsOpen(false)}
+                    aria-hidden="true"
+                />
+            )}
+
             {/* Notification Dropdown Drawer / Modal */}
             {isOpen && (
                 <div
-                    className={`absolute ${
-                        align === 'right' ? 'right-0' : 'left-0'
-                    } mt-2 w-80 sm:w-96 bg-white dark:bg-surface border border-surface-container rounded-3xl shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
+                    className={`fixed sm:absolute inset-x-3 sm:inset-x-auto ${
+                        align === 'right' ? 'sm:right-0' : 'sm:left-0'
+                    } top-16 sm:top-full mt-0 sm:mt-2 w-auto sm:w-96 max-w-[calc(100vw-1.5rem)] sm:max-w-none bg-white dark:bg-surface border border-surface-container rounded-3xl shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
                 >
                     {/* Header */}
-                    <div className="p-4 border-b border-surface-container flex items-center justify-between bg-surface-container-low/50">
+                    <div className="p-3.5 sm:p-4 border-b border-surface-container flex items-center justify-between bg-surface-container-low/50">
                         <div className="flex items-center gap-2">
                             <span className="font-heading font-bold text-sm text-on-surface">Notifikasi</span>
                             {unreadCount > 0 && (
@@ -163,19 +203,29 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                             )}
                         </div>
 
-                        {unreadCount > 0 && (
+                        <div className="flex items-center gap-2">
+                            {unreadCount > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={handleMarkAllAsRead}
+                                    className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+                                >
+                                    Tandai Dibaca
+                                </button>
+                            )}
                             <button
                                 type="button"
-                                onClick={handleMarkAllAsRead}
-                                className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+                                onClick={() => setIsOpen(false)}
+                                className="sm:hidden p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                                aria-label="Tutup notifikasi"
                             >
-                                Tandai Semua Dibaca
+                                <span className="material-symbols-outlined text-[18px]">close</span>
                             </button>
-                        )}
+                        </div>
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className="px-4 pt-2.5 pb-2 border-b border-surface-container flex items-center gap-2 text-xs">
+                    <div className="px-3.5 sm:px-4 py-2 border-b border-surface-container flex items-center gap-2 text-xs">
                         <button
                             type="button"
                             onClick={() => setFilter('all')}
@@ -196,12 +246,12 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                                     : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
                             }`}
                         >
-                            Belum Dibaca ({unreadCount})
+                            Belum Dibaca{unreadCount > 0 ? ` (${unreadCount})` : ''}
                         </button>
                     </div>
 
                     {/* Notifications List */}
-                    <div className="divide-y divide-surface-container max-h-84 overflow-y-auto">
+                    <div className="divide-y divide-surface-container max-h-[60vh] sm:max-h-84 overflow-y-auto">
                         {displayedNotifications.length > 0 ? (
                             displayedNotifications.map((notif) => {
                                 const isUnread = !notif.read_at;
@@ -211,7 +261,7 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                                     <div
                                         key={notif.id}
                                         onClick={() => handleItemClick(notif)}
-                                        className={`p-3.5 flex items-start gap-3 transition-colors cursor-pointer group ${
+                                        className={`p-3 sm:p-3.5 flex items-start gap-3 transition-colors cursor-pointer group ${
                                             isUnread
                                                 ? 'bg-primary/5 dark:bg-primary/10 hover:bg-primary/10'
                                                 : 'hover:bg-surface-container-low'
@@ -226,7 +276,7 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                                         </div>
 
                                         <div className="flex-1 min-w-0 space-y-0.5">
-                                            <div className="flex items-center justify-between gap-1">
+                                            <div className="flex items-center justify-between gap-1.5">
                                                 <h4 className={`text-xs font-bold truncate ${
                                                     isUnread ? 'text-on-surface' : 'text-on-surface-variant'
                                                 }`}>
@@ -241,20 +291,20 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                                                 {notif.body}
                                             </p>
 
-                                            <div className="flex items-center justify-between pt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center justify-between pt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                                 {notif.data?.action_url ? (
-                                                    <span className="text-[10px] font-bold text-primary flex items-center gap-0.5">
+                                                    <span className="text-[10px] font-bold text-primary flex items-center gap-0.5 hover:underline">
                                                         <span>Buka</span>
                                                         <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
                                                     </span>
                                                 ) : <span />}
 
-                                                <div className="flex items-center gap-1.5">
+                                                <div className="flex items-center gap-1">
                                                     {isUnread && (
                                                         <button
                                                             type="button"
                                                             onClick={(e) => handleMarkAsRead(e, notif)}
-                                                            className="p-1 rounded text-on-surface-variant hover:text-emerald-600 hover:bg-emerald-50"
+                                                            className="p-1.5 rounded-lg text-on-surface-variant hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
                                                             title="Tandai telah dibaca"
                                                         >
                                                             <span className="material-symbols-outlined text-[14px]">done</span>
@@ -263,7 +313,7 @@ export default function NotificationDropdown({ align = 'right', className = '' }
                                                     <button
                                                         type="button"
                                                         onClick={(e) => handleDelete(e, notif)}
-                                                        className="p-1 rounded text-on-surface-variant hover:text-rose-600 hover:bg-rose-50"
+                                                        className="p-1.5 rounded-lg text-on-surface-variant hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                                                         title="Hapus notifikasi"
                                                     >
                                                         <span className="material-symbols-outlined text-[14px]">delete</span>
