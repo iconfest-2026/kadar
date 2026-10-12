@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { usePage, router, Link } from '@inertiajs/react';
 
-export default function NotificationDropdown({ align = 'right', className = '' }) {
+export default function NotificationDropdown({
+    align = 'right',
+    className = '',
+    buttonClassName = '',
+}) {
     const { notifications: notifData = { unread_count: 0, recent: [] } } = usePage().props;
     const [isOpen, setIsOpen] = useState(false);
     const [filter, setFilter] = useState('all'); // 'all', 'unread'
@@ -162,7 +166,10 @@ export default function NotificationDropdown({ align = 'right', className = '' }
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-surface/90 text-on-surface-variant hover:text-primary hover:bg-white dark:hover:bg-surface border border-primary/10 shadow-xs transition-all cursor-pointer flex items-center justify-center shrink-0"
+                className={
+                    buttonClassName ||
+                    "relative p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-surface/90 text-on-surface-variant hover:text-primary hover:bg-white dark:hover:bg-surface border border-primary/10 shadow-xs transition-all cursor-pointer flex items-center justify-center shrink-0"
+                }
                 title={`Notifikasi (${unreadCount} belum dibaca)`}
                 aria-label="Pusat Notifikasi"
             >
