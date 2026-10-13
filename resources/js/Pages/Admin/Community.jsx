@@ -164,29 +164,31 @@ export default function Community({
     const postColumns = [
         {
             key: 'title',
-            label: 'Topik & Isi Diskusi',
+            label: 'Topik Diskusi',
             render: (row) => (
-                <div className="flex items-start gap-3 max-w-md">
-                    <div className="w-9 h-9 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-600 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="material-symbols-outlined text-[20px]">
+                <div className="flex items-center gap-2.5 max-w-sm">
+                    <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-[18px]">
                             {row.category_id === 5 ? 'campaign' : 'chat_bubble'}
                         </span>
                     </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <p className="font-bold text-xs sm:text-sm text-on-surface line-clamp-1">{row.title}</p>
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="font-bold text-xs sm:text-sm text-on-surface truncate" title={row.title}>
+                                {row.title}
+                            </p>
                             {row.category_id === 5 && (
-                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 shrink-0">
+                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 shrink-0">
                                     Resmi
                                 </span>
                             )}
                         </div>
-                        <p className="text-[11px] text-on-surface-variant line-clamp-2 mt-0.5">{row.body || '-'}</p>
-                        <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-[10px] font-semibold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/40 px-2 py-0.5 rounded-full border border-teal-200 dark:border-teal-800">
-                                {categoryNames[row.category_id] || 'Topik Umum'}
+                        <div className="flex items-center gap-2 text-[11px] text-on-surface-variant mt-0.5">
+                            <span className="font-medium text-primary">
+                                {categoryNames[row.category_id] || 'Umum'}
                             </span>
-                            <span className="text-[10px] text-on-surface-variant font-label-mono">
+                            <span>•</span>
+                            <span className="font-mono text-[10px]">
                                 {new Date(row.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                         </div>
@@ -196,18 +198,18 @@ export default function Community({
         },
         {
             key: 'author',
-            label: 'Penulis Postingan',
+            label: 'Penulis',
             render: (row) => {
                 const authorName = row.user?.name || 'Member Anonim';
                 const roleSlug = row.user?.roles?.[0]?.slug || 'member';
                 return (
                     <div className="flex items-center gap-2">
                         <Avatar name={authorName} size="xs" />
-                        <div>
-                            <p className="font-bold text-xs text-on-surface">{authorName}</p>
-                            <AdminBadge variant={roleSlug} size="xs">
-                                {roleSlug.toUpperCase()}
-                            </AdminBadge>
+                        <div className="min-w-0">
+                            <p className="font-bold text-xs text-on-surface truncate max-w-[130px]">{authorName}</p>
+                            <span className="text-[10px] font-mono uppercase text-on-surface-variant">
+                                {roleSlug}
+                            </span>
                         </div>
                     </div>
                 );
@@ -215,42 +217,42 @@ export default function Community({
         },
         {
             key: 'engagement',
-            label: 'Interaksi & Aduan',
+            label: 'Interaksi',
             render: (row) => (
-                <div className="font-label-mono text-xs space-y-0.5">
-                    <p className="text-on-surface font-semibold flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[14px] text-teal-600">comment</span>
-                        {row.comments_count ?? 0} Balasan
-                    </p>
-                    <p className="text-[11px] text-on-surface-variant flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[14px] text-rose-500">favorite</span>
-                        {row.reactions_count ?? 0} Reaksi
-                    </p>
+                <div className="flex items-center gap-3 text-xs font-mono">
+                    <span className="flex items-center gap-1 text-on-surface-variant" title="Balasan">
+                        <span className="material-symbols-outlined text-[15px] text-primary">comment</span>
+                        {row.comments_count ?? 0}
+                    </span>
+                    <span className="flex items-center gap-1 text-on-surface-variant" title="Suka / Reaksi">
+                        <span className="material-symbols-outlined text-[15px] text-rose-500">favorite</span>
+                        {row.reactions_count ?? 0}
+                    </span>
                     {row.reports_count > 0 && (
-                        <p className="text-[11px] text-rose-600 font-bold flex items-center gap-1 animate-pulse">
-                            <span className="material-symbols-outlined text-[14px]">report</span>
-                            {row.reports_count} Aduan
-                        </p>
+                        <span className="flex items-center gap-0.5 text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded" title="Aduan">
+                            <span className="material-symbols-outlined text-[13px]">report</span>
+                            {row.reports_count}
+                        </span>
                     )}
                 </div>
             ),
         },
         {
             key: 'status',
-            label: 'Status Moderasi',
+            label: 'Status',
             render: (row) => {
                 const stat = row.status || 'PUBLISHED';
                 const isFlagged = stat === 'UNDER_REVIEW' || stat === 'HIDDEN';
                 return (
                     <AdminBadge variant={isFlagged ? 'emergency' : 'published'} size="xs">
-                        {stat === 'PUBLISHED' ? 'Diterbitkan' : stat === 'UNDER_REVIEW' ? 'Dalam Review' : 'Disembunyikan'}
+                        {stat === 'PUBLISHED' ? 'Diterbitkan' : stat === 'UNDER_REVIEW' ? 'Review' : 'Disembunyikan'}
                     </AdminBadge>
                 );
             },
         },
         {
             key: 'actions',
-            label: 'Tindakan',
+            label: 'Aksi',
             align: 'right',
             render: (row) => (
                 <div className="flex items-center justify-end">

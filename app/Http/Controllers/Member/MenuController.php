@@ -36,6 +36,8 @@ class MenuController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'avatar_url' => $user->avatar_url,
+                'is_google_connected' => !empty($user->google_id),
             ],
             'profile' => $profile ? [
                 'display_name' => $profile->display_name ?: $user->name,

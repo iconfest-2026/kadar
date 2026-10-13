@@ -39,6 +39,13 @@ export default function InstructorLayout({ children, title, activeNav }) {
                 { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
             ],
         },
+        {
+            title: 'Pengaturan & Akun',
+            items: [
+                { id: 'account', name: 'Pengaturan Akun & Google', href: '/instructor/account', icon: 'manage_accounts' },
+                { id: 'profile', name: 'Profil & Kredensial Medis', href: '/instructor/profile', icon: 'badge' },
+            ],
+        },
     ];
 
     const renderStatusBadge = (status) => {
@@ -116,15 +123,20 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
                 {/* Instructor Profile Card in Sidebar */}
                 <div className="p-4 mx-3 mt-3 rounded-2xl bg-surface-container-low border border-surface-container space-y-2.5 shrink-0">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
-                            {user?.name?.charAt(0) || 'D'}
+                    <Link href="/instructor/account" className="flex items-center gap-2.5 min-w-0 group hover:opacity-85 transition-opacity" title="Buka Pengaturan Akun">
+                        <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0 group-hover:bg-primary-container transition-colors overflow-hidden">
+                            {user?.avatar_url ? (
+                                <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                            ) : (
+                                user?.name?.charAt(0) || 'D'
+                            )}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-on-surface truncate">{user?.name || 'Dokter Pendamping'}</p>
+                            <p className="text-xs font-bold text-on-surface truncate group-hover:text-primary transition-colors">{user?.name || 'Dokter Pendamping'}</p>
                             <p className="text-[10px] text-on-surface-variant truncate">{user?.email}</p>
                         </div>
-                    </div>
+                        <span className="material-symbols-outlined text-[16px] text-on-surface-variant/70 group-hover:text-primary transition-colors">chevron_right</span>
+                    </Link>
 
                     <div className="flex items-center justify-between pt-1 border-t border-surface-container/80 text-[10px]">
                         <span className="text-on-surface-variant font-medium">Status Akun:</span>
@@ -246,8 +258,12 @@ export default function InstructorLayout({ children, title, activeNav }) {
                                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                                 className="flex items-center gap-1.5 p-1 rounded-xl hover:bg-surface-container transition-all cursor-pointer"
                             >
-                                <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary">
-                                    {user?.name?.charAt(0) || 'D'}
+                                <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary overflow-hidden shrink-0">
+                                    {user?.avatar_url ? (
+                                        <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        user?.name?.charAt(0) || 'D'
+                                    )}
                                 </div>
                                 <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
                                     expand_more

@@ -104,6 +104,14 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
             title: 'Pengaturan & Layanan',
             items: [
                 {
+                    name: 'Informasi & Pengaturan Akun',
+                    desc: 'Edit profil, ubah kata sandi & koneksi Google SSO',
+                    href: '/member/account',
+                    icon: 'manage_accounts',
+                    color: 'bg-primary/10 text-primary',
+                    badge: user?.is_google_connected ? 'Google Terhubung' : null,
+                },
+                {
                     name: 'Paket Langganan SaaS',
                     desc: membership?.has_pending_downgrade 
                         ? `Beralih ke ${membership.pending_downgrade?.tier_name} (${membership.pending_downgrade?.effective_at})`
@@ -141,9 +149,17 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                     <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                             {/* Avatar */}
-                            <div className="w-13 h-13 rounded-2xl bg-white/20 backdrop-blur-md border border-white/25 flex items-center justify-center font-heading font-black text-xl text-white shrink-0">
-                                {(user?.name || 'U').charAt(0).toUpperCase()}
-                            </div>
+                            {user?.avatar_url ? (
+                                <img
+                                    src={user.avatar_url}
+                                    alt={user.name}
+                                    className="w-13 h-13 rounded-2xl object-cover border border-white/30 shadow-xs shrink-0"
+                                />
+                            ) : (
+                                <div className="w-13 h-13 rounded-2xl bg-white/20 backdrop-blur-md border border-white/25 flex items-center justify-center font-heading font-black text-xl text-white shrink-0">
+                                    {(user?.name || 'U').charAt(0).toUpperCase()}
+                                </div>
+                            )}
 
                             {/* Name & Occupation */}
                             <div className="min-w-0">
@@ -166,15 +182,15 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                             </div>
                         </div>
 
-                        {/* Edit Profile Button */}
-                        <button
-                            type="button"
-                            onClick={() => setIsEditProfileOpen(true)}
-                            className="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-bold transition-all active:scale-95 shrink-0 flex items-center gap-1 cursor-pointer"
+                        {/* Detail & Pengaturan Akun Button */}
+                        <Link
+                            href="/member/account"
+                            className="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-bold transition-all active:scale-95 shrink-0 flex items-center gap-1.5 cursor-pointer shadow-xs"
+                            title="Buka Informasi & Pengaturan Akun"
                         >
-                            <span className="material-symbols-outlined text-[15px]">edit</span>
-                            <span>Edit</span>
-                        </button>
+                            <span className="material-symbols-outlined text-[15px]">manage_accounts</span>
+                            <span>Detail Akun</span>
+                        </Link>
                     </div>
 
                     {/* Streak & Points Mini Stats */}
@@ -210,9 +226,16 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                                                 <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
                                             </div>
                                             <div className="min-w-0">
-                                                <h3 className="font-bold text-xs text-on-surface truncate group-hover:text-primary transition-colors">
-                                                    {item.name}
-                                                </h3>
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="font-bold text-xs text-on-surface truncate group-hover:text-primary transition-colors">
+                                                        {item.name}
+                                                    </h3>
+                                                    {item.badge && (
+                                                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold font-label-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 shrink-0">
+                                                            {item.badge}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <p className="text-[10px] text-on-surface-variant truncate mt-0.5">
                                                     {item.desc}
                                                 </p>

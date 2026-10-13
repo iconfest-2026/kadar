@@ -11,6 +11,7 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
     const [cameraActive, setCameraActive] = useState(false);
     const [cameraError, setCameraError] = useState(null);
     const [facingMode, setFacingMode] = useState('environment'); // 'environment' (back) | 'user' (front)
+    const [isMirrored, setIsMirrored] = useState(false); // Non-mirror default for text and unreversed scanning
     const [torchOn, setTorchOn] = useState(false);
     const [supportsTorch, setSupportsTorch] = useState(false);
 
@@ -151,7 +152,13 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
     const toggleFacingMode = () => {
         const nextFacing = facingMode === 'environment' ? 'user' : 'environment';
         setFacingMode(nextFacing);
+        // Pastikan orientasi kamera depan default tidak terbalik / non-mirror
+        setIsMirrored(false);
         startCamera(nextFacing);
+    };
+
+    const toggleMirror = () => {
+        setIsMirrored((prev) => !prev);
     };
 
     const toggleTorch = async () => {
@@ -286,10 +293,14 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
 
         canvas.width = video.videoWidth || 1280;
         canvas.height = video.videoHeight || 720;
-        const ctx = canvas.getContext('2d');
-
-        // Draw normal unmirrored image
+        // Draw snapshot respecting mirror state
+        ctx.save();
+        if (isMirrored) {
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+        }
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
 
         const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
         processImageAnalysis({ dataUrl });
@@ -374,7 +385,8 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                                 playsInline
                                 autoPlay
                                 muted
-                                className="w-full h-full object-cover"
+                                style={{ transform: isMirrored ? 'scaleX(-1)' : 'none' }}
+                                className="w-full h-full object-cover transition-transform duration-200"
                             />
                         )}
 
@@ -401,12 +413,28 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                             <span>AEVYRA AI Vision</span>
                             <span className="text-white/40">•</span>
                             <span className="text-emerald-300 font-mono text-[10px]">
-                                {tier?.name || 'Member'}
+                                {facingMode === 'user' ? 'Kamera Depan' : (tier?.name || 'Member')}
                             </span>
                         </div>
 
-                        {/* Top Right Utilities (Torch & Flip Camera) */}
+                        {/* Top Right Utilities (Torch, Mirror & Flip Camera) */}
                         <div className="flex items-center gap-2">
+                            {/* Tombol Balik Cermin / Mirror Toggle */}
+                            <button
+                                type="button"
+                                onClick={toggleMirror}
+                                className={`w-10 h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all active:scale-95 shadow-lg ${
+                                    isMirrored
+                                        ? 'bg-amber-500/80 text-white border-amber-300 shadow-[0_0_15px_#f59e0b]'
+                                        : 'bg-black/40 text-white border-white/20 hover:bg-black/60'
+                                }`}
+                                title={isMirrored ? "Cermin AKTIF (Klik untuk mode Non-Mirror / Asli)" : "Mode Non-Mirror (Klik untuk balik seperti Cermin)"}
+                            >
+                                <span className="material-symbols-outlined text-[20px]">
+                                    {isMirrored ? 'flip' : 'sync_alt'}
+                                </span>
+                            </button>
+
                             {/* Tombol Senter (Torch) */}
                             <button
                                 type="button"
@@ -428,7 +456,7 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                                 type="button"
                                 onClick={toggleFacingMode}
                                 className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/60 active:scale-95 transition-all shadow-lg"
-                                title="Putar Kamera"
+                                title={`Ganti ke ${facingMode === 'environment' ? 'Kamera Depan' : 'Kamera Belakang'}`}
                             >
                                 <span className="material-symbols-outlined text-[20px]">flip_camera_ios</span>
                             </button>
@@ -508,8 +536,13 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                         </div>
 
                         {/* Text Instruction Badge */}
-                        <div className="mt-5 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-xs font-medium text-center shadow-md">
-                            Arahkan titik fokus ke makanan atau label gizi produk
+                        <div className="mt-5 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-xs font-medium text-center shadow-md flex items-center justify-center gap-1.5">
+                            <span>Arahkan titik fokus ke makanan atau label gizi produk</span>
+                            {facingMode === 'user' && (
+                                <span className="text-emerald-400 font-semibold font-mono text-[11px]">
+                                    • {isMirrored ? 'Cermin Aktif' : 'Non-Mirror (Asli)'}
+                                </span>
+                            )}
                         </div>
                     </div>
 

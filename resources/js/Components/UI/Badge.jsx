@@ -37,6 +37,8 @@ export default function Badge({
         xs: 'px-2 py-0.5 text-[10px] gap-1 rounded-md font-bold uppercase tracking-wider',
         sm: 'px-2.5 py-1 text-xs gap-1.5 rounded-lg font-semibold',
         md: 'px-3 py-1.5 text-xs sm:text-sm gap-2 rounded-xl font-semibold',
+        lg: 'px-3.5 py-2 text-sm gap-2 rounded-xl font-bold',
+        xl: 'px-4 py-2.5 text-base gap-2.5 rounded-2xl font-bold',
     };
 
     return (

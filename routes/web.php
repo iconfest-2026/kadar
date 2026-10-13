@@ -11,6 +11,7 @@ use App\Http\Controllers\Payment\MidtransPaymentController;
 use App\Http\Controllers\Instructor\ConsultationController;
 use App\Http\Controllers\Instructor\InstructorCaseloadController;
 use App\Http\Controllers\Instructor\InterventionController;
+use App\Http\Controllers\Instructor\InstructorProfileController;
 use App\Http\Controllers\Instructor\ReportsController as InstructorReportsController;
 use App\Http\Controllers\Member\AiChatController;
 use App\Http\Controllers\Member\BaselineTrackerController;
@@ -243,7 +244,14 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
 });
+
+// Google OAuth 2.0 (Single Sign-On, Registration & Account Linking)
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+Route::get('/auth/google/link', [AuthController::class, 'linkGoogle'])->middleware('auth')->name('auth.google.link');
+Route::post('/auth/google/unlink', [AuthController::class, 'unlinkGoogle'])->middleware('auth')->name('auth.google.unlink');
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
@@ -280,6 +288,22 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('member.community.index');
     });
 
+    // Auto-redirect /onboarding to prevent 404
+    Route::get('/onboarding', function () {
+        /** @var \App\Models\User|null $user */
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+        if ($user->hasRole('instructor')) {
+            return redirect()->route('instructor.dashboard');
+        }
+        return redirect()->route('member.onboarding');
+    })->name('onboarding');
+
     // Centralized Notifications (All Roles)
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
@@ -297,6 +321,12 @@ Route::middleware(['auth'])->group(function () {
         // Member Menu & Profile Hub
         Route::get('/menu', [\App\Http\Controllers\Member\MenuController::class, 'index'])->name('menu');
         Route::post('/menu/profile', [\App\Http\Controllers\Member\MenuController::class, 'updateProfile'])->name('menu.profile');
+
+        // Member Account & Security (Information, Edit & Google Connection)
+        Route::get('/account', [\App\Http\Controllers\Member\AccountController::class, 'index'])->name('account.index');
+        Route::post('/account', [\App\Http\Controllers\Member\AccountController::class, 'update'])->name('account.update');
+        Route::post('/account/avatar', [\App\Http\Controllers\Member\AccountController::class, 'updateAvatar'])->name('account.avatar');
+        Route::post('/account/password', [\App\Http\Controllers\Member\AccountController::class, 'updatePassword'])->name('account.password');
 
         // Member Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -396,6 +426,16 @@ Route::middleware(['auth'])->group(function () {
 
         // Feature 9: Laporan Untuk Instruktur
         Route::get('/reports', [InstructorReportsController::class, 'index'])->name('reports.index');
+
+        // Profile & STR/SIP Credential Management
+        Route::get('/profile', [InstructorProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile', [InstructorProfileController::class, 'update'])->name('profile.update');
+
+        // Account & Security Management (Information, Edit & Google Connection)
+        Route::get('/account', [\App\Http\Controllers\Instructor\InstructorAccountController::class, 'index'])->name('account.index');
+        Route::post('/account', [\App\Http\Controllers\Instructor\InstructorAccountController::class, 'update'])->name('account.update');
+        Route::post('/account/avatar', [\App\Http\Controllers\Instructor\InstructorAccountController::class, 'updateAvatar'])->name('account.avatar');
+        Route::post('/account/password', [\App\Http\Controllers\Instructor\InstructorAccountController::class, 'updatePassword'])->name('account.password');
     });
 
     // -------------------------------------------------------------

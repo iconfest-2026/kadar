@@ -63,59 +63,63 @@ export default function NotificationsBroadcast({
     };
 
     const categoryLabels = {
-        announcement: 'Pengumuman Umum',
-        maintenance: 'Pemeliharaan Sistem',
-        system: 'Informasi Platform',
-        clinical: 'Klinis & Medis',
-        emergency: 'Peringatan Darurat',
+        announcement: 'Pengumuman',
+        maintenance: 'Maintenance',
+        system: 'Sistem',
+        clinical: 'Klinis',
+        emergency: 'Darurat',
     };
 
     const severityBadges = {
-        info: { variant: 'primary', label: 'INFO', bg: 'bg-primary/10 text-primary' },
-        warning: { variant: 'amber', label: 'PERINGATAN', bg: 'bg-amber-500/15 text-amber-700' },
-        danger: { variant: 'rose', label: 'KRITIS', bg: 'bg-rose-500/15 text-rose-700' },
-        success: { variant: 'emerald', label: 'SUKSES', bg: 'bg-emerald-500/15 text-emerald-700' },
+        info: { variant: 'info', label: 'INFO' },
+        warning: { variant: 'notice', label: 'PERINGATAN' },
+        danger: { variant: 'emergency', label: 'KRITIS' },
+        success: { variant: 'success', label: 'SUKSES' },
     };
 
     const targetRoleBadges = {
-        all: { label: 'Semua (Member & Instruktur)', variant: 'primary' },
-        member: { label: 'Khusus Member', variant: 'teal' },
-        instructor: { label: 'Khusus Instruktur', variant: 'amber' },
+        all: { label: 'Semua', variant: 'primary' },
+        member: { label: 'Member', variant: 'member' },
+        instructor: { label: 'Instruktur', variant: 'instructor' },
     };
 
     const columns = [
         {
             key: 'title_body',
-            label: 'Pesan Siaran & Judul',
+            label: 'Pesan & Judul',
             render: (row) => {
                 const cat = row.data?.category || 'announcement';
                 const sev = row.data?.severity || 'info';
                 const icon = row.data?.icon || 'notifications';
 
                 return (
-                    <div className="flex items-start gap-3 py-1">
-                        <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 border ${
-                            sev === 'danger' ? 'bg-rose-500/15 border-rose-500/25 text-rose-700' :
-                            sev === 'warning' ? 'bg-amber-500/15 border-amber-500/25 text-amber-700' :
-                            sev === 'success' ? 'bg-emerald-500/15 border-emerald-500/25 text-emerald-700' :
+                    <div className="flex items-center gap-2 max-w-sm">
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border ${
+                            sev === 'danger' ? 'bg-rose-500/10 border-rose-500/20 text-rose-600' :
+                            sev === 'warning' ? 'bg-amber-500/10 border-amber-500/20 text-amber-600' :
+                            sev === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600' :
                             'bg-primary/10 border-primary/20 text-primary'
                         }`}>
-                            <span className="material-symbols-outlined text-[18px]">{icon}</span>
+                            <span className="material-symbols-outlined text-[15px]">{icon}</span>
                         </div>
-                        <div className="min-w-0 space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <p className="font-bold text-on-surface text-xs sm:text-sm line-clamp-1">{row.title}</p>
-                                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-surface-container text-on-surface-variant">
+                        <div className="min-w-0">
+                            <p className="font-semibold text-xs text-on-surface truncate" title={row.title}>
+                                {row.title}
+                            </p>
+                            <div className="flex items-center gap-1.5 text-[10px] text-on-surface-variant">
+                                <span className="font-medium text-primary">
                                     {categoryLabels[cat] || cat}
                                 </span>
-                            </div>
-                            <p className="text-on-surface-variant text-xs line-clamp-2 leading-relaxed">{row.body}</p>
-                            {row.data?.action_url && (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-mono text-primary hover:underline">
-                                    <span className="material-symbols-outlined text-[13px]">link</span>
-                                    {row.data.action_url}
+                                <span>•</span>
+                                <span className="font-mono text-[9px]">
+                                    {new Date(row.created_at).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
                                 </span>
-                            )}
+                            </div>
                         </div>
                     </div>
                 );
@@ -123,17 +127,17 @@ export default function NotificationsBroadcast({
         },
         {
             key: 'target_role',
-            label: 'Target Penerima',
+            label: 'Target',
             render: (row) => {
                 const roleKey = row.data?.target_role || 'all';
                 const roleMeta = targetRoleBadges[roleKey] || targetRoleBadges.all;
                 return (
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                         <AdminBadge variant={roleMeta.variant} size="xs">
                             {roleMeta.label}
                         </AdminBadge>
-                        <p className="text-[11px] text-on-surface-variant font-medium">
-                            Penerima: <span className="font-semibold text-on-surface">{row.user?.name || 'User Terdaftar'}</span>
+                        <p className="text-[9px] text-on-surface-variant/70 truncate max-w-[110px]">
+                            {row.user?.name || 'User'}
                         </p>
                     </div>
                 );
@@ -141,7 +145,7 @@ export default function NotificationsBroadcast({
         },
         {
             key: 'severity',
-            label: 'Tingkat Urgensi',
+            label: 'Urgensi',
             render: (row) => {
                 const sev = row.data?.severity || 'info';
                 const sevMeta = severityBadges[sev] || severityBadges.info;
@@ -154,29 +158,17 @@ export default function NotificationsBroadcast({
         },
         {
             key: 'status',
-            label: 'Status Baca',
+            label: 'Status',
             render: (row) => (
-                <div className="space-y-0.5">
-                    {row.read_at ? (
-                        <span className="inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold">
-                            <span className="material-symbols-outlined text-[14px]">done_all</span>
-                            Dibaca
-                        </span>
-                    ) : (
-                        <span className="inline-flex items-center gap-1 text-amber-600 text-xs font-semibold">
-                            <span className="material-symbols-outlined text-[14px]">schedule</span>
-                            Belum Dibaca
-                        </span>
-                    )}
-                    <p className="text-[10px] text-on-surface-variant font-mono">
-                        {new Date(row.created_at).toLocaleString('id-ID', {
-                            day: 'numeric',
-                            month: 'short',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        })}
-                    </p>
-                </div>
+                row.read_at ? (
+                    <AdminBadge variant="published" size="xs">
+                        Dibaca
+                    </AdminBadge>
+                ) : (
+                    <AdminBadge variant="notice" size="xs">
+                        Belum Dibaca
+                    </AdminBadge>
+                )
             ),
         },
         {
@@ -184,7 +176,7 @@ export default function NotificationsBroadcast({
             label: 'Aksi',
             align: 'right',
             render: (row) => (
-                <div className="flex items-center justify-end gap-1">
+                <div className="flex items-center justify-end">
                     <button
                         type="button"
                         onClick={() => setDeletingNotification(row)}
@@ -204,10 +196,10 @@ export default function NotificationsBroadcast({
 
             <div className="space-y-6">
                 <AdminPageHeader
-                    title="Siaran Notifikasi & Pengumuman Platform"
-                    subtitle="Kirimkan notifikasi penting seperti jadwal pemeliharaan (maintenance), peringatan sistem, atau pengumuman fitur langsung ke akun Instruktur dan Member."
+                    title="Broadcast Notifikasi"
+                    subtitle="Kirimkan notifikasi dan pengumuman penting secara serentak ke akun Instruktur dan Member."
                     icon="campaign"
-                    badge={<AdminBadge variant="primary">Broadcast Engine</AdminBadge>}
+                    badge={<AdminBadge variant="primary">Broadcast</AdminBadge>}
                     actions={
                         <Button
                             type="button"
@@ -216,7 +208,7 @@ export default function NotificationsBroadcast({
                             leftIcon="send"
                             onClick={() => setIsCreateOpen(true)}
                         >
-                            Kirim Notifikasi Baru
+                            Kirim Notifikasi
                         </Button>
                     }
                 />
@@ -224,30 +216,30 @@ export default function NotificationsBroadcast({
                 {/* KPI Stat Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                     <AdminStatCard
-                        title="Total Siaran Terkirim"
+                        title="Total Siaran"
                         value={stats.totalBroadcasts}
-                        subtitle="Pesan notifikasi di sistem"
+                        subtitle="Pesan terkirim"
                         icon="send"
                         accent="primary"
                     />
                     <AdminStatCard
-                        title="Jangkauan Member"
+                        title="Total Member"
                         value={stats.totalMembers}
-                        subtitle="Akun member aktif"
+                        subtitle="Penerima aktif"
                         icon="group"
                         accent="teal"
                     />
                     <AdminStatCard
-                        title="Jangkauan Instruktur"
+                        title="Total Instruktur"
                         value={stats.totalInstructors}
-                        subtitle="Instruktur terdaftar"
+                        subtitle="Penerima aktif"
                         icon="verified_user"
                         accent="amber"
                     />
                     <AdminStatCard
                         title="Belum Dibaca"
                         value={stats.totalUnread}
-                        subtitle="Menunggu dibuka user"
+                        subtitle="Menunggu dibuka"
                         icon="mark_email_unread"
                         accent="rose"
                     />

@@ -315,8 +315,12 @@ export default function Header() {
                                         className="flex items-center gap-1.5 p-1 rounded-full hover:bg-surface-container-low transition-all cursor-pointer border border-surface-container bg-white/80"
                                         title={user.name}
                                     >
-                                        <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs">
-                                            {user.name?.charAt(0) || 'U'}
+                                        <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs overflow-hidden shrink-0">
+                                            {user.avatar_url ? (
+                                                <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                            ) : (
+                                                user.name?.charAt(0) || 'U'
+                                            )}
                                         </div>
                                         <span className="material-symbols-outlined text-[15px] text-on-surface-variant pr-0.5">
                                             {userDropdownOpen ? 'expand_less' : 'expand_more'}
@@ -517,8 +521,12 @@ export default function Header() {
                                 <div className="space-y-3">
                                     <div className="p-3.5 bg-linear-to-r from-[#edf5f0] to-[#e4f0e8] border border-[#d2e5da] rounded-2xl flex items-center justify-between gap-3 shadow-2xs">
                                         <div className="flex items-center gap-3 overflow-hidden">
-                                            <div className="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
-                                                {user.name?.charAt(0) || 'U'}
+                                            <div className="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0 overflow-hidden">
+                                                {user.avatar_url ? (
+                                                    <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    user.name?.charAt(0) || 'U'
+                                                )}
                                             </div>
                                             <div className="overflow-hidden space-y-0.5">
                                                 <div className="flex items-center gap-1.5">
