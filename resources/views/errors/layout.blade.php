@@ -93,7 +93,7 @@
             <div class="flex items-center gap-2.5 text-[#7e948c]">
                 <span>Standar SatuSehat Kemenkes</span>
                 <span>•</span>
-                <span>Enkripsi UU PDP</span>
+                <span>Enkripsi Medis AES-256</span>
             </div>
         </div>
     </footer>

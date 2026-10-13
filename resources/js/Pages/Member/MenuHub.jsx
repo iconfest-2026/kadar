@@ -105,7 +105,9 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
             items: [
                 {
                     name: 'Paket Langganan SaaS',
-                    desc: 'Lihat fitur paket & kuota konsultasi',
+                    desc: membership?.has_pending_downgrade 
+                        ? `Beralih ke ${membership.pending_downgrade?.tier_name} (${membership.pending_downgrade?.effective_at})`
+                        : `Paket aktif: ${membership?.current_tier || 'Gratis'} - Kelola di sini`,
                     href: '/paket',
                     icon: 'workspace_premium',
                     color: 'bg-amber-500/10 text-amber-600',
@@ -119,7 +121,7 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                 },
                 {
                     name: 'Ambulans Darurat GPS 119',
-                    desc: 'Panggilan tanggap darurat SPGDT Kemenkes',
+                    desc: 'Panggilan tanggap darurat ambulans medis',
                     href: '/demo/emergency',
                     icon: 'emergency',
                     color: 'bg-rose-500/10 text-rose-600',
@@ -150,8 +152,13 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                                         {profile?.display_name || user?.name}
                                     </h1>
                                     <span className="px-2 py-0.2 rounded-full bg-white/20 text-[9px] font-bold font-label-mono text-emerald-200 uppercase shrink-0">
-                                        {membership?.tier || 'Silver'}
+                                        {membership?.current_tier || membership?.tier || 'Gratis'}
                                     </span>
+                                    {membership?.has_pending_downgrade && (
+                                        <span className="px-2 py-0.2 rounded-full bg-amber-400/30 text-[9px] font-bold font-label-mono text-amber-200 shrink-0">
+                                            Jadwal: {membership.pending_downgrade?.tier_name}
+                                        </span>
+                                    )}
                                 </div>
                                 <p className="text-[11px] text-white/80 truncate mt-0.5">
                                     {profile?.occupation || user?.email}

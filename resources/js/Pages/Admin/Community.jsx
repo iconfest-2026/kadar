@@ -517,7 +517,7 @@ export default function Community({
                             <div>
                                 <p className="font-bold">Prinsip Moderasi Berbasis Keselamatan Medis:</p>
                                 <p className="mt-0.5">
-                                    Konten yang memuat klaim obat instan tanpa izin, resep mandiri tanpa lisensi dokter, atau pelanggaran privasi data biometrik anggota wajib ditindak segera sesuai UU PDP dan regulasi Kemenkes.
+                                    Konten yang memuat klaim obat instan tanpa izin, resep mandiri tanpa lisensi dokter, atau pelanggaran privasi data biometrik anggota wajib ditindak segera sesuai kebijakan privasi dan regulasi Kemenkes.
                                 </p>
                             </div>
                         </div>
@@ -611,7 +611,7 @@ export default function Community({
                             <div className="p-6 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3">
                                 <div className="flex items-center gap-2">
                                     <span className="material-symbols-outlined text-teal-600">lock</span>
-                                    <h4 className="font-heading font-bold text-sm text-on-surface">Perlindungan Data Pribadi (UU PDP)</h4>
+                                    <h4 className="font-heading font-bold text-sm text-on-surface">Perlindungan Kerahasiaan Data Pribadi</h4>
                                 </div>
                                 <ul className="text-xs text-on-surface-variant space-y-2 leading-relaxed">
                                     <li>• Dilarang mempublikasikan data glukosa, riwayat resep, atau identitas privat anggota lain tanpa persetujuan eksplisit.</li>

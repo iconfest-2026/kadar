@@ -145,7 +145,7 @@ export default function Emergency({
             label: 'Status Layanan',
             render: () => (
                 <AdminBadge variant="active" size="xs">
-                    Terintegrasi SPGDT
+                    Terintegrasi Siaga Medis
                 </AdminBadge>
             ),
         },
@@ -158,7 +158,7 @@ export default function Emergency({
             <div className="space-y-6">
                 <AdminPageHeader
                     title="Pusat Komando Tanggap Darurat Medis & Ambulans 119/112"
-                    subtitle="Pengawasan audit real-time pemicuan tombol panik SOS, transmisi koordinat GPS ke SPGDT Kemenkes RI, serta direktori IGD RS rujukan nasional."
+                    subtitle="Pengawasan audit real-time pemicuan tombol panik SOS, transmisi koordinat GPS ke hotline ambulans 119, serta direktori IGD RS rujukan nasional."
                     icon="emergency"
                     badge={<AdminBadge variant="emergency" pulse>Zero AI Dependency • Sub-200ms</AdminBadge>}
                     actions={

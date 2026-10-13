@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Table } from '@/Components/UI';
@@ -9,6 +9,74 @@ export default function Consultations({
 }) {
     const [selectedConsultation, setSelectedConsultation] = useState(null);
     const [showScheduleModal, setShowScheduleModal] = useState(false);
+    const [chatConsultation, setChatConsultation] = useState(null);
+    const [chatMessages, setChatMessages] = useState([]);
+    const [chatLoading, setChatLoading] = useState(false);
+    const [chatInput, setChatInput] = useState('');
+    const [chatSubmitting, setChatSubmitting] = useState(false);
+    const chatEndRef = useRef(null);
+
+    const openChatModal = async (cons) => {
+        setChatConsultation(cons);
+        setChatLoading(true);
+        try {
+            const res = await fetch(`/instructor/consultations/${cons.id}/messages`);
+            if (res.ok) {
+                const data = await res.json();
+                setChatMessages(data.messages || []);
+            }
+        } catch (err) {
+            console.error('Failed to load chat:', err);
+        } finally {
+            setChatLoading(false);
+            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+        }
+    };
+
+    const handleSendInstructorMessage = async (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!chatInput.trim() || chatSubmitting || !chatConsultation) return;
+
+        const text = chatInput.trim();
+        setChatInput('');
+        setChatSubmitting(true);
+
+        const tempMsg = {
+            id: 'temp_' + Date.now(),
+            sender_id: 0,
+            sender_role: 'INSTRUCTOR',
+            message: text,
+            created_at: new Date().toISOString(),
+        };
+        setChatMessages((prev) => [...prev, tempMsg]);
+        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const res = await fetch(`/instructor/consultations/${chatConsultation.id}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify({ message: text }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.message) {
+                    setChatMessages((prev) =>
+                        prev.map((m) => (m.id === tempMsg.id ? data.message : m))
+                    );
+                }
+            }
+        } catch (err) {
+            console.error('Send error:', err);
+        } finally {
+            setChatSubmitting(false);
+            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+        }
+    };
 
     // Schedule Consultation Form
     const scheduleForm = useForm({
@@ -150,7 +218,17 @@ export default function Consultations({
                 const isCompleted = cons.status === 'COMPLETED';
                 const isScheduled = cons.status === 'SCHEDULED' || cons.status === 'CONFIRMED';
                 return (
-                    <div className="space-x-2">
+                    <div className="flex items-center justify-end gap-1.5">
+                        <button
+                            type="button"
+                            onClick={() => openChatModal(cons)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary border border-surface-container font-semibold text-xs transition-all shadow-2xs cursor-pointer"
+                        >
+                            <span className="material-symbols-outlined text-[14px]">
+                                chat
+                            </span>
+                            <span>Chat</span>
+                        </button>
                         {isScheduled && (
                             <button
                                 type="button"
@@ -160,7 +238,7 @@ export default function Consultations({
                                 <span className="material-symbols-outlined text-[14px]">
                                     check_circle
                                 </span>
-                                <span>Selesaikan Sesi</span>
+                                <span>Selesaikan</span>
                             </button>
                         )}
                         {isCompleted && (
@@ -172,7 +250,7 @@ export default function Consultations({
                                 <span className="material-symbols-outlined text-[14px]">
                                     edit_note
                                 </span>
-                                <span>Lihat Catatan</span>
+                                <span>Catatan</span>
                             </button>
                         )}
                     </div>
@@ -427,6 +505,142 @@ export default function Consultations({
                                     {completeForm.processing ? 'Menyimpan...' : 'Simpan & Tandai Selesai'}
                                 </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL: Ruang Chat Telemedisin Instruktur */}
+            {chatConsultation && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150"
+                    onClick={() => setChatConsultation(null)}
+                >
+                    <div
+                        className="bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-2xl max-w-2xl w-full flex flex-col h-[620px] overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Chat Modal Header */}
+                        <div className="p-4 border-b border-surface-container flex items-center justify-between gap-3 bg-surface-container-lowest">
+                            <div className="flex items-center gap-3 min-w-0">
+                                <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base shrink-0 border border-primary/20">
+                                    {chatConsultation.member?.name?.charAt(0) || 'M'}
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="font-bold text-sm text-on-surface truncate">
+                                            {chatConsultation.member?.name || 'Member Binaan'}
+                                        </h3>
+                                        <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">
+                                            Sesi Bimbingan
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-on-surface-variant truncate">
+                                        Topik: {chatConsultation.purpose}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setChatConsultation(null)}
+                                className="p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">close</span>
+                            </button>
+                        </div>
+
+                        {/* Messages Feed */}
+                        <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-3 bg-[#fbfdfc] dark:bg-surface/50 text-xs">
+                            {chatLoading ? (
+                                <div className="py-12 text-center text-on-surface-variant space-y-2">
+                                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                                    <p className="text-xs">Memuat riwayat chat...</p>
+                                </div>
+                            ) : chatMessages.length === 0 ? (
+                                <div className="py-12 text-center text-on-surface-variant space-y-2">
+                                    <span className="material-symbols-outlined text-3xl text-primary/40">chat_bubble_outline</span>
+                                    <p className="text-xs">Belum ada pesan pada sesi ini.</p>
+                                </div>
+                            ) : (
+                                chatMessages.map((m) => {
+                                    const isInstructor = m.sender_role === 'INSTRUCTOR';
+                                    const hasMetric = m.metric_payload && typeof m.metric_payload === 'object';
+
+                                    return (
+                                        <div
+                                            key={m.id}
+                                            className={`flex flex-col ${isInstructor ? 'items-end' : 'items-start'} space-y-1`}
+                                        >
+                                            <span className="text-[10px] text-on-surface-variant font-mono px-1">
+                                                {isInstructor ? 'Anda (Instruktur)' : (chatConsultation.member?.name || 'Member')} •{' '}
+                                                {m.created_at
+                                                    ? new Date(m.created_at).toLocaleTimeString('id-ID', {
+                                                          hour: '2-digit',
+                                                          minute: '2-digit',
+                                                      })
+                                                    : 'Sekarang'}
+                                            </span>
+
+                                            <div
+                                                className={`p-3.5 sm:p-4 rounded-3xl max-w-[85%] leading-relaxed shadow-2xs space-y-2 ${
+                                                    isInstructor
+                                                        ? 'bg-[#00433e] text-white rounded-br-xs'
+                                                        : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
+                                                }`}
+                                            >
+                                                {hasMetric && (
+                                                    <div className={`p-2.5 rounded-2xl border text-left space-y-1 ${
+                                                        isInstructor
+                                                            ? 'bg-white/10 border-white/20 text-white'
+                                                            : 'bg-surface-container-low border-surface-container text-on-surface'
+                                                    }`}>
+                                                        <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase">
+                                                            <span>{m.metric_payload.title || 'Data Telemetri Pasien'}</span>
+                                                            <span className="text-[9px] opacity-80">{m.metric_payload.recorded_at}</span>
+                                                        </div>
+                                                        <div className="flex items-baseline gap-1">
+                                                            <span className="text-base font-mono font-black">{m.metric_payload.value}</span>
+                                                            {m.metric_payload.unit && (
+                                                                <span className="text-xs font-mono">{m.metric_payload.unit}</span>
+                                                            )}
+                                                        </div>
+                                                        {m.metric_payload.status && (
+                                                            <div className="text-[10px] font-bold">
+                                                                Status: {m.metric_payload.status}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                <p className="text-xs whitespace-pre-wrap">{m.message}</p>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                            <div ref={chatEndRef} />
+                        </div>
+
+                        {/* Instructor Chat Input */}
+                        <form
+                            onSubmit={handleSendInstructorMessage}
+                            className="p-3 border-t border-surface-container bg-white dark:bg-surface flex items-center gap-2"
+                        >
+                            <input
+                                type="text"
+                                value={chatInput}
+                                onChange={(e) => setChatInput(e.target.value)}
+                                placeholder="Tuliskan arahan klinis atau tanggapan untuk member..."
+                                className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+                            />
+                            <button
+                                type="submit"
+                                disabled={!chatInput.trim() || chatSubmitting}
+                                className="px-5 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:opacity-40 cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[16px]">send</span>
+                                <span className="hidden sm:inline">Kirim Arahan</span>
+                            </button>
                         </form>
                     </div>
                 </div>

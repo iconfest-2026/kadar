@@ -37,7 +37,7 @@ export default function AppLayout({ children, title, activeTab }) {
 
     const consultationQuotaText = currentTierObj
         ? (currentTierObj.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (currentTierObj.max_consultations > 0 ? `${currentTierObj.max_consultations} sesi konsultasi dokter / bln` : 'tanpa kuota konsultasi'))
-        : (membership?.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (membership?.max_consultations > 0 ? `${membership.max_consultations} sesi konsultasi dokter / bln` : '1 sesi konsultasi dokter'));
+        : (membership?.max_consultations === -1 ? 'konsultasi dokter tanpa batas' : (membership?.max_consultations > 0 ? `${membership.max_consultations} sesi konsultasi dokter / bln` : 'tanpa kuota konsultasi'));
 
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
     const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
@@ -179,13 +179,6 @@ export default function AppLayout({ children, title, activeTab }) {
                         <p className="font-medium text-[10.5px]">
                             © 2026 AEVYRA • Platform Kesehatan Preventif
                         </p>
-                        <div className="flex items-center justify-center gap-2 text-[9.5px] text-on-surface-variant/60">
-                            <span>UU PDP No. 27/2022</span>
-                            <span>•</span>
-                            <span>Non-Diagnostik</span>
-                            <span>•</span>
-                            <span>SPGDT 119</span>
-                        </div>
                     </div>
                 </footer>
             </div>

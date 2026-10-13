@@ -15,7 +15,7 @@ export default function Error({ status = 404, message = null, errorId = null }) 
             description: 'Halaman atau data klinis ini dilindungi oleh protokol keamanan medis. Anda memerlukan otorisasi khusus atau akun terverifikasi untuk dapat mengaksesnya.',
             primaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
             secondaryBtn: { text: 'Masuk Akun Lain', href: '/login', icon: 'switch_account' },
-            footerMeta: 'UU PDP No. 27/2022',
+            footerMeta: 'Enkripsi Medis Terstandar',
         },
         404: {
             code: 404,
@@ -273,7 +273,7 @@ export default function Error({ status = 404, message = null, errorId = null }) 
                     <div className="flex items-center gap-2.5 text-[#7e948c]">
                         <span>Standar SatuSehat Kemenkes</span>
                         <span>•</span>
-                        <span>Enkripsi UU PDP</span>
+                        <span>Enkripsi Medis AES-256</span>
                     </div>
                 </div>
             </footer>

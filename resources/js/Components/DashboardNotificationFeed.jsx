@@ -81,7 +81,18 @@ export default function DashboardNotificationFeed({
             case 'challenge':
             case 'payment':
                 return { icon: 'stars', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' };
+            case 'membership':
+                return { icon: 'workspace_premium', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
             default:
+                if (notif?.type?.startsWith('MEMBERSHIP_')) {
+                    if (notif.type === 'MEMBERSHIP_PAYMENT_SUCCESS') {
+                        return { icon: 'verified', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
+                    }
+                    if (notif.type === 'MEMBERSHIP_DOWNGRADE_SCHEDULED') {
+                        return { icon: 'event_repeat', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' };
+                    }
+                    return { icon: 'workspace_premium', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
+                }
                 return { icon: 'notifications', color: 'bg-primary/10 text-primary border-primary/20' };
         }
     };

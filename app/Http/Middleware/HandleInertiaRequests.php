@@ -67,15 +67,41 @@ class HandleInertiaRequests extends Middleware
                 }
                 $active = \App\Models\Membership::where('user_id', $user->id)
                     ->where('status', 'ACTIVE')
-                    ->with('tier')
+                    ->with(['tier', 'downgradeTier'])
                     ->first();
 
+                if ($active) {
+                    $active->applyPendingDowngradeIfDue();
+                    $active->loadMissing(['tier', 'downgradeTier']);
+                }
+
+                $defaultFreeTier = \App\Models\MembershipTier::where('slug', 'silver')
+                    ->orWhere('slug', 'free')
+                    ->first();
+
+                $quotaService = app(\App\Services\Membership\ConsultationQuotaService::class);
+                $consultationQuota = $quotaService->getMemberQuota($user);
+
                 return [
-                    'current_tier' => $active?->tier?->name ?? 'Silver',
-                    'current_tier_slug' => $active?->tier?->slug ?? 'silver',
-                    'tier_id' => $active?->tier?->id,
-                    'max_scanner' => $active?->tier?->max_scanner,
-                    'max_consultations' => $active?->tier?->max_consultations,
+                    'current_tier' => $active?->tier?->name ?? ($defaultFreeTier?->name ?? 'Silver'),
+                    'current_tier_slug' => $active?->tier?->slug ?? ($defaultFreeTier?->slug ?? 'silver'),
+                    'current_tier_price' => (float) ($active?->tier?->price ?? 0),
+                    'tier_id' => $active?->tier?->id ?? $defaultFreeTier?->id,
+                    'max_scanner' => $active?->tier?->max_scanner ?? ($defaultFreeTier?->max_scanner ?? 10),
+                    'max_consultations' => $active?->tier?->max_consultations ?? ($defaultFreeTier?->max_consultations ?? 0),
+                    'consultation_quota' => $consultationQuota,
+                    'starts_at' => $active?->starts_at?->translatedFormat('d F Y'),
+                    'ends_at' => $active?->ends_at?->translatedFormat('d F Y'),
+                    'ends_at_iso' => $active?->ends_at?->toDateString(),
+                    'has_pending_downgrade' => (bool) ($active && $active->hasPendingDowngrade()),
+                    'pending_downgrade' => ($active && $active->hasPendingDowngrade()) ? [
+                        'tier_id' => $active->downgrade_to_tier_id,
+                        'tier_name' => $active->downgradeTier?->name,
+                        'tier_slug' => $active->downgradeTier?->slug,
+                        'effective_at' => $active->downgrade_at?->translatedFormat('d F Y'),
+                        'effective_at_iso' => $active->downgrade_at?->toDateString(),
+                        'reason' => $active->downgrade_reason,
+                    ] : null,
                     'active_tiers' => $activeTiers,
                 ];
             },

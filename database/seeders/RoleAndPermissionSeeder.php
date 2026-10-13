@@ -40,7 +40,7 @@ class RoleAndPermissionSeeder extends Seeder
             // Member
             'log_health_data' => 'Mencatat data metrik kesehatan harian',
             'view_own_baseline' => 'Melihat baseline dan grafik tren personal',
-            'chat_with_ai' => 'Menggunakan asisten gaya hidup AI non-diagnostik',
+            'chat_with_ai' => 'Menggunakan asisten gaya hidup dan wawasan kesehatan AI',
             'trigger_emergency' => 'Mengakses tombol SOS dan panggilan 119/112',
             // Instructor
             'view_caseload' => 'Melihat daftar dan status member bimbingan',

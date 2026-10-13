@@ -45,4 +45,9 @@ class Consultation extends Model
     {
         return $this->belongsTo(Program::class, 'program_id');
     }
+
+    public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ConsultationMessage::class, 'consultation_id');
+    }
 }

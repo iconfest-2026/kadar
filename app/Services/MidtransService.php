@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\Membership;
 use App\Models\MembershipPayment;
 use App\Models\MembershipTier;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -61,8 +62,31 @@ class MidtransService
                     'status' => 'ACTIVE',
                     'starts_at' => now(),
                     'ends_at' => null, // Lifetime for free tier
+                    'downgrade_to_tier_id' => null,
+                    'downgrade_at' => null,
+                    'downgrade_reason' => null,
                 ]
             );
+
+            // Automated notification for free tier activation
+            try {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'type' => 'MEMBERSHIP_ACTIVATED',
+                    'title' => "Paket {$tier->name} Berhasil Diaktifkan",
+                    'body' => "Paket {$tier->name} telah aktif pada akun Anda tanpa biaya. Nikmati akses skrining mandiri label pangan & integrasi medis.",
+                    'data' => [
+                        'category' => 'system',
+                        'tier_name' => $tier->name,
+                        'tier_slug' => $tier->slug,
+                        'action_url' => '/paket',
+                    ],
+                    'read_at' => null,
+                    'delivered_at' => now(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Error creating free tier notification: ' . $e->getMessage());
+            }
 
             return [
                 'success' => true,
@@ -369,17 +393,49 @@ class MidtransService
 
             if ($isPaid) {
                 $tier = $lockedPayment->tier;
-                $endsAt = now()->addMonth(); // Standard 1 month interval
+                // Calculate dynamic ends_at: if user already has an active subscription ending in the future, extend from that date
+                $currentMembership = Membership::where('user_id', $lockedPayment->user_id)->first();
+                $baseDate = ($currentMembership && $currentMembership->ends_at && $currentMembership->ends_at->isFuture())
+                    ? $currentMembership->ends_at
+                    : now();
+                $endsAt = (clone $baseDate)->addMonth();
 
-                Membership::updateOrCreate(
+                $membership = Membership::updateOrCreate(
                     ['user_id' => $lockedPayment->user_id],
                     [
                         'tier_id' => $lockedPayment->tier_id,
                         'status' => 'ACTIVE',
                         'starts_at' => now(),
                         'ends_at' => $endsAt,
+                        'downgrade_to_tier_id' => null,
+                        'downgrade_at' => null,
+                        'downgrade_reason' => null,
                     ]
                 );
+
+                // Automated in-app notification to member upon successful payment
+                try {
+                    $formattedAmount = number_format((float) $lockedPayment->gross_amount, 0, ',', '.');
+                    Notification::create([
+                        'user_id' => $lockedPayment->user_id,
+                        'type' => 'MEMBERSHIP_PAYMENT_SUCCESS',
+                        'title' => "Pembayaran Berhasil! Paket {$tier?->name} Aktif",
+                        'body' => "Terima kasih! Pembayaran sebesar Rp {$formattedAmount} telah berhasil diverifikasi. Paket {$tier?->name} Anda kini aktif hingga " . $endsAt->translatedFormat('d F Y') . ".",
+                        'data' => [
+                            'category' => 'system',
+                            'order_id' => $orderId,
+                            'tier_name' => $tier?->name,
+                            'tier_slug' => $tier?->slug,
+                            'gross_amount' => $lockedPayment->gross_amount,
+                            'ends_at' => $endsAt->toDateString(),
+                            'action_url' => '/paket',
+                        ],
+                        'read_at' => null,
+                        'delivered_at' => now(),
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::error('Error creating payment settled notification: ' . $e->getMessage());
+                }
 
                 AuditLog::log(
                     $lockedPayment->user_id,

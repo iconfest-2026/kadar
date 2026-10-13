@@ -25,7 +25,7 @@ class MembershipTierEnhancementSeeder extends Seeder
                     'Akses Pemindai Kamera OCR (10x / hari)',
                     'Pelacak Biomarker Mandiri & Riwayat Medis',
                     'Akses Forum Diskusi Komunitas Sehat',
-                    'Panggilan Darurat Cepat SPGDT 119',
+                    'Panggilan Darurat Cepat Ambulans 119',
                 ],
             ],
             'gold' => [

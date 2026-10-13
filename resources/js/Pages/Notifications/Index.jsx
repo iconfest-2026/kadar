@@ -220,7 +220,7 @@ export default function NotificationsIndex({
 
                     <div className="text-[11px] sm:text-xs text-on-surface-variant font-medium flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-teal-600 text-[16px] shrink-0">verified_user</span>
-                        <span>Privasi dilindungi UU PDP (pratinjau bebas data rahasia).</span>
+                        <span>Privasi terproteksi dengan enkripsi ketat (pratinjau bebas data rahasia).</span>
                     </div>
                 </div>
 

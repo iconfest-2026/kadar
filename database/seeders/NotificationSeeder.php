@@ -194,7 +194,7 @@ class NotificationSeeder extends Seeder
                     'user_id' => $admin->id,
                     'type' => 'EMERGENCY_SOS_LOG',
                     'title' => 'Pemicuan Jalur Darurat Telemetri 119',
-                    'body' => 'Pemicuan tombol darurat SPGDT 119 tercatat pada log telemetri platform dengan latensi respon 240ms.',
+                    'body' => 'Pemicuan tombol darurat ambulans 119 tercatat pada log telemetri platform dengan latensi respon 240ms.',
                     'data' => [
                         'action_url' => '/admin/emergency',
                         'category' => 'emergency',

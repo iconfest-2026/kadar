@@ -73,7 +73,7 @@ const getDefaultFeatures = (t) => {
             { text: 'Pencatatan metrik harian (Gula Darah, Tidur, Langkah)', active: true },
             { text: 'Deteksi Beban Glikemik & Gramatur Gula Instan', active: true },
             { text: 'Konsultasi Asisten AI Preventif Medis Terverifikasi', active: true },
-            { text: 'Akses Siaga Panggilan Darurat SPGDT 119', active: true },
+            { text: 'Akses Siaga Panggilan Darurat Ambulans 119', active: true },
             { text: 'Forum Diskusi Komunitas & Edukasi Pasien Publik', active: true },
             { text: 'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)', active: false },
             { text: 'Rencana Intervensi Gizi Mingguan Dipersonalisasi', active: false },
@@ -152,7 +152,7 @@ const getDefaultFeatures = (t) => {
 
     list.push({ text: 'Asisten AI Preventif Medis 24/7', active: true });
     list.push({ text: 'Pencatatan Riwayat Biomarker & Tren Kestabilan', active: true });
-    list.push({ text: 'Akses Siaga Panggilan Darurat SPGDT 119', active: true });
+    list.push({ text: 'Akses Siaga Panggilan Darurat Ambulans 119', active: true });
     list.push({ text: 'Laporan Evaluasi Progres Terstandar Kemenkes', active: true });
 
     return list;
@@ -363,15 +363,35 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
 
                 if (window.snap && typeof window.snap.pay === 'function') {
                     window.snap.pay(data.snap_token, {
-                        onSuccess: function () {
+                        onSuccess: async function () {
                             setStatusMessage({
                                 type: 'success',
-                                text: `Pembayaran berhasil! Paket ${tierItem.name} Anda sedang diaktifkan.`,
+                                text: `🎉 Pembayaran berhasil diverifikasi! Paket ${tierItem.name} Anda telah aktif dan notifikasi resmi telah dikirim.`,
                             });
+
+                            // Instant authoritative DB verification & notification generation
+                            try {
+                                const metaToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                                const xsrfToken = getCookie('XSRF-TOKEN');
+                                const csrfToken = metaToken || xsrfToken || '';
+                                await fetch('/member/memberships/verify', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                    },
+                                    body: JSON.stringify({ order_id: data.order_id }),
+                                });
+                            } catch (err) {
+                                console.warn('Instant sync ping:', err);
+                            }
+
                             setTimeout(() => {
                                 onClose();
                                 window.location.reload();
-                            }, 1800);
+                            }, 1400);
                         },
                         onPending: function () {
                             setStatusMessage({
@@ -581,6 +601,14 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                             >
                                                 Paket Aktif Saat Ini
                                             </button>
+                                        ) : Number(membership?.current_tier_price || 0) > 0 && t.basePrice < Number(membership?.current_tier_price || 0) ? (
+                                            <a
+                                                href="/paket"
+                                                className="w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs border border-[#b2cfc1] bg-white text-[#1f3731] hover:bg-[#f1f7f4] flex items-center justify-center gap-1.5 cursor-pointer block"
+                                            >
+                                                <span className="material-symbols-outlined text-[15px] text-emerald-700">schedule_send</span>
+                                                <span>Turunkan ke {t.name}</span>
+                                            </a>
                                         ) : (
                                             <button
                                                 type="button"

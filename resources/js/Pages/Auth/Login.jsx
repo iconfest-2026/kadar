@@ -62,10 +62,10 @@ export default function Login() {
             desc: 'Manajemen hak akses pengguna, verifikasi STR instruktur, audit forensik keamanan, pemantauan ambulans 119, dan kontrol parameter sistem.',
             previewBadge: 'Konsol Tata Kelola Medis & Audit',
             previewTitle: 'Pengawasan privasi dan keamanan sistem kesehatan.',
-            previewQuote: 'Memastikan kepatuhan UU PDP No. 27/2022, audit forensik rekam medis digital, dan keandalan failover AI 24/7.',
+            previewQuote: 'Memastikan audit forensik rekam medis digital, enkripsi data terstandar, dan keandalan failover AI 24/7.',
             previewImage: '/image/doctor_bramantyo.jpg',
             previewStats: [
-                { label: 'Kepatuhan Regulasi', val: 'UU PDP' },
+                { label: 'Keamanan Data', val: 'Terproteksi' },
                 { label: 'Enkripsi Data', val: 'AES-256' },
                 { label: 'Sistem Failover', val: '4-Tier AI' },
             ],
@@ -211,7 +211,7 @@ export default function Login() {
                         <div className="flex items-center justify-center gap-3 text-[10px] text-on-surface-variant/80 font-mono">
                             <span>SatuSehat Terhubung</span>
                             <span>•</span>
-                            <span>UU PDP No. 27/2022</span>
+                            <span>Enkripsi AES-256</span>
                             <span>•</span>
                             <span>SSL 256-Bit</span>
                         </div>

@@ -60,10 +60,10 @@ class EmergencyService
         return [
             'hotlines' => [
                 [
-                    'name' => 'SPGDT Kemenkes RI (Ambulans Medis)',
+                    'name' => 'Ambulans Darurat Medis 119 (Kemenkes RI)',
                     'number' => '119',
                     'badge' => 'Utama / Medis',
-                    'description' => 'Sistem Penanggulangan Gawat Darurat Terpadu Nasional',
+                    'description' => 'Layanan Tanggap Darurat Medis Nasional Bebas Pulsa',
                 ],
                 [
                     'name' => 'Layanan Panggilan Darurat Nasional',

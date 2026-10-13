@@ -158,21 +158,50 @@ Route::get('/paket', function () {
 
     $user = \Illuminate\Support\Facades\Auth::user();
     $currentTier = null;
+    $membershipDetails = null;
+
     if ($user) {
         $activeMembership = \App\Models\Membership::where('user_id', $user->id)
             ->where('status', 'ACTIVE')
-            ->with('tier')
+            ->with(['tier', 'downgradeTier'])
             ->first();
-        $currentTier = $activeMembership?->tier ? [
-            'id' => $activeMembership->tier->id,
-            'name' => $activeMembership->tier->name,
-            'slug' => $activeMembership->tier->slug,
-        ] : null;
+
+        if ($activeMembership) {
+            $activeMembership->applyPendingDowngradeIfDue();
+            $activeMembership->loadMissing(['tier', 'downgradeTier']);
+
+            $currentTier = $activeMembership->tier ? [
+                'id' => $activeMembership->tier->id,
+                'name' => $activeMembership->tier->name,
+                'slug' => $activeMembership->tier->slug,
+                'price' => (float) $activeMembership->tier->price,
+            ] : null;
+
+            $membershipDetails = [
+                'id' => $activeMembership->id,
+                'tier_id' => $activeMembership->tier_id,
+                'status' => $activeMembership->status,
+                'starts_at' => $activeMembership->starts_at?->translatedFormat('d F Y'),
+                'ends_at' => $activeMembership->ends_at?->translatedFormat('d F Y'),
+                'ends_at_iso' => $activeMembership->ends_at?->toDateString(),
+                'has_pending_downgrade' => $activeMembership->hasPendingDowngrade(),
+                'downgrade_tier' => $activeMembership->downgradeTier ? [
+                    'id' => $activeMembership->downgradeTier->id,
+                    'name' => $activeMembership->downgradeTier->name,
+                    'slug' => $activeMembership->downgradeTier->slug,
+                    'price' => (float) $activeMembership->downgradeTier->price,
+                ] : null,
+                'downgrade_at' => $activeMembership->downgrade_at?->translatedFormat('d F Y'),
+                'downgrade_at_iso' => $activeMembership->downgrade_at?->toDateString(),
+                'downgrade_reason' => $activeMembership->downgrade_reason,
+            ];
+        }
     }
 
     return Inertia::render('Paket', [
         'tiersData' => $tiers,
         'currentTier' => $currentTier,
+        'membershipDetails' => $membershipDetails,
         'midtransConfig' => [
             'client_key' => config('services.midtrans.client_key'),
             'snap_url' => config('services.midtrans.snap_url'),
@@ -315,6 +344,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/booking/store', fn() => redirect()->route('member.consultations.index'));
         Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
         Route::post('/booking/{consultation}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+        Route::get('/consultations/{consultation}/messages', [BookingController::class, 'getMessages'])->name('consultations.messages');
+        Route::post('/consultations/{consultation}/messages', [BookingController::class, 'sendMessage'])->name('consultations.messages.send');
 
         // Feature 5: Program Challenge Kesehatan
         Route::get('/challenges', [ChallengeMemberController::class, 'index'])->name('challenges.index');
@@ -341,6 +372,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/memberships/{tier}/checkout', [MidtransPaymentController::class, 'checkout'])->name('memberships.checkout');
         Route::post('/memberships/verify', [MidtransPaymentController::class, 'verifyStatus'])->name('memberships.verify')->middleware('throttle:30,1');
         Route::get('/memberships/finish', [MidtransPaymentController::class, 'finish'])->name('memberships.finish');
+        Route::post('/memberships/{tier}/downgrade', [MidtransPaymentController::class, 'scheduleDowngrade'])->name('memberships.downgrade');
+        Route::post('/memberships/cancel-downgrade', [MidtransPaymentController::class, 'cancelDowngrade'])->name('memberships.cancel-downgrade');
     });
 
     // -------------------------------------------------------------
@@ -358,6 +391,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/consultations', [ConsultationController::class, 'index'])->name('consultations.index');
         Route::post('/consultations', [ConsultationController::class, 'store'])->name('consultations.store');
         Route::patch('/consultations/{consultation}/complete', [ConsultationController::class, 'complete'])->name('consultations.complete');
+        Route::get('/consultations/{consultation}/messages', [BookingController::class, 'getMessages'])->name('consultations.messages');
+        Route::post('/consultations/{consultation}/messages', [BookingController::class, 'sendMessage'])->name('consultations.messages.send');
 
         // Feature 9: Laporan Untuk Instruktur
         Route::get('/reports', [InstructorReportsController::class, 'index'])->name('reports.index');

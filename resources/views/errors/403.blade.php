@@ -46,6 +46,6 @@
     <!-- Subtle Trace & Regulatory Note -->
     <div class="mt-7 pt-4 border-t border-[#ebf2ee] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] text-[#6b8078] font-mono">
         <span>Ref ID: <strong class="text-[#1a2e29] font-medium">AEV-403-{{ rand(100000, 999999) }}</strong></span>
-        <span class="text-[#728780] font-sans">UU PDP No. 27/2022</span>
+        <span class="text-[#728780] font-sans">Enkripsi Medis Terstandar</span>
     </div>
 @endsection

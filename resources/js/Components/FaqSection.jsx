@@ -28,7 +28,7 @@ export default function FaqSection() {
         {
             category: 'security',
             q: 'Bagaimana keamanan data pribadi dan catatan biomarker kesehatan saya?',
-            a: 'Seluruh data kesehatan akun dienkripsi menggunakan protokol keamanan standar industri dan mematuhi amanat UU Perlindungan Data Pribadi (UU No. 27/2022). Hanya Anda dan tenaga medis berlisensi yang Anda beri otorisasi yang dapat meninjau buku harian glukosa Anda.',
+            a: 'Seluruh data kesehatan akun dienkripsi menggunakan protokol keamanan standar industri dan enkripsi data medis AES-256 tingkat tinggi. Hanya Anda dan tenaga medis berlisensi yang Anda beri otorisasi yang dapat meninjau buku harian glukosa Anda.',
         },
         {
             category: 'medical',

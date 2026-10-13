@@ -8,7 +8,7 @@ export default function SidebarFooter({ onOpenEmergency, onLogout }) {
                 type="button"
                 onClick={onOpenEmergency}
                 className="w-full py-1.5 px-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-[11px] font-bold border border-rose-500/20 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                title="Panggilan Tanggap Darurat SPGDT 119"
+                title="Panggilan Tanggap Darurat Ambulans 119"
             >
                 <span className="material-symbols-outlined text-[15px]">emergency</span>
                 <span>Siaga Darurat 119</span>

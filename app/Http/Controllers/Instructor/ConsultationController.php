@@ -56,6 +56,13 @@ class ConsultationController extends Controller
             abort(403, 'Member ini tidak ditugaskan kepada Anda.');
         }
 
+        $member = User::findOrFail($validated['member_id']);
+        $quotaService = app(\App\Services\Membership\ConsultationQuotaService::class);
+        $quotaError = $quotaService->validateBooking($member);
+        if ($quotaError) {
+            return back()->withErrors(['member_id' => $quotaError]);
+        }
+
         $consultation = Consultation::create([
             'member_id' => $validated['member_id'],
             'instructor_id' => $instructor->id,

@@ -339,7 +339,7 @@ export default function Reports({
                                     <span className="material-symbols-outlined text-primary">security</span>
                                     Log Audit Forensik Sistem Terkini
                                 </h3>
-                                <span className="text-xs text-on-surface-variant">Standar HL7 FHIR & UU PDP No. 27/2022</span>
+                                <span className="text-xs text-on-surface-variant">Standar HL7 FHIR & Enkripsi Medis AES-256</span>
                             </div>
 
                             <Table

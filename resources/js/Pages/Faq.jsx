@@ -111,7 +111,7 @@ export default function Faq(props) {
             category: 'security',
             categoryLabel: 'Privasi & Keamanan Data',
             q: 'Apa yang terjadi jika saya ingin menghapus seluruh data saya dari sistem?',
-            a: 'Sesuai amanat UU Perlindungan Data Pribadi (UU PDP No. 27/2022), Anda memiliki hak penuh untuk meminta penghapusan akun dan seluruh riwayat catatan biomarker Anda (right to erasure). Anda dapat mengajukan permohonan melalui menu Pengaturan Akun atau menghubungi email tim kepatuhan data kami.',
+            a: 'Sesuai prinsip perlindungan privasi data pribadi, Anda memiliki hak penuh untuk meminta penghapusan akun dan seluruh riwayat catatan biomarker Anda (right to erasure). Anda dapat mengajukan permohonan melalui menu Pengaturan Akun atau menghubungi email tim kepatuhan data kami.',
         },
 
         // Category: membership (16 - 20)
