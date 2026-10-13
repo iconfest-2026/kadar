@@ -21,28 +21,29 @@ class EnsureInstructorIsVerified
             return redirect()->route('login');
         }
 
+        // Izinkan instruktur (meskipun belum terverifikasi) untuk melihat profil legalitas dan pengaturan akun
+        if ($request->is('instructor/profile*') || $request->is('instructor/account*')) {
+            return $next($request);
+        }
+
         // Hanya berlaku untuk user dengan role instructor
         if ($user->hasRole('instructor')) {
             $profile = $user->instructorProfile;
             $isVerified = $profile?->is_verified ?? false;
 
             if ($user->status !== 'ACTIVE' || !$isVerified) {
-                if ($request->header('X-Inertia')) {
-                    return Inertia::render('Instructor/PendingVerification', [
-                        'status' => $user->status,
-                        'profile' => $profile ? [
-                            'specialization' => $profile->specialization,
-                            'str_number' => $profile->str_number,
-                            'sip_number' => $profile->sip_number,
-                            'institution' => $profile->institution,
-                            'is_verified' => $profile->is_verified,
-                            'rejection_reason' => $profile->rejection_reason,
-                            'created_at' => $profile->created_at?->toISOString(),
-                        ] : null,
-                    ])->toResponse($request)->setStatusCode(403);
-                }
-
-                abort(403, 'Akun instruktur Anda belum diverifikasi atau sedang dibekukan oleh Administrator platform.');
+                return Inertia::render('Instructor/PendingVerification', [
+                    'status' => $user->status,
+                    'profile' => $profile ? [
+                        'specialization' => $profile->specialization,
+                        'str_number' => $profile->str_number,
+                        'sip_number' => $profile->sip_number,
+                        'institution' => $profile->institution,
+                        'is_verified' => $profile->is_verified,
+                        'rejection_reason' => $profile->rejection_reason,
+                        'created_at' => $profile->created_at?->toISOString(),
+                    ] : null,
+                ])->toResponse($request);
             }
         }
 

@@ -43,6 +43,6 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/onboarding');
+        $response->assertRedirect('/member/dashboard');
     }
 }

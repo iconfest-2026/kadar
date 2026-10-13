@@ -215,6 +215,7 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
     const toggleFacingMode = () => {
         const nextFacing = facingMode === 'environment' ? 'user' : 'environment';
         setFacingMode(nextFacing);
+        setIsMirrored(false); // Pastikan kamera depan selalu default Non-Mirror (orientasi asli agar teks tidak terbalik)
         startCamera(nextFacing);
     };
 
@@ -559,12 +560,12 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                                                     ? 'bg-amber-600/80 border-amber-400 text-white'
                                                     : 'bg-black/75 hover:bg-black/90 border-white/20 text-white'
                                             }`}
-                                            title={isMirrored ? "Nonaktifkan Cermin (Tampilan Normal)" : "Aktifkan Cermin Kamera"}
+                                            title={isMirrored ? "Nonaktifkan Cermin (Kembali ke Tampilan Normal Non-Mirror)" : "Balik Cermin Kamera"}
                                         >
                                             <span className="material-symbols-outlined text-[15px] text-emerald-400">
                                                 {isMirrored ? 'flip' : 'sync_alt'}
                                             </span>
-                                            <span>{isMirrored ? 'Cermin: AKTIF' : 'Cermin: MATI'}</span>
+                                            <span>{isMirrored ? 'Cermin: AKTIF' : 'Non-Mirror (Normal)'}</span>
                                         </button>
 
                                         {/* Flip Camera Lens (Front/Back) */}

@@ -45,10 +45,11 @@ class HandleInertiaRequests extends Middleware
                     'name' => $user->name,
                     'email' => $user->email,
                     'status' => $user->status,
+                    'avatar_url' => $user->avatar_url ?: ($user->memberProfile?->avatar_path ?: null),
                     'roles' => $user->roles->pluck('slug')->all(),
                     'profile' => $user->memberProfile ? [
                         'display_name' => $user->memberProfile->display_name,
-                        'avatar_path' => $user->memberProfile->avatar_path,
+                        'avatar_path' => $user->memberProfile->avatar_path ?: $user->avatar_url,
                     ] : null,
                 ] : null,
             ],

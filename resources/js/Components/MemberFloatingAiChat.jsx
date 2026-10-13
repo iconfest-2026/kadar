@@ -1,8 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import WhatsAppEmojiPicker from './WhatsAppEmojiPicker';
 
 export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: propOnClose }) {
+    let currentUser = null;
+    try {
+        const page = usePage();
+        currentUser = page?.props?.auth?.user || null;
+    } catch {
+        currentUser = null;
+    }
+
     const [internalOpen, setInternalOpen] = useState(false);
     const isOpen = propIsOpen !== undefined ? propIsOpen : internalOpen;
 
@@ -505,12 +513,18 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                         return (
                             <div
                                 key={msg.id}
-                                className={`flex flex-col relative z-10 ${
-                                    isAssistant ? 'items-start' : 'items-end'
+                                className={`flex items-end gap-1.5 relative z-10 ${
+                                    isAssistant ? 'justify-start' : 'justify-end'
                                 }`}
                             >
+                                {isAssistant && (
+                                    <div className="w-6 h-6 rounded-full bg-[#005c4b] text-white flex items-center justify-center shrink-0 mb-1 shadow-2xs">
+                                        <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                                    </div>
+                                )}
+
                                 <div
-                                    className={`max-w-[88%] p-3 sm:p-3.5 rounded-2xl shadow-[0_1px_0.5px_rgba(11,20,26,0.13)] text-xs sm:text-[13px] leading-relaxed transition-all ${
+                                    className={`max-w-[84%] p-3 sm:p-3.5 rounded-2xl shadow-[0_1px_0.5px_rgba(11,20,26,0.13)] text-xs sm:text-[13px] leading-relaxed transition-all ${
                                         isAssistant
                                             ? 'bg-white text-[#111b21] rounded-tl-xs border border-[#e9edef]'
                                             : 'bg-[#d9fdd3] text-[#111b21] rounded-tr-xs'
@@ -548,6 +562,16 @@ export default function MemberFloatingAiChat({ isOpen: propIsOpen, onClose: prop
                                         </div>
                                     </div>
                                 </div>
+
+                                {!isAssistant && (
+                                    <div className="w-6 h-6 rounded-full bg-[#005c4b]/10 text-primary border border-emerald-300 flex items-center justify-center text-[10px] font-bold shrink-0 mb-1 overflow-hidden shadow-2xs">
+                                        {currentUser?.avatar_url ? (
+                                            <img src={currentUser.avatar_url} alt={currentUser.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            (currentUser?.name || 'U').charAt(0).toUpperCase()
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         );
                     })}

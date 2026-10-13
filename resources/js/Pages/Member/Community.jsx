@@ -392,14 +392,18 @@ export default function Community({
                                     {/* Author & Kategori */}
                                     <div className="flex items-center justify-between gap-2">
                                         <div className="flex items-center gap-2.5 min-w-0">
-                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
+                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden ${
                                                 isDoctor
                                                     ? 'bg-teal-500/15 text-teal-700'
                                                     : isOfficial
                                                     ? 'bg-amber-500/15 text-amber-700'
                                                     : 'bg-primary/10 text-primary'
                                             }`}>
-                                                {post.user?.name?.charAt(0) || 'U'}
+                                                {post.user?.avatar_url ? (
+                                                    <img src={post.user.avatar_url} alt={post.user.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    post.user?.name?.charAt(0) || 'U'
+                                                )}
                                             </div>
 
                                             <div className="min-w-0">
@@ -549,7 +553,14 @@ export default function Community({
                                                                 className="p-2.5 rounded-xl bg-white dark:bg-surface border border-surface-container space-y-1"
                                                             >
                                                                 <div className="flex items-center justify-between">
-                                                                    <div className="flex items-center gap-1.5">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className="w-5 h-5 rounded-md bg-primary/10 text-primary font-bold text-[10px] flex items-center justify-center overflow-hidden shrink-0">
+                                                                            {comm.user?.avatar_url ? (
+                                                                                <img src={comm.user.avatar_url} alt={comm.user.name} className="w-full h-full object-cover" />
+                                                                            ) : (
+                                                                                (comm.user?.name || 'A').charAt(0).toUpperCase()
+                                                                            )}
+                                                                        </div>
                                                                         <span className="font-bold text-on-surface">
                                                                             {comm.user?.name || 'Anggota'}
                                                                         </span>

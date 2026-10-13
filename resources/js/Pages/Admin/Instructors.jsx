@@ -155,36 +155,36 @@ export default function Instructors({ instructors = { data: [], links: [] }, sta
 
                 if (status === 'PENDING_VERIFICATION') {
                     return (
-                        <Badge variant="warning" dot pulse>
-                            MENUNGGU VERIFIKASI
-                        </Badge>
+                        <AdminBadge variant="pending" size="xs" pulse>
+                            Menunggu Review
+                        </AdminBadge>
                     );
                 }
                 if (status === 'REJECTED') {
                     return (
-                        <Badge variant="destructive" dot>
-                            VERIFIKASI DITOLAK
-                        </Badge>
+                        <AdminBadge variant="attention" size="xs">
+                            Ditolak
+                        </AdminBadge>
                     );
                 }
                 if (status === 'SUSPENDED') {
                     return (
-                        <Badge variant="destructive">
-                            DIBEKUKAN
-                        </Badge>
+                        <AdminBadge variant="suspended" size="xs">
+                            Dibekukan
+                        </AdminBadge>
                     );
                 }
                 if (isVerified && status === 'ACTIVE') {
                     return (
-                        <Badge variant="success" dot icon="verified">
-                            TERVERIFIKASI RESMI
-                        </Badge>
+                        <AdminBadge variant="published" size="xs">
+                            Terverifikasi
+                        </AdminBadge>
                     );
                 }
                 return (
-                    <Badge variant="neutral">
-                        {status}
-                    </Badge>
+                    <AdminBadge variant="default" size="xs">
+                        {status ? status.replace(/_/g, ' ') : 'Aktif'}
+                    </AdminBadge>
                 );
             },
         },
@@ -356,17 +356,24 @@ export default function Instructors({ instructors = { data: [], links: [] }, sta
                                     </div>
                                     <p className="text-on-surface-variant font-mono">{selectedInstructor.email}</p>
                                     <div className="flex items-center gap-2 mt-1.5">
-                                        <Badge
+                                        <AdminBadge
                                             variant={
                                                 selectedInstructor.status === 'ACTIVE'
-                                                    ? 'success'
+                                                    ? 'published'
                                                     : selectedInstructor.status === 'PENDING_VERIFICATION'
-                                                    ? 'warning'
-                                                    : 'destructive'
+                                                    ? 'pending'
+                                                    : 'suspended'
                                             }
+                                            size="sm"
                                         >
-                                            Status Akun: {selectedInstructor.status}
-                                        </Badge>
+                                            {selectedInstructor.status === 'ACTIVE'
+                                                ? 'Terverifikasi'
+                                                : selectedInstructor.status === 'PENDING_VERIFICATION'
+                                                ? 'Menunggu Review'
+                                                : selectedInstructor.status === 'REJECTED'
+                                                ? 'Ditolak'
+                                                : 'Dibekukan'}
+                                        </AdminBadge>
                                         <span className="text-[11px] text-on-surface-variant font-medium">
                                             Pengalaman: {selectedInstructor.instructor_profile?.years_of_experience || 0} Tahun
                                         </span>

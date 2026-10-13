@@ -1,6 +1,7 @@
 import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
+import PwaInstallPrompt from './Components/PwaInstallPrompt';
 
 createInertiaApp({
     title: (title) => (title ? `${title}` : 'AEVYRA - Personal Preventive Health & Early Intervention Platform'),
@@ -14,7 +15,12 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         const root = createRoot(el);
-        root.render(<App {...props} />);
+        root.render(
+            <>
+                <App {...props} />
+                <PwaInstallPrompt />
+            </>
+        );
     },
     progress: {
         color: '#00433e',

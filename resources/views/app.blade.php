@@ -120,33 +120,7 @@
 <body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
     @inertia
 
-    @production
-        @laravelPwa
-        @pwaUpdateNotifier
-    @else
-        <!-- Development Auto-Clean: Unregister Service Worker & Clear PWA Caches so Vite HMR Auto-Refresh works flawlessly -->
-        {{-- <script>
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for (let registration of registrations) {
-                        registration.unregister().then(function(success) {
-                            if (success) {
-                                console.log('[AEVYRA Dev] PWA Service Worker unregistered to enable instant Vite HMR auto-refresh.');
-                            }
-                        });
-                    }
-                });
-            }
-            if ('caches' in window) {
-                caches.keys().then(func
-                tion(keys) {
-                    for (let key of keys) {
-                        caches.delete(key);
-                    }
-                });
-            }
-        </script> --}}
-    @endproduction
+    @laravelPwa
 </body>
 </html>
 

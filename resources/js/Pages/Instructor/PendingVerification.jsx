@@ -113,25 +113,47 @@ export default function PendingVerification({ status = 'PENDING_VERIFICATION', p
                     </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                {/* STR Missing Callout for Google SSO */}
+                {!profile?.str_number && (
+                    <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/25 text-left text-xs space-y-1.5">
+                        <div className="flex items-center gap-1.5 font-bold text-amber-900">
+                            <span className="material-symbols-outlined text-[18px]">edit_note</span>
+                            <span>Biodata & Kredensial STR Belum Lengkap</span>
+                        </div>
+                        <p className="text-amber-800 leading-relaxed text-[11px]">
+                            Akun Anda terdaftar melalui Google Sign-In dan belum menyertakan Nomor STR, institusi faskes, serta berkas legalitas. Administrator hanya dapat memvalidasi akun Anda jika biodata kredensial telah dilengkapi.
+                        </p>
+                    </div>
+                )}
+
+                <div className="flex flex-col sm:flex-row gap-2.5 justify-center pt-2">
+                    <Button
+                        href="/instructor/profile"
+                        variant="primary"
+                        size="md"
+                        leftIcon="badge"
+                        className="w-full sm:w-auto"
+                    >
+                        Lengkapi Profil &amp; Nomor STR
+                    </Button>
+                    <Button
+                        href="/instructor/account"
+                        variant="outline"
+                        size="md"
+                        leftIcon="manage_accounts"
+                        className="w-full sm:w-auto"
+                    >
+                        Pengaturan Akun &amp; Google
+                    </Button>
                     <Button
                         type="button"
                         variant="outline"
                         size="md"
                         onClick={handleLogout}
                         leftIcon="logout"
-                        className="w-full sm:w-auto"
+                        className="w-full sm:w-auto text-rose-600 hover:bg-rose-50 border-rose-200"
                     >
-                        Keluar Akun
-                    </Button>
-                    <Button
-                        href="/"
-                        variant="primary"
-                        size="md"
-                        leftIcon="home"
-                        className="w-full sm:w-auto"
-                    >
-                        Kembali ke Beranda
+                        Keluar
                     </Button>
                 </div>
             </div>
