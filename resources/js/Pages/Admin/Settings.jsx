@@ -483,7 +483,7 @@ export default function Settings({
                             icon="qr_code_scanner"
                         />
                         <FeatureToggleItem
-                            title="Asisten AI Non-Diagnostik"
+                            title="Asisten AI Gaya Hidup & Wawasan"
                             description="Tanya-jawab panduan gaya hidup preventif berbasis model Google Gemini 2.5 Flash"
                             enabled={featureFlags.aiChatAssistant}
                             onToggle={() => toggleFlag('aiChatAssistant')}
@@ -549,7 +549,7 @@ export default function Settings({
                                 Fast-Track Darurat 119
                             </span>
                             <p className="text-on-surface-variant leading-relaxed">
-                                Panggilan SPGDT darurat 119 dieksekusi dalam sub-200ms secara independen dari LLM cloud.
+                                Panggilan darurat ambulans 119 dieksekusi dalam sub-200ms secara independen dari LLM cloud.
                             </p>
                         </div>
                     </div>

@@ -199,7 +199,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
                             </span>
                         </div>
                         <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                            Intervensi bersifat bimbingan perilaku preventif. Sesuai UU PDP 27/2022, jaga kerahasiaan riwayat biologis member.
+                            Intervensi bersifat bimbingan perilaku preventif. Selalu jaga kerahasiaan riwayat biologis member.
                         </p>
                     </div>
                 </div>
@@ -340,8 +340,6 @@ export default function InstructorLayout({ children, title, activeNav }) {
                         </p>
                         <div className="flex items-center gap-4 text-[11px]">
                             <span>Batas Yuridis Terisolasi</span>
-                            <span>•</span>
-                            <span>UU PDP No. 27/2022</span>
                             <span>•</span>
                             <span>Pedoman PERKENI</span>
                         </div>

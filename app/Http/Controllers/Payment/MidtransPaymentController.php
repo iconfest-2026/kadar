@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
+use App\Models\Membership;
 use App\Models\MembershipPayment;
 use App\Models\MembershipTier;
+use App\Models\Notification;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MidtransPaymentController extends Controller
 {
@@ -113,5 +117,229 @@ class MidtransPaymentController extends Controller
         }
 
         return redirect()->route('member.dashboard')->with('info', 'Pembayaran paket membership Anda sedang diproses dan diverifikasi.');
+    }
+
+    /**
+     * Netflix-style Subscription Downgrade.
+     * Allows members to schedule a downgrade to a lower tier at their current billing cycle ends_at,
+     * maintaining all current tier benefits until that date, or apply immediately if requested.
+     */
+    public function scheduleDowngrade(Request $request, MembershipTier $tier)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$tier || $tier->status !== 'ACTIVE') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Paket tujuan tidak ditemukan atau sedang tidak aktif.',
+            ], 404);
+        }
+
+        $membership = Membership::where('user_id', $user->id)
+            ->where('status', 'ACTIVE')
+            ->with('tier')
+            ->first();
+
+        if (!$membership) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda belum memiliki paket keanggotaan aktif untuk diturunkan.',
+            ], 422);
+        }
+
+        if ($membership->tier_id === $tier->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda saat ini sudah berada pada paket ' . $tier->name . '.',
+            ], 422);
+        }
+
+        $validated = $request->validate([
+            'mode' => ['nullable', 'string', 'in:SCHEDULED,IMMEDIATE'],
+            'reason' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $mode = $validated['mode'] ?? 'SCHEDULED';
+        $reason = $validated['reason'] ?? null;
+        $currentTier = $membership->tier;
+
+        if ($mode === 'IMMEDIATE') {
+            $isFree = ((float) $tier->price) <= 0;
+            $membership->update([
+                'tier_id' => $tier->id,
+                'downgrade_to_tier_id' => null,
+                'downgrade_at' => null,
+                'downgrade_reason' => $reason,
+                'starts_at' => now(),
+                'ends_at' => $isFree ? null : now()->addMonth(),
+                'status' => 'ACTIVE',
+            ]);
+
+            try {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'type' => 'MEMBERSHIP_DOWNGRADED_IMMEDIATELY',
+                    'title' => "Paket Berhasil Dialihkan ke {$tier->name}",
+                    'body' => "Paket langganan Anda telah berhasil dialihkan langsung ke {$tier->name}. Seluruh kuota dan kapabilitas telah disesuaikan.",
+                    'data' => [
+                        'category' => 'system',
+                        'tier_name' => $tier->name,
+                        'tier_slug' => $tier->slug,
+                        'previous_tier' => $currentTier?->name,
+                        'action_url' => '/paket',
+                    ],
+                    'read_at' => null,
+                    'delivered_at' => now(),
+                ]);
+
+                AuditLog::log(
+                    $user->id,
+                    'member',
+                    'membership.immediate_downgrade',
+                    'Membership',
+                    (string) $membership->id,
+                    [
+                        'from_tier' => $currentTier?->name,
+                        'to_tier' => $tier->name,
+                        'reason' => $reason,
+                    ]
+                );
+            } catch (\Throwable $e) {
+                Log::error('Error creating notification on immediate downgrade: ' . $e->getMessage());
+            }
+
+            return response()->json([
+                'success' => true,
+                'mode' => 'IMMEDIATE',
+                'message' => "Paket Anda telah berhasil beralih ke {$tier->name}.",
+                'current_tier' => $tier->name,
+                'current_tier_slug' => $tier->slug,
+            ]);
+        }
+
+        // Mode SCHEDULED (Netflix standard: keep benefits until ends_at)
+        $effectiveDate = ($membership->ends_at && $membership->ends_at->isFuture())
+            ? $membership->ends_at
+            : now()->addMonth();
+
+        $membership->update([
+            'downgrade_to_tier_id' => $tier->id,
+            'downgrade_at' => $effectiveDate,
+            'downgrade_reason' => $reason,
+        ]);
+
+        $formattedDate = $effectiveDate->translatedFormat('d F Y');
+
+        try {
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => 'MEMBERSHIP_DOWNGRADE_SCHEDULED',
+                'title' => "Jadwal Penurunan Paket ke {$tier->name} Dikonfirmasi",
+                'body' => "Paket Anda akan diturunkan ke {$tier->name} pada tanggal {$formattedDate}. Hingga tanggal tersebut, Anda tetap dapat menikmati seluruh fitur {$currentTier?->name}. Anda dapat membatalkan jadwal ini kapan saja.",
+                'data' => [
+                    'category' => 'system',
+                    'tier_name' => $tier->name,
+                    'tier_slug' => $tier->slug,
+                    'previous_tier' => $currentTier?->name,
+                    'effective_at' => $effectiveDate->toDateString(),
+                    'action_url' => '/paket',
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+
+            AuditLog::log(
+                $user->id,
+                'member',
+                'membership.schedule_downgrade',
+                'Membership',
+                (string) $membership->id,
+                [
+                    'from_tier' => $currentTier?->name,
+                    'to_tier' => $tier->name,
+                    'effective_at' => $effectiveDate->toIso8601String(),
+                    'reason' => $reason,
+                ]
+            );
+        } catch (\Throwable $e) {
+            Log::error('Error creating notification on scheduled downgrade: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'success' => true,
+            'mode' => 'SCHEDULED',
+            'message' => "Paket Anda dijadwalkan turun ke {$tier->name} pada {$formattedDate}. Anda tetap memiliki akses penuh ke {$currentTier?->name} hingga saat itu.",
+            'effective_at' => $effectiveDate->toDateString(),
+            'formatted_effective_at' => $formattedDate,
+            'downgrade_tier' => $tier->name,
+            'downgrade_tier_slug' => $tier->slug,
+        ]);
+    }
+
+    /**
+     * Cancel a scheduled downgrade, keeping the current subscription intact.
+     * Corresponds to Netflix's "Keep Current Plan" button.
+     */
+    public function cancelDowngrade(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $membership = Membership::where('user_id', $user->id)
+            ->where('status', 'ACTIVE')
+            ->with(['tier', 'downgradeTier'])
+            ->first();
+
+        if (!$membership || !$membership->hasPendingDowngrade()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada jadwal penurunan paket yang aktif untuk dibatalkan.',
+            ], 422);
+        }
+
+        $targetTierName = $membership->downgradeTier?->name;
+        $currentTierName = $membership->tier?->name;
+
+        $membership->update([
+            'downgrade_to_tier_id' => null,
+            'downgrade_at' => null,
+            'downgrade_reason' => null,
+        ]);
+
+        try {
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => 'MEMBERSHIP_DOWNGRADE_CANCELLED',
+                'title' => 'Penurunan Paket Berhasil Dibatalkan',
+                'body' => "Jadwal penurunan paket ke {$targetTierName} telah dibatalkan. Anda tetap menikmati seluruh fitur {$currentTierName} seperti biasa.",
+                'data' => [
+                    'category' => 'system',
+                    'current_tier' => $currentTierName,
+                    'action_url' => '/paket',
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+
+            AuditLog::log(
+                $user->id,
+                'member',
+                'membership.cancel_downgrade',
+                'Membership',
+                (string) $membership->id,
+                [
+                    'cancelled_target_tier' => $targetTierName,
+                    'current_tier' => $currentTierName,
+                ]
+            );
+        } catch (\Throwable $e) {
+            Log::error('Error creating notification on cancel downgrade: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Jadwal penurunan paket dibatalkan. Anda tetap berlangganan {$currentTierName}.",
+        ]);
     }
 }

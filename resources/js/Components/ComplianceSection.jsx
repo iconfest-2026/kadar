@@ -22,7 +22,7 @@ export default function ComplianceSection() {
         },
         {
             icon: 'policy',
-            title: 'UU PDP No. 27/2022',
+            title: 'Perlindungan Privasi Digital',
             code: 'Privasi Data Pribadi',
             desc: 'Kendali penuh hak hapus, unduh, atau cabut izin akses riwayat medis.',
         },

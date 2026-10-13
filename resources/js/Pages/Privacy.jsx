@@ -18,7 +18,7 @@ export default function Privacy(props) {
                         Kebijakan Privasi ini merupakan wujud kepatuhan PT Aevyra Digital Medika ("<strong>AEVYRA</strong>", "<strong>Kami</strong>") terhadap peraturan perundang-undangan perlindungan data yang berlaku di Republik Indonesia, khususnya:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-[#465b55]">
-                        <li><strong>Undang-Undang No. 27 Tahun 2022</strong> tentang Pelindungan Data Pribadi (UU PDP).</li>
+                        <li><strong>Regulasi Nasional</strong> tentang Pelindungan Data Pribadi.</li>
                         <li><strong>Undang-Undang No. 17 Tahun 2023</strong> tentang Kesehatan.</li>
                         <li><strong>Peraturan Menteri Kesehatan RI No. 24 Tahun 2022</strong> tentang Rekam Medis Elektronik.</li>
                         <li><strong>Peraturan Pemerintah No. 71 Tahun 2019</strong> tentang Penyelenggaraan Sistem dan Transaksi Elektronik (PSTE).</li>
@@ -121,7 +121,7 @@ export default function Privacy(props) {
             content: (
                 <div className="space-y-3 text-sm text-[#3b4e49] leading-relaxed">
                     <p>
-                        Sesuai Pasal 20 UU PDP, pemrosesan Data Pribadi dilakukan atas dasar <strong>Persetujuan Eksplisit yang Sah</strong> yang Anda berikan saat mendaftar dan menyetujui ketentuan ini. Data dimanfaatkan untuk tujuan:
+                        Pemrosesan Data Pribadi dilakukan atas dasar <strong>Persetujuan Eksplisit yang Sah</strong> yang Anda berikan saat mendaftar dan menyetujui ketentuan ini. Data dimanfaatkan untuk tujuan:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-[#465b55]">
                         <li>Menghitung estimasi kurva lonjakan glukosa darah 2 jam pasca-makan berdasarkan pangan yang Anda konsumsi.</li>
@@ -136,12 +136,12 @@ export default function Privacy(props) {
         {
             id: 'pasal-5',
             number: 'Pasal 5',
-            title: 'Hak-Hak Anda sebagai Subjek Data Pribadi (UU PDP)',
+            title: 'Hak-Hak Anda sebagai Subjek Data Pribadi',
             badge: 'Hak Anda',
             content: (
                 <div className="space-y-4 text-sm text-[#3b4e49] leading-relaxed">
                     <p>
-                        Berdasarkan Bab IV Pasal 5 hingga Pasal 13 UU No. 27 Tahun 2022, Anda selaku Subjek Data memiliki hak-hak yang kami lindungi sepenuhnya:
+                        Sebagai Subjek Data, Anda memiliki hak-hak privasi yang kami lindungi sepenuhnya:
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="p-3 rounded-2xl bg-[#edf5f0] border border-[#d2e5da] space-y-1">
@@ -278,7 +278,7 @@ export default function Privacy(props) {
             content: (
                 <div className="space-y-3 text-sm text-[#3b4e49] leading-relaxed">
                     <p>
-                        Sesuai amanat Pasal 46 UU PDP, apabila dalam keadaan kahar atau serangan siber tak terduga terjadi insiden kegagalan pelindungan Data Pribadi:
+                        Apabila dalam keadaan kahar atau serangan siber tak terduga terjadi insiden kegagalan pelindungan Data Pribadi:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-[#465b55]">
                         <li>Kami wajib menyampaikan pemberitahuan tertulis kepada Subjek Data dan Lembaga Pelindungan Data Pribadi dalam waktu maksimal <strong>3 x 24 jam</strong> sejak insiden terkonfirmasi.</li>
@@ -349,7 +349,7 @@ export default function Privacy(props) {
 
     return (
         <MarketingLayout {...props}>
-            <Head title="Kebijakan Privasi &amp; Perlindungan Data Pribadi (UU PDP No. 27/2022) - AEVYRA" />
+            <Head title="Kebijakan Privasi &amp; Perlindungan Data Pribadi - AEVYRA" />
 
             <div className="relative w-full overflow-hidden bg-[#f7faf8] py-8 sm:py-12 lg:py-16">
                 {/* Diffused Natural Light Blooms */}
@@ -365,14 +365,14 @@ export default function Privacy(props) {
                             Beranda
                         </Link>
                         <span>/</span>
-                        <span className="text-[#192b27] font-medium">Kebijakan Privasi (UU PDP)</span>
+                        <span className="text-[#192b27] font-medium">Kebijakan Privasi</span>
                     </nav>
 
                     {/* Page Header */}
                     <div className="space-y-3.5 border-b border-surface-container-high pb-6">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide w-fit">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                            <span>Kepatuhan Regulasi Nasional • UU No. 27 Tahun 2022 &amp; Permenkes No. 24/2022</span>
+                            <span>Kepatuhan Regulasi Nasional • Permenkes No. 24/2022</span>
                         </div>
                         <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
                             Kebijakan Privasi &amp; Pelindungan Data Medis Pribadi.
@@ -390,7 +390,7 @@ export default function Privacy(props) {
                                 Standar Enkripsi: <strong>AES-256-GCM / TLS 1.3</strong>
                             </span>
                             <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-[#d9e7e0]">
-                                Kepatuhan: <strong>UU PDP No. 27/2022</strong>
+                                Kepatuhan: <strong>Standar Privasi Digital</strong>
                             </span>
                         </div>
                     </div>

@@ -14,10 +14,10 @@
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Tests Passing](https://img.shields.io/badge/Tests-19%20Passed-success?style=for-the-badge&logo=githubactions&logoColor=white)]()
-[![Compliance](https://img.shields.io/badge/Compliance-UU%20PDP%20No.%2027%2F2022-00433e?style=for-the-badge)]()
+[![Compliance](https://img.shields.io/badge/Security-AES--256%20Encrypted-00433e?style=for-the-badge)]()
 
 ## About Laravel
-> **Platform PWA cerdas untuk pemantauan garis acuan biologis personal (*Personal Baseline*), deteksi dini pergeseran perilaku gaya hidup (*Health Behavior Engine*), bimbingan tenaga ahli terverifikasi, dan tanggap darurat medis SPGDT 119 mandiri.**
+> **Platform PWA cerdas untuk pemantauan garis acuan biologis personal (*Personal Baseline*), deteksi dini pergeseran perilaku gaya hidup (*Health Behavior Engine*), bimbingan tenaga ahli terverifikasi, dan tanggap darurat medis ambulans 119 mandiri.**
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 ---
@@ -41,7 +41,7 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 9. [Panduan Instalasi & Menjalankan Aplikasi](#-panduan-instalasi--menjalankan-aplikasi)
 10. [Verifikasi Pengujian Otomatis (Testing)](#-verifikasi-pengujian-otomatis-testing)
 11. [Design Tokens & Identitas Visual](#-design-tokens--identitas-visual)
-12. [Kepatuhan Regulasi & Perlindungan Data (UU PDP)](#-kepatuhan-regulasi--perlindungan-data-uu-pdp)
+12. [Kepatuhan Regulasi & Perlindungan Data](#-kepatuhan-regulasi--perlindungan-data)
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 ---
@@ -53,7 +53,7 @@ Laravel has the most extensive and thorough [documentation](https://laravel.com/
 Mayoritas aplikasi kesehatan konvensional mengandalkan ambang batas populasi umum statis (misal: semua orang harus 10.000 langkah atau 8 jam tidur) yang kerap memicu alarm palsu atau mengabaikan deviasi halus pada individu. 
 
 If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-**Kadar (AEVYRA)** hadir sebagai platform kesehatan preventif berbasis perilaku dan intervensi dini yang membangun **Garis Acuan Personal (*Personal Baseline*)** berbasis jendela bergulir 14-hari data objektif pengguna. Melalui pendekatan non-diagnostik, Kadar mendeteksi pergeseran ritme biologis lebih awal, menyajikan wawasan empati yang didukung data bukti, serta menghubungkan pengguna dengan instruktur kesehatan berlisensi dan layanan ambulans gawat darurat nasional (SPGDT 119).
+**Kadar (AEVYRA)** hadir sebagai platform kesehatan preventif berbasis perilaku dan intervensi dini yang membangun **Garis Acuan Personal (*Personal Baseline*)** berbasis jendela bergulir 14-hari data objektif pengguna. Melalui pendekatan berbasis wawasan preventif, Kadar mendeteksi pergeseran ritme biologis lebih awal, menyajikan wawasan empati yang didukung data bukti, serta menghubungkan pengguna dengan instruktur kesehatan berlisensi dan layanan ambulans gawat darurat nasional (119).
 
 ## Laravel Sponsors
 ---
@@ -121,7 +121,7 @@ Platform Kadar menerapkan pembatas keselamatan berlapis (*clinical guardrails*) 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 ### 2. Kedaulatan Protokol Darurat 119 (`EmergencyService`)
 - **100% Independen dari AI**: Tombol darurat **SOS 119** merespons instan (< 200ms) tanpa menunggu respon LLM atau jaringan eksternal.
-- **Integrasi SPGDT Nasional**: Menghubungkan langsung ke Panggilan Darurat Medis **119** (Kemenkes RI), Panggilan Darurat Terpadu **112**, serta direktori hotline IGD 24 Jam rumah sakit rujukan.
+- **Integrasi Layanan Darurat Nasional**: Menghubungkan langsung ke Panggilan Darurat Medis **119** (Kemenkes RI), Panggilan Darurat Terpadu **112**, serta direktori hotline IGD 24 Jam rumah sakit rujukan.
 - **Pencatatan Audit Medis**: Setiap aktivasi tombol darurat mencatat log kejadian forensik (`emergency_events`) dengan izin lokasi yang diproses secara aman.
 
 ## License
@@ -142,7 +142,7 @@ Arsitektur AI Kadar dirancang terisolasi (*decoupled*) melalui `AiDriverInterfac
 | :--- | :--- | :--- |
 | **Member** | `/member/dashboard` | Pantau status baseline personal (Tidur, Air, Langkah, Glukosa), catat metrik harian 1-tap, feed kronologis timeline kesehatan, terima rekomendasi kebiasaan mikro, tantangan gamifikasi, dan tombol SOS 119. |
 | **Instruktur** | `/instructor/dashboard` | Tinjau caseload member bimbingan, pantau triase sinyal HBE aktif berdasarkan skor urgensi, tugaskan rencana intervensi terstruktur, dan simpan rekam catatan konsultasi gaya hidup. |
-| **Admin** | `/admin/dashboard` | Monitor KPI kepatuhan & stabilitas sistem, lihat log jejak audit forensik dengan hashing satu arah SHA-256 (UU PDP), serta kelola aktivasi/penangguhan akun pengguna. |
+| **Admin** | `/admin/dashboard` | Monitor KPI kepatuhan & stabilitas sistem, lihat log jejak audit forensik dengan hashing satu arah SHA-256 (Enkripsi Terstandar), serta kelola aktivasi/penangguhan akun pengguna. |
 
 ---
 
@@ -339,9 +339,9 @@ Aplikasi mengadopsi standar visual medis premium modern yang dikonfigurasi pada 
 
 ---
 
-## ⚖️ Kepatuhan Regulasi & Perlindungan Data (UU PDP)
+## ⚖️ Kepatuhan Regulasi & Perlindungan Data
 
-Kadar dirancang dengan mematuhi prinsip perlindungan data pribadi sesuai **Undang-Undang No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP)**:
+Kadar dirancang dengan mematuhi prinsip perlindungan data pribadi dan enkripsi medis modern:
 1. **Anonimisir Data Jejak Audit**: Alamat IP pengguna pada jejak audit forensik disamarkan menggunakan fungsi hash satu arah SHA-256 (`ip_reference`), sehingga tidak dapat didekripsi balik.
 2. **Prinsip Minimisir Data Lokasi**: Koordinat GPS perangkat hanya digunakan secara temporer saat panggilan darurat 119 diaktifkan pengguna, tanpa disimpan permanen sebagai riwayat perjalanan.
 3. **Pemisahan Peran Tegas**: Hak akses riwayat kesehatan dibatasi secara ketat antar peran melalui kebijakan otorisasi berbasis relasi penugasan aktif (*assignment-based authorization*).

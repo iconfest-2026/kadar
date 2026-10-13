@@ -844,7 +844,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                 <tr>
                                     <td className="py-3.5 px-4 font-bold text-on-surface">Konektivitas SatuSehat</td>
                                     <td className="py-3.5 px-4 text-gray-500">Rekam medis terpisah dalam aplikasi sendiri</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Terhubung penuh ke ekosistem SatuSehat Kemenkes RI (UU PDP)</td>
+                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Terhubung penuh ke ekosistem SatuSehat Kemenkes RI Terenkripsi</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -981,7 +981,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                 Bagaimana privasi rekam medis dan data pasien dilindungi?
                             </h4>
                             <p className="text-on-surface-variant leading-relaxed">
-                                Data rekam medis elektronik Anda dienkripsi dengan standar AES-256 militer dan protokol transmisi video WebRTC peer-to-peer terenkripsi, mematuhi penuh UU Perlindungan Data Pribadi (UU PDP No. 27/2022).
+                                Data rekam medis elektronik Anda dienkripsi dengan standar AES-256 militer dan protokol transmisi video WebRTC peer-to-peer terenkripsi berstandar internasional.
                             </p>
                         </div>
 

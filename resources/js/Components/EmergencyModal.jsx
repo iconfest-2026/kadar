@@ -58,7 +58,7 @@ export default function EmergencyModal({ isOpen, onClose }) {
                                 Siaga Darurat Medis
                             </h2>
                             <p className="text-[11px] text-on-surface-variant leading-tight">
-                                SPGDT 119 Kemenkes RI
+                                Layanan Ambulans 119
                             </p>
                         </div>
                     </div>
@@ -75,7 +75,7 @@ export default function EmergencyModal({ isOpen, onClose }) {
 
                 {/* Direct Call Action Buttons */}
                 <div className="space-y-2.5">
-                    {/* Primary: SPGDT Ambulance 119 */}
+                    {/* Primary: Ambulance 119 */}
                     <a
                         href="tel:119"
                         className="w-full p-3.5 rounded-2xl bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white flex items-center justify-between shadow-md shadow-rose-600/20 transition-all group active:scale-98"
@@ -86,7 +86,7 @@ export default function EmergencyModal({ isOpen, onClose }) {
                             </div>
                             <div className="text-left min-w-0">
                                 <span className="text-xs font-bold block truncate">Panggil Ambulans 119</span>
-                                <span className="text-[10px] text-white/80 block truncate">SPGDT Kemenkes RI • Bebas Pulsa</span>
+                                <span className="text-[10px] text-white/80 block truncate">Layanan Siaga Medis • Bebas Pulsa</span>
                             </div>
                         </div>
                         <div className="w-8 h-8 rounded-xl bg-white text-rose-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">

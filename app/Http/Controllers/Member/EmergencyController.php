@@ -30,11 +30,11 @@ class EmergencyController extends Controller
     {
         return response()->json([
             'national_emergency' => '112',
-            'spgdt_medical' => '119',
+            'medical_ambulance' => '119',
             'police' => '110',
             'fire' => '113',
             'directory' => [
-                ['name' => 'SPGDT Kemenkes RI (Ambulans)', 'number' => '119', 'type' => 'MEDICAL'],
+                ['name' => 'Ambulans Darurat 119 (Kemenkes RI)', 'number' => '119', 'type' => 'MEDICAL'],
                 ['name' => 'Panggilan Darurat Terpadu Nasional', 'number' => '112', 'type' => 'GENERAL'],
                 ['name' => 'RSUP Cipto Mangunkusumo (RSCM Jakarta)', 'number' => '(021) 1500135', 'type' => 'HOSPITAL'],
                 ['name' => 'RSUP Dr. Hasan Sadikin (Bandung)', 'number' => '(022) 2034953', 'type' => 'HOSPITAL'],

@@ -93,20 +93,31 @@ class BookingController extends Controller
                 ];
             });
 
-        // 3. User active membership & quota
-        $membership = Membership::where('user_id', $user->id)
-            ->where('status', 'ACTIVE')
-            ->with('tier')
-            ->first();
+        // 3. User active membership & dynamic consultation quota
+        $quotaService = app(\App\Services\Membership\ConsultationQuotaService::class);
+        $quota = $quotaService->getMemberQuota($user);
 
-        $tierName = $membership?->tier?->name ?? 'Silver';
-        $totalQuota = $membership?->tier
-            ? ($membership->tier->max_consultations === -1 ? 999 : (int) ($membership->tier->max_consultations ?? 1))
-            : 1;
-        $quota = [
-            'total' => $totalQuota,
-            'used' => $consultations->where('is_upcoming', true)->count(),
-        ];
+        // 3b. Fetch latest health metrics summary for clinical chat context
+        $coreMetrics = ['blood_glucose', 'sleep_duration', 'steps', 'water_intake', 'calories'];
+        $latestRecords = \App\Models\HealthRecord::where('user_id', $user->id)
+            ->whereIn('metric_type', $coreMetrics)
+            ->orderBy('recorded_at', 'desc')
+            ->get()
+            ->groupBy('metric_type')
+            ->map(function ($items) {
+                $first = $items->first();
+                return [
+                    'value' => (float) $first->value_numeric,
+                    'unit' => $first->unit,
+                    'recorded_at' => $first->recorded_at ? $first->recorded_at->format('d M H:i') : null,
+                ];
+            });
+
+        // 3c. Fetch assigned instructors for fast access
+        $assignedInstructorIds = InstructorMemberAssignment::where('member_id', $user->id)
+            ->where('status', 'ACTIVE')
+            ->pluck('instructor_id')
+            ->toArray();
 
         // 4. Default available time slots template
         $defaultSlots = [
@@ -116,8 +127,11 @@ class BookingController extends Controller
         return Inertia::render('Member/ConsultationsHub', [
             'instructors' => $instructors,
             'consultations' => $consultations,
+            'assignedInstructorIds' => $assignedInstructorIds,
+            'healthMetrics' => $latestRecords,
             'membership' => [
-                'tier' => $tierName,
+                'tier' => $quota['tier_name'],
+                'tier_slug' => $quota['tier_slug'],
                 'quota' => $quota,
             ],
             'defaultSlots' => $defaultSlots,
@@ -171,6 +185,13 @@ class BookingController extends Controller
             'purpose' => 'required|string|min:3|max:500',
             'health_context' => 'nullable|string|max:500',
         ]);
+
+        // Check consultation quota according to active subscription tier
+        $quotaService = app(\App\Services\Membership\ConsultationQuotaService::class);
+        $quotaError = $quotaService->validateBooking($user);
+        if ($quotaError) {
+            return back()->withErrors(['general' => $quotaError]);
+        }
 
         $start = Carbon::parse($validated['scheduled_date'] . ' ' . $validated['scheduled_time']);
         $end = (clone $start)->addMinutes(45);
@@ -268,5 +289,78 @@ class BookingController extends Controller
         );
 
         return back()->with('success', 'Jadwal konsultasi berhasil dibatalkan.');
+    }
+
+    public function getMessages(Request $request, Consultation $consultation)
+    {
+        $user = Auth::user();
+        if ($consultation->member_id !== $user->id && $consultation->instructor_id !== $user->id) {
+            abort(403, 'Akses ruang konsultasi dibatasi.');
+        }
+
+        $messages = \App\Models\ConsultationMessage::where('consultation_id', $consultation->id)
+            ->with('sender:id,name,email')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        if ($messages->isEmpty()) {
+            $doctorName = $consultation->instructor?->name ?? 'Dokter Pendamping';
+            $initial = \App\Models\ConsultationMessage::create([
+                'consultation_id' => $consultation->id,
+                'sender_id' => $consultation->instructor_id,
+                'sender_role' => 'INSTRUCTOR',
+                'message' => "Halo! Saya {$doctorName}. Sesi tele-konsultasi Anda telah dibuka dengan topik: \"{$consultation->purpose}\". Anda dapat bertanya, mendiskusikan keluhan, atau membagikan data biomarker terukur Anda di sini.",
+                'is_read' => true,
+            ]);
+            $initial->load('sender:id,name,email');
+            $messages = collect([$initial]);
+        }
+
+        return response()->json([
+            'consultation' => [
+                'id' => $consultation->id,
+                'purpose' => $consultation->purpose,
+                'status' => $consultation->status,
+                'scheduled_start' => $consultation->scheduled_start?->format('Y-m-d H:i'),
+                'doctor_name' => $consultation->instructor?->name ?? 'Dokter Pendamping',
+                'doctor_title' => 'Spesialis Gizi Klinis & Metabolik',
+                'notes' => $consultation->notes,
+            ],
+            'messages' => $messages,
+        ]);
+    }
+
+    public function sendMessage(Request $request, Consultation $consultation)
+    {
+        $user = Auth::user();
+        if ($consultation->member_id !== $user->id && $consultation->instructor_id !== $user->id) {
+            abort(403, 'Akses ruang konsultasi dibatasi.');
+        }
+
+        if ($consultation->status === 'CANCELLED') {
+            return response()->json(['error' => 'Sesi tele-konsultasi ini telah dibatalkan.'], 422);
+        }
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:2500',
+            'metric_payload' => 'nullable|array',
+        ]);
+
+        $senderRole = $user->id === $consultation->instructor_id ? 'INSTRUCTOR' : 'MEMBER';
+
+        $msg = \App\Models\ConsultationMessage::create([
+            'consultation_id' => $consultation->id,
+            'sender_id' => $user->id,
+            'sender_role' => $senderRole,
+            'message' => $validated['message'],
+            'metric_payload' => $validated['metric_payload'] ?? null,
+            'is_read' => false,
+        ]);
+        $msg->load('sender:id,name,email');
+
+        return response()->json([
+            'success' => true,
+            'message' => $msg,
+        ]);
     }
 }

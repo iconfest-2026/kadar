@@ -7,105 +7,75 @@ export default function Error({ status = 404, message = null, errorId = null }) 
     const errorConfigs = {
         403: {
             code: 403,
-            badge: 'AKSES DIRESTRIKSI • OTORISASI DIPERLUKAN',
-            badgeStyle: 'bg-rose-50 text-rose-700 border-rose-200',
+            badge: 'KODE 403 • AKSES DIRESTRIKSI',
+            badgeStyle: 'bg-[#fdf2f1] text-[#992a24] border-[#f5cbca]',
             icon: 'lock',
-            iconBg: 'bg-rose-100 text-rose-700',
-            title: 'Akses Dibatasi oleh Protokol Keamanan Medis',
-            subtitle: 'Otorisasi Khusus Diperlukan',
-            description: 'Anda tidak memiliki hak otorisasi untuk mengakses area data klinis atau konsol tata kelola ini. Area ini dilindungi oleh regulasi privasi rekam medis digital UU PDP No. 27/2022 dan hanya dapat diakses oleh peran tertentu (Admin / Dokter Terverifikasi).',
-            suggestions: [
-                'Pastikan Anda telah masuk dengan akun yang memiliki hak akses yang sesuai (Role Admin / Instruktur Terverifikasi).',
-                'Jika Anda adalah dokter binaan, pastikan nomor STR dan SIP Anda telah selesai divalidasi oleh Administrator.',
-                'Hubungi tim administrator faskes jika Anda membutuhkan eskalasi hak istimewa operasional.',
-            ],
+            iconContainer: 'from-[#fdf2f1] to-[#fae2e0] border-[#f5cbca] text-[#992a24] shadow-[0_4px_20px_rgba(153,42,36,0.06)]',
+            title: 'Akses Memerlukan Otorisasi',
+            description: 'Halaman atau data klinis ini dilindungi oleh protokol keamanan medis. Anda memerlukan otorisasi khusus atau akun terverifikasi untuk dapat mengaksesnya.',
             primaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
             secondaryBtn: { text: 'Masuk Akun Lain', href: '/login', icon: 'switch_account' },
+            footerMeta: 'Enkripsi Medis Terstandar',
         },
         404: {
             code: 404,
-            badge: 'KODE 404 • DOKUMEN TIDAK DITEMUKAN',
-            badgeStyle: 'bg-emerald-50 text-[#1c6454] border-[#d4e8dd]',
+            badge: 'KODE 404 • TIDAK DITEMUKAN',
+            badgeStyle: 'bg-[#eef7f2] text-[#00433e] border-[#d3e7dc]',
             icon: 'travel_explore',
-            iconBg: 'bg-emerald-100 text-[#1c6454]',
-            title: 'Halaman atau Rekam Data Tidak Ditemukan',
-            subtitle: 'Alamat URL Mungkin Telah Berubah',
-            description: 'Tautan yang Anda tuju mungkin telah dipindahkan, dinonaktifkan, atau parameter identitas rekam medis tidak terdaftar dalam indeks sistem AEVYRA.',
-            suggestions: [
-                'Periksa kembali penulisan URL pada bilah alamat peramban Anda.',
-                'Gunakan menu navigasi utama untuk mencari fitur pemindai kamera, tracker biomarker, atau jadwal konsultasi.',
-                'Jika mencari produk pangan/obat, buka langsung modul Scanner Kamera BPOM untuk pemindaian live.',
-            ],
-            primaryBtn: { text: 'Buka Pemindai Nutrisi', href: '/member/scanner', icon: 'photo_camera' },
-            secondaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            iconContainer: 'from-[#eaf5f0] to-[#d8ede1] border-[#cbe3d6] text-[#00433e] shadow-[0_4px_20px_rgba(0,67,62,0.06)]',
+            title: 'Halaman Tidak Ditemukan',
+            description: 'Tautan yang Anda tuju mungkin telah dipindahkan, diubah, atau tidak lagi terdaftar dalam indeks sistem AEVYRA.',
+            primaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            secondaryBtn: { text: 'Halaman Sebelumnya', action: 'back', icon: 'arrow_back' },
+            shortcut: { text: 'Buka Pemindai Nutrisi', href: '/member/scanner' },
         },
         419: {
             code: 419,
-            badge: 'KODE 419 • SESI ENKRIPSI KEDALUWARSA',
-            badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200',
+            badge: 'KODE 419 • SESI KEDALUWARSA',
+            badgeStyle: 'bg-[#fef8ed] text-[#996312] border-[#f5dfb8]',
             icon: 'history_toggle_off',
-            iconBg: 'bg-amber-100 text-amber-800',
-            title: 'Sesi Keamanan Enkripsi Telah Kedaluwarsa',
-            subtitle: 'Token CSRF & Autentikasi Habis Masa Berlaku',
-            description: 'Untuk melindungi data kesehatan pribadi Anda dari manipulasi pihak ketiga, sistem secara otomatis mengunci formulir jika tidak terdapat aktivitas interaktif dalam kurun waktu tertentu.',
-            suggestions: [
-                'Muat ulang halaman untuk memperbarui token keamanan sesi Anda.',
-                'Kirim ulang formulir yang sebelumnya sedang Anda isi.',
-                'Jika kendala berulang, silakan masuk kembali ke akun AEVYRA Anda.',
-            ],
+            iconContainer: 'from-[#fef8ed] to-[#fcefd8] border-[#f5dfb8] text-[#996312] shadow-[0_4px_20px_rgba(153,99,18,0.06)]',
+            title: 'Sesi Keamanan Telah Kedaluwarsa',
+            description: 'Untuk menjaga kerahasiaan data kesehatan Anda, formulir ditutup secara otomatis setelah beberapa waktu tanpa interaksi. Silakan muat ulang halaman untuk melanjutkan.',
             primaryBtn: { text: 'Muat Ulang Halaman', action: 'reload', icon: 'refresh' },
-            secondaryBtn: { text: 'Masuk Ulang Akun', href: '/login', icon: 'login' },
+            secondaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            footerMeta: 'Token CSRF Diperbarui',
         },
         429: {
             code: 429,
-            badge: 'KODE 429 • BATAS LAJU AKSES TERCAPAI',
-            badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200',
+            badge: 'KODE 429 • BATAS LAJU TERCAPAI',
+            badgeStyle: 'bg-[#fef8ed] text-[#996312] border-[#f5dfb8]',
             icon: 'speed',
-            iconBg: 'bg-amber-100 text-amber-800',
-            title: 'Laju Permintaan Melebihi Batas Kecepatan',
-            subtitle: 'Rate Limit Throttling Aktif',
-            description: 'Sistem mendeteksi frekuensi pengiriman data atau pemindaian OCR yang terlalu padat dalam interval singkat. Pembatasan ini diterapkan untuk menjaga ketersediaan server bagi seluruh pengguna.',
-            suggestions: [
-                'Tunggu 30–60 detik sebelum mengirimkan permintaan analisis kamera atau formulir berikutnya.',
-                'Hindari menekan tombol submit secara bertubi-tubi.',
-                'Sistem akan otomatis membuka pembatasan setelah interval pendinginan selesai.',
-            ],
-            primaryBtn: { text: 'Coba Lagi Nanti', action: 'reload', icon: 'update' },
+            iconContainer: 'from-[#fef8ed] to-[#fcefd8] border-[#f5dfb8] text-[#996312] shadow-[0_4px_20px_rgba(153,99,18,0.06)]',
+            title: 'Terlalu Banyak Permintaan',
+            description: 'Sistem mendeteksi pengiriman data atau pemindaian yang terlalu sering dalam interval singkat. Mohon jeda 30–60 detik sebelum mengirimkan permintaan berikutnya.',
+            primaryBtn: { text: 'Coba Lagi Sekarang', action: 'reload', icon: 'update' },
             secondaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            footerMeta: 'Throttle Rate Guard Aktif',
         },
         500: {
             code: 500,
-            badge: 'KODE 500 • KENDALA INTERNAL SERVER',
-            badgeStyle: 'bg-rose-50 text-rose-700 border-rose-200',
+            badge: 'KODE 500 • KENDALA SISTEM',
+            badgeStyle: 'bg-[#fdf2f1] text-[#992a24] border-[#f5cbca]',
             icon: 'dns',
-            iconBg: 'bg-rose-100 text-rose-700',
-            title: 'Terjadi Gangguan Internal pada Sistem Komputasi',
-            subtitle: 'Layanan Telah Mencatat Insiden',
-            description: 'Terjadi kegagalan yang tidak terduga saat memproses algoritma inferensi atau query basis data. Tim teknis dan rekayasa keandalan sistem AEVYRA telah menerima peringatan otomatis untuk segera melakukan investigasi.',
-            suggestions: [
-                'Coba muat ulang halaman beberapa saat lagi.',
-                'Jika Anda sedang melakukan panggilan konsultasi atau darurat, gunakan tombol Siaga 119 di bawah.',
-                'Kirim laporan diagnostik ke tim bantuan teknis kami jika masalah berlanjut.',
-            ],
-            primaryBtn: { text: 'Muat Ulang Sistem', action: 'reload', icon: 'refresh' },
-            secondaryBtn: { text: 'Laporkan ke Tim Siaga', href: 'mailto:care@aevyra.health', icon: 'mail' },
+            iconContainer: 'from-[#fdf2f1] to-[#fae2e0] border-[#f5cbca] text-[#992a24] shadow-[0_4px_20px_rgba(153,42,36,0.06)]',
+            title: 'Terjadi Kendala pada Sistem',
+            description: 'Sistem kami mengalami gangguan sesaat saat memproses permintaan Anda. Tim teknis AEVYRA telah menerima peringatan otomatis untuk segera menanganinya.',
+            primaryBtn: { text: 'Muat Ulang Halaman', action: 'reload', icon: 'refresh' },
+            secondaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            shortcut: { text: 'Hubungi Bantuan Medis', href: 'mailto:care@aevyra.health', isExternal: true },
         },
         503: {
             code: 503,
-            badge: 'KODE 503 • PEMELIHARAAN SISTEM BERKALA',
-            badgeStyle: 'bg-teal-50 text-teal-800 border-teal-200',
+            badge: 'KODE 503 • PEMELIHARAAN SISTEM',
+            badgeStyle: 'bg-[#eef7f2] text-[#00433e] border-[#d3e7dc]',
             icon: 'construction',
-            iconBg: 'bg-teal-100 text-teal-800',
-            title: 'Sistem Sedang Dalam Pemeliharaan & Peningkatan',
-            subtitle: 'Sinkronisasi Basis Data SatuSehat & Kalibrasi AI',
-            description: 'Platform AEVYRA sedang menjalani pemeliharaan berkala untuk peningkatan performa model visi gizi dan sinkronisasi standar interoperabilitas HL7 FHIR Kemenkes RI. Layanan akan kembali normal dalam hitungan menit.',
-            suggestions: [
-                'Seluruh data biomarker dan rekam konsultasi Anda aman dan terenkripsi.',
-                'Layanan darurat hotline Ambulan 119 tetap beroperasi 24 jam melalui sambungan telepon langsung.',
-                'Halaman akan otomatis terhubung kembali setelah proses pemeliharaan selesai.',
-            ],
+            iconContainer: 'from-[#eaf5f0] to-[#d8ede1] border-[#cbe3d6] text-[#00433e] shadow-[0_4px_20px_rgba(0,67,62,0.06)]',
+            title: 'Sistem Sedang Ditingkatkan',
+            description: 'Platform AEVYRA sedang menjalani peningkatan berkala dan kalibrasi model inferensi SatuSehat. Layanan klinis akan segera kembali beroperasi penuh.',
             primaryBtn: { text: 'Periksa Status Server', action: 'reload', icon: 'cached' },
-            secondaryBtn: { text: 'Kontak Tim Support', href: 'mailto:care@aevyra.health', icon: 'support_agent' },
+            secondaryBtn: { text: 'Kembali ke Beranda', href: '/', icon: 'home' },
+            footerMeta: 'Data Pasien Aman & Terenkripsi',
         },
     };
 
@@ -115,166 +85,178 @@ export default function Error({ status = 404, message = null, errorId = null }) 
     const handleAction = (btn) => {
         if (btn.action === 'reload') {
             window.location.reload();
+        } else if (btn.action === 'back') {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
         }
     };
 
+    const renderButton = (btn, isPrimary = true) => {
+        const baseClasses = isPrimary
+            ? 'w-full sm:w-auto min-h-11 px-5 py-2.5 rounded-full bg-[#00433e] text-white text-xs sm:text-sm font-medium hover:bg-[#0c5348] transition-all hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-xs cursor-pointer'
+            : 'w-full sm:w-auto min-h-11 px-4 py-2.5 rounded-full bg-white text-[#203630] text-xs sm:text-sm font-medium hover:bg-[#f3f8f5] border border-[#d2e0d7] transition-all active:scale-98 flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer';
+
+        if (btn.action) {
+            return (
+                <button
+                    key={btn.text}
+                    type="button"
+                    onClick={() => handleAction(btn)}
+                    className={baseClasses}
+                >
+                    <span className="material-symbols-outlined text-[18px]">{btn.icon}</span>
+                    <span>{btn.text}</span>
+                </button>
+            );
+        }
+
+        if (btn.href?.startsWith('mailto:') || btn.href?.startsWith('tel:')) {
+            return (
+                <a
+                    key={btn.text}
+                    href={btn.href}
+                    className={baseClasses}
+                >
+                    <span className="material-symbols-outlined text-[18px]">{btn.icon}</span>
+                    <span>{btn.text}</span>
+                </a>
+            );
+        }
+
+        return (
+            <Link
+                key={btn.text}
+                href={btn.href || '/'}
+                className={baseClasses}
+            >
+                <span className="material-symbols-outlined text-[18px]">{btn.icon}</span>
+                <span>{btn.text}</span>
+            </Link>
+        );
+    };
+
     return (
-        <div className="min-h-screen w-full bg-[#f7faf8] text-[#142320] flex flex-col font-sans selection:bg-primary/20 selection:text-primary relative overflow-x-hidden">
+        <div className="min-h-screen w-full bg-[#f6faf8] text-[#12221e] flex flex-col font-sans selection:bg-[#00433e]/20 selection:text-[#00433e] relative overflow-x-hidden justify-between">
             <Head title={`${currentError.code} - ${currentError.title} | AEVYRA Health`} />
 
             {/* Peaceful, Serene Background Canvas Blooms */}
             <div 
                 aria-hidden="true" 
-                className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-150 max-w-[90vw] h-87.5 bg-linear-to-b from-[#e3f0e9]/70 via-[#edf6f1]/40 to-transparent blur-3xl rounded-full"
+                className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-160 max-w-[95vw] h-96 bg-gradient-to-b from-[#ddede4]/70 via-[#ebf5ef]/40 to-transparent blur-3xl rounded-full"
             />
             <div 
                 aria-hidden="true" 
-                className="pointer-events-none absolute bottom-0 right-0 w-112.5 max-w-[80vw] h-87.5 bg-[#f4ebe1]/30 blur-3xl rounded-full"
+                className="pointer-events-none absolute bottom-0 right-0 w-120 max-w-[85vw] h-96 bg-[#f7eee4]/40 blur-3xl rounded-full"
             />
 
-            {/* Minimalist Medical Header */}
-            <header className="h-16 w-full border-b border-surface-container-high/60 bg-white/70 backdrop-blur-md sticky top-0 z-30">
-                <div className="max-w-7xl min-w-0 mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
-                    <Link href="/" className="flex items-center gap-2 group">
+            {/* Clean Medical Header */}
+            <header className="h-16 w-full border-b border-[#e1ede5]/80 bg-white/75 backdrop-blur-md sticky top-0 z-30">
+                <div className="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+                    <Link href="/" className="flex items-center gap-2 group transition-opacity hover:opacity-90">
                         <img
                             src="/image/Logo_EVYRA_Horizontal.png"
-                            alt="AEVYRA Logo"
+                            alt="AEVYRA Healthcare"
                             className="h-7 sm:h-8 w-auto object-contain"
                         />
                     </Link>
 
-                    <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#d8e7de] text-[11px] text-[#1c6454]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span>Diagnostik Sistem Siaga</span>
-                        </div>
+                    <div className="flex items-center gap-2.5">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-medium text-[#00433e] border border-[#d3e5dc] hover:border-[#00433e]/40 transition-all shadow-xs"
+                        >
+                            <span className="material-symbols-outlined text-[16px]">home</span>
+                            <span className="hidden sm:inline">Beranda</span>
+                        </Link>
                         <a
                             href="tel:119"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#faf5f3] text-[#8e483b] border border-[#ebd8d2] text-xs font-medium hover:bg-[#f5edea] transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#fcf6f5] text-[#8e483b] border border-[#ebd8d2] text-xs font-medium hover:bg-[#f6edea] transition-colors"
+                            title="Saluran Siaga Medis 119"
                         >
                             <span className="material-symbols-outlined text-[15px] text-[#9c5243]">emergency</span>
-                            <span>Siaga 119</span>
+                            <span>119</span>
                         </a>
                     </div>
                 </div>
             </header>
 
             {/* Main Error Presentation Card */}
-            <main className="flex-1 max-w-7xl min-w-0 w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col justify-center items-center relative z-10">
-                <div className="w-full max-w-2xl bg-white/95 backdrop-blur-xl rounded-3xl border border-surface-container-high p-6 sm:p-10 shadow-[0_8px_30px_rgba(0,40,36,0.04)] space-y-6 text-left">
+            <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16 flex flex-col justify-center items-center relative z-10">
+                <div className="w-full max-w-lg bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d6e4dc]/80 p-6 sm:p-9 shadow-[0_16px_40px_rgba(0,67,62,0.04)] text-center relative overflow-hidden transition-all">
                     
-                    {/* Top Status Strip */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-surface-container">
-                        <div className="flex items-center gap-2.5">
-                            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${currentError.iconBg}`}>
-                                <span className="material-symbols-outlined text-[22px]">
-                                    {currentError.icon}
-                                </span>
-                            </div>
-                            <div>
-                                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold border ${currentError.badgeStyle}`}>
-                                    {currentError.badge}
-                                </span>
-                                <span className="text-[11px] text-[#63746f] block mt-0.5">
-                                    {currentError.subtitle}
-                                </span>
-                            </div>
-                        </div>
-
-                        <span className="font-mono text-2xl sm:text-3xl font-bold text-primary/40 tracking-wider">
-                            HTTP {currentError.code}
+                    {/* Status Icon Badge */}
+                    <div className={`mx-auto w-16 h-16 sm:w-18 sm:h-18 rounded-3xl bg-gradient-to-b border flex items-center justify-center mb-5 ${currentError.iconContainer}`}>
+                        <span className="material-symbols-outlined text-[32px] sm:text-[36px]">
+                            {currentError.icon}
                         </span>
                     </div>
 
-                    {/* Editorial Headline & Explanation */}
-                    <div className="space-y-2.5">
-                        <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#142320] leading-snug">
-                            {currentError.title}
-                        </h1>
-                        <p className="text-xs sm:text-sm text-[#4d605a] leading-relaxed">
-                            {message || currentError.description}
-                        </p>
+                    {/* Status Code Chip */}
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono font-semibold tracking-wider mb-3 ${currentError.badgeStyle}`}>
+                        <span>{currentError.badge}</span>
                     </div>
 
-                    {/* Clinical Recommendations & Action Guidance */}
-                    <div className="p-4 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-2.5">
-                        <span className="text-[11px] font-bold text-[#1c6454] uppercase tracking-wider flex items-center gap-1.5">
-                            <span className="material-symbols-outlined text-[16px]">info</span>
-                            Langkah Panduan Penanganan:
-                        </span>
-                        <ul className="space-y-2 text-xs text-[#445652]">
-                            {currentError.suggestions.map((item, idx) => (
-                                <li key={idx} className="flex items-start gap-2">
-                                    <span className="text-primary font-bold leading-none mt-0.5">•</span>
-                                    <span className="leading-relaxed">{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* Editorial Headline */}
+                    <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#12221e] leading-snug tracking-tight">
+                        {currentError.title}
+                    </h1>
 
-                    {/* Diagnostic Trace Info (UUID, Timestamp, Protocol) */}
-                    <div className="p-3 rounded-xl bg-surface-container-low border border-surface-container flex flex-wrap items-center justify-between gap-2 text-[10px] text-[#61736d] font-mono">
-                        <span>Trace ID: <strong className="text-on-surface">{generatedTraceId}</strong></span>
-                        <span>Waktu: {new Date().toLocaleTimeString('id-ID', { hour12: false })} WIB</span>
-                        <span>Enkripsi: AES-256 Valid</span>
-                    </div>
+                    {/* Empathetic & Clear Explanation */}
+                    <p className="text-xs sm:text-sm text-[#4d635c] leading-relaxed max-w-md mx-auto mt-2.5 mb-7">
+                        {message || currentError.description}
+                    </p>
 
                     {/* Action Button Row */}
-                    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                        {currentError.primaryBtn.action ? (
-                            <button
-                                type="button"
-                                onClick={() => handleAction(currentError.primaryBtn)}
-                                className="min-h-11 px-5 py-2.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">{currentError.primaryBtn.icon}</span>
-                                <span>{currentError.primaryBtn.text}</span>
-                            </button>
-                        ) : (
-                            <Link
-                                href={currentError.primaryBtn.href}
-                                className="min-h-11 px-5 py-2.5 rounded-full bg-primary text-white text-xs font-medium hover:bg-primary-container transition-all active:scale-95 shadow-xs flex items-center justify-center gap-2"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">{currentError.primaryBtn.icon}</span>
-                                <span>{currentError.primaryBtn.text}</span>
-                            </Link>
-                        )}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 w-full max-w-sm mx-auto">
+                        {renderButton(currentError.primaryBtn, true)}
+                        {renderButton(currentError.secondaryBtn, false)}
+                    </div>
 
-                        {currentError.secondaryBtn.href?.startsWith('mailto:') ? (
-                            <a
-                                href={currentError.secondaryBtn.href}
-                                className="min-h-11 px-4 py-2.5 rounded-full bg-white text-[#31433f] text-xs font-medium hover:bg-[#f4faf6] transition-all active:scale-95 border border-[#dce6e1] flex items-center justify-center gap-1.5"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">{currentError.secondaryBtn.icon}</span>
-                                <span>{currentError.secondaryBtn.text}</span>
-                            </a>
+                    {/* Subtle Trace & Meta Info */}
+                    <div className="mt-7 pt-4 border-t border-[#ebf2ee] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] text-[#6b8078] font-mono">
+                        <span>Ref ID: <strong className="text-[#1a2e29] font-medium">{generatedTraceId}</strong></span>
+                        {currentError.shortcut ? (
+                            currentError.shortcut.isExternal ? (
+                                <a
+                                    href={currentError.shortcut.href}
+                                    className="text-[#00433e] font-sans font-medium hover:underline inline-flex items-center gap-1"
+                                >
+                                    <span>{currentError.shortcut.text}</span>
+                                    <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                </a>
+                            ) : (
+                                <Link
+                                    href={currentError.shortcut.href}
+                                    className="text-[#00433e] font-sans font-medium hover:underline inline-flex items-center gap-1"
+                                >
+                                    <span>{currentError.shortcut.text}</span>
+                                    <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                </Link>
+                            )
                         ) : (
-                            <Link
-                                href={currentError.secondaryBtn.href || '/'}
-                                className="min-h-11 px-4 py-2.5 rounded-full bg-white text-[#31433f] text-xs font-medium hover:bg-[#f4faf6] transition-all active:scale-95 border border-[#dce6e1] flex items-center justify-center gap-1.5"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">{currentError.secondaryBtn.icon}</span>
-                                <span>{currentError.secondaryBtn.text}</span>
-                            </Link>
+                            <span className="text-[#728780] font-sans">{currentError.footerMeta || 'Enkripsi Sesi Aktif'}</span>
                         )}
                     </div>
                 </div>
 
                 {/* Status Switcher Bar (Quick preview for testing and verifying all status codes) */}
-                <div className="mt-8 text-center space-y-2">
-                    <span className="text-[11px] text-[#6b7d78] block">
+                <div className="mt-8 text-center space-y-1.5 opacity-70 hover:opacity-100 transition-opacity">
+                    <span className="text-[11px] text-[#6b8078] block">
                         Pratinjau Kode Status Lain:
                     </span>
-                    <div className="flex flex-wrap items-center justify-center gap-1.5 p-1 bg-white/80 rounded-full border border-surface-container shadow-2xs">
+                    <div className="inline-flex flex-wrap items-center justify-center gap-1 p-1 bg-white/70 backdrop-blur-xs rounded-full border border-[#d6e4dc] shadow-2xs">
                         {[403, 404, 419, 429, 500, 503].map((code) => (
                             <button
                                 key={code}
                                 type="button"
                                 onClick={() => setActiveCode(code)}
-                                className={`px-3 py-1 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${
+                                className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${
                                     activeCode === code
-                                        ? 'bg-primary text-white shadow-2xs'
-                                        : 'text-[#52645f] hover:text-primary hover:bg-[#edf5f0]'
+                                        ? 'bg-[#00433e] text-white shadow-2xs'
+                                        : 'text-[#4d635c] hover:text-[#00433e] hover:bg-[#edf5f0]'
                                 }`}
                             >
                                 {code}
@@ -284,20 +266,17 @@ export default function Error({ status = 404, message = null, errorId = null }) 
                 </div>
             </main>
 
-            {/* Quiet Footer */}
-            <footer className="w-full py-5 border-t border-surface-container-high/60 bg-white/40 text-[11px] text-[#63756f] text-center">
-                <div className="max-w-7xl min-w-0 mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-                    <span>© 2026 AEVYRA HEALTHCARE • SISTEM INTEGRASI PREVENTIF</span>
-                    <div className="flex items-center gap-3">
+            {/* Quiet Minimalist Footer */}
+            <footer className="w-full py-4 sm:py-5 border-t border-[#e1ede5]/70 bg-white/40 text-[11px] text-[#6b8078] text-center">
+                <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+                    <span>© 2026 AEVYRA HEALTHCARE • Platform Intervensi Preventif</span>
+                    <div className="flex items-center gap-2.5 text-[#7e948c]">
                         <span>Standar SatuSehat Kemenkes</span>
                         <span>•</span>
-                        <span>UU PDP No. 27/2022</span>
-                        <span>•</span>
-                        <span>PERKENI Protocol</span>
+                        <span>Enkripsi Medis AES-256</span>
                     </div>
                 </div>
             </footer>
         </div>
     );
 }
-

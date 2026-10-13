@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,13 +18,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1c6454',
-                        'primary-container': '#144c40',
-                        'surface-container-low': '#f3f7f5',
-                        'surface-container': '#e6eee9',
-                        'surface-container-high': '#d6e4dc',
-                        'on-surface': '#142320',
-                        'on-surface-variant': '#51635e',
+                        primary: '#00433e',
+                        'primary-hover': '#0c5348',
+                        'primary-container': '#0f5c56',
+                        'surface-container-low': '#edf6f0',
+                        'surface-container': '#e7f0eb',
+                        'surface-container-high': '#dce8e0',
+                        'on-surface': '#12221e',
+                        'on-surface-variant': '#4d635c',
                     },
                     fontFamily: {
                         sans: ['"IBM Plex Sans"', 'sans-serif'],
@@ -36,64 +37,65 @@
         };
     </script>
 </head>
-<body class="bg-[#f7faf8] text-[#142320] font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-primary/20 selection:text-primary relative overflow-x-hidden">
+<body class="bg-[#f6faf8] text-[#12221e] font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-[#00433e]/20 selection:text-[#00433e] relative overflow-x-hidden">
     <!-- Diffused Natural Light Ambient Blooms -->
     <div 
         aria-hidden="true" 
-        class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-150 max-w-[90vw] h-87.5 bg-linear-to-b from-[#e3f0e9]/70 via-[#edf6f1]/40 to-transparent blur-3xl rounded-full"
+        class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-160 max-w-[95vw] h-96 bg-gradient-to-b from-[#ddede4]/70 via-[#ebf5ef]/40 to-transparent blur-3xl rounded-full"
     ></div>
     <div 
         aria-hidden="true" 
-        class="pointer-events-none absolute bottom-0 right-0 w-112.5 max-w-[80vw] h-87.5 bg-[#f4ebe1]/30 blur-3xl rounded-full"
+        class="pointer-events-none absolute bottom-0 right-0 w-120 max-w-[85vw] h-96 bg-[#f7eee4]/40 blur-3xl rounded-full"
     ></div>
 
     <!-- Header -->
-    <header class="h-16 w-full border-b border-[#d6e4dc]/60 bg-white/70 backdrop-blur-md sticky top-0 z-30">
+    <header class="h-16 w-full border-b border-[#e1ede5]/80 bg-white/75 backdrop-blur-md sticky top-0 z-30">
         <div class="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
-            <a href="/" class="flex items-center gap-2">
+            <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90">
                 <img
                     src="/image/Logo_EVYRA_Horizontal.png"
-                    alt="AEVYRA Logo"
+                    alt="AEVYRA Healthcare"
                     class="h-7 sm:h-8 w-auto object-contain"
                 />
             </a>
 
-            <div class="flex items-center gap-2 sm:gap-3">
-                <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#d8e7de] text-[11px] text-[#1c6454]">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Diagnostik Sistem Siaga</span>
-                </div>
+            <div class="flex items-center gap-2.5">
+                <a
+                    href="/"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-medium text-[#00433e] border border-[#d3e5dc] hover:border-[#00433e]/40 transition-all shadow-xs"
+                >
+                    <span class="material-symbols-outlined text-[16px]">home</span>
+                    <span class="hidden sm:inline">Beranda</span>
+                </a>
                 <a
                     href="tel:119"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#faf5f3] text-[#8e483b] border border-[#ebd8d2] text-xs font-medium hover:bg-[#f5edea] transition-colors"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#fcf6f5] text-[#8e483b] border border-[#ebd8d2] text-xs font-medium hover:bg-[#f6edea] transition-colors"
+                    title="Saluran Siaga Medis 119"
                 >
                     <span class="material-symbols-outlined text-[15px] text-[#9c5243]">emergency</span>
-                    <span>Siaga 119</span>
+                    <span>119</span>
                 </a>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col justify-center items-center relative z-10">
-        <div class="w-full max-w-2xl bg-white/95 backdrop-blur-xl rounded-3xl border border-[#d6e4dc] p-6 sm:p-10 shadow-[0_8px_30px_rgba(0,40,36,0.04)] space-y-6 text-left">
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16 flex flex-col justify-center items-center relative z-10">
+        <div class="w-full max-w-lg bg-white/90 backdrop-blur-xl rounded-3xl border border-[#d6e4dc]/80 p-6 sm:p-9 shadow-[0_16px_40px_rgba(0,67,62,0.04)] text-center relative overflow-hidden transition-all">
             @yield('content')
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="w-full py-5 border-t border-[#d6e4dc]/60 bg-white/40 text-[11px] text-[#63756f] text-center">
+    <footer class="w-full py-4 sm:py-5 border-t border-[#e1ede5]/70 bg-white/40 text-[11px] text-[#6b8078] text-center">
         <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <span>© 2026 AEVYRA HEALTHCARE • SISTEM INTEGRASI PREVENTIF</span>
-            <div class="flex items-center gap-3">
+            <span>© 2026 AEVYRA HEALTHCARE • Platform Intervensi Preventif</span>
+            <div class="flex items-center gap-2.5 text-[#7e948c]">
                 <span>Standar SatuSehat Kemenkes</span>
                 <span>•</span>
-                <span>UU PDP No. 27/2022</span>
-                <span>•</span>
-                <span>PERKENI Protocol</span>
+                <span>Enkripsi Medis AES-256</span>
             </div>
         </div>
     </footer>
 </body>
 </html>
-

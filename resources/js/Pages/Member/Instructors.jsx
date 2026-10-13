@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import { Button, Badge, Avatar, Modal } from '../../Components/UI';
 
@@ -293,15 +293,26 @@ export default function Instructors({
                                         </Button>
 
                                         {isAssigned ? (
-                                            <Button
-                                                type="button"
-                                                size="sm"
-                                                variant="destructive"
-                                                onClick={() => handleRelease(inst)}
-                                                disabled={actionProcessing}
-                                            >
-                                                Lepas
-                                            </Button>
+                                            <>
+                                                <Link
+                                                    href={`/member/consultations-hub?instructor_id=${inst.id}&tab=booking`}
+                                                    className="flex-1 py-1.5 px-3 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold text-center flex items-center justify-center gap-1 shadow-2xs transition-all active:scale-95"
+                                                >
+                                                    <span className="material-symbols-outlined text-[15px]">chat</span>
+                                                    <span>Konsultasi</span>
+                                                </Link>
+                                                <Button
+                                                    type="button"
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    onClick={() => handleRelease(inst)}
+                                                    disabled={actionProcessing}
+                                                    className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                                                    title="Lepas Bimbingan"
+                                                >
+                                                    <span className="material-symbols-outlined text-[16px]">person_remove</span>
+                                                </Button>
+                                            </>
                                         ) : (
                                             <Button
                                                 type="button"
@@ -402,15 +413,24 @@ export default function Instructors({
                                 </Button>
 
                                 {assignedInstructorIds.includes(selectedInstructor.id) ? (
-                                    <Button
-                                        type="button"
-                                        variant="destructive"
-                                        size="sm"
-                                        onClick={() => handleRelease(selectedInstructor)}
-                                        disabled={actionProcessing}
-                                    >
-                                        Lepas Pendamping
-                                    </Button>
+                                    <>
+                                        <Link
+                                            href={`/member/consultations-hub?instructor_id=${selectedInstructor.id}&tab=booking`}
+                                            className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs"
+                                        >
+                                            <span className="material-symbols-outlined text-[16px]">chat</span>
+                                            <span>Mulai Konsultasi &amp; Chat</span>
+                                        </Link>
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => handleRelease(selectedInstructor)}
+                                            disabled={actionProcessing}
+                                        >
+                                            Lepas
+                                        </Button>
+                                    </>
                                 ) : (
                                     <Button
                                         type="button"

@@ -316,7 +316,7 @@ export default function Register() {
                                     description={
                                         accountType === 'instructor'
                                             ? 'Saya menyatakan bahwa nomor STR/SIP dan dokumen bukti yang diunggah adalah asli, sah, dan dapat dipertanggungjawabkan secara hukum.'
-                                            : 'Saya menyetujui Ketentuan Layanan, Kebijakan Privasi data kesehatan pribadi AEVYRA, serta kepatuhan UU PDP No. 27/2022.'
+                                            : 'Saya menyetujui Ketentuan Layanan serta Kebijakan Privasi data kesehatan pribadi AEVYRA.'
                                     }
                                     error={errors.consent}
                                 />
@@ -384,7 +384,7 @@ export default function Register() {
                         <div className="flex items-center justify-center gap-3 text-[10px] text-on-surface-variant/80 font-mono">
                             <span>SatuSehat Terhubung</span>
                             <span>•</span>
-                            <span>UU PDP No. 27/2022</span>
+                            <span>Enkripsi AES-256</span>
                             <span>•</span>
                             <span>SSL 256-Bit</span>
                         </div>

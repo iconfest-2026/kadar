@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePage, router, Link } from '@inertiajs/react';
 
 export default function DashboardNotificationFeed({
@@ -9,8 +9,17 @@ export default function DashboardNotificationFeed({
     className = '',
 }) {
     const { notifications: notifData = { unread_count: 0, recent: [] } } = usePage().props;
-    const unreadCount = notifData.unread_count || 0;
-    const recentList = notifData.recent || [];
+
+    const [localUnreadCount, setLocalUnreadCount] = useState(notifData.unread_count || 0);
+    const [localRecent, setLocalRecent] = useState(notifData.recent || []);
+
+    useEffect(() => {
+        setLocalUnreadCount(notifData.unread_count || 0);
+        setLocalRecent(notifData.recent || []);
+    }, [notifData.unread_count, notifData.recent]);
+
+    const unreadCount = localUnreadCount;
+    const recentList = localRecent;
 
     const displayedNotifications = recentList.slice(0, maxItems);
 
@@ -72,7 +81,18 @@ export default function DashboardNotificationFeed({
             case 'challenge':
             case 'payment':
                 return { icon: 'stars', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' };
+            case 'membership':
+                return { icon: 'workspace_premium', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
             default:
+                if (notif?.type?.startsWith('MEMBERSHIP_')) {
+                    if (notif.type === 'MEMBERSHIP_PAYMENT_SUCCESS') {
+                        return { icon: 'verified', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
+                    }
+                    if (notif.type === 'MEMBERSHIP_DOWNGRADE_SCHEDULED') {
+                        return { icon: 'event_repeat', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' };
+                    }
+                    return { icon: 'workspace_premium', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' };
+                }
                 return { icon: 'notifications', color: 'bg-primary/10 text-primary border-primary/20' };
         }
     };
@@ -80,6 +100,10 @@ export default function DashboardNotificationFeed({
     const handleMarkAsRead = (e, notif) => {
         e.stopPropagation();
         e.preventDefault();
+        setLocalUnreadCount((prev) => Math.max(0, prev - 1));
+        setLocalRecent((prev) =>
+            prev.map((n) => (n.id === notif.id ? { ...n, read_at: new Date().toISOString() } : n))
+        );
         router.patch(`/notifications/${notif.id}/read`, {}, {
             preserveScroll: true,
             preserveState: true,
@@ -87,7 +111,11 @@ export default function DashboardNotificationFeed({
     };
 
     const handleMarkAllAsRead = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
+        setLocalUnreadCount(0);
+        setLocalRecent((prev) =>
+            prev.map((n) => ({ ...n, read_at: n.read_at || new Date().toISOString() }))
+        );
         router.post('/notifications/mark-all-read', {}, {
             preserveScroll: true,
             preserveState: true,
@@ -95,29 +123,37 @@ export default function DashboardNotificationFeed({
     };
 
     const handleItemClick = (notif) => {
+        const targetUrl = notif.data?.action_url;
         if (!notif.read_at) {
+            setLocalUnreadCount((prev) => Math.max(0, prev - 1));
+            setLocalRecent((prev) =>
+                prev.map((n) => (n.id === notif.id ? { ...n, read_at: new Date().toISOString() } : n))
+            );
             router.patch(`/notifications/${notif.id}/read`, {}, {
                 preserveScroll: true,
-                preserveState: true,
+                onSuccess: () => {
+                    if (targetUrl) router.visit(targetUrl);
+                },
+                onError: () => {
+                    if (targetUrl) router.visit(targetUrl);
+                },
             });
-        }
-        const targetUrl = notif.data?.action_url;
-        if (targetUrl) {
+        } else if (targetUrl) {
             router.visit(targetUrl);
         }
     };
 
     return (
-        <div className={`p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs transition-all ${className}`}>
+        <div className={`p-3.5 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs transition-all ${className}`}>
             {/* Header */}
-            <div className="flex items-center justify-between gap-3 mb-3.5 pb-3 border-b border-surface-container">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 mb-3.5 pb-3 border-b border-surface-container">
                 <div className="flex items-center gap-2.5 min-w-0">
                     <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                         <span className="material-symbols-outlined text-[19px]">notifications_active</span>
                     </div>
                     <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                            <h3 className="font-heading font-black text-xs sm:text-sm text-on-surface truncate">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                            <h3 className="font-heading font-black text-xs sm:text-sm text-on-surface">
                                 {title || defaultTitle}
                             </h3>
                             {unreadCount > 0 && (
@@ -132,12 +168,12 @@ export default function DashboardNotificationFeed({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-surface-container/50 sm:border-transparent">
                     {unreadCount > 0 && (
                         <button
                             type="button"
                             onClick={handleMarkAllAsRead}
-                            className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:text-primary-container px-2 py-1 rounded-lg hover:bg-primary/5 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:text-primary-container px-2 py-1 rounded-lg hover:bg-primary/5 transition-colors cursor-pointer"
                             title="Tandai semua notifikasi sudah dibaca"
                         >
                             <span className="material-symbols-outlined text-[14px]">done_all</span>
@@ -146,7 +182,7 @@ export default function DashboardNotificationFeed({
                     )}
                     <Link
                         href="/notifications"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-[11px] font-bold transition-colors shrink-0"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-[11px] font-bold transition-colors shrink-0 ml-auto sm:ml-0"
                     >
                         <span>Semua</span>
                         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -165,7 +201,7 @@ export default function DashboardNotificationFeed({
                             <div
                                 key={notif.id}
                                 onClick={() => handleItemClick(notif)}
-                                className={`group p-3 rounded-2xl transition-all cursor-pointer flex items-start gap-3 border ${
+                                className={`group p-2.5 sm:p-3 rounded-2xl transition-all cursor-pointer flex items-start gap-2.5 sm:gap-3 border ${
                                     isUnread
                                         ? 'bg-primary/3 hover:bg-primary/6 border-primary/15 shadow-2xs'
                                         : 'bg-surface-container-low/50 hover:bg-surface-container border-transparent'
@@ -178,11 +214,11 @@ export default function DashboardNotificationFeed({
                                 </div>
 
                                 <div className="flex-1 min-w-0 space-y-0.5">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <h4 className={`text-xs truncate ${isUnread ? 'font-bold text-on-surface' : 'font-medium text-on-surface-variant'}`}>
+                                    <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
+                                        <h4 className={`text-xs ${isUnread ? 'font-bold text-on-surface' : 'font-medium text-on-surface-variant'} truncate`}>
                                             {notif.title}
                                         </h4>
-                                        <span className="text-[10px] font-mono text-on-surface-variant shrink-0">
+                                        <span className="text-[10px] font-mono text-on-surface-variant shrink-0 whitespace-nowrap">
                                             {formatRelativeTime(notif.created_at)}
                                         </span>
                                     </div>
@@ -191,15 +227,16 @@ export default function DashboardNotificationFeed({
                                     </p>
                                 </div>
 
-                                <div className="shrink-0 flex items-center gap-1 self-center opacity-80 group-hover:opacity-100">
+                                <div className="shrink-0 flex items-center gap-1 self-center">
                                     {isUnread && (
                                         <button
                                             type="button"
                                             onClick={(e) => handleMarkAsRead(e, notif)}
-                                            className="p-1 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+                                            className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
                                             title="Tandai dibaca"
+                                            aria-label="Tandai notifikasi telah dibaca"
                                         >
-                                            <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                                            <span className="material-symbols-outlined text-[17px]">check_circle</span>
                                         </button>
                                     )}
                                     <span className="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:text-primary group-hover:translate-x-0.5 transition-transform">

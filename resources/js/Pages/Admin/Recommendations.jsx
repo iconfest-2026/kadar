@@ -232,7 +232,7 @@ export default function Recommendations({
             <div className="space-y-6">
                 <AdminPageHeader
                     title="Health Behavior Engine & Rekomendasi Personal"
-                    subtitle="Pusat inferensi perilaku otomatis non-diagnostik: deteksi sinyal deviasi dari baseline 14-hari, penurunan rekomendasi mikro bertahap, dan evaluasi kepatuhan."
+                    subtitle="Pusat inferensi perilaku otomatis: deteksi sinyal deviasi dari baseline 14-hari, penurunan rekomendasi mikro bertahap, dan evaluasi kepatuhan."
                     icon="psychology"
                     badge={<AdminBadge variant="primary">Automated HBE Engine</AdminBadge>}
                     actions={
