@@ -17,6 +17,8 @@ class Consultation extends Model
         'purpose',
         'meeting_url',
         'notes',
+        'cancellation_reason',
+        'cancelled_by_id',
         'cancelled_at',
         'completed_at',
     ];
@@ -29,6 +31,11 @@ class Consultation extends Model
             'cancelled_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
+    }
+
+    public function cancelledBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cancelled_by_id');
     }
 
     public function member(): BelongsTo

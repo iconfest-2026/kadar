@@ -421,6 +421,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/consultations', [ConsultationController::class, 'index'])->name('consultations.index');
         Route::post('/consultations', [ConsultationController::class, 'store'])->name('consultations.store');
         Route::patch('/consultations/{consultation}/complete', [ConsultationController::class, 'complete'])->name('consultations.complete');
+        Route::post('/consultations/{consultation}/cancel', [ConsultationController::class, 'cancel'])->name('consultations.cancel');
         Route::get('/consultations/{consultation}/messages', [BookingController::class, 'getMessages'])->name('consultations.messages');
         Route::post('/consultations/{consultation}/messages', [BookingController::class, 'sendMessage'])->name('consultations.messages.send');
 

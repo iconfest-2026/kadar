@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Consultation;
+use App\Models\ConsultationMessage;
 use App\Models\InstructorAvailability;
 use App\Models\InstructorMemberAssignment;
 use App\Models\Membership;
+use App\Models\Notification;
 use App\Models\PointsLedger;
 use App\Models\Role;
 use App\Models\User;
@@ -75,7 +77,7 @@ class BookingController extends Controller
 
         // 2. Fetch user's consultations (upcoming and past)
         $consultations = Consultation::where('member_id', $user->id)
-            ->with('instructor')
+            ->with(['instructor:id,name,email', 'cancelledBy:id,name'])
             ->orderBy('scheduled_start', 'desc')
             ->get()
             ->map(function ($c) {
@@ -89,6 +91,11 @@ class BookingController extends Controller
                     'status' => $c->status,
                     'meeting_url' => $c->meeting_url,
                     'notes' => $c->notes,
+                    'cancellation_reason' => $c->cancellation_reason,
+                    'cancelled_at' => $c->cancelled_at?->format('Y-m-d H:i'),
+                    'cancelled_by_id' => $c->cancelled_by_id,
+                    'cancelled_by_name' => $c->cancelledBy?->name,
+                    'cancelled_by_role' => $c->cancelled_by_id === $c->instructor_id ? 'INSTRUCTOR' : ($c->cancelled_by_id === $c->member_id ? 'MEMBER' : null),
                     'is_upcoming' => $c->scheduled_start && $c->scheduled_start->isFuture() && !in_array($c->status, ['CANCELLED', 'COMPLETED']),
                 ];
             });
@@ -238,6 +245,59 @@ class BookingController extends Controller
             ]
         );
 
+        // Send notifications
+        $formattedStart = $start->translatedFormat('l, d F Y H:i');
+        try {
+            // Notification for Instructor
+            Notification::create([
+                'user_id' => $validated['instructor_id'],
+                'type' => 'CONSULTATION_BOOKED',
+                'title' => 'Jadwal Tele-Konsultasi Baru Masuk',
+                'body' => "Pasien {$user->name} telah memesan sesi bimbingan untuk {$formattedStart} WIB. Topik: {$purpose}",
+                'data' => [
+                    'category' => 'consultation',
+                    'consultation_id' => $consultation->id,
+                    'action_url' => '/instructor/consultations',
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+
+            // Notification for Member
+            $instructor = User::find($validated['instructor_id']);
+            $doctorName = $instructor?->name ?? 'Dokter Pendamping';
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => 'CONSULTATION_CONFIRMED',
+                'title' => 'Jadwal Tele-Konsultasi Dikonfirmasi',
+                'body' => "Sesi tele-konsultasi Anda bersama {$doctorName} telah berhasil dijadwalkan pada {$formattedStart} WIB.",
+                'data' => [
+                    'category' => 'consultation',
+                    'consultation_id' => $consultation->id,
+                    'action_url' => '/member/consultations-hub?tab=live_chat&consultation_id=' . $consultation->id,
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore notification failure
+        }
+
+        // Initialize welcome message in room
+        try {
+            $doctor = User::find($validated['instructor_id']);
+            $docName = $doctor?->name ?? 'Dokter Pendamping';
+            ConsultationMessage::create([
+                'consultation_id' => $consultation->id,
+                'sender_id' => $validated['instructor_id'],
+                'sender_role' => 'INSTRUCTOR',
+                'message' => "Halo! Saya {$docName}. Sesi tele-konsultasi Anda telah dibuka dengan topik: \"{$consultation->purpose}\". Anda dapat bertanya, mendiskusikan keluhan, atau membagikan data biomarker terukur Anda di sini sebelum sesi dimulai.",
+                'is_read' => true,
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore starter message failure
+        }
+
         // Award +10 Gamification Points for booking preventive consultation
         PointsLedger::create([
             'user_id' => $user->id,
@@ -273,10 +333,80 @@ class BookingController extends Controller
             abort(403, 'Akses dibatasi.');
         }
 
+        if ($consultation->status === 'COMPLETED') {
+            return back()->withErrors(['general' => 'Konsultasi yang telah selesai tidak dapat dibatalkan.']);
+        }
+
+        if ($consultation->status === 'CANCELLED') {
+            return back()->withErrors(['general' => 'Konsultasi ini sudah dibatalkan sebelumnya.']);
+        }
+
+        $validated = $request->validate([
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        $reason = !empty($validated['reason'])
+            ? trim($validated['reason'])
+            : 'Pasien berhalangan hadir pada jadwal yang telah ditentukan.';
+
+        $formattedTime = now()->translatedFormat('d M Y H:i');
+
         $consultation->update([
             'status' => 'CANCELLED',
             'cancelled_at' => now(),
-            'notes' => ($consultation->notes ?? '') . ' [Dibatalkan oleh pasien pada ' . now()->toDateTimeString() . ']',
+            'cancellation_reason' => $reason,
+            'cancelled_by_id' => $user->id,
+            'notes' => ($consultation->notes ? $consultation->notes . "\n" : '') . "[Dibatalkan oleh pasien pada {$formattedTime} WIB. Alasan: {$reason}]",
+        ]);
+
+        // Send Notification to Instructor
+        try {
+            $formattedStart = $consultation->scheduled_start ? $consultation->scheduled_start->translatedFormat('d M Y H:i') : 'terjadwal';
+            Notification::create([
+                'user_id' => $consultation->instructor_id,
+                'type' => 'CONSULTATION_CANCELLED',
+                'title' => 'Jadwal Konsultasi Dibatalkan oleh Pasien',
+                'body' => "Pasien {$user->name} telah membatalkan sesi konsultasi jadwal {$formattedStart} WIB. Alasan: \"{$reason}\".",
+                'data' => [
+                    'category' => 'consultation',
+                    'consultation_id' => $consultation->id,
+                    'action_url' => '/instructor/consultations',
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+        } catch (\Throwable $e) {}
+
+        // Send Notification to Member (Confirms Quota Refund)
+        try {
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => 'CONSULTATION_CANCELLED',
+                'title' => 'Konsultasi Berhasil Dibatalkan',
+                'body' => "Jadwal konsultasi Anda telah dibatalkan dan 1 kuota sesi konsultasi telah dikembalikan ke akun Anda secara otomatis.",
+                'data' => [
+                    'category' => 'consultation',
+                    'consultation_id' => $consultation->id,
+                    'action_url' => '/member/consultations-hub?tab=booking',
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+        } catch (\Throwable $e) {}
+
+        // Insert System Cancellation Notice into Chat Room
+        ConsultationMessage::create([
+            'consultation_id' => $consultation->id,
+            'sender_id' => $user->id,
+            'sender_role' => 'SYSTEM',
+            'message' => "⚠️ [PEMBERITAHUAN SISTEM] Sesi konsultasi ini telah dibatalkan oleh pasien {$user->name} pada {$formattedTime} WIB.\nAlasan: \"{$reason}\".\nKuota sesi tele-konsultasi telah dikembalikan ke akun pasien.",
+            'metric_payload' => [
+                'event' => 'CANCELLED',
+                'by' => 'MEMBER',
+                'reason' => $reason,
+                'cancelled_at' => now()->toIso8601String(),
+            ],
+            'is_read' => true,
         ]);
 
         AuditLog::log(
@@ -285,10 +415,10 @@ class BookingController extends Controller
             'CANCEL_CONSULTATION',
             'Consultation',
             $consultation->id,
-            ['reason' => $request->input('reason', 'Pasien membatalkan sesi')]
+            ['reason' => $reason]
         );
 
-        return back()->with('success', 'Jadwal konsultasi berhasil dibatalkan.');
+        return back()->with('success', 'Jadwal tele-konsultasi berhasil dibatalkan. Kuota sesi konsultasi Anda telah dikembalikan secara utuh.');
     }
 
     public function getMessages(Request $request, Consultation $consultation)
@@ -316,6 +446,8 @@ class BookingController extends Controller
             $messages = collect([$initial]);
         }
 
+        $consultation->loadMissing('cancelledBy:id,name');
+
         return response()->json([
             'consultation' => [
                 'id' => $consultation->id,
@@ -325,6 +457,11 @@ class BookingController extends Controller
                 'doctor_name' => $consultation->instructor?->name ?? 'Dokter Pendamping',
                 'doctor_title' => 'Spesialis Gizi Klinis & Metabolik',
                 'notes' => $consultation->notes,
+                'cancellation_reason' => $consultation->cancellation_reason,
+                'cancelled_at' => $consultation->cancelled_at?->format('Y-m-d H:i'),
+                'cancelled_by_id' => $consultation->cancelled_by_id,
+                'cancelled_by_name' => $consultation->cancelledBy?->name,
+                'cancelled_by_role' => $consultation->cancelled_by_id === $consultation->instructor_id ? 'INSTRUCTOR' : ($consultation->cancelled_by_id === $consultation->member_id ? 'MEMBER' : null),
             ],
             'messages' => $messages,
         ]);
@@ -338,7 +475,11 @@ class BookingController extends Controller
         }
 
         if ($consultation->status === 'CANCELLED') {
-            return response()->json(['error' => 'Sesi tele-konsultasi ini telah dibatalkan.'], 422);
+            return response()->json(['error' => 'Sesi tele-konsultasi ini telah dibatalkan. Anda tidak dapat mengirim pesan baru.'], 422);
+        }
+
+        if ($consultation->status === 'COMPLETED') {
+            return response()->json(['error' => 'Sesi tele-konsultasi ini telah selesai dan diarsipkan.'], 422);
         }
 
         $validated = $request->validate([

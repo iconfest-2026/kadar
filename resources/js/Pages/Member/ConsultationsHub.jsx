@@ -51,6 +51,11 @@ export default function ConsultationsHub({
     const [showTelemetryDrawer, setShowTelemetryDrawer] = useState(false);
     const chatEndRef = useRef(null);
 
+    // Cancel Consultation Modal State
+    const [cancelModalCons, setCancelModalCons] = useState(null);
+    const [cancelReason, setCancelReason] = useState('Perubahan jadwal mendadak / berhalangan hadir.');
+    const [cancelSubmitting, setCancelSubmitting] = useState(false);
+
     // Booking Form State
     const [selectedDoctor, setSelectedDoctor] = useState(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -89,6 +94,12 @@ export default function ConsultationsHub({
             if (res.ok) {
                 const data = await res.json();
                 setChatMessages(data.messages || []);
+                if (data.consultation) {
+                    setSelectedConsultation((prev) => ({
+                        ...prev,
+                        ...data.consultation,
+                    }));
+                }
             }
         } catch (err) {
             console.error('Failed to load consultation messages:', err);
@@ -127,7 +138,7 @@ export default function ConsultationsHub({
     // Send Message inside Consultation Chat
     const handleSendMessage = async (e) => {
         if (e && e.preventDefault) e.preventDefault();
-        if (!chatInput.trim() || chatSubmitting || !selectedConsultation) return;
+        if (!chatInput.trim() || chatSubmitting || !selectedConsultation || selectedConsultation.status === 'CANCELLED') return;
 
         const text = chatInput.trim();
         setChatInput('');
@@ -174,7 +185,7 @@ export default function ConsultationsHub({
 
     // Quick Metric Share: Shares real, measured quantitative health telemetry directly into chat
     const handleShareMetric = async (type) => {
-        if (!selectedConsultation || chatSubmitting) return;
+        if (!selectedConsultation || chatSubmitting || selectedConsultation.status === 'CANCELLED') return;
 
         let payload = null;
         let shareText = '';
@@ -324,11 +335,37 @@ export default function ConsultationsHub({
         );
     };
 
-    const handleCancelBooking = (consultationId) => {
-        if (!confirm('Batalkan jadwal bimbingan klinis ini? Kuota konsultasi Anda akan dikembalikan.')) return;
-        router.post(`/member/booking/${consultationId}/cancel`, {}, {
-            preserveScroll: true,
-        });
+    const openCancelModal = (cons) => {
+        setCancelModalCons(cons);
+        setCancelReason('Perubahan jadwal mendadak / berhalangan hadir.');
+    };
+
+    const handleConfirmCancel = (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!cancelModalCons || cancelSubmitting) return;
+
+        setCancelSubmitting(true);
+        router.post(
+            `/member/booking/${cancelModalCons.id}/cancel`,
+            { reason: cancelReason },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    const cancelledId = cancelModalCons.id;
+                    const reasonUsed = cancelReason;
+                    setCancelModalCons(null);
+                    setCancelReason('Perubahan jadwal mendadak / berhalangan hadir.');
+                    if (selectedConsultation?.id === cancelledId) {
+                        setSelectedConsultation((prev) => ({
+                            ...prev,
+                            status: 'CANCELLED',
+                            cancellation_reason: reasonUsed,
+                        }));
+                    }
+                },
+                onFinish: () => setCancelSubmitting(false),
+            }
+        );
     };
 
     const quota = membership?.quota || {
@@ -479,8 +516,18 @@ export default function ConsultationsHub({
                                                     Sesi Telemedisin Terhubung
                                                 </span>
                                             </div>
-                                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                                45 Menit
+                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                                                selectedConsultation.status === 'CANCELLED'
+                                                    ? 'bg-rose-50 text-rose-800 border-rose-200'
+                                                    : selectedConsultation.status === 'COMPLETED'
+                                                    ? 'bg-primary/10 text-primary border-primary/20'
+                                                    : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                            }`}>
+                                                {selectedConsultation.status === 'CANCELLED'
+                                                    ? 'Dibatalkan'
+                                                    : selectedConsultation.status === 'COMPLETED'
+                                                    ? 'Selesai'
+                                                    : '45 Menit'}
                                             </span>
                                         </div>
 
@@ -516,8 +563,8 @@ export default function ConsultationsHub({
                                             </p>
                                         </div>
 
-                                        {/* Meeting Room Button if available */}
-                                        {selectedConsultation.meeting_url && (
+                                        {/* Meeting Room Button if available and active */}
+                                        {selectedConsultation.meeting_url && selectedConsultation.status !== 'CANCELLED' && (
                                             <a
                                                 href={selectedConsultation.meeting_url}
                                                 target="_blank"
@@ -542,7 +589,9 @@ export default function ConsultationsHub({
                                             </span>
                                         </div>
                                         <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                                            Kirimkan data fisiologis terukur Anda ke ruang chat agar evaluasi dokter tepat sasaran:
+                                            {selectedConsultation.status === 'CANCELLED'
+                                                ? 'Sesi tele-konsultasi telah dibatalkan sehingga sinkronisasi telemetri dinonaktifkan.'
+                                                : 'Kirimkan data fisiologis terukur Anda ke ruang chat agar evaluasi dokter tepat sasaran:'}
                                         </p>
 
                                         {/* Quick Data Sharing Chips */}
@@ -550,8 +599,8 @@ export default function ConsultationsHub({
                                             <button
                                                 type="button"
                                                 onClick={() => handleShareMetric('glucose')}
-                                                disabled={chatSubmitting}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98"
+                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
                                             >
                                                 <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
                                                     <span className="font-medium">Gula Puasa</span>
@@ -565,8 +614,8 @@ export default function ConsultationsHub({
                                             <button
                                                 type="button"
                                                 onClick={() => handleShareMetric('diet')}
-                                                disabled={chatSubmitting}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98"
+                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
                                             >
                                                 <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
                                                     <span className="font-medium">Asupan Gizi</span>
@@ -580,8 +629,8 @@ export default function ConsultationsHub({
                                             <button
                                                 type="button"
                                                 onClick={() => handleShareMetric('sleep')}
-                                                disabled={chatSubmitting}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98"
+                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
                                             >
                                                 <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
                                                     <span className="font-medium">Durasi Tidur</span>
@@ -595,8 +644,8 @@ export default function ConsultationsHub({
                                             <button
                                                 type="button"
                                                 onClick={() => handleShareMetric('steps')}
-                                                disabled={chatSubmitting}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98"
+                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
                                             >
                                                 <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
                                                     <span className="font-medium">Langkah Kaki</span>
@@ -624,9 +673,27 @@ export default function ConsultationsHub({
                                                     <h4 className="font-bold text-xs sm:text-sm text-on-surface truncate">
                                                         {selectedConsultation.instructor_name}
                                                     </h4>
-                                                    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                                        <span>Online</span>
+                                                    <span className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.2 rounded-full font-bold border ${
+                                                        selectedConsultation.status === 'CANCELLED'
+                                                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                                            : selectedConsultation.status === 'COMPLETED'
+                                                            ? 'bg-primary/10 text-primary border-primary/20'
+                                                            : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                                    }`}>
+                                                        <span className={`w-1.5 h-1.5 rounded-full ${
+                                                            selectedConsultation.status === 'CANCELLED'
+                                                                ? 'bg-rose-500'
+                                                                : selectedConsultation.status === 'COMPLETED'
+                                                                ? 'bg-primary'
+                                                                : 'bg-emerald-500'
+                                                        }`} />
+                                                        <span>
+                                                            {selectedConsultation.status === 'CANCELLED'
+                                                                ? 'Dibatalkan'
+                                                                : selectedConsultation.status === 'COMPLETED'
+                                                                ? 'Selesai'
+                                                                : 'Terjadwal'}
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <p className="text-[11px] text-on-surface-variant truncate">
@@ -635,16 +702,31 @@ export default function ConsultationsHub({
                                             </div>
                                         </div>
 
-                                        {/* Mobile Toggle Telemetry Drawer */}
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowTelemetryDrawer(!showTelemetryDrawer)}
-                                            className="lg:hidden p-2 rounded-xl bg-surface-container-low text-primary hover:bg-surface-container border border-surface-container text-xs flex items-center gap-1 cursor-pointer"
-                                            title="Lihat Data Metrik Terukur"
-                                        >
-                                            <span className="material-symbols-outlined text-[18px]">monitoring</span>
-                                            <span className="text-[11px] font-semibold">Data</span>
-                                        </button>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            {/* Cancel Button if upcoming/scheduled */}
+                                            {(selectedConsultation.is_upcoming || selectedConsultation.status === 'CONFIRMED' || selectedConsultation.status === 'SCHEDULED') && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openCancelModal(selectedConsultation)}
+                                                    className="px-2.5 py-1.5 rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                                                    title="Batalkan konsultasi dan pulihkan kuota"
+                                                >
+                                                    <span className="material-symbols-outlined text-[15px]">cancel</span>
+                                                    <span className="hidden sm:inline">Batalkan Sesi</span>
+                                                </button>
+                                            )}
+
+                                            {/* Mobile Toggle Telemetry Drawer */}
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowTelemetryDrawer(!showTelemetryDrawer)}
+                                                className="lg:hidden p-2 rounded-xl bg-surface-container-low text-primary hover:bg-surface-container border border-surface-container text-xs flex items-center gap-1 cursor-pointer"
+                                                title="Lihat Data Metrik Terukur"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">monitoring</span>
+                                                <span className="text-[11px] font-semibold">Data</span>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {/* Mobile Expandable Telemetry Drawer */}
@@ -655,7 +737,8 @@ export default function ConsultationsHub({
                                                 <button
                                                     type="button"
                                                     onClick={() => { handleShareMetric('glucose'); setShowTelemetryDrawer(false); }}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1"
+                                                    disabled={selectedConsultation.status === 'CANCELLED'}
+                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
                                                 >
                                                     <span className="material-symbols-outlined text-[14px]">water_drop</span>
                                                     <span>Glukosa ({healthMetrics.blood_glucose?.value || 108} mg/dL)</span>
@@ -663,7 +746,8 @@ export default function ConsultationsHub({
                                                 <button
                                                     type="button"
                                                     onClick={() => { handleShareMetric('diet'); setShowTelemetryDrawer(false); }}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1"
+                                                    disabled={selectedConsultation.status === 'CANCELLED'}
+                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
                                                 >
                                                     <span className="material-symbols-outlined text-[14px]">nutrition</span>
                                                     <span>Nutrisi ({healthMetrics.calories?.value || 1650} kkal)</span>
@@ -671,11 +755,28 @@ export default function ConsultationsHub({
                                                 <button
                                                     type="button"
                                                     onClick={() => { handleShareMetric('sleep'); setShowTelemetryDrawer(false); }}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1"
+                                                    disabled={selectedConsultation.status === 'CANCELLED'}
+                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
                                                 >
                                                     <span className="material-symbols-outlined text-[14px]">bedtime</span>
                                                     <span>Tidur ({healthMetrics.sleep_duration?.value || 7.2} Jam)</span>
                                                 </button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Banner if Cancelled */}
+                                    {selectedConsultation.status === 'CANCELLED' && (
+                                        <div className="p-3.5 bg-rose-50 dark:bg-rose-950/30 border-b border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 flex items-start gap-2.5 text-xs">
+                                            <span className="material-symbols-outlined text-[20px] text-rose-600 shrink-0">cancel</span>
+                                            <div className="space-y-0.5">
+                                                <span className="font-bold block">Sesi Tele-Konsultasi Ini Telah Dibatalkan</span>
+                                                <p className="text-[11px] leading-relaxed">
+                                                    {selectedConsultation.cancelled_by_role === 'INSTRUCTOR'
+                                                        ? `Dibatalkan oleh Dokter/Instruktur dengan alasan: "${selectedConsultation.cancellation_reason || '-'}"`
+                                                        : `Dibatalkan oleh Anda dengan alasan: "${selectedConsultation.cancellation_reason || '-'}"`}
+                                                    . 1 kuota sesi konsultasi telah dikembalikan ke saldo akun Anda secara otomatis.
+                                                </p>
                                             </div>
                                         </div>
                                     )}
@@ -694,8 +795,21 @@ export default function ConsultationsHub({
                                             </div>
                                         ) : (
                                             chatMessages.map((msg) => {
+                                                const isSystem = msg.sender_role === 'SYSTEM';
                                                 const isUser = msg.sender_role === 'MEMBER';
                                                 const hasMetric = msg.metric_payload && typeof msg.metric_payload === 'object';
+
+                                                if (isSystem) {
+                                                    return (
+                                                        <div key={msg.id} className="py-2.5 px-3.5 my-2 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-center text-[11px] max-w-lg mx-auto leading-relaxed shadow-2xs">
+                                                            <div className="flex items-center justify-center gap-1 font-bold text-amber-800 dark:text-amber-300 mb-0.5">
+                                                                <span className="material-symbols-outlined text-[15px]">info</span>
+                                                                <span>Pemberitahuan Sistem</span>
+                                                            </div>
+                                                            <p className="whitespace-pre-wrap">{msg.message}</p>
+                                                        </div>
+                                                    );
+                                                }
 
                                                 return (
                                                     <div
@@ -764,14 +878,19 @@ export default function ConsultationsHub({
                                         <input
                                             type="text"
                                             value={chatInput}
+                                            disabled={selectedConsultation.status === 'CANCELLED'}
                                             onChange={(e) => setChatInput(e.target.value)}
-                                            placeholder="Ketik pertanyaan atau diskusikan keluhan klinis Anda..."
-                                            className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+                                            placeholder={
+                                                selectedConsultation.status === 'CANCELLED'
+                                                    ? 'Sesi tele-konsultasi telah dibatalkan. Ruang chat dinonaktifkan.'
+                                                    : 'Ketik pertanyaan atau diskusikan keluhan klinis Anda...'
+                                            }
+                                            className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium disabled:opacity-60 disabled:cursor-not-allowed"
                                         />
                                         <button
                                             type="submit"
-                                            disabled={!chatInput.trim() || chatSubmitting}
-                                            className="px-5 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:opacity-40 cursor-pointer"
+                                            disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                            className="px-5 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                                         >
                                             <span className="material-symbols-outlined text-[16px]">send</span>
                                             <span className="hidden sm:inline">Kirim</span>
@@ -1092,11 +1211,11 @@ export default function ConsultationsHub({
                                                     <span>Buka Chat</span>
                                                 </button>
 
-                                                {c.is_upcoming && (
+                                                {(c.is_upcoming || c.status === 'CONFIRMED' || c.status === 'SCHEDULED') && (
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleCancelBooking(c.id)}
-                                                        className="text-[11px] text-rose-600 hover:underline cursor-pointer px-2"
+                                                        onClick={() => openCancelModal(c)}
+                                                        className="text-[11px] text-rose-600 hover:text-rose-700 hover:underline cursor-pointer px-2 font-semibold"
                                                     >
                                                         Batalkan
                                                     </button>
@@ -1112,6 +1231,26 @@ export default function ConsultationsHub({
                                                 Topik: {c.purpose}
                                             </p>
                                         </div>
+
+                                        {/* Cancellation Details Card */}
+                                        {isCancelled && (
+                                            <div className="p-3 rounded-2xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-xs space-y-1">
+                                                <div className="flex items-center justify-between text-rose-800 dark:text-rose-300 font-bold">
+                                                    <span className="flex items-center gap-1">
+                                                        <span className="material-symbols-outlined text-[15px]">cancel</span>
+                                                        <span>Informasi Pembatalan Sesi</span>
+                                                    </span>
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 font-mono">
+                                                        Kuota Dipulihkan (+1)
+                                                    </span>
+                                                </div>
+                                                <p className="text-on-surface-variant text-[11px] leading-relaxed">
+                                                    Alasan: "{c.cancellation_reason || 'Dibatalkan oleh pihak pengguna/instruktur'}"
+                                                    {c.cancelled_at && ` • Pada ${c.cancelled_at} WIB`}
+                                                    {c.cancelled_by_name && ` (${c.cancelled_by_role === 'INSTRUCTOR' ? 'oleh Dokter/Instruktur' : 'oleh Anda'})`}
+                                                </p>
+                                            </div>
+                                        )}
 
                                         {/* Catatan Dokter (SOAP / Recommendations) */}
                                         {c.notes && (
@@ -1140,6 +1279,104 @@ export default function ConsultationsHub({
                     </div>
                 )}
             </div>
+
+            {/* MODAL: Batalkan Sesi Konsultasi Pasien */}
+            {cancelModalCons && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+                    onClick={() => setCancelModalCons(null)}
+                >
+                    <div
+                        className="bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-2xl max-w-lg w-full p-6 space-y-5"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between border-b border-surface-container pb-3">
+                            <div>
+                                <h3 className="font-heading font-bold text-lg text-rose-600 dark:text-rose-400 flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-[22px]">warning</span>
+                                    <span>Batalkan Jadwal Tele-Konsultasi</span>
+                                </h3>
+                                <p className="text-xs text-on-surface-variant">
+                                    Dokter: {cancelModalCons.instructor_name} • {cancelModalCons.scheduled_start} WIB
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setCancelModalCons(null)}
+                                className="p-1.5 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">close</span>
+                            </button>
+                        </div>
+
+                        {/* Quota refund guarantee card */}
+                        <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs flex items-start gap-2.5">
+                            <span className="material-symbols-outlined text-[20px] text-emerald-600 shrink-0">check_circle</span>
+                            <div className="space-y-0.5">
+                                <span className="font-bold block">Jaminan Pengembalian Kuota (100%)</span>
+                                <p className="text-[11px] leading-relaxed">
+                                    Pembatalan sesi ini akan langsung mengembalikan 1 kuota sesi tele-konsultasi ke akun Anda. Anda dapat memesan jadwal sesi baru kapan saja selama paket langganan aktif.
+                                </p>
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleConfirmCancel} className="space-y-4 text-xs">
+                            <div>
+                                <label className="font-bold text-on-surface block mb-1">
+                                    Alasan Pembatalan:
+                                </label>
+                                <textarea
+                                    rows="3"
+                                    value={cancelReason}
+                                    onChange={(e) => setCancelReason(e.target.value)}
+                                    placeholder="Tuliskan alasan Anda membatalkan sesi ini..."
+                                    className="w-full px-3.5 py-2.5 bg-surface-container-low rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-rose-500 text-xs text-on-surface font-medium leading-relaxed"
+                                    required
+                                />
+
+                                <div className="mt-2 space-y-1">
+                                    <span className="text-[10px] text-on-surface-variant font-medium">Pilih alasan cepat:</span>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {[
+                                            'Perubahan jadwal mendadak / ada agenda penting.',
+                                            'Kondisi tubuh telah membaik, jadwal diundur.',
+                                            'Membutuhkan pemeriksaan lab terlebih dahulu.',
+                                            'Ingin mengganti dokter spesialis pendamping.',
+                                        ].map((preset) => (
+                                            <button
+                                                key={preset}
+                                                type="button"
+                                                onClick={() => setCancelReason(preset)}
+                                                className="px-2 py-1 rounded-lg text-[10px] font-medium bg-surface-container-low hover:bg-surface-container border border-surface-container text-on-surface transition-all text-left"
+                                            >
+                                                {preset}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-2 pt-3 border-t border-surface-container">
+                                <button
+                                    type="button"
+                                    onClick={() => setCancelModalCons(null)}
+                                    className="px-4 py-2 rounded-xl bg-surface-container-low border border-surface-container text-on-surface font-semibold hover:bg-surface-container-high transition-all cursor-pointer"
+                                >
+                                    Kembali
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={cancelSubmitting}
+                                    className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
+                                >
+                                    {cancelSubmitting ? 'Membatalkan...' : 'Konfirmasi Batalkan Sesi'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
+
