@@ -1,85 +1,52 @@
 @extends('errors.layout')
 
-@section('title', '419 Sesi Kedaluwarsa')
+@section('title', '419 - Sesi Kedaluwarsa')
 
 @section('content')
-    <!-- Top Status Strip -->
-    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#e6eee9]">
-        <div class="flex items-center gap-2.5">
-            <div class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 bg-amber-100 text-amber-800">
-                <span class="material-symbols-outlined text-[22px]">history_toggle_off</span>
-            </div>
-            <div>
-                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold border bg-amber-50 text-amber-800 border-amber-200">
-                    KODE 419 • SESI ENKRIPSI KEDALUWARSA
-                </span>
-                <span class="text-[11px] text-[#63746f] block mt-0.5">
-                    Token CSRF & Autentikasi Habis Masa Berlaku
-                </span>
-            </div>
-        </div>
-
-        <span class="font-mono text-2xl sm:text-3xl font-bold text-[#1c6454]/40 tracking-wider">
-            HTTP 419
-        </span>
+    <!-- Status Icon Badge -->
+    <div class="mx-auto w-16 h-16 sm:w-18 sm:h-18 rounded-3xl bg-gradient-to-b from-[#fef8ed] to-[#fcefd8] border border-[#f5dfb8] flex items-center justify-center text-[#996312] shadow-[0_4px_20px_rgba(153,99,18,0.06)] mb-5">
+        <span class="material-symbols-outlined text-[32px] sm:text-[36px]">history_toggle_off</span>
     </div>
 
-    <!-- Editorial Headline & Explanation -->
-    <div class="space-y-2.5">
-        <h1 class="font-serif text-2xl sm:text-3xl font-normal text-[#142320] leading-snug">
-            Sesi Keamanan Enkripsi Telah Kedaluwarsa
-        </h1>
-        <p class="text-xs sm:text-sm text-[#4d605a] leading-relaxed">
-            Untuk melindungi data kesehatan pribadi Anda dari manipulasi pihak ketiga, sistem secara otomatis mengunci formulir jika tidak terdapat aktivitas interaktif dalam kurun waktu tertentu.
-        </p>
+    <!-- Status Code Chip -->
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fef8ed] border border-[#f5dfb8] text-[11px] font-mono font-semibold text-[#996312] tracking-wider mb-3">
+        <span>KODE 419</span>
+        <span class="text-[#c79a55]">•</span>
+        <span>SESI KEDALUWARSA</span>
     </div>
 
-    <!-- Clinical Recommendations & Action Guidance -->
-    <div class="p-4 rounded-2xl bg-[#fafcfb] border border-[#e5eee9] space-y-2.5">
-        <span class="text-[11px] font-bold text-[#1c6454] uppercase tracking-wider flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[16px]">info</span>
-            Langkah Panduan Penanganan:
-        </span>
-        <ul class="space-y-2 text-xs text-[#445652]">
-            <li class="flex items-start gap-2">
-                <span class="text-[#1c6454] font-bold leading-none mt-0.5">•</span>
-                <span class="leading-relaxed">Muat ulang halaman untuk memperbarui token keamanan sesi Anda.</span>
-            </li>
-            <li class="flex items-start gap-2">
-                <span class="text-[#1c6454] font-bold leading-none mt-0.5">•</span>
-                <span class="leading-relaxed">Kirim ulang formulir yang sebelumnya sedang Anda isi.</span>
-            </li>
-            <li class="flex items-start gap-2">
-                <span class="text-[#1c6454] font-bold leading-none mt-0.5">•</span>
-                <span class="leading-relaxed">Jika kendala berulang, silakan masuk kembali ke akun AEVYRA Anda.</span>
-            </li>
-        </ul>
-    </div>
+    <!-- Editorial Headline -->
+    <h1 class="font-serif text-2xl sm:text-3xl font-normal text-[#12221e] leading-snug tracking-tight">
+        Sesi Keamanan Telah Kedaluwarsa
+    </h1>
 
-    <!-- Diagnostic Trace Info -->
-    <div class="p-3 rounded-xl bg-[#f3f7f5] border border-[#e6eee9] flex flex-wrap items-center justify-between gap-2 text-[10px] text-[#61736d] font-mono">
-        <span>Trace ID: <strong class="text-[#142320]">AEV-419-{{ rand(100000, 999999) }}</strong></span>
-        <span>Waktu: {{ now()->timezone('Asia/Jakarta')->format('H:i:s') }} WIB</span>
-        <span>Enkripsi: AES-256 Valid</span>
-    </div>
+    <!-- Empathetic & Clear Explanation -->
+    <p class="text-xs sm:text-sm text-[#4d635c] leading-relaxed max-w-md mx-auto mt-2.5 mb-7">
+        Untuk menjaga kerahasiaan data kesehatan Anda, sistem secara otomatis mengunci formulir setelah beberapa waktu tanpa interaksi. Silakan muat ulang halaman untuk melanjutkan.
+    </p>
 
-    <!-- Action Button Row -->
-    <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+    <!-- Clean Action Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 w-full max-w-sm mx-auto">
         <button
             type="button"
             onclick="window.location.reload()"
-            class="min-h-11 px-5 py-2.5 rounded-full bg-[#1c6454] text-white text-xs font-medium hover:bg-[#144c40] transition-all active:scale-95 shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full sm:w-auto min-h-11 px-5 py-2.5 rounded-full bg-[#00433e] text-white text-xs sm:text-sm font-medium hover:bg-[#0c5348] transition-all hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
         >
-            <span class="material-symbols-outlined text-[17px]">refresh</span>
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
             <span>Muat Ulang Halaman</span>
         </button>
         <a
-            href="/login"
-            class="min-h-11 px-4 py-2.5 rounded-full bg-white text-[#31433f] text-xs font-medium hover:bg-[#f4faf6] transition-all active:scale-95 border border-[#dce6e1] flex items-center justify-center gap-1.5"
+            href="/"
+            class="w-full sm:w-auto min-h-11 px-4 py-2.5 rounded-full bg-white text-[#203630] text-xs sm:text-sm font-medium hover:bg-[#f3f8f5] border border-[#d2e0d7] transition-all active:scale-98 flex items-center justify-center gap-1.5 shadow-2xs"
         >
-            <span class="material-symbols-outlined text-[17px]">login</span>
-            <span>Masuk Ulang Akun</span>
+            <span class="material-symbols-outlined text-[18px]">home</span>
+            <span>Kembali ke Beranda</span>
         </a>
     </div>
-@endsection
 
+    <!-- Subtle Trace & Token Refresh Note -->
+    <div class="mt-7 pt-4 border-t border-[#ebf2ee] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] text-[#6b8078] font-mono">
+        <span>Ref ID: <strong class="text-[#1a2e29] font-medium">AEV-419-{{ rand(100000, 999999) }}</strong></span>
+        <span class="text-[#728780] font-sans">Token CSRF Diperbarui</span>
+    </div>
+@endsection
