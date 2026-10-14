@@ -234,13 +234,22 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                                             <p className="text-[11px] text-on-surface-variant font-mono truncate">{member.email}</p>
                                         </div>
                                     </div>
-                                    <Link
-                                        href={`/instructor/members/${member.id}`}
-                                        className="p-2 rounded-xl text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
-                                        title="Buka Rekam Binaan"
-                                    >
-                                        <span className="material-symbols-outlined text-[20px]">visibility</span>
-                                    </Link>
+                                    <div className="flex items-center gap-1">
+                                        <Link
+                                            href={`/instructor/chat?member_id=${member.id}`}
+                                            className="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors cursor-pointer"
+                                            title="Chat Pasien Langsung"
+                                        >
+                                            <span className="material-symbols-outlined text-[18px]">forum</span>
+                                        </Link>
+                                        <Link
+                                            href={`/instructor/members/${member.id}`}
+                                            className="p-2 rounded-xl text-primary hover:bg-surface-container-low transition-colors cursor-pointer"
+                                            title="Buka Rekam Binaan"
+                                        >
+                                            <span className="material-symbols-outlined text-[18px]">visibility</span>
+                                        </Link>
+                                    </div>
                                 </div>
                             ))}
 
@@ -288,9 +297,18 @@ export default function Dashboard({ assignedMembers = [], pendingSignals = [], u
                                             </p>
                                         </div>
                                     </div>
-                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-primary/10 text-primary">
-                                        {consultation.status || 'SCHEDULED'}
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <Link
+                                            href={`/instructor/chat?consultation_id=${consultation.id}`}
+                                            className="p-1.5 rounded-xl text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 hover:bg-emerald-100 transition-colors"
+                                            title="Buka Ruang Chat"
+                                        >
+                                            <span className="material-symbols-outlined text-[17px]">forum</span>
+                                        </Link>
+                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold bg-primary/10 text-primary">
+                                            {consultation.status || 'SCHEDULED'}
+                                        </span>
+                                    </div>
                                 </div>
                             ))}
 

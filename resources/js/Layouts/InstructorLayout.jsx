@@ -29,6 +29,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
         {
             title: 'Tindakan Klinis & Intervensi',
             items: [
+                { id: 'chat', name: 'Ruang Chat Pasien', href: '/instructor/chat', icon: 'forum', badge: 'Live' },
                 { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes', badge: 'HBE' },
                 { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
             ],
@@ -281,6 +282,14 @@ export default function InstructorLayout({ children, title, activeNav }) {
                                             </span>
                                         </div>
                                     </div>
+                                    <Link
+                                        href="/instructor/chat"
+                                        className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"
+                                        onClick={() => setUserMenuOpen(false)}
+                                    >
+                                        <span className="material-symbols-outlined text-[16px] text-primary">forum</span>
+                                        <span>Ruang Chat Pasien</span>
+                                    </Link>
                                     <Link
                                         href="/instructor/consultations"
                                         className="w-full text-left px-4 py-2 text-xs text-on-surface hover:bg-surface-container-low flex items-center gap-2"

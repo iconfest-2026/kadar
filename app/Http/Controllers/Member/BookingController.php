@@ -424,8 +424,21 @@ class BookingController extends Controller
     public function getMessages(Request $request, Consultation $consultation)
     {
         $user = Auth::user();
-        if ($consultation->member_id !== $user->id && $consultation->instructor_id !== $user->id) {
+        if ((int)$consultation->member_id !== (int)$user->id && (int)$consultation->instructor_id !== (int)$user->id) {
             abort(403, 'Akses ruang konsultasi dibatasi.');
+        }
+
+        // Mark incoming messages as read
+        if ((int)$user->id === (int)$consultation->instructor_id) {
+            \App\Models\ConsultationMessage::where('consultation_id', $consultation->id)
+                ->where('sender_role', 'MEMBER')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+        } elseif ((int)$user->id === (int)$consultation->member_id) {
+            \App\Models\ConsultationMessage::where('consultation_id', $consultation->id)
+                ->where('sender_role', 'INSTRUCTOR')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
         }
 
         $messages = \App\Models\ConsultationMessage::where('consultation_id', $consultation->id)
@@ -446,14 +459,19 @@ class BookingController extends Controller
             $messages = collect([$initial]);
         }
 
-        $consultation->loadMissing('cancelledBy:id,name');
+        $consultation->loadMissing(['cancelledBy:id,name', 'member:id,name,email', 'instructor:id,name,email']);
 
         return response()->json([
             'consultation' => [
                 'id' => $consultation->id,
+                'member_id' => $consultation->member_id,
+                'member_name' => $consultation->member?->name ?? 'Member Binaan',
+                'member_email' => $consultation->member?->email ?? '-',
+                'meeting_url' => $consultation->meeting_url,
                 'purpose' => $consultation->purpose,
                 'status' => $consultation->status,
                 'scheduled_start' => $consultation->scheduled_start?->format('Y-m-d H:i'),
+                'scheduled_end' => $consultation->scheduled_end?->format('Y-m-d H:i'),
                 'doctor_name' => $consultation->instructor?->name ?? 'Dokter Pendamping',
                 'doctor_title' => 'Spesialis Gizi Klinis & Metabolik',
                 'notes' => $consultation->notes,
@@ -470,7 +488,7 @@ class BookingController extends Controller
     public function sendMessage(Request $request, Consultation $consultation)
     {
         $user = Auth::user();
-        if ($consultation->member_id !== $user->id && $consultation->instructor_id !== $user->id) {
+        if ((int)$consultation->member_id !== (int)$user->id && (int)$consultation->instructor_id !== (int)$user->id) {
             abort(403, 'Akses ruang konsultasi dibatasi.');
         }
 
@@ -487,7 +505,7 @@ class BookingController extends Controller
             'metric_payload' => 'nullable|array',
         ]);
 
-        $senderRole = $user->id === $consultation->instructor_id ? 'INSTRUCTOR' : 'MEMBER';
+        $senderRole = (int)$user->id === (int)$consultation->instructor_id ? 'INSTRUCTOR' : 'MEMBER';
 
         $msg = \App\Models\ConsultationMessage::create([
             'consultation_id' => $consultation->id,
@@ -498,6 +516,29 @@ class BookingController extends Controller
             'is_read' => false,
         ]);
         $msg->load('sender:id,name,email');
+
+        // Send in-app notification to the recipient
+        try {
+            $recipientId = $senderRole === 'INSTRUCTOR' ? $consultation->member_id : $consultation->instructor_id;
+            $senderName = $user->name;
+            $truncatedText = \Illuminate\Support\Str::limit($validated['message'], 100);
+
+            \App\Models\Notification::create([
+                'user_id' => $recipientId,
+                'type' => 'NEW_CHAT_MESSAGE',
+                'title' => $senderRole === 'INSTRUCTOR' ? "Pesan Baru dari Dokter {$senderName}" : "Pesan Baru dari Pasien {$senderName}",
+                'body' => $truncatedText,
+                'data' => [
+                    'category' => 'consultation',
+                    'consultation_id' => $consultation->id,
+                    'action_url' => $senderRole === 'INSTRUCTOR'
+                        ? '/member/consultations-hub?tab=live_chat&consultation_id=' . $consultation->id
+                        : '/instructor/chat?consultation_id=' . $consultation->id,
+                ],
+                'read_at' => null,
+                'delivered_at' => now(),
+            ]);
+        } catch (\Throwable $e) {}
 
         return response()->json([
             'success' => true,

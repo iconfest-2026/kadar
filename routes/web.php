@@ -563,6 +563,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/interventions', [InterventionController::class, 'store'])->name('interventions.store');
         Route::patch('/interventions/{intervention}', [InterventionController::class, 'update'])->name('interventions.update');
         Route::get('/consultations', [ConsultationController::class, 'index'])->name('consultations.index');
+        Route::get('/consultations-hub', fn() => redirect()->route('instructor.chat.index'));
+        Route::get('/chat', [ConsultationController::class, 'chatHub'])->name('chat.index');
+        Route::get('/chat/conversations', [ConsultationController::class, 'getConversations'])->name('chat.conversations');
         Route::post('/consultations', [ConsultationController::class, 'store'])->name('consultations.store');
         Route::patch('/consultations/{consultation}/complete', [ConsultationController::class, 'complete'])->name('consultations.complete');
         Route::post('/consultations/{consultation}/cancel', [ConsultationController::class, 'cancel'])->name('consultations.cancel');

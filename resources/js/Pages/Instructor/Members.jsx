@@ -87,16 +87,26 @@ export default function Members({ members = { data: [], links: [] }, filters = {
         },
         {
             key: 'action',
-            label: 'Rekam Binaan',
+            label: 'Tindakan Klinis',
             align: 'right',
             render: (member) => (
-                <Link
-                    href={`/instructor/members/${member.id}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary text-white hover:bg-primary-container text-xs font-bold shadow-2xs transition-all cursor-pointer"
-                >
-                    <span className="material-symbols-outlined text-[16px]">clinical_notes</span>
-                    <span>Buka Profil</span>
-                </Link>
+                <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                    <Link
+                        href={`/instructor/chat?member_id=${member.id}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                        title="Chat langsung dengan member ini"
+                    >
+                        <span className="material-symbols-outlined text-[15px]">forum</span>
+                        <span>Chat</span>
+                    </Link>
+                    <Link
+                        href={`/instructor/members/${member.id}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary border border-surface-container text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-[15px]">clinical_notes</span>
+                        <span>Profil</span>
+                    </Link>
+                </div>
             ),
         },
     ];
