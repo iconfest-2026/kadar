@@ -1,4 +1,4 @@
-const CACHE_NAME = "laravel-pwa-v2";
+const CACHE_NAME = "laravel-pwa-v3";
 const OFFLINE_URL = "/offline.html";
 
 // Only pre-cache static offline fallback, NEVER dynamic root ("/") or Vite bundles
