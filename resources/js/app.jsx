@@ -21,6 +21,17 @@ createInertiaApp({
                 <PwaInstallPrompt />
             </>
         );
+
+        // Smoothly dismiss AEVYRA preloader
+        const preloader = document.getElementById('aevyra-app-preloader');
+        if (preloader) {
+            preloader.classList.add('preloader-fade-out');
+            setTimeout(() => {
+                if (preloader.parentNode) {
+                    preloader.parentNode.removeChild(preloader);
+                }
+            }, 450);
+        }
     },
     progress: {
         color: '#00433e',
