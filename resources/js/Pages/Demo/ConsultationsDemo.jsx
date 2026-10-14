@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import MarketingLayout from '@/Layouts/MarketingLayout';
 
 export default function ConsultationsDemo({ instructors = [] }) {
+    let authUser = null;
+    try {
+        const page = usePage();
+        authUser = page?.props?.auth?.user || null;
+    } catch {
+        authUser = null;
+    }
+
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedQuestion, setSelectedQuestion] = useState('q1');
     const [selectedDoctor, setSelectedDoctor] = useState('bramantyo');
     const [selectedSlot, setSelectedSlot] = useState('14:00');
     const [doctorFilter, setDoctorFilter] = useState('all');
     const [bookingSuccessModal, setBookingSuccessModal] = useState(false);
+    const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
     // =========================================================================
     // 1. EXTENSIVE CLINICAL TRIAGE DATABASE (8 Real Scenarios with PERKENI Guidelines)
@@ -277,11 +286,13 @@ export default function ConsultationsDemo({ instructors = [] }) {
 
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                             <Link
-                                href="/member/consultations-hub"
+                                href={authUser ? '/member/consultations-hub' : '/register'}
                                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white text-xs font-bold hover:bg-primary-container shadow-md transition-all active:scale-95 whitespace-nowrap"
                             >
-                                <span className="material-symbols-outlined text-[18px]">calendar_today</span>
-                                <span>Buka Hub Konsultasi Member</span>
+                                <span className="material-symbols-outlined text-[18px]">
+                                    {authUser ? 'calendar_today' : 'person_add'}
+                                </span>
+                                <span>{authUser ? 'Buka Hub Konsultasi Member' : 'Daftar Konsultasi'}</span>
                             </Link>
                         </div>
                     </div>
@@ -291,40 +302,24 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 {/* 2. STATS & CLINICAL TRUST STRIP (4 Key Pillars) */}
                 {/* ============================================================== */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-1">
-                        <div className="flex items-center gap-2 text-primary">
-                            <span className="material-symbols-outlined text-[22px]">badge</span>
-                            <span className="text-xs font-bold uppercase tracking-wider font-mono">100% Lisensi IDI</span>
-                        </div>
-                        <div className="font-serif text-xl sm:text-2xl font-bold text-on-surface">Terverifikasi SIP &amp; STR</div>
-                        <p className="text-[11px] text-on-surface-variant leading-tight">Seluruh dokter terdaftar resmi di Kemenkes SatuSehat Protocol.</p>
+                    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#c4dcce] shadow-xs space-y-1.5">
+                        <div className="font-serif text-xl sm:text-2xl font-bold text-black">Terverifikasi SIP &amp; STR</div>
+                        <p className="text-[11px] text-[#222222] font-medium leading-tight">Seluruh dokter terdaftar resmi di Kemenkes SatuSehat Protocol.</p>
                     </div>
 
-                    <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-1">
-                        <div className="flex items-center gap-2 text-emerald-600">
-                            <span className="material-symbols-outlined text-[22px]">video_chat</span>
-                            <span className="text-xs font-bold uppercase tracking-wider font-mono">15.420+ Sesi</span>
-                        </div>
-                        <div className="font-serif text-xl sm:text-2xl font-bold text-on-surface">Tingkat Kepuasan 4.9/5</div>
-                        <p className="text-[11px] text-on-surface-variant leading-tight">Tele-konsultasi video WebRTC HD terenkripsi aman peer-to-peer.</p>
+                    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#c4dcce] shadow-xs space-y-1.5">
+                        <div className="font-serif text-xl sm:text-2xl font-bold text-black">Tingkat Kepuasan 4.9/5</div>
+                        <p className="text-[11px] text-[#222222] font-medium leading-tight">Tele-konsultasi video WebRTC HD terenkripsi aman peer-to-peer.</p>
                     </div>
 
-                    <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-1">
-                        <div className="flex items-center gap-2 text-primary">
-                            <span className="material-symbols-outlined text-[22px]">psychology</span>
-                            <span className="text-xs font-bold uppercase tracking-wider font-mono">0.3 Detik Respon</span>
-                        </div>
-                        <div className="font-serif text-xl sm:text-2xl font-bold text-on-surface">AI Triage PERKENI</div>
-                        <p className="text-[11px] text-on-surface-variant leading-tight">Terkalibrasi 100% konsensus medis diabetes &amp; gizi klinis nasional.</p>
+                    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#c4dcce] shadow-xs space-y-1.5">
+                        <div className="font-serif text-xl sm:text-2xl font-bold text-black">AI Triage PERKENI</div>
+                        <p className="text-[11px] text-[#222222] font-medium leading-tight">Terkalibrasi 100% konsensus medis diabetes &amp; gizi klinis nasional.</p>
                     </div>
 
-                    <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-1">
-                        <div className="flex items-center gap-2 text-emerald-700">
-                            <span className="material-symbols-outlined text-[22px]">trending_down</span>
-                            <span className="text-xs font-bold uppercase tracking-wider font-mono">87.4% Remisi</span>
-                        </div>
-                        <div className="font-serif text-xl sm:text-2xl font-bold text-on-surface">Penurunan HbA1c Lab</div>
-                        <p className="text-[11px] text-on-surface-variant leading-tight">Hasil evaluasi lab 90 hari membuktikan pra-diabetes dapat dibalikkan.</p>
+                    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#c4dcce] shadow-xs space-y-1.5">
+                        <div className="font-serif text-xl sm:text-2xl font-bold text-black">Penurunan HbA1c Lab</div>
+                        <p className="text-[11px] text-[#222222] font-medium leading-tight">Hasil evaluasi lab 90 hari membuktikan pra-diabetes dapat dibalikkan.</p>
                     </div>
                 </div>
 
@@ -348,9 +343,6 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                         <p className="text-[11px] text-[#40564f] font-mono">Terkalibrasi Pedoman PERKENI 2021 &amp; Kemenkes RI</p>
                                     </div>
                                 </div>
-                                <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-mono font-bold border border-emerald-300 shadow-2xs">
-                                    AKTIF 24 JAM
-                                </span>
                             </div>
 
                             {/* Category Filter for Questions */}
@@ -492,9 +484,6 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                         <p className="text-[11px] text-[#40564f] font-mono">Tatap Muka Video 1-on-1 Enkripsi WebRTC</p>
                                     </div>
                                 </div>
-                                <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-mono font-bold border border-emerald-300 shadow-2xs">
-                                    TERLISENSI RESMI
-                                </span>
                             </div>
 
                             {/* Doctor Selector Chips */}
@@ -505,7 +494,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     </label>
                                     <span className="text-[11px] font-mono text-[#40564f] font-semibold">{doctorList.length} Spesialis Standby</span>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     {doctorList.map((doc) => (
                                         <button
                                             key={doc.id}
@@ -537,7 +526,10 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     ))}
                                 </div>
                             </div>
+                        </div>
 
+                        {/* Schedule Slot & Session Confirmation Box (Anchored to Bottom to Match Left Column Perfectly) */}
+                        <div className="space-y-3 pt-3 border-t border-[#e2eee6]">
                             {/* Doctor Detailed Credentials Card */}
                             <div className="p-4 rounded-2xl bg-[#f4f9f6] border border-[#cfe2d7] space-y-2.5 text-xs shadow-2xs">
                                 <div className="flex items-center justify-between flex-wrap gap-2">
@@ -570,10 +562,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Schedule Slot & Session Confirmation Box (Anchored to Bottom to Match Left Column Perfectly) */}
-                        <div className="space-y-3 pt-3 border-t border-[#e2eee6]">
                             {/* Schedule Slot Selector */}
                             <div className="space-y-1.5">
                                 <div className="flex items-center justify-between">
@@ -627,56 +616,46 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 {/* ============================================================== */}
                 {/* 4. WORKFLOW: 4-STEP CLINICAL CONSULTATION PATHWAY */}
                 {/* ============================================================== */}
-                <div className="bg-white dark:bg-surface rounded-3xl border border-surface-container p-6 sm:p-8 space-y-6 shadow-xs">
-                    <div className="text-center max-w-2xl mx-auto space-y-2">
+                <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#c4dcce] p-3.5 sm:p-8 space-y-4 sm:space-y-6 shadow-xs">
+                    <div className="text-center max-w-2xl mx-auto space-y-1.5 sm:space-y-2">
                         <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold">
                             ALUR KERJA TERPADU
                         </span>
-                        <h2 className="font-heading font-black text-xl sm:text-3xl text-on-surface">
+                        <h2 className="font-heading font-black text-base sm:text-3xl text-black">
                             Bagaimana Konsultasi AEVYRA Bekerja?
                         </h2>
-                        <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                            Proses 4 langkah mudah menghubungkan pemantauan glukosa harian Anda langsung dengan tim medis berlisensi tanpa antre di rumah sakit.
+                        <p className="text-[11px] sm:text-sm text-[#222222] font-medium leading-relaxed">
+                            Proses 3 langkah mudah menghubungkan pemantauan glukosa harian Anda langsung dengan tim medis berlisensi tanpa antre di rumah sakit.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="p-5 rounded-2xl bg-surface-container-low border border-surface-container space-y-3 relative">
-                            <span className="w-8 h-8 rounded-full bg-primary text-white font-mono font-bold text-sm flex items-center justify-center">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-6">
+                        <div className="p-2.5 sm:p-5 rounded-xl sm:rounded-2xl bg-surface-container-low border border-[#c4dcce] space-y-1.5 sm:space-y-3 relative text-center flex flex-col items-center">
+                            <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary text-white font-mono font-bold text-xs sm:text-sm flex items-center justify-center mx-auto shrink-0">
                                 1
                             </span>
-                            <h4 className="font-bold text-sm text-on-surface">Skrining &amp; AI Triage</h4>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
+                            <h4 className="font-bold text-[10px] sm:text-sm text-black leading-tight sm:leading-snug">Skrining &amp; AI Triage</h4>
+                            <p className="text-[8.5px] sm:text-xs text-[#222222] font-medium leading-tight sm:leading-relaxed">
                                 Unggah riwayat makan atau masukkan angka glukosa darah. AI langsung menyusun ringkasan klinis awal berbasis konsensus PERKENI.
                             </p>
                         </div>
 
-                        <div className="p-5 rounded-2xl bg-surface-container-low border border-surface-container space-y-3 relative">
-                            <span className="w-8 h-8 rounded-full bg-primary text-white font-mono font-bold text-sm flex items-center justify-center">
+                        <div className="p-2.5 sm:p-5 rounded-xl sm:rounded-2xl bg-surface-container-low border border-[#c4dcce] space-y-1.5 sm:space-y-3 relative text-center flex flex-col items-center">
+                            <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary text-white font-mono font-bold text-xs sm:text-sm flex items-center justify-center mx-auto shrink-0">
                                 2
                             </span>
-                            <h4 className="font-bold text-sm text-on-surface">Pilih Dokter &amp; Jadwal</h4>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
+                            <h4 className="font-bold text-[10px] sm:text-sm text-black leading-tight sm:leading-snug">Pilih Dokter &amp; Jadwal</h4>
+                            <p className="text-[8.5px] sm:text-xs text-[#222222] font-medium leading-tight sm:leading-relaxed">
                                 Pilih dokter spesialis penyakit dalam (Sp.PD), gizi klinis (Sp.GK), atau kardiologi sesuai kebutuhan, lalu tentukan jam sesi.
                             </p>
                         </div>
 
-                        <div className="p-5 rounded-2xl bg-surface-container-low border border-surface-container space-y-3 relative">
-                            <span className="w-8 h-8 rounded-full bg-primary text-white font-mono font-bold text-sm flex items-center justify-center">
+                        <div className="p-2.5 sm:p-5 rounded-xl sm:rounded-2xl bg-surface-container-low border border-[#c4dcce] space-y-1.5 sm:space-y-3 relative text-center flex flex-col items-center">
+                            <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary text-white font-mono font-bold text-xs sm:text-sm flex items-center justify-center mx-auto shrink-0">
                                 3
                             </span>
-                            <h4 className="font-bold text-sm text-on-surface">Video Call 1-on-1 HD</h4>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
-                                Terhubung langsung via video call beresolusi tinggi di browser Anda, terenkripsi aman tanpa perlu instalasi aplikasi rumit.
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl bg-surface-container-low border border-surface-container space-y-3 relative">
-                            <span className="w-8 h-8 rounded-full bg-primary text-white font-mono font-bold text-sm flex items-center justify-center">
-                                4
-                            </span>
-                            <h4 className="font-bold text-sm text-on-surface">Rencana Terapi Medis</h4>
-                            <p className="text-xs text-on-surface-variant leading-relaxed">
+                            <h4 className="font-bold text-[10px] sm:text-sm text-black leading-tight sm:leading-snug">Rencana Terapi Medis</h4>
+                            <p className="text-[8.5px] sm:text-xs text-[#222222] font-medium leading-tight sm:leading-relaxed">
                                 Terima panduan nutrisi terarah, e-resep resmi jika diperlukan, dan resume medis yang otomatis tersimpan di rekam medis digital.
                             </p>
                         </div>
@@ -687,21 +666,18 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 {/* 5. FULL CLINICAL SPECIALIST DIRECTORY (5 Doctors Grid) */}
                 {/* ============================================================== */}
                 <div className="space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
                         <div className="space-y-1">
-                            <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold border border-emerald-500/20">
-                                TIM MEDIS TERLENGKAP
-                            </span>
-                            <h2 className="font-heading font-black text-xl sm:text-3xl text-on-surface">
+                            <h2 className="font-heading font-black text-xl sm:text-3xl text-black">
                                 Direktori Dokter Spesialis Berlisensi IDI
                             </h2>
-                            <p className="text-xs sm:text-sm text-on-surface-variant">
+                            <p className="text-xs sm:text-sm text-[#222222] font-medium">
                                 Dokter kami telah melalui verifikasi ganda Surat Tanda Registrasi (STR) dan Surat Izin Praktik (SIP) resmi.
                             </p>
                         </div>
 
                         {/* Filter Tabs */}
-                        <div className="flex items-center gap-1.5 overflow-x-auto text-xs pb-1">
+                        <div className="flex items-center gap-1.5 overflow-x-auto sm:flex-wrap text-xs pb-1 scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             {[
                                 { id: 'all', label: 'Semua Spesialis' },
                                 { id: 'internist', label: 'Penyakit Dalam' },
@@ -713,10 +689,10 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     key={f.id}
                                     type="button"
                                     onClick={() => setDoctorFilter(f.id)}
-                                    className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all shrink-0 cursor-pointer ${
+                                    className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-all shrink-0 cursor-pointer ${
                                         doctorFilter === f.id
                                             ? 'bg-primary text-white font-bold shadow-xs'
-                                            : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
+                                            : 'bg-white text-black border border-gray-400 hover:border-primary hover:text-primary font-bold'
                                     }`}
                                 >
                                     {f.label}
@@ -729,7 +705,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                         {filteredDoctorList.map((doc) => (
                             <div
                                 key={doc.id}
-                                className="bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-xs p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow"
+                                className="bg-white rounded-3xl border border-[#c4dcce] shadow-xs p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow"
                             >
                                 <div className="space-y-4">
                                     <div className="flex items-start gap-3.5">
@@ -739,30 +715,26 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                             className="w-14 h-14 rounded-2xl object-cover ring-2 ring-primary/20 shrink-0"
                                         />
                                         <div className="min-w-0 space-y-1">
-                                            <div className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">
-                                                <span className="material-symbols-outlined text-[12px]">verified</span>
-                                                <span>STR Terverifikasi</span>
-                                            </div>
-                                            <h3 className="font-heading font-bold text-sm text-on-surface leading-snug">
+                                            <h3 className="font-heading font-bold text-sm text-black leading-snug">
                                                 {doc.name}
                                             </h3>
-                                            <p className="text-[11px] text-on-surface-variant font-medium">
+                                            <p className="text-xs text-[#222222] font-bold">
                                                 {doc.role}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2 text-xs pt-2 border-t border-surface-container">
+                                    <div className="space-y-2 text-xs pt-2 border-t border-[#e2eee6]">
                                         <div className="flex items-center justify-between text-[11px]">
-                                            <span className="text-gray-500 font-mono">Pengalaman:</span>
-                                            <span className="font-bold text-on-surface">{doc.exp}</span>
+                                            <span className="text-[#333333] font-mono font-bold">Pengalaman:</span>
+                                            <span className="font-bold text-black">{doc.exp}</span>
                                         </div>
                                         <div className="flex items-center justify-between text-[11px]">
-                                            <span className="text-gray-500 font-mono">Rating Pasien:</span>
-                                            <span className="font-bold text-amber-600 font-mono">★ {doc.rating} ({doc.sessions} sesi)</span>
+                                            <span className="text-[#333333] font-mono font-bold">Rating Pasien:</span>
+                                            <span className="font-bold text-amber-700 font-mono">★ {doc.rating} ({doc.sessions} sesi)</span>
                                         </div>
-                                        <div className="text-[11px] text-gray-600 dark:text-gray-400">
-                                            <span className="font-semibold block text-gray-700 dark:text-gray-300">Fokus Klinis:</span>
+                                        <div className="text-[11px] text-[#111111] leading-relaxed">
+                                            <span className="font-bold block text-black mb-0.5">Fokus Klinis:</span>
                                             {doc.focus}
                                         </div>
                                     </div>
@@ -772,7 +744,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                         {(doc.tags || []).map((t, idx) => (
                                             <span
                                                 key={idx}
-                                                className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/5 dark:bg-white/5 text-gray-700 dark:text-gray-300"
+                                                className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-[#e8f5ee] text-[#053d2f] border border-[#a8d9bf]"
                                             >
                                                 #{t}
                                             </span>
@@ -780,7 +752,7 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     </div>
                                 </div>
 
-                                <div className="pt-3 border-t border-surface-container flex items-center justify-between gap-2">
+                                <div className="pt-3 border-t border-[#e2eee6] flex items-center justify-between gap-2">
                                     <button
                                         type="button"
                                         onClick={() => handleSelectDoctorFromCard(doc.id)}
@@ -798,53 +770,113 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 {/* ============================================================== */}
                 {/* 6. COMPARISON: TELEMEDISIN UMUM VS AEVYRA CLINICAL CO-PILOT */}
                 {/* ============================================================== */}
-                <div className="bg-white dark:bg-surface rounded-3xl border border-surface-container p-6 sm:p-8 space-y-6 shadow-xs">
+                <div className="bg-white rounded-3xl border border-[#c4dcce] p-6 sm:p-8 space-y-6 shadow-xs">
                     <div className="text-center max-w-2xl mx-auto space-y-2">
-                        <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold">
-                            PERBANDINGAN KLINIS
-                        </span>
-                        <h2 className="font-heading font-black text-xl sm:text-3xl text-on-surface">
+                        <h2 className="font-heading font-black text-xl sm:text-3xl text-black">
                             Mengapa AEVYRA Berbeda dari Telemedisin Biasa?
                         </h2>
-                        <p className="text-xs sm:text-sm text-on-surface-variant">
+                        <p className="text-xs sm:text-sm text-[#222222] font-medium">
                             Kami tidak sekadar memberikan resep obat penurun gejala, melainkan intervensi presisi untuk mencapai remisi metabolik permanen.
                         </p>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    {/* Mobile Comparison Cards (2 Columns Layout without green dot) */}
+                    <div className="sm:hidden grid grid-cols-2 gap-2.5">
+                        {[
+                            {
+                                param: 'Fokus Sasaran',
+                                conv: 'Meredakan keluhan akut & konsumsi obat rutin seumur hidup',
+                                aev: 'Remisi metabolik & perbaikan sensitivitas sel beta pankreas',
+                            },
+                            {
+                                param: 'Standar AI & Panduan',
+                                conv: 'Chatbot teks umum tanpa verifikasi klinis spesifik',
+                                aev: 'Terkalibrasi 100% Konsensus PERKENI 2021 & MNT Kemenkes RI',
+                            },
+                            {
+                                param: 'Integrasi Data Biomarker',
+                                conv: 'Pasien harus mengetik ulang angka tes lab setiap konsultasi',
+                                aev: 'Sinkronisasi otomatis dengan AI scanner nutrisi & glukometer digital',
+                            },
+                            {
+                                param: 'Kolaborasi Tim Medis',
+                                conv: 'Hanya 1 dokter umum secara terisolasi',
+                                aev: 'Panel multidisiplin: Sp.PD, Sp.GK, Sp.JP, dan Sp.OG bekerja terpadu',
+                            },
+                            {
+                                param: 'Konektivitas SatuSehat',
+                                conv: 'Rekam medis terpisah dalam aplikasi sendiri',
+                                aev: 'Terhubung penuh ke ekosistem SatuSehat Kemenkes RI Terenkripsi',
+                            },
+                        ].map((row, idx) => (
+                            <div
+                                key={idx}
+                                className={`p-2.5 sm:p-3 rounded-2xl bg-surface-container-low border border-[#c4dcce] flex flex-col justify-between space-y-2 ${
+                                    idx === 4 ? 'col-span-2' : ''
+                                }`}
+                            >
+                                <div className="font-bold text-[11px] sm:text-xs text-black border-b border-[#d8e8de] pb-1 leading-snug">
+                                    {row.param}
+                                </div>
+                                <div
+                                    className={`text-xs flex-1 ${
+                                        idx === 4
+                                            ? 'grid grid-cols-2 gap-2 space-y-0'
+                                            : 'flex flex-col justify-between space-y-1.5'
+                                    }`}
+                                >
+                                    <div className="p-2 rounded-xl bg-white border border-gray-200 text-[#333333] space-y-0.5">
+                                        <span className="text-[8.5px] font-mono font-bold text-gray-500 uppercase block tracking-wider">
+                                            Konvensional
+                                        </span>
+                                        <p className="text-[10px] sm:text-[11px] leading-tight text-[#444444]">{row.conv}</p>
+                                    </div>
+                                    <div className="p-2 rounded-xl bg-primary/10 border border-primary/20 text-black space-y-0.5">
+                                        <span className="text-[8.5px] font-mono font-bold text-primary uppercase block tracking-wider">
+                                            AEVYRA Co-Pilot
+                                        </span>
+                                        <p className="text-[10px] sm:text-[11px] font-semibold text-primary leading-tight">{row.aev}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop Comparison Table */}
+                    <div className="hidden sm:block overflow-x-auto">
                         <table className="w-full text-xs text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-surface-container text-on-surface-variant font-mono">
+                                <tr className="border-b border-[#e2eee6] text-black font-mono">
                                     <th className="py-3 px-4 font-bold">Parameter Layanan</th>
-                                    <th className="py-3 px-4 text-gray-400">Telemedisin Konvensional</th>
+                                    <th className="py-3 px-4 text-[#333333] font-bold">Telemedisin Konvensional</th>
                                     <th className="py-3 px-4 text-primary font-bold bg-primary/5 rounded-t-xl">AEVYRA Clinical Co-Pilot</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-surface-container">
+                            <tbody className="divide-y divide-[#e2eee6]">
                                 <tr>
-                                    <td className="py-3.5 px-4 font-bold text-on-surface">Fokus Sasaran</td>
-                                    <td className="py-3.5 px-4 text-gray-500">Meredakan keluhan akut &amp; konsumsi obat rutin seumur hidup</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Remisi metabolik &amp; perbaikan sensitivitas sel beta pankreas</td>
+                                    <td className="py-3.5 px-4 font-bold text-black">Fokus Sasaran</td>
+                                    <td className="py-3.5 px-4 text-[#222222] font-medium">Meredakan keluhan akut &amp; konsumsi obat rutin seumur hidup</td>
+                                    <td className="py-3.5 px-4 font-bold text-primary bg-primary/5">Remisi metabolik &amp; perbaikan sensitivitas sel beta pankreas</td>
                                 </tr>
                                 <tr>
-                                    <td className="py-3.5 px-4 font-bold text-on-surface">Standar AI &amp; Panduan</td>
-                                    <td className="py-3.5 px-4 text-gray-500">Chatbot teks umum tanpa verifikasi klinis spesifik</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Terkalibrasi 100% Konsensus PERKENI 2021 &amp; MNT Kemenkes RI</td>
+                                    <td className="py-3.5 px-4 font-bold text-black">Standar AI &amp; Panduan</td>
+                                    <td className="py-3.5 px-4 text-[#222222] font-medium">Chatbot teks umum tanpa verifikasi klinis spesifik</td>
+                                    <td className="py-3.5 px-4 font-bold text-primary bg-primary/5">Terkalibrasi 100% Konsensus PERKENI 2021 &amp; MNT Kemenkes RI</td>
                                 </tr>
                                 <tr>
-                                    <td className="py-3.5 px-4 font-bold text-on-surface">Integrasi Data Biomarker</td>
-                                    <td className="py-3.5 px-4 text-gray-500">Pasien harus mengetik ulang angka tes lab setiap konsultasi</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Sinkronisasi otomatis dengan AI scanner nutrisi &amp; glukometer digital</td>
+                                    <td className="py-3.5 px-4 font-bold text-black">Integrasi Data Biomarker</td>
+                                    <td className="py-3.5 px-4 text-[#222222] font-medium">Pasien harus mengetik ulang angka tes lab setiap konsultasi</td>
+                                    <td className="py-3.5 px-4 font-bold text-primary bg-primary/5">Sinkronisasi otomatis dengan AI scanner nutrisi &amp; glukometer digital</td>
                                 </tr>
                                 <tr>
-                                    <td className="py-3.5 px-4 font-bold text-on-surface">Kolaborasi Tim Medis</td>
-                                    <td className="py-3.5 px-4 text-gray-500">Hanya 1 dokter umum secara terisolasi</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Panel multidisiplin: Sp.PD, Sp.GK, Sp.JP, dan Sp.OG bekerja terpadu</td>
+                                    <td className="py-3.5 px-4 font-bold text-black">Kolaborasi Tim Medis</td>
+                                    <td className="py-3.5 px-4 text-[#222222] font-medium">Hanya 1 dokter umum secara terisolasi</td>
+                                    <td className="py-3.5 px-4 font-bold text-primary bg-primary/5">Panel multidisiplin: Sp.PD, Sp.GK, Sp.JP, dan Sp.OG bekerja terpadu</td>
                                 </tr>
                                 <tr>
-                                    <td className="py-3.5 px-4 font-bold text-on-surface">Konektivitas SatuSehat</td>
-                                    <td className="py-3.5 px-4 text-gray-500">Rekam medis terpisah dalam aplikasi sendiri</td>
-                                    <td className="py-3.5 px-4 font-semibold text-primary bg-primary/5">Terhubung penuh ke ekosistem SatuSehat Kemenkes RI Terenkripsi</td>
+                                    <td className="py-3.5 px-4 font-bold text-black">Konektivitas SatuSehat</td>
+                                    <td className="py-3.5 px-4 text-[#222222] font-medium">Rekam medis terpisah dalam aplikasi sendiri</td>
+                                    <td className="py-3.5 px-4 font-bold text-primary bg-primary/5">Terhubung penuh ke ekosistem SatuSehat Kemenkes RI Terenkripsi</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -856,19 +888,16 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 {/* ============================================================== */}
                 <div className="space-y-6">
                     <div className="space-y-1 text-center max-w-2xl mx-auto">
-                        <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold border border-emerald-500/20">
-                            BUKTI KLINIS NYATA
-                        </span>
-                        <h2 className="font-heading font-black text-xl sm:text-3xl text-on-surface">
+                        <h2 className="font-heading font-black text-xl sm:text-3xl text-black">
                             Kisah Pasien yang Berhasil Mencapai Remisi
                         </h2>
-                        <p className="text-xs sm:text-sm text-on-surface-variant">
+                        <p className="text-xs sm:text-sm text-[#222222] font-medium">
                             Data laboratorium objektif membuktikan efektivitas bimbingan telemedisin terarah AEVYRA.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="p-6 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-4">
+                        <div className="p-6 rounded-3xl bg-white border border-[#c4dcce] shadow-xs space-y-4">
                             <div className="flex items-center gap-3">
                                 <img
                                     src="/image/doctor_consultation.jpg"
@@ -876,26 +905,26 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     className="w-12 h-12 rounded-2xl object-cover ring-2 ring-primary/20"
                                 />
                                 <div>
-                                    <h4 className="font-bold text-sm text-on-surface">Dimas Aryo (29 th)</h4>
-                                    <p className="text-[10px] text-gray-500 font-mono">Software Engineer • Jakarta</p>
+                                    <h4 className="font-bold text-sm text-black">Dimas Aryo (29 th)</h4>
+                                    <p className="text-[10px] text-[#333333] font-mono font-bold">Software Engineer • Jakarta</p>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-center p-3 rounded-2xl bg-surface-container-low font-mono text-xs">
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">GDP Puasa</span>
+                                    <span className="text-[10px] text-black font-bold block">GDP Puasa</span>
                                     <span className="text-rose-600 line-through text-[11px]">154</span> → <b className="text-emerald-600">86 mg/dL</b>
                                 </div>
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">HbA1c Lab</span>
+                                    <span className="text-[10px] text-black font-bold block">HbA1c Lab</span>
                                     <span className="text-rose-600 line-through text-[11px]">6.3%</span> → <b className="text-emerald-600">5.3%</b>
                                 </div>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed italic">
+                            <p className="text-xs text-[#222222] leading-relaxed italic font-medium">
                                 "Sebelumnya saya sering lemas dan kantuk parah tiap jam 2 siang. Melalui bimbingan telemedisin dr. Bramantyo dan pengaturan urutan makan dari dr. Sarah, gula darah saya kembali normal tanpa obat."
                             </p>
                         </div>
 
-                        <div className="p-6 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-4">
+                        <div className="p-6 rounded-3xl bg-white border border-[#c4dcce] shadow-xs space-y-4">
                             <div className="flex items-center gap-3">
                                 <img
                                     src="/image/habit_morning_walk.jpg"
@@ -903,26 +932,26 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     className="w-12 h-12 rounded-2xl object-cover ring-2 ring-primary/20"
                                 />
                                 <div>
-                                    <h4 className="font-bold text-sm text-on-surface">Sarah Nindya (34 th)</h4>
-                                    <p className="text-[10px] text-gray-500 font-mono">Brand Strategist • Surabaya</p>
+                                    <h4 className="font-bold text-sm text-black">Sarah Nindya (34 th)</h4>
+                                    <p className="text-[10px] text-[#333333] font-mono font-bold">Brand Strategist • Surabaya</p>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-center p-3 rounded-2xl bg-surface-container-low font-mono text-xs">
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">Lonjakan Luteal</span>
+                                    <span className="text-[10px] text-black font-bold block">Lonjakan Luteal</span>
                                     <span className="text-rose-600 line-through text-[11px]">162</span> → <b className="text-emerald-600">104 mg/dL</b>
                                 </div>
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">Lingkar Perut</span>
+                                    <span className="text-[10px] text-black font-bold block">Lingkar Perut</span>
                                     <span className="text-rose-600 line-through text-[11px]">86 cm</span> → <b className="text-emerald-600">79 cm</b>
                                 </div>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed italic">
+                            <p className="text-xs text-[#222222] leading-relaxed italic font-medium">
                                 "Fluktuasi gula saat PMS selalu bikin migrain dan kram perut. Dr. Nadia dan dr. Sarah Sp.GK memberikan terapi nutrisi fase luteal yang benar-benar memulihkan siklus menstruasi saya."
                             </p>
                         </div>
 
-                        <div className="p-6 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-4">
+                        <div className="p-6 rounded-3xl bg-white border border-[#c4dcce] shadow-xs space-y-4">
                             <div className="flex items-center gap-3">
                                 <img
                                     src="/image/doctor_bramantyo.jpg"
@@ -930,21 +959,21 @@ export default function ConsultationsDemo({ instructors = [] }) {
                                     className="w-12 h-12 rounded-2xl object-cover ring-2 ring-primary/20"
                                 />
                                 <div>
-                                    <h4 className="font-bold text-sm text-on-surface">Ir. Hendro Wibowo (52 th)</h4>
-                                    <p className="text-[10px] text-gray-500 font-mono">Manajer Konstruksi • Bandung</p>
+                                    <h4 className="font-bold text-sm text-black">Ir. Hendro Wibowo (52 th)</h4>
+                                    <p className="text-[10px] text-[#333333] font-mono font-bold">Manajer Konstruksi • Bandung</p>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-center p-3 rounded-2xl bg-surface-container-low font-mono text-xs">
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">Tekanan Darah</span>
+                                    <span className="text-[10px] text-black font-bold block">Tekanan Darah</span>
                                     <span className="text-rose-600 line-through text-[11px]">145/92</span> → <b className="text-emerald-600">118/76</b>
                                 </div>
                                 <div>
-                                    <span className="text-[10px] text-gray-400 block">Keluhan Kebas</span>
+                                    <span className="text-[10px] text-black font-bold block">Keluhan Kebas</span>
                                     <span className="text-rose-600 line-through text-[11px]">Aktif</span> → <b className="text-emerald-600">Hilang 100%</b>
                                 </div>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed italic">
+                            <p className="text-xs text-[#222222] leading-relaxed italic font-medium">
                                 "Kombinasi tele-konsultasi kardiologi dr. Rayhan dengan pemantauan natrium harian menyelamatkan saya dari risiko stroke dan serangan jantung koroner di proyek."
                             </p>
                         </div>
@@ -952,90 +981,131 @@ export default function ConsultationsDemo({ instructors = [] }) {
                 </div>
 
                 {/* ============================================================== */}
-                {/* 8. CLINICAL FAQ ACCORDION (Answers to Common Concerns) */}
+                {/* 8. CLINICAL FAQ ACCORDION (Landing Page Accordion Style) */}
                 {/* ============================================================== */}
-                <div className="bg-white dark:bg-surface rounded-3xl border border-surface-container p-6 sm:p-8 space-y-6 shadow-xs">
+                <div className="bg-white rounded-3xl border border-[#c4dcce] p-6 sm:p-8 space-y-6 shadow-xs">
                     <div className="space-y-1">
-                        <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold">
-                            TANYA JAWAB KLINIS
-                        </span>
-                        <h2 className="font-heading font-black text-xl sm:text-2xl text-on-surface">
+                        <h2 className="font-heading font-black text-xl sm:text-2xl text-black">
                             Pertanyaan Umum Mengenai Telemedisin AEVYRA
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container space-y-1.5">
-                            <h4 className="font-bold text-on-surface text-sm flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
-                                Apakah dokter yang bertugas memiliki izin praktik resmi?
-                            </h4>
-                            <p className="text-on-surface-variant leading-relaxed">
-                                Ya. 100% dokter di AEVYRA adalah dokter spesialis berlisensi IDI dengan Surat Tanda Registrasi (STR) aktif dari Konsil Kedokteran Indonesia (KKI) dan Surat Izin Praktik (SIP) yang terdaftar di Kementerian Kesehatan RI.
-                            </p>
-                        </div>
+                    <div className="space-y-2.5">
+                        {[
+                            {
+                                q: 'Apakah dokter yang bertugas memiliki izin praktik resmi?',
+                                a: 'Ya. 100% dokter di AEVYRA adalah dokter spesialis berlisensi IDI dengan Surat Tanda Registrasi (STR) aktif dari Konsil Kedokteran Indonesia (KKI) dan Surat Izin Praktik (SIP) yang terdaftar di Kementerian Kesehatan RI.',
+                            },
+                            {
+                                q: 'Bagaimana privasi rekam medis dan data pasien dilindungi?',
+                                a: 'Data rekam medis elektronik Anda dienkripsi dengan standar AES-256 militer dan protokol transmisi video WebRTC peer-to-peer terenkripsi berstandar internasional.',
+                            },
+                            {
+                                q: 'Apakah dokter dapat meresepkan obat atau rujukan lab?',
+                                a: 'Dokter kami dapat menerbitkan e-resep resmi dan surat pengantar laboratorium terverifikasi digital yang dapat ditebus langsung di apotek rekanan atau laboratorium klinik terdekat di kota Anda.',
+                            },
+                            {
+                                q: 'Kapan saya harus memilih Sp.PD vs Sp.GK?',
+                                a: 'Pilih dokter Sp.PD jika Anda ingin evaluasi komprehensif diagnosis glukosa darah puasa, HbA1c, dan obat. Pilih dokter Sp.GK jika fokus Anda adalah penyusunan menu piring gizi harian, takaran karbohidrat, dan jadwal makan terarah.',
+                            },
+                            {
+                                q: 'Berapa lama durasi setiap sesi tele-konsultasi dokter spesialis?',
+                                a: 'Setiap sesi konsultasi berdurasi 30 menit interaktif tatap muka langsung via video HD terenkripsi, lengkap dengan resume klinis dan rekam medis digital SatuSehat yang dapat diunduh seketika.',
+                            },
+                        ].map((faq, idx) => {
+                            const isOpen = openFaqIndex === idx;
+                            return (
+                                <div
+                                    key={idx}
+                                    className={`rounded-2xl border transition-all duration-300 ease-in-out ${
+                                        isOpen
+                                            ? 'bg-white border-[#1c6454]/40 shadow-[0_4px_20px_rgba(0,40,36,0.06)]'
+                                            : 'bg-white/80 border-[#d5e5db] hover:border-[#1c6454]/30 hover:bg-white'
+                                    }`}
+                                >
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                                        className="w-full p-4 flex items-center justify-between text-left text-xs sm:text-sm font-semibold text-black cursor-pointer gap-4"
+                                        aria-expanded={isOpen}
+                                    >
+                                        <span className="flex items-center gap-3">
+                                            <span className="text-xs font-mono text-primary font-bold">
+                                                0{idx + 1}.
+                                            </span>
+                                            <span className="font-bold text-black">{faq.q}</span>
+                                        </span>
+                                        <span
+                                            className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center transition-all duration-300 ease-in-out ${
+                                                isOpen
+                                                    ? 'bg-primary text-white rotate-180 shadow-2xs'
+                                                    : 'bg-[#edf5f0] text-primary rotate-0'
+                                            }`}
+                                        >
+                                            <span className="material-symbols-outlined text-[18px] leading-none">
+                                                expand_more
+                                            </span>
+                                        </span>
+                                    </button>
 
-                        <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container space-y-1.5">
-                            <h4 className="font-bold text-on-surface text-sm flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-primary text-[18px]">lock</span>
-                                Bagaimana privasi rekam medis dan data pasien dilindungi?
-                            </h4>
-                            <p className="text-on-surface-variant leading-relaxed">
-                                Data rekam medis elektronik Anda dienkripsi dengan standar AES-256 militer dan protokol transmisi video WebRTC peer-to-peer terenkripsi berstandar internasional.
-                            </p>
-                        </div>
-
-                        <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container space-y-1.5">
-                            <h4 className="font-bold text-on-surface text-sm flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-primary text-[18px]">prescriptions</span>
-                                Apakah dokter dapat meresepkan obat atau rujukan lab?
-                            </h4>
-                            <p className="text-on-surface-variant leading-relaxed">
-                                Dokter kami dapat menerbitkan e-resep resmi dan surat pengantar laboratorium terverifikasi digital yang dapat ditebus langsung di apotek rekanan atau laboratorium klinik terdekat di kota Anda.
-                            </p>
-                        </div>
-
-                        <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container space-y-1.5">
-                            <h4 className="font-bold text-on-surface text-sm flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-primary text-[18px]">hub</span>
-                                Kapan saya harus memilih Sp.PD vs Sp.GK?
-                            </h4>
-                            <p className="text-on-surface-variant leading-relaxed">
-                                Pilih dokter Sp.PD jika Anda ingin evaluasi komprehensif diagnosis glukosa darah puasa, HbA1c, dan obat. Pilih dokter Sp.GK jika fokus Anda adalah penyusunan menu piring gizi harian, takaran karbohidrat, dan jadwal makan terarah.
-                            </p>
-                        </div>
+                                    <div
+                                        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                                            isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                                        }`}
+                                    >
+                                        <div className="overflow-hidden">
+                                            <div className="px-5 pb-4 text-xs text-[#222222] font-medium leading-relaxed border-t border-[#f0f5f2] pt-3">
+                                                {faq.a}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
                 {/* ============================================================== */}
-                {/* 9. BOTTOM CALL TO ACTION BANNER */}
+                {/* 9. BOTTOM CALL TO ACTION BANNER (Landing Page CtaBanner Style) */}
                 {/* ============================================================== */}
-                <div className="rounded-3xl bg-linear-to-r from-primary to-[#00695c] text-white p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-                    <div className="space-y-2 text-center md:text-left">
-                        <span className="px-3 py-1 rounded-full bg-white/20 text-emerald-200 text-xs font-mono font-bold">
-                            MULAI PERJALANAN SEHAT ANDA
-                        </span>
-                        <h3 className="font-serif text-2xl sm:text-3xl font-bold leading-snug">
+                <div className="relative overflow-hidden p-6 sm:p-10 lg:p-12 bg-primary text-white rounded-2xl sm:rounded-3xl space-y-4 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
+                    {/* Subtle Restorative Ambient Glow */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#1c6454]/30 rounded-full blur-3xl"
+                    />
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 bg-primary-container/40 rounded-full blur-3xl"
+                    />
+
+                    {/* Content */}
+                    <div className="relative z-10 space-y-3.5 max-w-2xl mx-auto">
+                        <h3 className="font-serif text-xl sm:text-3xl lg:text-[40px] leading-[1.2] font-normal text-white">
                             Siap Membalikkan Risiko Pra-Diabetes Bersama Dokter Ahli?
                         </h3>
-                        <p className="text-xs sm:text-sm text-emerald-100/90 max-w-xl leading-relaxed">
+
+                        <p className="text-xs sm:text-sm text-[#d4ebe0] max-w-xl mx-auto leading-relaxed">
                             Akses langsung dashboard pemantauan mandiri, panduan nutrisi harian, dan sesi tele-konsultasi dokter spesialis berlisensi IDI resmi sekarang.
                         </p>
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                        <Link
-                            href="/register"
-                            className="px-6 py-3.5 rounded-2xl bg-white text-primary text-xs font-bold hover:bg-gray-100 transition-all shadow-md active:scale-95 text-center"
-                        >
-                            Daftar Pasien Baru
-                        </Link>
-                        <Link
-                            href="/member/consultations-hub"
-                            className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-bold transition-all text-center"
-                        >
-                            Masuk Portal Konsultasi
-                        </Link>
+                        {/* Action Buttons */}
+                        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white text-primary text-[11px] sm:text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-xs text-center gap-1.5 cursor-pointer"
+                            >
+                                <span>Daftar Pasien Baru</span>
+                                <span className="ml-1 text-xs">→</span>
+                            </Link>
+                            <Link
+                                href="/member/consultations-hub"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold hover:bg-white/20 transition-all active:scale-95 border border-white/20 text-center gap-1.5 cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[16px]">stethoscope</span>
+                                <span>Masuk Portal Konsultasi</span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

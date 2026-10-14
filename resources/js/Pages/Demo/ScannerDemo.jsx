@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import MarketingLayout from '@/Layouts/MarketingLayout';
 
 export default function ScannerDemo() {
+    let authUser = null;
+    try {
+        const page = usePage();
+        authUser = page?.props?.auth?.user || null;
+    } catch {
+        authUser = null;
+    }
+
     const [selectedSample, setSelectedSample] = useState('drink');
     const [scannerStage, setScannerStage] = useState('ready'); // 'ready' | 'capturing' | 'analyzing' | 'result'
     const [analysisStep, setAnalysisStep] = useState(0);
@@ -175,55 +183,65 @@ export default function ScannerDemo() {
                         </div>
 
                         <Link
-                            href="/member/scanner"
+                            href={authUser ? '/member/scanner' : '/register'}
                             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-primary text-white text-xs font-semibold hover:bg-[#00352e] transition-all active:scale-95 shadow-xs whitespace-nowrap self-start lg:self-auto shrink-0"
                         >
-                            <span className="material-symbols-outlined text-[17px]">center_focus_strong</span>
-                            <span>Buka Scanner Member</span>
+                            <span className="material-symbols-outlined text-[17px]">
+                                {authUser ? 'center_focus_strong' : 'person_add'}
+                            </span>
+                            <span>{authUser ? 'Buka Scanner Member' : 'Daftar Akun Baru'}</span>
                         </Link>
                     </div>
                 </div>
 
-                {/* 2. Cara Kerja 3 Langkah Singkat (Mobile-First Stepper) */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                    <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#e4ede7] space-y-1.5 shadow-2xs">
+                {/* 2. Cara Kerja 3 Langkah Singkat (Symmetrical Mobile-First Stepper) */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">
+                    {/* Step 1 */}
+                    <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#c4dcce] space-y-1.5 shadow-2xs flex flex-col justify-between">
                         <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-primary text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                            <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary text-white text-[10px] sm:text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
                                 1
                             </span>
-                            <h3 className="font-bold text-xs sm:text-sm text-[#142320]">
+                            <h3 className="font-bold text-[11px] sm:text-sm text-black leading-snug">
                                 Bidik &amp; Jepret Foto
                             </h3>
                         </div>
-                        <p className="text-[11px] text-[#556963] leading-relaxed pl-8">
-                            Arahkan kamera ke piring makanan segar atau label gizi kemasan, lalu tekan tombol shutter (atau pilih dari galeri).
+                        <p className="text-[10px] sm:text-[11px] text-[#222222] font-medium leading-relaxed">
+                            Arahkan kamera ke piring makanan atau label kemasan, lalu tekan shutter.
                         </p>
                     </div>
 
-                    <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#e4ede7] space-y-1.5 shadow-2xs">
+                    {/* Step 2 */}
+                    <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#c4dcce] space-y-1.5 shadow-2xs flex flex-col justify-between">
                         <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-primary text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                            <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary text-white text-[10px] sm:text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
                                 2
                             </span>
-                            <h3 className="font-bold text-xs sm:text-sm text-[#142320]">
+                            <h3 className="font-bold text-[11px] sm:text-sm text-black leading-snug">
                                 AI Ekstraksi Otomatis
                             </h3>
                         </div>
-                        <p className="text-[11px] text-[#556963] leading-relaxed pl-8">
-                            Visi YOLO mengenali jenis makanan fisik, sementara Vision OCR membaca gramatur gula, natrium, dan nomor izin BPOM.
+                        <p className="text-[10px] sm:text-[11px] text-[#222222] font-medium leading-relaxed">
+                            Visi YOLO kenali porsi makanan fisik &amp; OCR membaca gramatur gula/BPOM.
                         </p>
                     </div>
 
-                    <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#e4ede7] space-y-1.5 shadow-2xs">
-                        <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-primary text-white text-[11px] font-bold flex items-center justify-center shrink-0">
-                                3
+                    {/* Step 3 (Spans symmetrically full-width on mobile, 1 column on desktop) */}
+                    <div className="col-span-2 sm:col-span-1 p-3 sm:p-4 rounded-2xl bg-primary/5 border border-primary/25 space-y-1.5 shadow-2xs flex flex-col justify-between">
+                        <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary text-white text-[10px] sm:text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
+                                    3
+                                </span>
+                                <h3 className="font-bold text-[11px] sm:text-sm text-primary leading-snug">
+                                    Proyeksi Kurva &amp; Telaah
+                                </h3>
+                            </div>
+                            <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 shrink-0">
+                                Hasil Klinis
                             </span>
-                            <h3 className="font-bold text-xs sm:text-sm text-[#142320]">
-                                Proyeksi Kurva &amp; Telaah
-                            </h3>
                         </div>
-                        <p className="text-[11px] text-[#556963] leading-relaxed pl-8">
+                        <p className="text-[10px] sm:text-[11px] text-[#222222] font-medium leading-relaxed">
                             Dapatkan estimasi kurva lonjakan glukosa 2 jam, skor gizi DQS, dan alternatif menu sehat dari dokter spesialis.
                         </p>
                     </div>
@@ -307,13 +325,13 @@ export default function ScannerDemo() {
                         <div className="lg:col-span-7 bg-white rounded-3xl border border-[#d6e7dd] p-3.5 sm:p-5 shadow-xs space-y-3">
                             <div className="flex items-center justify-between pb-2.5 border-b border-[#edf4f0] text-xs">
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <span className="font-bold text-[#142320]">
-                                        {scannerStage === 'ready' && 'Lensa Kamera Siap Bidik'}
-                                        {scannerStage === 'capturing' && 'Mengambil Gambar...'}
-                                        {scannerStage === 'analyzing' && 'Memproses Identifikasi AI...'}
-                                        {scannerStage === 'result' && 'Foto Terkunci &amp; Teridentifikasi'}
-                                    </span>
+                                    {scannerStage !== 'ready' && (
+                                        <span className="font-bold text-[#142320]">
+                                            {scannerStage === 'capturing' && 'Mengambil Gambar...'}
+                                            {scannerStage === 'analyzing' && 'Memproses Identifikasi AI...'}
+                                            {scannerStage === 'result' && 'Foto Terkunci &amp; Teridentifikasi'}
+                                        </span>
+                                    )}
                                 </div>
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#f0f6f3] text-[#365049] font-medium">
                                     {current.typeLabel}
@@ -563,33 +581,45 @@ export default function ScannerDemo() {
                     </div>
                 </div>
 
-                {/* 5. Bottom Call to Action for Member Access */}
-                <div className="p-6 sm:p-8 rounded-3xl bg-primary text-white flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left shadow-xs">
-                    <div className="space-y-1 max-w-lg">
-                        <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-white/10 text-emerald-200 border border-white/15 inline-block">
-                            Siap Mengontrol Makanan Anda?
-                        </span>
-                        <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+                {/* 5. Bottom Call to Action for Member Access (Landing Page CtaBanner Style) */}
+                <div className="relative overflow-hidden p-6 sm:p-10 lg:p-12 bg-primary text-white rounded-2xl sm:rounded-3xl space-y-4 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
+                    {/* Subtle Restorative Ambient Glow */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#1c6454]/30 rounded-full blur-3xl"
+                    />
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 bg-primary-container/40 rounded-full blur-3xl"
+                    />
+
+                    {/* Content */}
+                    <div className="relative z-10 space-y-3.5 max-w-2xl mx-auto">
+                        <h3 className="font-serif text-xl sm:text-3xl lg:text-[40px] leading-[1.2] font-normal text-white">
                             Coba Scanner Kamera Pada Makanan Asli Anda.
                         </h3>
-                        <p className="text-xs text-[#c6e6d7] leading-relaxed">
+
+                        <p className="text-xs sm:text-sm text-[#d4ebe0] max-w-xl mx-auto leading-relaxed">
                             Buka portal member untuk menggunakan kamera ponsel langsung atau unggah foto label makanan dari galeri.
                         </p>
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-2.5 shrink-0">
-                        <Link
-                            href="/member/scanner"
-                            className="px-6 py-3 rounded-full bg-white text-primary text-xs font-bold hover:bg-[#edf5f0] transition-all active:scale-95 shadow-xs"
-                        >
-                            Buka Scanner Member Sekarang
-                        </Link>
-                        <Link
-                            href="/"
-                            className="px-4 py-3 rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/15 transition-all border border-white/20"
-                        >
-                            Kembali ke Beranda
-                        </Link>
+                        {/* Action Buttons */}
+                        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
+                            <Link
+                                href="/member/scanner"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white text-primary text-[11px] sm:text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-xs text-center gap-1.5 cursor-pointer"
+                            >
+                                <span>Buka Scanner Member Sekarang</span>
+                                <span className="ml-1 text-xs">→</span>
+                            </Link>
+                            <Link
+                                href="/"
+                                className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold hover:bg-white/20 transition-all active:scale-95 border border-white/20 text-center gap-1.5 cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[16px]">home</span>
+                                <span>Kembali ke Beranda</span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
 

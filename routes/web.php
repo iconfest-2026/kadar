@@ -136,9 +136,147 @@ Route::get('/demo/challenges', function () {
     return Inertia::render('Demo/ChallengesDemo');
 })->name('demo.challenges');
 
-Route::get('/demo/community', function () {
-    return Inertia::render('Demo/CommunityDemo');
+Route::get('/demo/community', function (\Illuminate\Http\Request $request) {
+    $category = $request->query('category', 'ALL');
+    $search = $request->query('search', '');
+
+    $categoryMap = [
+        'RESEP_SEHAT' => 1,
+        'CERITA_REMISI' => 2,
+        'TANYA_DOKTER' => 4,
+    ];
+
+    $query = \App\Models\CommunityPost::with([
+        'user:id,name,email',
+        'reactions',
+    ])
+    ->where('status', 'PUBLISHED')
+    ->latest();
+
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('body', 'like', "%{$search}%")
+              ->orWhereHas('user', function ($u) use ($search) {
+                  $u->where('name', 'like', "%{$search}%");
+              });
+        });
+    }
+
+    if ($category !== 'ALL' && isset($categoryMap[$category])) {
+        $query->where('category_id', $categoryMap[$category]);
+    }
+
+    $paginated = $query->paginate(4)->withQueryString();
+
+    $currentUser = \Illuminate\Support\Facades\Auth::user();
+
+    $paginated->getCollection()->transform(function ($post) use ($currentUser) {
+        $categoryTag = match ($post->category_id) {
+            1 => 'RESEP_SEHAT',
+            2 => 'CERITA_REMISI',
+            4 => 'TANYA_DOKTER',
+            default => 'RESEP_SEHAT',
+        };
+
+        $categoryLabel = match ($post->category_id) {
+            1 => 'Resep Rendah Glikemik',
+            2 => 'Cerita Remisi Kohor',
+            4 => 'Tanya Dokter Spesialis',
+            default => 'Resep Rendah Glikemik',
+        };
+
+        return [
+            'id' => $post->id,
+            'author' => $post->user?->name ?? 'Anggota Komunitas',
+            'time' => $post->created_at ? $post->created_at->diffForHumans() : 'Baru saja',
+            'tag' => $categoryTag,
+            'tagLabel' => $categoryLabel,
+            'title' => $post->title,
+            'content' => $post->body,
+            'likes_count' => $post->reactions->count(),
+            'is_liked' => $currentUser ? $post->reactions->where('user_id', $currentUser->id)->isNotEmpty() : false,
+        ];
+    });
+
+    $counts = [
+        'ALL' => \App\Models\CommunityPost::where('status', 'PUBLISHED')->count(),
+        'RESEP_SEHAT' => \App\Models\CommunityPost::where('status', 'PUBLISHED')->where('category_id', 1)->count(),
+        'TANYA_DOKTER' => \App\Models\CommunityPost::where('status', 'PUBLISHED')->where('category_id', 4)->count(),
+        'CERITA_REMISI' => \App\Models\CommunityPost::where('status', 'PUBLISHED')->where('category_id', 2)->count(),
+    ];
+
+    return \Inertia\Inertia::render('Demo/CommunityDemo', [
+        'posts' => $paginated,
+        'activeCategory' => $category,
+        'search' => $search,
+        'categoryCounts' => $counts,
+    ]);
 })->name('demo.community');
+
+Route::post('/demo/community/post', function (\Illuminate\Http\Request $request) {
+    if (!\Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    $body = $request->input('body', $request->input('content'));
+    $request->merge(['body' => $body]);
+
+    $validated = $request->validate([
+        'title' => 'required|string|max:200',
+        'body' => 'required|string|max:3000',
+        'category' => 'nullable|string',
+    ]);
+
+    $categoryMap = [
+        'RESEP_SEHAT' => 1,
+        'CERITA_REMISI' => 2,
+        'TANYA_DOKTER' => 4,
+    ];
+
+    $categoryId = $categoryMap[$validated['category'] ?? ''] ?? 1;
+
+    \App\Models\CommunityPost::create([
+        'user_id' => \Illuminate\Support\Facades\Auth::id(),
+        'category_id' => $categoryId,
+        'title' => $validated['title'],
+        'body' => $validated['body'],
+        'visibility' => 'PUBLIC',
+        'status' => 'PUBLISHED',
+    ]);
+
+    return redirect()->back()->with('success', 'Diskusi Anda berhasil diterbitkan ke komunitas!');
+})->name('demo.community.post');
+
+Route::post('/demo/community/react', function (\Illuminate\Http\Request $request) {
+    if (!\Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    $validated = $request->validate([
+        'post_id' => 'required|exists:community_posts,id',
+    ]);
+
+    $userId = \Illuminate\Support\Facades\Auth::id();
+
+    $existing = \App\Models\CommunityReaction::where('user_id', $userId)
+        ->where('reactable_type', \App\Models\CommunityPost::class)
+        ->where('reactable_id', $validated['post_id'])
+        ->first();
+
+    if ($existing) {
+        $existing->delete();
+    } else {
+        \App\Models\CommunityReaction::create([
+            'user_id' => $userId,
+            'reactable_type' => \App\Models\CommunityPost::class,
+            'reactable_id' => $validated['post_id'],
+            'reaction_type' => 'LIKE',
+        ]);
+    }
+
+    return redirect()->back();
+})->name('demo.community.react');
 
 Route::get('/demo/gender-vitality', function () {
     return Inertia::render('Demo/GenderVitalityDemo');

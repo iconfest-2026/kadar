@@ -115,13 +115,6 @@ export default function Footer() {
                 {/* Bottom Legal & Security Strip */}
                 <div className="pt-4 border-t border-[#e0ece5] flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-[#63756f] text-center sm:text-left">
                     <span>© 2026 AEVYRA HEALTHCARE.</span>
-                    <div className="flex flex-wrap items-center justify-center gap-2">
-                        <span className="text-[#1c6454] font-medium">Enkripsi Medis AES-256</span>
-                        <span>•</span>
-                        <span>SatuSehat Compatible</span>
-                        <span>•</span>
-                        <span>PERKENI Protocol Compliant</span>
-                    </div>
                 </div>
             </div>
         </footer>

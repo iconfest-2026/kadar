@@ -120,28 +120,25 @@ export default function Login() {
                                             key={key}
                                             type="button"
                                             onClick={() => handleRoleSelect(key)}
-                                            className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${isSelected
+                                            className={`p-2.5 sm:p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${isSelected
                                                     ? 'border-primary bg-primary/10 ring-2 ring-primary/20 shadow-xs'
                                                     : 'border-primary/15 bg-surface-container-low hover:border-primary/30 hover:bg-surface-container'
                                                 }`}
                                         >
-                                            <div className="flex items-center justify-between w-full mb-1">
-                                                <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${isSelected ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
-                                                    }`}>
-                                                    <span className="material-symbols-outlined text-[16px]">
-                                                        {role.icon}
-                                                    </span>
-                                                </div>
-                                                {isSelected && (
-                                                    <span className="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
-                                                )}
+                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all ${isSelected ? 'bg-primary text-white shadow-xs' : 'bg-white text-on-surface-variant border border-primary/10'
+                                                }`}>
+                                                <span className="material-symbols-outlined text-[18px]">
+                                                    {role.icon}
+                                                </span>
                                             </div>
-                                            <span className={`text-xs font-bold block ${isSelected ? 'text-primary' : 'text-on-surface'}`}>
-                                                {role.name}
-                                            </span>
-                                            <span className="text-[10px] text-on-surface-variant truncate block">
-                                                {role.subtitle}
-                                            </span>
+                                            <div className="w-full">
+                                                <span className={`text-xs font-bold block truncate ${isSelected ? 'text-primary' : 'text-on-surface'}`}>
+                                                    {role.name}
+                                                </span>
+                                                <span className="text-[10px] text-on-surface-variant truncate block">
+                                                    {role.subtitle}
+                                                </span>
+                                            </div>
                                         </button>
                                     );
                                 })}
@@ -171,7 +168,6 @@ export default function Login() {
                                 allowPasswordToggle
                                 error={errors.password}
                                 autoComplete="current-password"
-                                helperText="Demo: password"
                             />
 
                             {/* Remember Me & Forgot Password */}
@@ -239,20 +235,13 @@ export default function Login() {
                     </div>
 
                     {/* Bottom Links */}
-                    <div className="pt-4 border-t border-primary/10 text-center space-y-2">
+                    <div className="pt-4 border-t border-primary/10 text-center">
                         <p className="text-xs text-on-surface-variant">
                             Belum memiliki akun?{' '}
                             <Link href="/register" className="text-primary font-bold hover:underline">
                                 Mulai Skrining Mandiri Gratis →
                             </Link>
                         </p>
-                        <div className="flex items-center justify-center gap-3 text-[10px] text-on-surface-variant/80 font-mono">
-                            <span>SatuSehat Terhubung</span>
-                            <span>•</span>
-                            <span>Enkripsi AES-256</span>
-                            <span>•</span>
-                            <span>SSL 256-Bit</span>
-                        </div>
                     </div>
 
                     {/* Google Role Selection Modal */}

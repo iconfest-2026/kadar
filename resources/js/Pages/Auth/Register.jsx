@@ -78,10 +78,6 @@ export default function Register() {
                     <div>
                         {/* Eyebrow & Headline */}
                         <div className="space-y-2 pb-4 border-b border-primary/10">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-semibold border border-primary/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>Pendaftaran Pengguna Baru Terverifikasi</span>
-                            </div>
                             <h1 className="font-heading font-black text-xl sm:text-3xl text-primary tracking-tight">
                                 Buat Akun AEVYRA
                             </h1>
@@ -374,20 +370,13 @@ export default function Register() {
                     </div>
 
                     {/* Bottom Accreditations */}
-                    <div className="pt-4 border-t border-primary/10 text-center space-y-2">
+                    <div className="pt-4 border-t border-primary/10 text-center">
                         <p className="text-xs text-on-surface-variant">
                             Sudah memiliki akun terdaftar?{' '}
                             <Link href="/login" className="text-primary font-bold hover:underline">
                                 Masuk ke Portal Akun →
                             </Link>
                         </p>
-                        <div className="flex items-center justify-center gap-3 text-[10px] text-on-surface-variant/80 font-mono">
-                            <span>SatuSehat Terhubung</span>
-                            <span>•</span>
-                            <span>Enkripsi AES-256</span>
-                            <span>•</span>
-                            <span>SSL 256-Bit</span>
-                        </div>
                     </div>
 
                     {/* Google Role Selection Modal */}

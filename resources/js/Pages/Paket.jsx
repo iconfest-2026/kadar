@@ -796,7 +796,7 @@ export default function Paket(props) {
                                                         className={`flex items-start gap-2.5 ${
                                                             f.included
                                                                 ? 'text-[#20342e]'
-                                                                : 'text-[#8b9e97] line-through decoration-[#9cb0a8]'
+                                                                : 'text-[#8b9e97]'
                                                         }`}
                                                     >
                                                         <span
@@ -812,7 +812,7 @@ export default function Paket(props) {
                                                         >
                                                             {f.included ? 'check_circle' : 'close'}
                                                         </span>
-                                                        <span className={f.included && f.highlight ? 'font-bold text-[#006057]' : ''}>
+                                                        <span className={`${!f.included ? 'line-through decoration-[#9cb0a8]' : ''} ${f.included && f.highlight ? 'font-bold text-[#006057]' : ''}`}>
                                                             {f.text}
                                                         </span>
                                                     </li>
@@ -1066,32 +1066,50 @@ export default function Paket(props) {
                         </div>
                     </div>
 
-                    {/* Bottom Counselor Banner */}
-                    <div className="p-6 sm:p-8 bg-primary text-white rounded-3xl shadow-[0_8px_30px_rgba(0,67,62,0.12)] flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-                        <div className="space-y-1.5 max-w-lg">
-                            <span className="text-[11px] px-3 py-0.5 rounded-full bg-white/10 text-[#d4ede2] border border-white/15 inline-block">
+                    {/* Bottom Counselor Banner (Matching Consultations & Tracker Demo CTA Banner Style) */}
+                    <div className="relative overflow-hidden p-6 sm:p-10 lg:p-12 bg-primary text-white rounded-2xl sm:rounded-3xl space-y-4 text-center shadow-[0_12px_40px_rgba(0,67,62,0.18)]">
+                        {/* Subtle Restorative Ambient Glow */}
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#1c6454]/30 rounded-full blur-3xl"
+                        />
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 bg-primary-container/40 rounded-full blur-3xl"
+                        />
+
+                        {/* Content */}
+                        <div className="relative z-10 space-y-3.5 max-w-2xl mx-auto">
+                            <span className="text-[11px] px-3.5 py-1 rounded-full bg-white/10 text-[#d4ede2] border border-white/15 inline-block font-medium">
                                 Butuh Saran Personalisasi?
                             </span>
-                            <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+
+                            <h3 className="font-serif text-xl sm:text-3xl lg:text-[40px] leading-[1.2] font-normal text-white">
                                 Bingung menentukan paket mana yang paling tepat untuk Anda?
                             </h3>
-                            <p className="text-xs sm:text-sm text-[#c8e6d8] leading-relaxed">
-                                Edukator klinis kami siap membantu menganalisis riwayat biomarker dan merekomendasikan tingkatan intervensi yang paling efektif.
+
+                            <p className="text-xs sm:text-sm text-[#d4ebe0] max-w-xl mx-auto leading-relaxed">
+                                Edukator klinis kami siap membantu menganalisis riwayat biomarker dan merekomendasikan tingkatan intervensi yang paling efektif untuk kondisi kesehatan Anda.
                             </p>
-                        </div>
-                        <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                            <a
-                                href="mailto:care@aevyra.health"
-                                className="px-6 py-3 rounded-full bg-white text-primary text-xs font-semibold hover:bg-[#f3f9f5] transition-all shadow-xs"
-                            >
-                                Konsultasi Gratis Sekarang
-                            </a>
-                            <Link
-                                href="/"
-                                className="px-4 py-3 rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/15 transition-all border border-white/20"
-                            >
-                                Kembali ke Beranda
-                            </Link>
+
+                            {/* Action Buttons */}
+                            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
+                                <Link
+                                    href="/demo/consultations"
+                                    className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white text-primary text-[11px] sm:text-xs font-bold hover:bg-[#f3f9f5] transition-all active:scale-95 shadow-xs text-center gap-1.5 cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">stethoscope</span>
+                                    <span>Konsultasi Gratis Sekarang</span>
+                                    <span className="ml-1 text-xs">→</span>
+                                </Link>
+                                <Link
+                                    href="/"
+                                    className="inline-flex items-center justify-center min-h-10 sm:min-h-12 px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-white/10 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold hover:bg-white/20 transition-all active:scale-95 border border-white/20 text-center gap-1.5 cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">home</span>
+                                    <span>Kembali ke Beranda</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1110,7 +1128,7 @@ export default function Paket(props) {
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Modal Header */}
-                        <div className="p-5 sm:p-6 bg-linear-to-r from-[#00433e] to-[#0f5c56] text-white flex items-start justify-between gap-3 shrink-0">
+                        <div className="p-5 sm:p-6 bg-linear-to-r from-primary to-primary-container text-white flex items-start justify-between gap-3 shrink-0">
                             <div className="space-y-1">
                                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-mono font-bold tracking-wider uppercase">
                                     <span className="material-symbols-outlined text-[13px] text-amber-300">event_repeat</span>

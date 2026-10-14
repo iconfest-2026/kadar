@@ -57,7 +57,7 @@ export default function AuthLayout({ children, title, subtitle, maxWidth = 'max-
             <footer className="w-full bg-white/70 backdrop-blur-xs border-t border-surface-container-high/60 py-4 text-center">
                 <div className="max-w-6xl mx-auto px-4 text-center space-y-1">
                     <p className="text-[11px] text-[#63746f]">
-                        © 2026 AEVYRA Health Platform • Sistem Rekam Medis Terenkripsi
+                        © 2026 AEVYRA Health Platform
                     </p>
                     <p className="text-[10px] text-[#859691] font-mono">
                         Standar Interoperabilitas HL7 FHIR • PERKENI Clinical Guidelines

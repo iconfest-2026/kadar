@@ -368,7 +368,9 @@ export default function QuickChatDialog() {
                 }`}
                 aria-label={authUser ? "Konsultasi Asisten AI" : "Tanya Asisten"}
             >
-                <span className="w-2 h-2 rounded-full bg-[#82d6b3]"></span>
+                <span className="material-symbols-outlined text-[16px]">
+                    {isOpen ? 'close' : 'forum'}
+                </span>
                 <span className="text-xs font-medium">
                     {isOpen ? 'Tutup Konseling' : authUser ? 'Tanya Fitur / Chat AI' : 'Tanya Fitur Platform'}
                 </span>

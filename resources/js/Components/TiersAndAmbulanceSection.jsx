@@ -288,7 +288,7 @@ export default function TiersAndAmbulanceSection() {
                                                         className={`flex items-start gap-2.5 ${
                                                             isIncluded
                                                                 ? 'text-[#20342e]'
-                                                                : 'text-[#8b9e97] line-through decoration-[#9cb0a8]'
+                                                                : 'text-[#8b9e97]'
                                                         }`}
                                                     >
                                                         <span
@@ -304,7 +304,7 @@ export default function TiersAndAmbulanceSection() {
                                                         >
                                                             {isIncluded ? 'check_circle' : 'close'}
                                                         </span>
-                                                        <span className={isIncluded && isHighlight ? 'font-bold text-[#006057]' : ''}>
+                                                        <span className={`${!isIncluded ? 'line-through decoration-[#9cb0a8]' : ''} ${isIncluded && isHighlight ? 'font-bold text-[#006057]' : ''}`}>
                                                             {text}
                                                         </span>
                                                     </li>
@@ -410,27 +410,11 @@ export default function TiersAndAmbulanceSection() {
                                 />
                             </div>
 
-                            {/* Top HUD Floating Status Badges */}
-                            <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
-                                <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/80 shadow-xs flex items-center gap-1.5 text-[10px] font-bold text-[#182926]">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <span>Unit Siaga Aktif</span>
-                                </div>
-                                <span className="text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-white backdrop-blur-md font-mono font-bold tracking-wider">
-                                    RESPON &lt; 8 MENIT
-                                </span>
-                            </div>
-
                             {/* Bottom Glassmorphic Overlay */}
                             <div className="absolute inset-x-0 bottom-0 p-4 bg-linear-to-t from-black/85 via-black/50 to-transparent backdrop-blur-[2px] text-white">
-                                <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-xs sm:text-sm text-white">
-                                        Unit Reaksi Cepat 119
-                                    </span>
-                                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 font-medium">
-                                        SatuSehat Ready
-                                    </span>
-                                </div>
+                                <span className="font-semibold text-xs sm:text-sm text-white block">
+                                    Unit Reaksi Cepat 119
+                                </span>
                                 <span className="text-[11px] text-white/80 block mt-1 leading-snug">
                                     Terhubung langsung jejaring IGD rumah sakit rujukan terdekat
                                 </span>

@@ -57,6 +57,39 @@ export default function Header() {
         return cleanCurrent === path || cleanCurrent.startsWith(`${path}/`);
     };
 
+    const isFeatureActive = (item) => {
+        if (!currentPath) return false;
+        const cleanCurrent = currentPath.split('?')[0].split('#')[0];
+
+        // Specific path matching for each feature item to ensure exact active indicator
+        if (cleanCurrent === '/demo/tracker' || cleanCurrent === '/member/tracker') {
+            return item.name === 'Tracker & Metrik Kesehatan';
+        }
+        if (cleanCurrent === '/demo/challenges' || cleanCurrent === '/member/challenges') {
+            return item.name === 'Program Tantangan Sehat';
+        }
+        if (cleanCurrent === '/demo/community' || cleanCurrent === '/member/community') {
+            return item.name === 'Komunitas & Forum Diskusi';
+        }
+        if (cleanCurrent === '/demo/scanner' || cleanCurrent === '/member/scanner') {
+            return item.name === 'Scanner Kamera & BPOM';
+        }
+        if (cleanCurrent === '/demo/consultations' || cleanCurrent.includes('/consultation')) {
+            return item.name === 'Konsultasi & Booking Dokter';
+        }
+        if (cleanCurrent === '/demo/gender-vitality' || cleanCurrent.includes('vitality')) {
+            return item.name === 'Siklus Haid & Vitalitas Pria';
+        }
+        if (cleanCurrent === '/arcade' || cleanCurrent.includes('/arcade')) {
+            return item.name === 'Story Game Metabolik';
+        }
+        if (cleanCurrent === '/demo/emergency') {
+            return item.name === 'Siaga Ambulan 119 Lokasi GPS';
+        }
+
+        return cleanCurrent === item.href;
+    };
+
     const clinicalRef = useRef(null);
     const userDropdownRef = useRef(null);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -203,7 +236,7 @@ export default function Header() {
                                     setUserDropdownOpen(false);
                                 }}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
-                                    clinicalDropdownOpen || featureItems.some((item) => isActive(item.href))
+                                    clinicalDropdownOpen || featureItems.some((item) => isFeatureActive(item))
                                         ? 'bg-primary text-white shadow-2xs'
                                         : 'text-[#4e615b] hover:text-primary hover:bg-[#edf5f0]/80'
                                 }`}
@@ -232,8 +265,8 @@ export default function Header() {
                                                 href={item.href}
                                                 onClick={() => setClinicalDropdownOpen(false)}
                                                 className={`p-2.5 rounded-2xl transition-all flex items-start gap-2.5 group border ${
-                                                    item.href === '/arcade'
-                                                        ? 'bg-emerald-50/70 border-emerald-200/80 hover:bg-emerald-100/60'
+                                                    isFeatureActive(item)
+                                                        ? 'bg-emerald-50/90 border-emerald-300 shadow-2xs'
                                                         : 'hover:bg-[#edf5f0]/70 border-transparent hover:border-surface-container'
                                                 }`}
                                             >
@@ -688,28 +721,33 @@ export default function Header() {
                                 <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-2 block">
                                     Fitur &amp; Layanan Utama
                                 </span>
-                                {featureItems.map((item, idx) => (
-                                    <Link
-                                        key={idx}
-                                        href={item.href}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className={`px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs transition-all ${
-                                            item.href === '/arcade'
-                                                ? 'font-bold text-emerald-900 bg-[#edf5f0] hover:bg-[#e2efe8]'
-                                                : 'font-medium text-[#445652] hover:bg-[#edf5f0]'
-                                        }`}
-                                    >
-                                        <div className="flex items-center gap-2.5">
-                                            <span className="material-symbols-outlined text-[18px] text-primary">
-                                                {item.icon}
+                                {featureItems.map((item, idx) => {
+                                    const active = isFeatureActive(item);
+                                    return (
+                                        <Link
+                                            key={idx}
+                                            href={item.href}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={`px-3 py-2.5 min-h-11 flex items-center justify-between rounded-xl text-xs transition-all ${
+                                                active
+                                                    ? 'font-bold text-emerald-950 bg-[#edf5f0] border border-[#c4dcce] shadow-2xs'
+                                                    : 'font-medium text-[#445652] hover:bg-[#edf5f0] border border-transparent'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-2.5">
+                                                <span className={`material-symbols-outlined text-[18px] ${active ? 'text-primary font-bold' : 'text-[#445652]'}`}>
+                                                    {item.icon}
+                                                </span>
+                                                <span className={active ? 'text-black font-bold' : 'text-[#445652]'}>{item.name}</span>
+                                            </div>
+                                            <span className={`text-[9px] px-2 py-0.5 rounded-md font-mono font-bold ${
+                                                active ? 'bg-primary text-white' : 'bg-[#cfe2d7] text-primary'
+                                            }`}>
+                                                {item.badge}
                                             </span>
-                                            <span>{item.name}</span>
-                                        </div>
-                                        <span className="text-[9px] px-2 py-0.5 rounded-md bg-[#cfe2d7] text-primary font-mono font-bold">
-                                            {item.badge}
-                                        </span>
-                                    </Link>
-                                ))}
+                                        </Link>
+                                    );
+                                })}
                             </div>
 
                             {/* Group 2: Public Navigation */}
@@ -720,7 +758,11 @@ export default function Header() {
                                 <Link
                                     href="/"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                                    className={`px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs transition-all ${
+                                        isActive('/') && !featureItems.some((it) => isFeatureActive(it))
+                                            ? 'font-bold text-emerald-950 bg-[#edf5f0] border border-[#c4dcce] shadow-2xs'
+                                            : 'font-medium text-[#445652] hover:bg-[#edf5f0] border border-transparent'
+                                    }`}
                                 >
                                     <span className="material-symbols-outlined text-[18px] text-primary">home</span>
                                     <span>Beranda Utama</span>
@@ -728,7 +770,11 @@ export default function Header() {
                                 <Link
                                     href="/paket"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                                    className={`px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs transition-all ${
+                                        isActive('/paket')
+                                            ? 'font-bold text-emerald-950 bg-[#edf5f0] border border-[#c4dcce] shadow-2xs'
+                                            : 'font-medium text-[#445652] hover:bg-[#edf5f0] border border-transparent'
+                                    }`}
                                 >
                                     <span className="material-symbols-outlined text-[18px] text-primary">card_membership</span>
                                     <span>Pilihan Paket Keanggotaan</span>
@@ -736,7 +782,11 @@ export default function Header() {
                                 <Link
                                     href="/faq"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs font-medium text-[#445652] hover:bg-[#edf5f0] transition-all"
+                                    className={`px-3 py-2.5 min-h-11 flex items-center gap-2.5 rounded-xl text-xs transition-all ${
+                                        isActive('/faq')
+                                            ? 'font-bold text-emerald-950 bg-[#edf5f0] border border-[#c4dcce] shadow-2xs'
+                                            : 'font-medium text-[#445652] hover:bg-[#edf5f0] border border-transparent'
+                                    }`}
                                 >
                                     <span className="material-symbols-outlined text-[18px] text-primary">quiz</span>
                                     <span>Pusat Bantuan &amp; FAQ Medis</span>

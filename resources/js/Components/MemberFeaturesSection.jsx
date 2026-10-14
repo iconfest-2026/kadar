@@ -50,9 +50,8 @@ export default function MemberFeaturesSection() {
                         alt="Konsultasi Bersama Dokter"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent flex items-end justify-between p-2 sm:p-3 text-white">
+                    <div className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent flex items-end p-2 sm:p-3 text-white">
                         <span className="text-[9px] sm:text-[11px] font-medium truncate">Telekonsultasi Dokter IDI</span>
-                        <span className="text-[8px] sm:text-[10px] px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full bg-emerald-500/80 backdrop-blur-xs font-mono shrink-0">AI / Dokter</span>
                     </div>
                 </div>
             ),
@@ -157,7 +156,7 @@ export default function MemberFeaturesSection() {
             href: '/arcade',
             btnText: 'Mulai Simulasi',
             visual: (
-                <div className="mt-2 sm:mt-3.5 h-20 sm:h-28 p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-linear-to-r from-slate-900 to-emerald-950 border border-emerald-800/40 text-white flex items-center justify-between">
+                <div className="mt-2 sm:mt-3.5 h-20 sm:h-28 p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-emerald-950 border border-emerald-800/40 text-white flex items-center justify-between">
                     <div className="space-y-0.5 sm:space-y-1">
                         <div className="flex items-center gap-1.5">
                             <span className="material-symbols-outlined text-[14px] sm:text-[16px] text-amber-400">auto_stories</span>
@@ -182,7 +181,7 @@ export default function MemberFeaturesSection() {
             href: authUser ? '/member/dashboard#ambulance' : '/demo/emergency',
             btnText: 'Siaga 119',
             visual: (
-                <div className="mt-2 sm:mt-3.5 h-20 sm:h-28 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-linear-to-r from-rose-950 to-slate-900 border border-rose-800/40 text-white flex items-center justify-between">
+                <div className="mt-2 sm:mt-3.5 h-20 sm:h-28 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-rose-950 border border-rose-800/40 text-white flex items-center justify-between">
                     <div className="space-y-0.5 sm:space-y-1">
                         <div className="flex items-center gap-1">
                             <span className="material-symbols-outlined text-[13px] sm:text-[16px] text-rose-400 animate-pulse">emergency</span>

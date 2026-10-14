@@ -1,17 +1,105 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 import MarketingLayout from '../Layouts/MarketingLayout';
-import MetabolicRunner2D from '../Components/MetabolicRunner2D';
 import MetabolicStoryGame from '../Components/MetabolicStoryGame';
-import MetabolicArcadeModal from '../Components/MetabolicArcadeModal';
 
 export default function Arcade({ leaderboard: initialLeaderboard = [] }) {
     const { auth } = usePage().props;
     const isAuthenticated = !!auth?.user;
-    const [activeView, setActiveView] = useState('story'); // 'story', 'runner'
-    const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
-    const [leaderboard, setLeaderboard] = useState(initialLeaderboard);
+
+    const patientPersonas = [
+        {
+            name: 'Sarah Nindya',
+            age: '34 Tahun',
+            role: 'Brand Strategist & Ibu Bekerja',
+            avatar: '/image/habit_morning_walk.jpg',
+            focus: 'Kesehatan Wanita & Fluktuasi Hormon Menstruasi',
+            badgeColor: 'bg-rose-50 text-rose-800 border-rose-200',
+            baseGlucose: 162,
+            baseHbA1c: '6.5%',
+            challenge: 'Resistensi insulin fisiologis melonjak 7 hari menjelang haid (fase luteal). Mengalami sugar craving hebat dan energi ambruk jam 15:00.',
+            goal: 'Menstabilkan kurva glukosa tanpa pemicu inflamasi dengan asupan tinggi magnesium, zat besi, dan serat sayuran hijau.',
+            icon: 'female',
+        },
+        {
+            name: 'Ir. Hendro Wibowo',
+            age: '52 Tahun',
+            role: 'Manajer Proyek Konstruksi',
+            avatar: '/image/doctor_bramantyo.jpg',
+            focus: 'Komorbid Kardiovaskular, Hipertensi & Neuropati',
+            badgeColor: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+            baseGlucose: 178,
+            baseHbA1c: '6.9%',
+            challenge: 'Riwayat keluarga diabetes & jantung, tekanan darah 145/92 mmHg, serta sensasi kebas kesemutan tebal di ujung jari kaki saat bangun pagi.',
+            goal: 'Mengontrol natrium garam, mencegah plak aterosklerosis pembuluh koroner, dan meredakan beban kerja jantung.',
+            icon: 'cardiology',
+        },
+        {
+            name: 'Dimas Aryo',
+            age: '29 Tahun',
+            role: 'Software Engineer',
+            avatar: '/image/doctor_consultation.jpg',
+            focus: 'Gaya Hidup Sedenter & Sugar Crash Pasca-Makan',
+            badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+            baseGlucose: 154,
+            baseHbA1c: '6.3%',
+            challenge: 'Bekerja 10–12 jam duduk statis, sering mengalami kantuk berat 30 menit setelah makan siang (postprandial somnolence), dan gemetar jika belum minum manis.',
+            goal: 'Aktivasi transporter GLUT4 melalui jeda gerak teratur dan menghentikan ketergantungan pada minuman boba/kopi berpemanis cair.',
+            icon: 'laptop_mac',
+        },
+    ];
+
+    const gameSteps = [
+        {
+            step: '01',
+            icon: 'person_search',
+            title: 'Pilih Kasus Klinis Pasien',
+            desc: 'Pilih salah satu dari 3 profil pasien dengan latar belakang biologis berbeda: siklus hormonal wanita, komorbid kardiometabolik usia 50+, atau sindrom sedenter pekerja muda.',
+        },
+        {
+            step: '02',
+            icon: 'schedule',
+            title: 'Telusuri 6 Babak Waktu (24 Jam)',
+            desc: 'Jalani 6 fase waktu krusial mulai dari sarapan pagi (07:30), stres kerja (10:30), kantin siang (12:45), titik nadir sore (15:30), santap malam (19:00), hingga tidur restoratif (22:30).',
+        },
+        {
+            step: '03',
+            icon: 'nutrition',
+            title: 'Gunakan Alat "Cek Gizi" Klinis',
+            desc: 'Sebelum memilih menu makanan atau aktivitas, buka fitur Inspektur Gizi di pojok atas untuk melihat gram gula, natrium, serat larut, dan beban glikemik secara transparan.',
+        },
+        {
+            step: '04',
+            icon: 'verified',
+            title: 'Amati Kurva & Raih Remisi',
+            desc: 'Setiap keputusan berdampak langsung pada indikator GDS dan HbA1c. Jaga glukosa dalam batas sehat (70–140 mg/dL) untuk meraih Sertifikat Remisi Kemenkes Grade A.',
+        },
+    ];
+
+    const clinicalMetrics = [
+        {
+            icon: 'monitoring',
+            name: 'Glukosa Darah Sewaktu (GDS)',
+            target: 'Target: 70 – 140 mg/dL',
+            desc: 'Mengukur konsentrasi gula bebas di aliran darah secara seketika. Lonjakan di atas 140 mg/dL setelah makan (postprandial) memicu stres pada sel beta pankreas dan kelelahan seluler.',
+            badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+        },
+        {
+            icon: 'speed',
+            name: 'Indeks & Beban Glikemik (GI & GL)',
+            target: 'Target: Makanan Rendah GI (<55)',
+            desc: 'Indeks Glikemik mengukur seberapa cepat karbohidrat dipecah menjadi glukosa darah. Makanan tinggi GI memicu lonjakan insulin mendadak yang diikuti hipoglikemia reaktif (sugar crash).',
+            badge: 'bg-amber-50 text-amber-800 border-amber-200',
+        },
+        {
+            icon: 'shield_with_heart',
+            name: 'Hemoglobin Terglikasi (HbA1c)',
+            target: 'Target Remisi: <5.7% (Ideal) / <6.5%',
+            desc: 'Mencerminkan rata-rata kadar gula darah selama 90 hari terakhir melalui ikatan molekul glukosa pada sel darah merah. Parameter utama remisi pra-diabetes & diabetes melitus tipe 2.',
+            badge: 'bg-blue-50 text-blue-800 border-blue-200',
+        },
+    ];
 
     const foodCards = [
         {
@@ -49,234 +137,311 @@ export default function Arcade({ leaderboard: initialLeaderboard = [] }) {
     ];
 
     const content = (
-        <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-10">
+        <div className="w-full max-w-7xl mx-auto space-y-8 sm:space-y-12">
             {/* Hero Header */}
-            <div className="space-y-2.5 sm:space-y-3 text-center max-w-3xl mx-auto pt-2 sm:pt-4">
-                    <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#edf5f0] text-primary text-[10px] sm:text-xs font-mono font-bold border border-[#cfe1d7]">
-                        <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>ARENA GAMIFIKASI KESEHATAN PREVENTIF 2D</span>
+            <div className="space-y-3 sm:space-y-4 text-center max-w-3xl mx-auto pt-2 sm:pt-4">
+                <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-normal text-[#122824] leading-tight">
+                    Kuasai Respon Glukosa &amp; Keputusan Gizi Klinis 24 Jam
+                </h1>
+
+                <p className="text-xs sm:text-sm text-[#4d665f] leading-relaxed max-w-2xl mx-auto">
+                    Masuki peran pendamping kesehatan preventif. Tentukan pilihan diet, aktivitas, dan hidrasi bersama pasien Puskesmas dalam perjalanan 24 jam interaktif berbasis standar PERKENI 2026.
+                </p>
+
+                {/* Quick Info Badges */}
+                <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-[10px] sm:text-[11px] font-mono">
+                    <span className="px-2.5 py-1 rounded-lg bg-surface-container-low border border-surface-container text-on-surface-variant flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px] text-primary">groups</span>
+                        3 Profil Pasien
+                    </span>
+                    <span className="px-2.5 py-1 rounded-lg bg-surface-container-low border border-surface-container text-on-surface-variant flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px] text-primary">timer</span>
+                        6 Fase Babak 24 Jam
+                    </span>
+                    <span className="px-2.5 py-1 rounded-lg bg-surface-container-low border border-surface-container text-on-surface-variant flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px] text-primary">biotech</span>
+                        Inspektur Gizi Interaktif
+                    </span>
+                    <span className="px-2.5 py-1 rounded-lg bg-surface-container-low border border-surface-container text-on-surface-variant flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px] text-emerald-700">workspace_premium</span>
+                        Evaluasi Remisi Klinis
+                    </span>
+                </div>
+            </div>
+
+            {/* Primary Feature Stage: 24-Hour Clinical Story Game */}
+            <section className="space-y-3">
+                <MetabolicStoryGame />
+            </section>
+
+            {/* Section 1: Alur & Mekanisme Permainan */}
+            <div className="bg-white rounded-3xl p-5 sm:p-7 border border-surface-container-high shadow-xs space-y-6">
+                <div className="border-b border-surface-container pb-4">
+                    <div className="flex items-center gap-2 text-primary text-xs font-mono font-bold uppercase tracking-wider mb-1">
+                        <span className="material-symbols-outlined text-[18px]">alt_route</span>
+                        <span>Mekanisme &amp; Alur Simulasi</span>
                     </div>
-
-                    <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl font-normal text-[#122824] leading-tight">
-                        Taklukkan Lonjakan Glukosa dalam Aksi 2D Interaktif
-                    </h1>
-
-                    <p className="text-[11px] sm:text-sm text-[#4d665f] leading-relaxed max-w-2xl mx-auto">
-                        Pelajari respon biologis tubuh terhadap makanan tinggi gula dan manfaat serat secara menyenangkan! Mainkan runner 2D dengan fisika mulus, atau jelajahi simulasi keputusan kasus klinis 24 jam.
+                    <h3 className="font-serif font-bold text-lg sm:text-2xl text-on-surface">
+                        Bagaimana Simulasi Kasus 24 Jam Bekerja?
+                    </h3>
+                    <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
+                        Alur 4 tahap yang menghubungkan keputusan gaya hidup sehari-hari dengan respon kurva biologis tubuh.
                     </p>
-
-                    {/* Mode Selector Tabs */}
-                    <div className="pt-2 sm:pt-3 flex justify-center w-full">
-                        <div className="p-1 sm:p-1.5 bg-surface-container-low rounded-2xl border border-surface-container grid grid-cols-2 sm:flex items-center gap-1 sm:gap-1.5 shadow-2xs w-full sm:w-auto">
-                            <button
-                                type="button"
-                                onClick={() => setActiveView('story')}
-                                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
-                                    activeView === 'story'
-                                        ? 'bg-primary text-white shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-[15px] sm:text-[17px]">auto_stories</span>
-                                <span className="truncate">Story 24 Jam</span>
-                                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-800 text-[9px] font-mono">
-                                    Visual Novel
-                                </span>
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => setActiveView('runner')}
-                                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
-                                    activeView === 'runner'
-                                        ? 'bg-primary text-white shadow-xs'
-                                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-[15px] sm:text-[17px]">sports_esports</span>
-                                <span className="truncate">Glucose Dash</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
-                {/* Primary Feature Stage: Story Mode or 2D Runner */}
-                <section className="space-y-4">
-                    {activeView === 'story' ? (
-                        <MetabolicStoryGame />
-                    ) : (
-                        <MetabolicRunner2D onLeaderboardUpdate={setLeaderboard} />
-                    )}
-                </section>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+                    {gameSteps.map((step, idx) => (
+                        <div
+                            key={idx}
+                            className="p-4 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-3 flex flex-col justify-between hover:border-primary/40 transition-all"
+                        >
+                            <div className="space-y-2.5">
+                                <div className="flex items-center justify-between">
+                                    <div className="w-9 h-9 rounded-xl bg-emerald-50 text-primary border border-emerald-200 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-[20px]">{step.icon}</span>
+                                    </div>
+                                    <span className="font-mono text-xs font-bold text-on-surface-variant/70">
+                                        LANGKAH {step.step}
+                                    </span>
+                                </div>
+                                <h4 className="font-bold text-xs sm:text-sm text-on-surface leading-snug">
+                                    {step.title}
+                                </h4>
+                                <p className="text-[11px] text-[#52645f] leading-relaxed">
+                                    {step.desc}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-                {/* Secondary Grid: Community Leaderboard & Nutritional Education */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 pt-2">
-                    {/* Community Leaderboard */}
-                    <div className="lg:col-span-1 bg-white rounded-3xl p-4 sm:p-6 border border-surface-container-high shadow-xs space-y-4">
-                        <div className="flex items-center justify-between border-b border-surface-container pb-3">
-                            <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary text-[20px] sm:text-[22px]">leaderboard</span>
-                                <div>
-                                    <h3 className="font-serif font-bold text-sm sm:text-base text-on-surface">Papan Peringkat</h3>
-                                    <p className="text-[10px] text-on-surface-variant">Top Rekor Skor Komunitas Pekan Ini</p>
+            {/* Section 2: Studi Kasus 3 Profil Pasien */}
+            <div className="bg-white rounded-3xl p-5 sm:p-7 border border-surface-container-high shadow-xs space-y-6">
+                <div className="border-b border-surface-container pb-4">
+                    <div className="flex items-center gap-2 text-primary text-xs font-mono font-bold uppercase tracking-wider mb-1">
+                        <span className="material-symbols-outlined text-[18px]">badge</span>
+                        <span>Profil Triase Pasien Puskesmas</span>
+                    </div>
+                    <h3 className="font-serif font-bold text-lg sm:text-2xl text-on-surface">
+                        3 Studi Kasus Pasien yang Dapat Anda Dampingi
+                    </h3>
+                    <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
+                        Setiap pasien memiliki latar belakang hormonal, risiko komorbiditas, dan tantangan gaya hidup yang unik.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+                    {patientPersonas.map((char, idx) => (
+                        <div
+                            key={idx}
+                            className="p-4 sm:p-5 rounded-2xl bg-surface-container-lowest border border-surface-container flex flex-col justify-between space-y-3.5 hover:border-primary/40 transition-all"
+                        >
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        src={char.avatar}
+                                        alt={char.name}
+                                        className="w-12 h-12 rounded-2xl object-cover ring-2 ring-primary/20 shrink-0"
+                                    />
+                                    <div className="min-w-0">
+                                        <h4 className="font-heading font-bold text-sm sm:text-base text-on-surface truncate">
+                                            {char.name}
+                                        </h4>
+                                        <p className="text-[10px] text-on-surface-variant font-mono">
+                                            {char.age} • {char.role}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className={`px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono border ${char.badgeColor}`}>
+                                    {char.focus}
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2 text-center font-mono py-1">
+                                    <div className="p-2 rounded-xl bg-white border border-surface-container">
+                                        <span className="text-[9px] text-on-surface-variant uppercase block">GDS Awal</span>
+                                        <b className="text-rose-600 text-xs sm:text-sm">{char.baseGlucose} mg/dL</b>
+                                    </div>
+                                    <div className="p-2 rounded-xl bg-white border border-surface-container">
+                                        <span className="text-[9px] text-on-surface-variant uppercase block">HbA1c Lab</span>
+                                        <b className="text-amber-700 text-xs sm:text-sm">{char.baseHbA1c}</b>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5 text-[11px] leading-relaxed">
+                                    <p className="text-[#3b4e48]">
+                                        <strong className="text-on-surface font-semibold block">Keluhan Klinis:</strong>
+                                        {char.challenge}
+                                    </p>
+                                    <p className="text-[#3b4e48] pt-1">
+                                        <strong className="text-primary font-semibold block">Target Terapi:</strong>
+                                        {char.goal}
+                                    </p>
                                 </div>
                             </div>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
-                                Live
-                            </span>
                         </div>
+                    ))}
+                </div>
+            </div>
 
-                        <div className="space-y-2">
-                            {leaderboard.length === 0 ? (
-                                <div className="p-4 rounded-2xl bg-surface-container-lowest border border-dashed border-surface-container text-center text-xs text-on-surface-variant">
-                                    Belum ada skor yang dicatat oleh akun yang pernah login.
-                                </div>
-                            ) : (
-                                leaderboard.map((item) => {
-                                    const isCurrentUser = auth?.user && auth.user.id === item.user_id;
-                                    return (
-                                        <div
-                                            key={item.user_id || item.rank}
-                                            className={`p-2.5 sm:p-3 rounded-2xl border flex items-center justify-between text-xs transition-colors gap-2 ${
-                                                isCurrentUser
-                                                    ? 'bg-emerald-50/80 border-emerald-300 ring-1 ring-emerald-400/30'
-                                                    : 'bg-surface-container-lowest border border-surface-container hover:border-primary/40'
-                                            }`}
-                                        >
-                                            <div className="flex items-center gap-2 min-w-0">
-                                                <span
-                                                    className={`w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-full font-mono font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 ${
-                                                        item.rank === 1
-                                                            ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs'
-                                                            : item.rank === 2
-                                                            ? 'bg-slate-200 text-slate-800 border border-slate-300'
-                                                            : item.rank === 3
-                                                            ? 'bg-amber-900/10 text-amber-950 border border-amber-800/30'
-                                                            : 'bg-surface-container text-on-surface-variant'
-                                                    }`}
-                                                >
-                                                    {item.medal}
-                                                </span>
-                                                <div className="min-w-0">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <strong className="block text-on-surface leading-tight text-[11px] sm:text-xs truncate">
-                                                            {item.name}
-                                                        </strong>
-                                                        {isCurrentUser && (
-                                                            <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white font-mono text-[9px] font-bold shrink-0">
-                                                                Anda
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <span className="text-[9px] sm:text-[10px] text-on-surface-variant font-mono block truncate">
-                                                        {item.char}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="text-right shrink-0">
-                                                <span className="font-mono font-black text-primary text-xs sm:text-sm block leading-tight">
-                                                    {item.score}
-                                                </span>
-                                                <span className="text-[9px] text-on-surface-variant">TIR: {item.tir}</span>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
-
-                        <div className="pt-1 text-center text-[10px] sm:text-[11px] text-on-surface-variant">
-                            {auth?.user ? (
-                                <p className="text-emerald-700 font-medium">
-                                    Terkoneksi sebagai <strong>{auth.user.name}</strong> • Mainkan Glucose Dash untuk mencetak rekor Anda
-                                </p>
-                            ) : (
-                                <p>
-                                    <Link href="/login" className="text-primary font-bold hover:underline">
-                                        Masuk akun
-                                    </Link>{' '}
-                                    untuk mencatatkan rekor Anda ke papan peringkat.
-                                </p>
-                            )}
-                        </div>
+            {/* Section 3: Indikator & Parameter Klinis yang Dipantau */}
+            <div className="bg-white rounded-3xl p-5 sm:p-7 border border-surface-container-high shadow-xs space-y-6">
+                <div className="border-b border-surface-container pb-4">
+                    <div className="flex items-center gap-2 text-primary text-xs font-mono font-bold uppercase tracking-wider mb-1">
+                        <span className="material-symbols-outlined text-[18px]">vital_signs</span>
+                        <span>Panduan Biomarker Medis</span>
                     </div>
+                    <h3 className="font-serif font-bold text-lg sm:text-2xl text-on-surface">
+                        Biomarker Vital yang Anda Kendalikan dalam Permainan
+                    </h3>
+                    <p className="text-xs sm:text-sm text-on-surface-variant mt-0.5">
+                        Memahami angka di balik setiap pilihan makanan dan dampaknya terhadap metabolisme jangka panjang.
+                    </p>
+                </div>
 
-                    {/* Food Items & Glycemic Impact Guide */}
-                    <div className="lg:col-span-2 bg-white rounded-3xl p-4 sm:p-6 border border-surface-container-high shadow-xs space-y-4 flex flex-col justify-between">
-                        <div>
-                            <div className="flex flex-wrap items-center justify-between border-b border-surface-container pb-3 mb-4 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4">
+                    {clinicalMetrics.map((metric, idx) => (
+                        <div
+                            key={idx}
+                            className="p-4 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-3 flex flex-col justify-between"
+                        >
+                            <div className="space-y-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-primary text-[20px] sm:text-[22px]">biotech</span>
-                                    <div>
-                                        <h3 className="font-serif font-bold text-sm sm:text-base text-on-surface">
-                                            Kamus Glikemik &amp; Dampak Metabolik
-                                        </h3>
-                                        <p className="text-[10px] text-on-surface-variant">
-                                            Kenapa item dalam game berpengaruh terhadap glukosa darah?
-                                        </p>
+                                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-primary border border-emerald-200 flex items-center justify-center shrink-0">
+                                        <span className="material-symbols-outlined text-[18px]">{metric.icon}</span>
                                     </div>
+                                    <h4 className="font-bold text-xs sm:text-sm text-on-surface leading-tight">
+                                        {metric.name}
+                                    </h4>
                                 </div>
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">
-                                    PERKENI 2026
+                                <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border inline-block ${metric.badge}`}>
+                                    {metric.target}
                                 </span>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                                {foodCards.map((card, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="p-3 sm:p-3.5 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-1.5"
-                                    >
-                                        <div className="flex items-center justify-between gap-2">
-                                            <div className="flex items-center gap-2 min-w-0">
-                                                <span className="material-symbols-outlined text-primary text-[18px] sm:text-[20px] shrink-0">{card.icon}</span>
-                                                <h4 className="font-bold text-[11px] sm:text-xs text-on-surface truncate">{card.name}</h4>
-                                            </div>
-                                            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border shrink-0 ${card.badge}`}>
-                                                {card.impact}
-                                            </span>
-                                        </div>
-                                        <p className="text-[10px] sm:text-[11px] text-[#52645f] leading-relaxed">
-                                            {card.desc}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Banner to Real Life Application */}
-                        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#edf5f0] border border-[#cfe1d7] flex flex-col sm:flex-row items-center justify-between gap-3 mt-3 sm:mt-4">
-                            <div className="space-y-0.5 text-center sm:text-left">
-                                <strong className="text-[11px] sm:text-xs text-primary font-bold block">
-                                    Ingin Pindai Makanan Nyata Anda Menggunakan Kamera?
-                                </strong>
-                                <p className="text-[10px] sm:text-[11px] text-[#4d665f]">
-                                    Arahkan kamera ke label kemasan untuk deteksi gula, natrium, dan beban glikemik dalam &lt;0.4 detik.
+                                <p className="text-[11px] text-[#52645f] leading-relaxed pt-1">
+                                    {metric.desc}
                                 </p>
                             </div>
-                            <Link
-                                href="/member/scanner"
-                                className="w-full sm:w-auto px-4 py-2 sm:py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-[11px] sm:text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-1.5 shadow-xs"
-                            >
-                                <span className="material-symbols-outlined text-[15px] sm:text-[16px]">photo_camera</span>
-                                <span>Buka Scanner Kamera</span>
-                            </Link>
                         </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Section 4: Glycemic Impact & Food Education Guide */}
+            <div className="bg-white rounded-3xl p-5 sm:p-7 border border-surface-container-high shadow-xs space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-surface-container pb-4 gap-2">
+                    <div className="flex items-center gap-2.5">
+                        <span className="material-symbols-outlined text-primary text-[22px] sm:text-[24px]">biotech</span>
+                        <div>
+                            <h3 className="font-serif font-bold text-base sm:text-lg text-on-surface">
+                                Kamus Glikemik &amp; Dampak Metabolik Klinis
+                            </h3>
+                            <p className="text-xs text-on-surface-variant">
+                                Panduan rujukan respon glukosa darah dan beban insulin berdasarkan konsensus PERKENI 2026.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[13px]">verified</span>
+                            PERKENI 2026
+                        </span>
                     </div>
                 </div>
 
-                {/* 24-Hour Patient Story Simulation Modal */}
-                <MetabolicArcadeModal
-                    isOpen={isStoryModalOpen}
-                    onClose={() => setIsStoryModalOpen(false)}
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    {foodCards.map((card, idx) => (
+                        <div
+                            key={idx}
+                            className="p-4 rounded-2xl bg-surface-container-lowest border border-surface-container space-y-2.5 hover:border-primary/30 transition-all flex flex-col justify-between"
+                        >
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <span className="material-symbols-outlined text-primary text-[20px] shrink-0">{card.icon}</span>
+                                        <span className="text-[10px] font-mono uppercase text-on-surface-variant font-bold truncate">{card.type}</span>
+                                    </div>
+                                </div>
+                                <h4 className="font-bold text-xs sm:text-sm text-on-surface">{card.name}</h4>
+                                <p className="text-[11px] text-[#52645f] leading-relaxed">
+                                    {card.desc}
+                                </p>
+                            </div>
+                            <div className="pt-2 border-t border-surface-container/60">
+                                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border inline-block ${card.badge}`}>
+                                    {card.impact}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Banner to Real Life Application */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-[#edf5f0] border border-[#cfe1d7] flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="space-y-1 text-center sm:text-left">
+                        <div className="flex items-center justify-center sm:justify-start gap-1.5 text-primary">
+                            <span className="material-symbols-outlined text-[18px]">photo_camera</span>
+                            <strong className="text-xs sm:text-sm font-bold">
+                                Ingin Pindai Makanan Nyata Anda Menggunakan Kamera?
+                            </strong>
+                        </div>
+                        <p className="text-[11px] sm:text-xs text-[#4d665f] max-w-2xl">
+                            Arahkan kamera ke label kemasan makanan untuk deteksi gula, natrium, dan estimasi beban glikemik otomatis dalam waktu kurang dari 0.4 detik.
+                        </p>
+                    </div>
+                    <Link
+                        href="/member/scanner"
+                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-[17px]">center_focus_strong</span>
+                        <span>Buka Scanner Kamera</span>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Section 5: Tips Sukses Menuntaskan Simulasi */}
+            <div className="bg-[#122824] text-white rounded-3xl p-5 sm:p-8 space-y-4">
+                <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider">
+                    <span className="material-symbols-outlined text-[18px]">tips_and_updates</span>
+                    <span>Petunjuk Praktis Simulasi</span>
+                </div>
+                <h3 className="font-serif text-lg sm:text-2xl font-normal leading-tight">
+                    3 Tips Mendapatkan Evaluasi Remisi Klinis Grade A
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1 text-xs">
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                        <strong className="text-emerald-300 font-bold block text-xs">
+                            1. Selalu Cek Gizi Sebelum Memilih
+                        </strong>
+                        <p className="text-gray-300 text-[11px] leading-relaxed">
+                            Tekan tombol <span className="text-emerald-300 font-mono">Cek Gizi</span> di pojok kanan atas untuk memeriksa kandungan gula, natrium, dan serat secara akurat sebelum membuat keputusan.
+                        </p>
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                        <strong className="text-emerald-300 font-bold block text-xs">
+                            2. Dampingi Karbohidrat dengan Serat
+                        </strong>
+                        <p className="text-gray-300 text-[11px] leading-relaxed">
+                            Serat sayuran hijau membentuk jaring pelindung di usus halus yang memperlambat penyerapan glukosa, mencegah lonjakan tajam dan rasa kantuk berat.
+                        </p>
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                        <strong className="text-emerald-300 font-bold block text-xs">
+                            3. Perhatikan Pola Hidrasi &amp; Stres
+                        </strong>
+                        <p className="text-gray-300 text-[11px] leading-relaxed">
+                            Kurang minum saat stres kerja meningkatkan hemokonsentrasi darah. Air mineral membantu filtrasi ginjal alami untuk mengeluarkan kelebihan gula darah.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 
     if (isAuthenticated) {
         return (
-            <AppLayout title="Arena Gim Glucose Dash & Edukasi Metabolik" activeTab="arcade">
-                <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
+            <AppLayout title="Simulasi Kasus Metabolik 24 Jam" activeTab="arcade">
+                <Head title="Simulasi Kasus Metabolik 24 Jam & Edukasi Glikemik | AEVYRA" />
                 {content}
             </AppLayout>
         );
@@ -284,10 +449,11 @@ export default function Arcade({ leaderboard: initialLeaderboard = [] }) {
 
     return (
         <MarketingLayout>
-            <Head title="Arena Gim Glucose Dash & Edukasi Metabolik | AEVYRA" />
+            <Head title="Simulasi Kasus Metabolik 24 Jam & Edukasi Glikemik | AEVYRA" />
             <div className="py-6 sm:py-10 px-3 sm:px-6">
                 {content}
             </div>
         </MarketingLayout>
     );
 }
+

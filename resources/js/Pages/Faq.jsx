@@ -218,10 +218,6 @@ export default function Faq(props) {
 
                     {/* Page Header */}
                     <div className="space-y-3.5 border-b border-surface-container-high pb-6">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-inverse-on-surface border border-[#d6e7dc] text-[11px] text-primary font-medium tracking-wide w-fit">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454]"></span>
-                            <span>Pusat Bantuan • Direktori Pengetahuan Klinis Lengkap (Total 20 Pertanyaan)</span>
-                        </div>
                         <h1 className="font-serif text-xl sm:text-4xl lg:text-5xl font-normal text-[#142320] leading-tight">
                             Jawaban Lengkap seputar Skrining, Data Klinis &amp; Layanan.
                         </h1>
@@ -254,13 +250,13 @@ export default function Faq(props) {
                     </div>
 
                     {/* Category Filter Tabs */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    <div className="flex flex-wrap items-center gap-2">
                         {categories.map((cat) => (
                             <button
                                 key={cat.id}
                                 type="button"
                                 onClick={() => handleCategoryChange(cat.id)}
-                                className={`min-h-9 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                                className={`min-h-9 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
                                     activeCategory === cat.id
                                         ? 'bg-primary text-white shadow-2xs'
                                         : 'bg-white text-[#4e605b] hover:text-primary hover:bg-[#edf5f0] border border-[#d8e6df]'

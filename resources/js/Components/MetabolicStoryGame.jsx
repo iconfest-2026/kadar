@@ -1968,15 +1968,8 @@ export default function MetabolicStoryGame() {
             {/* Top Retro WebGL Bar */}
             <div className="bg-[#1a2320] px-2.5 sm:px-4 py-2 flex items-center justify-between border-b border-white/10 text-xs gap-2">
                 <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
                     <span className="font-mono font-bold text-gray-200 text-[11px] sm:text-xs truncate">
                         AEVYRA STORY
-                    </span>
-                    <span className="hidden md:inline-block font-mono text-gray-400 text-xs truncate">
-                        : Perjalanan Medis Pasien
-                    </span>
-                    <span className="hidden lg:inline-block px-2 py-0.5 rounded bg-emerald-950/80 text-[10px] text-emerald-300 font-mono border border-emerald-500/30 shrink-0">
-                        Standar PERKENI &amp; SatuSehat Kemenkes
                     </span>
                 </div>
 
@@ -2177,33 +2170,33 @@ export default function MetabolicStoryGame() {
                 {/* SCENE: PATIENT SELECTION (BEFORE SICKNESS PHASE) */}
                 {/* ============================================================== */}
                 {gameState === 'select_patient' && (
-                    <div className="relative z-20 flex-1 flex flex-col justify-center items-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-300 overflow-y-auto max-h-full">
-                        <div className="max-w-4xl w-full text-center space-y-3 sm:space-y-4 my-auto">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/90 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-white">
+                    <div className="relative z-20 flex-1 flex flex-col justify-center items-center px-3 py-3 sm:px-6 sm:py-5 bg-black/60 backdrop-blur-xs animate-in fade-in duration-300 w-full overflow-hidden">
+                        <div className="max-w-4xl w-full text-center space-y-2 sm:space-y-3 my-auto">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/90 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-white shadow-xs">
                                 <span>PILIH KASUS KLINIS PASIEN • ALUR &amp; INTERVENSI KHUSUS</span>
                             </div>
 
-                            <h2 className="font-serif text-xl sm:text-3xl text-white font-normal drop-shadow-md">
+                            <h2 className="font-serif text-lg sm:text-2xl md:text-3xl text-white font-normal drop-shadow-md">
                                 Pilih Profil Pasien yang Mengunjungi Puskesmas Hari Ini
                             </h2>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left max-h-[65vh] sm:max-h-none overflow-y-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 pt-1 text-left w-full">
                                 {Object.values(characters).map((char) => (
                                     <div
                                         key={char.id}
                                         onClick={() => handleSelectPatient(char.id)}
-                                        className={`group bg-[#fcf9f4]/98 text-[#1b2824] p-3.5 sm:p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-102 hover:shadow-2xl flex flex-col justify-between space-y-2.5 ${
+                                        className={`group bg-[#fcf9f4]/98 text-[#1b2824] p-3 sm:p-3.5 rounded-2xl border-2 cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between space-y-2 ${
                                             selectedCharId === char.id
                                                 ? 'border-emerald-600 ring-2 ring-emerald-500/30'
-                                                : 'border-transparent hover:border-emerald-500'
+                                                : 'border-white/40 hover:border-emerald-500'
                                         }`}
                                     >
-                                        <div className="space-y-2">
+                                        <div className="space-y-1.5 sm:space-y-2">
                                             <div className="flex items-center gap-2.5">
                                                 <img
                                                     src={char.avatar}
                                                     alt={char.name}
-                                                    className="w-10 sm:w-12 h-10 sm:h-12 rounded-xl object-cover ring-2 ring-emerald-600/30 shrink-0"
+                                                    className="w-9 sm:w-11 h-9 sm:h-11 rounded-xl object-cover ring-2 ring-emerald-600/30 shrink-0"
                                                 />
                                                 <div className="min-w-0">
                                                     <h3 className="font-heading font-bold text-xs sm:text-sm text-primary truncate">
@@ -2216,21 +2209,22 @@ export default function MetabolicStoryGame() {
                                             </div>
 
                                             {/* Special Case Badge */}
-                                            <div className="px-2 py-1 rounded bg-[#edf5f0] text-emerald-900 text-[9px] sm:text-[10px] font-bold font-mono border border-emerald-200 truncate">
+                                            <div className="px-2 py-0.5 rounded bg-[#edf5f0] text-emerald-900 text-[9px] sm:text-[9.5px] font-bold font-mono border border-emerald-200 truncate">
                                                 {char.specialCaseTitle}
                                             </div>
 
-                                            <p className="text-[10px] sm:text-[11px] text-gray-700 leading-snug line-clamp-3">
+                                            <p className="text-[9.5px] sm:text-[10.5px] text-gray-700 leading-snug line-clamp-3">
                                                 {char.symptomHistory}
                                             </p>
                                         </div>
 
-                                        <div className="pt-2 border-t border-gray-200 flex items-center justify-between">
-                                            <span className="text-[10px] font-mono text-gray-600">
+                                        <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-[10px] sm:text-[11px]">
+                                            <span className="font-mono text-gray-600">
                                                 GDS: <b className="text-rose-600">{char.baseGlucose}</b> mg/dL
                                             </span>
-                                            <span className="text-[11px] sm:text-xs text-primary font-bold group-hover:translate-x-1 transition-transform">
-                                                Mulai Triase →
+                                            <span className="text-primary font-bold group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+                                                <span>Mulai Triase</span>
+                                                <span className="material-symbols-outlined text-[13px] sm:text-[14px]">arrow_forward</span>
                                             </span>
                                         </div>
                                     </div>
@@ -2511,32 +2505,33 @@ export default function MetabolicStoryGame() {
             {/* MODAL: INTERACTIVE NUTRITIONAL INSPECTOR ("Cek Kadar Gizi") */}
             {/* ============================================================== */}
             {isNutritionModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-                    <div className="bg-[#fcfaf5] text-[#1a2522] max-w-3xl w-full max-h-[85vh] rounded-3xl shadow-2xl border border-gray-300 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+                    <div className="bg-[#fcfaf5] text-[#1a2522] max-w-4xl w-full max-h-[90vh] rounded-3xl shadow-2xl border border-gray-300 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                         {/* Modal Header */}
-                        <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-primary-container">
-                            <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-[20px]">nutrition</span>
+                        <div className="px-5 py-3.5 bg-primary text-white flex items-center justify-between border-b border-primary-container">
+                            <div className="flex items-center gap-2.5">
+                                <span className="material-symbols-outlined text-[22px] text-emerald-300">nutrition</span>
                                 <div>
-                                    <h3 className="font-heading font-bold text-sm">
+                                    <h3 className="font-heading font-bold text-sm sm:text-base leading-tight">
                                         Inspektur Kadar Gizi &amp; Dampak Metabolik Makanan
                                     </h3>
-                                    <p className="text-[10px] text-emerald-200 font-mono">
-                                        Basis Data Standar Kemenkes RI &amp; PERKENI
+                                    <p className="text-[10px] sm:text-[11px] text-emerald-200 font-mono">
+                                        Basis Data Standar Kemenkes RI &amp; Konsensus Klinis PERKENI
                                     </p>
                                 </div>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => setIsNutritionModalOpen(false)}
-                                className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold cursor-pointer"
+                                className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold cursor-pointer transition-colors"
+                                title="Tutup Modal"
                             >
                                 ✕
                             </button>
                         </div>
 
                         {/* Filter Tabs */}
-                        <div className="px-5 pt-3 flex items-center gap-2 overflow-x-auto border-b border-gray-200 text-xs">
+                        <div className="px-5 pt-3 pb-1 flex items-center gap-1.5 overflow-x-auto border-b border-gray-200 text-xs scrollbar-none">
                             {[
                                 { id: 'all', label: 'Semua Makanan' },
                                 { id: 'lunch', label: 'Menu Siang & Kantin' },
@@ -2549,10 +2544,10 @@ export default function MetabolicStoryGame() {
                                     key={tab.id}
                                     type="button"
                                     onClick={() => setSelectedFoodFilter(tab.id)}
-                                    className={`px-3 py-1.5 rounded-t-lg font-mono text-[11px] whitespace-nowrap cursor-pointer transition-colors border-b-2 ${
+                                    className={`px-3 py-1.5 rounded-lg font-mono text-[11px] whitespace-nowrap cursor-pointer transition-all border ${
                                         selectedFoodFilter === tab.id
-                                            ? 'border-primary text-primary font-bold bg-emerald-50/50'
-                                            : 'border-transparent text-gray-500 hover:text-gray-800'
+                                            ? 'border-primary bg-primary text-white font-bold shadow-xs'
+                                            : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                                     }`}
                                 >
                                     {tab.label}
@@ -2561,9 +2556,9 @@ export default function MetabolicStoryGame() {
                         </div>
 
                         {/* Modal Body: Two-Column Inspector */}
-                        <div className="p-5 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div className="p-4 sm:p-5 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-4 text-xs">
                             {/* Left: Food List */}
-                            <div className="space-y-2 pr-1 max-h-[50vh] overflow-y-auto">
+                            <div className="md:col-span-5 space-y-2 pr-1 max-h-[55vh] overflow-y-auto">
                                 <span className="text-[10px] font-mono text-gray-500 block uppercase font-bold">
                                     Pilih Item untuk Diperiksa ({filteredFoods.length} Menu)
                                 </span>
@@ -2571,27 +2566,29 @@ export default function MetabolicStoryGame() {
                                     <div
                                         key={item.id}
                                         onClick={() => setInspectedFood(item)}
-                                        className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                                        className={`p-3 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between gap-1.5 ${
                                             inspectedFood.id === item.id
-                                                ? 'bg-emerald-50 border-primary text-emerald-950 shadow-xs'
+                                                ? 'bg-emerald-50/80 border-primary text-emerald-950 ring-1 ring-primary/40 shadow-xs'
                                                 : 'bg-white border-gray-200 hover:border-emerald-300 text-gray-800'
                                         }`}
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <strong className="text-xs font-bold block">{item.name}</strong>
+                                        <div className="flex items-start justify-between gap-2.5">
+                                            <strong className="text-xs font-bold leading-snug block flex-1 text-gray-900 min-w-0">
+                                                {item.name}
+                                            </strong>
                                             <span
-                                                className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${
+                                                className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold shrink-0 whitespace-nowrap border ${
                                                     item.sugar > 25
-                                                        ? 'bg-rose-100 text-rose-800'
+                                                        ? 'bg-rose-50 text-rose-700 border-rose-200'
                                                         : item.sugar > 10
-                                                        ? 'bg-amber-100 text-amber-800'
-                                                        : 'bg-emerald-100 text-emerald-800'
+                                                        ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                                        : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                 }`}
                                             >
                                                 Gula {item.sugar}g
                                             </span>
                                         </div>
-                                        <p className="text-[10px] text-gray-500 font-mono mt-1">
+                                        <p className="text-[10px] text-gray-500 font-mono line-clamp-1">
                                             {item.impactTag}
                                         </p>
                                     </div>
@@ -2599,23 +2596,31 @@ export default function MetabolicStoryGame() {
                             </div>
 
                             {/* Right: Detailed Nutrition Facts Card */}
-                            <div className="bg-white p-4 rounded-2xl border border-gray-200 flex flex-col justify-between space-y-3">
-                                <div className="space-y-3">
-                                    <div className="border-b border-gray-200 pb-2">
-                                        <span className="text-[10px] font-mono uppercase text-gray-400 block font-bold">
-                                            HASIL INSPEKSI GIZI KLINIS
-                                        </span>
-                                        <h4 className="font-serif text-base font-bold text-primary">
+                            <div className="md:col-span-7 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 flex flex-col justify-between space-y-4 shadow-xs">
+                                <div className="space-y-3.5">
+                                    <div className="border-b border-gray-200 pb-3">
+                                        <div className="flex items-center justify-between gap-2 mb-1">
+                                            <span className="text-[10px] font-mono uppercase text-emerald-800 font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200">
+                                                HASIL INSPEKSI GIZI KLINIS
+                                            </span>
+                                            <span className="text-[10px] font-mono text-gray-500">
+                                                {inspectedFood.calories} kkal
+                                            </span>
+                                        </div>
+                                        <h4 className="font-serif text-base sm:text-lg font-bold text-primary leading-snug">
                                             {inspectedFood.name}
                                         </h4>
+                                        <span className="text-[11px] text-gray-500 font-mono block mt-1">
+                                            Respon: <b className="text-gray-800">{inspectedFood.impactTag}</b>
+                                        </span>
                                     </div>
 
                                     {/* Nutrition Indicators */}
                                     <div className="grid grid-cols-2 gap-2 text-center font-mono">
-                                        <div className="p-2 rounded-lg bg-gray-50 border border-gray-100">
+                                        <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col justify-center">
                                             <span className="text-[10px] text-gray-500 block">Kadar Gula</span>
                                             <span
-                                                className={`font-bold text-sm ${
+                                                className={`font-bold text-base ${
                                                     inspectedFood.sugar > 25
                                                         ? 'text-rose-600'
                                                         : inspectedFood.sugar > 10
@@ -2627,10 +2632,10 @@ export default function MetabolicStoryGame() {
                                             </span>
                                         </div>
 
-                                        <div className="p-2 rounded-lg bg-gray-50 border border-gray-100">
+                                        <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col justify-center">
                                             <span className="text-[10px] text-gray-500 block">Natrium (Garam)</span>
                                             <span
-                                                className={`font-bold text-sm ${
+                                                className={`font-bold text-base ${
                                                     inspectedFood.sodium > 800 ? 'text-rose-600' : 'text-emerald-700'
                                                 }`}
                                             >
@@ -2638,14 +2643,14 @@ export default function MetabolicStoryGame() {
                                             </span>
                                         </div>
 
-                                        <div className="p-2 rounded-lg bg-gray-50 border border-gray-100">
+                                        <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col justify-center">
                                             <span className="text-[10px] text-gray-500 block">Serat Larut</span>
-                                            <span className="font-bold text-sm text-emerald-700">
+                                            <span className="font-bold text-base text-emerald-700">
                                                 {inspectedFood.fiber} Gram
                                             </span>
                                         </div>
 
-                                        <div className="p-2 rounded-lg bg-gray-50 border border-gray-100">
+                                        <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex flex-col justify-center">
                                             <span className="text-[10px] text-gray-500 block">Indeks Glikemik</span>
                                             <span className="font-bold text-sm text-gray-800">
                                                 {inspectedFood.gi}
@@ -2654,33 +2659,37 @@ export default function MetabolicStoryGame() {
                                     </div>
 
                                     {/* Clinical Impacts */}
-                                    <div className="space-y-1.5 text-[11px]">
-                                        <div className="p-2 rounded-lg bg-emerald-50/70 border border-emerald-200/60">
-                                            <strong className="text-emerald-950 font-bold block">
-                                                Dampak Hormon &amp; Menstruasi (Wanita):
-                                            </strong>
-                                            <p className="text-gray-700">{inspectedFood.hormoneImpact}</p>
+                                    <div className="space-y-2 text-[11px]">
+                                        <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200/60 space-y-0.5">
+                                            <div className="flex items-center gap-1.5 text-emerald-950 font-bold">
+                                                <span className="material-symbols-outlined text-[15px] text-emerald-700">female</span>
+                                                <span>Dampak Hormon &amp; Menstruasi (Wanita):</span>
+                                            </div>
+                                            <p className="text-gray-700 pl-5 leading-relaxed">{inspectedFood.hormoneImpact}</p>
                                         </div>
 
-                                        <div className="p-2 rounded-lg bg-cyan-50/70 border border-cyan-200/60">
-                                            <strong className="text-cyan-950 font-bold block">
-                                                Dampak Jantung &amp; Kardiovaskular:
-                                            </strong>
-                                            <p className="text-gray-700">{inspectedFood.cardioRisk}</p>
+                                        <div className="p-2.5 rounded-xl bg-cyan-50/70 border border-cyan-200/60 space-y-0.5">
+                                            <div className="flex items-center gap-1.5 text-cyan-950 font-bold">
+                                                <span className="material-symbols-outlined text-[15px] text-cyan-700">favorite</span>
+                                                <span>Dampak Jantung &amp; Kardiovaskular:</span>
+                                            </div>
+                                            <p className="text-gray-700 pl-5 leading-relaxed">{inspectedFood.cardioRisk}</p>
                                         </div>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-gray-50 text-[11px] text-gray-600 italic">
-                                        "{inspectedFood.verdict}"
+                                    <div className="p-3 rounded-xl bg-gray-50 border border-gray-200/70 text-[11px] text-gray-600 italic flex items-start gap-2">
+                                        <span className="material-symbols-outlined text-[16px] text-amber-600 shrink-0 mt-0.5">format_quote</span>
+                                        <span className="leading-relaxed">"{inspectedFood.verdict}"</span>
                                     </div>
                                 </div>
 
                                 <button
                                     type="button"
                                     onClick={() => setIsNutritionModalOpen(false)}
-                                    className="w-full py-2 rounded-xl bg-primary text-white font-bold text-xs hover:bg-primary-container cursor-pointer transition-colors text-center"
+                                    className="w-full py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white font-bold text-xs cursor-pointer transition-all shadow-xs flex items-center justify-center gap-1.5"
                                 >
-                                    Kembali ke Simulasi Cerita
+                                    <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                                    <span>Kembali ke Simulasi Cerita</span>
                                 </button>
                             </div>
                         </div>

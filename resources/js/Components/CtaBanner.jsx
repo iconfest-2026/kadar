@@ -65,15 +65,6 @@ export default function CtaBanner() {
                             <span>Tanya Tim Dokter</span>
                         </a>
                     </div>
-
-                    {/* Factual Trust Footnote */}
-                    <div className="pt-4 sm:pt-5 text-[10px] sm:text-[11px] text-[#b3dac8] border-t border-white/10 flex flex-wrap items-center justify-center gap-2 sm:gap-5">
-                        <span>Pedoman Klinis PERKENI</span>
-                        <span>•</span>
-                        <span>Verifikasi Mandiri Label BPOM</span>
-                        <span>•</span>
-                        <span>Akses Skrining Dasar 100% Gratis</span>
-                    </div>
                 </div>
             </div>
         </section>

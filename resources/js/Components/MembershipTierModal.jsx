@@ -577,7 +577,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                                 <div
                                                     key={idx}
                                                     className={`flex items-start gap-2 ${
-                                                        feat.active ? 'text-on-surface' : 'text-on-surface-variant/40 line-through'
+                                                        feat.active ? 'text-on-surface' : 'text-on-surface-variant/40'
                                                     }`}
                                                 >
                                                     <span className={`material-symbols-outlined text-[16px] shrink-0 ${
@@ -585,7 +585,9 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                                     }`}>
                                                         {feat.active ? 'check_circle' : 'close'}
                                                     </span>
-                                                    <span className="text-[11px] leading-tight">{feat.text}</span>
+                                                    <span className={`text-[11px] leading-tight ${!feat.active ? 'line-through' : ''}`}>
+                                                        {feat.text}
+                                                    </span>
                                                 </div>
                                             ))}
                                         </div>
@@ -604,7 +606,7 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
                                         ) : Number(membership?.current_tier_price || 0) > 0 && t.basePrice < Number(membership?.current_tier_price || 0) ? (
                                             <a
                                                 href="/paket"
-                                                className="w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs border border-[#b2cfc1] bg-white text-[#1f3731] hover:bg-[#f1f7f4] flex items-center justify-center gap-1.5 cursor-pointer block"
+                                                className="w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-2xs border border-[#b2cfc1] bg-white text-[#1f3731] hover:bg-[#f1f7f4] flex items-center justify-center gap-1.5 cursor-pointer"
                                             >
                                                 <span className="material-symbols-outlined text-[15px] text-emerald-700">schedule_send</span>
                                                 <span>Turunkan ke {t.name}</span>
