@@ -148,6 +148,10 @@ Route::get('/demo/emergency', function () {
     return Inertia::render('Demo/EmergencyDemo');
 })->name('demo.emergency');
 
+// Real Geolocation Emergency Public API
+Route::get('/emergency/nearby-hospitals', [EmergencyController::class, 'nearbyHospitals'])->name('emergency.nearby-hospitals');
+Route::post('/emergency/trigger', [EmergencyController::class, 'trigger'])->name('emergency.public-trigger');
+
 // Public FAQ Page (20 Comprehensive Medical & Platform Questions)
 Route::get('/faq', function () {
     return Inertia::render('Faq');
@@ -354,7 +358,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/insights/{insight}/dismiss', [InsightController::class, 'dismiss'])->name('insights.dismiss');
         Route::post('/recommendations/{recommendation}/accept', [InsightController::class, 'acceptRecommendation'])->name('recommendations.accept');
 
-        // Emergency 119/112 (Instant, AI-Independent)
+        // Emergency 119/112 & Real Geolocation (Instant, AI-Independent)
+        Route::get('/emergency', [EmergencyController::class, 'index'])->name('emergency.index');
+        Route::get('/emergency/nearby-hospitals', [EmergencyController::class, 'nearbyHospitals'])->name('emergency.nearby');
         Route::post('/emergency/trigger', [EmergencyController::class, 'trigger'])->name('emergency.trigger');
         Route::get('/emergency/hotlines', [EmergencyController::class, 'getHotlines'])->name('emergency.hotlines');
 

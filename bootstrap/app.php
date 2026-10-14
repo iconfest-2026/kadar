@@ -23,6 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'member/scanner/analyze',
             'member/scanner/save',
             'member/ai-chat/send',
+            'emergency/trigger',
+            'member/emergency/trigger',
         ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
