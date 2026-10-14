@@ -248,6 +248,34 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         }
     };
 
+    // Compress image client-side to ensure lightning-fast upload & AI processing
+    const compressImage = (dataUrl, maxDim = 720, quality = 0.76) => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                let w = img.width;
+                let h = img.height;
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
+                const c = document.createElement('canvas');
+                c.width = w;
+                c.height = h;
+                const ctx = c.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(c.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = () => resolve(dataUrl);
+            img.src = dataUrl;
+        });
+    };
+
     // Unified Multi-Modal Pipeline: Camera Snapshot / File -> YOLO + OCR -> Backend
     const processImageAnalysis = async ({ dataUrl = null, presetKey = null }) => {
         setAnalyzing(true);
@@ -260,21 +288,17 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
             setAnalysisStep('Memuat basis data tervalidasi klinis & YOLO/BPOM...');
             setProgressPercent(60);
         } else if (dataUrl) {
-            if (scanMode === 'yolo') {
-                setAnalysisStep('Tahap 1/2: Menjalankan YOLO Food Object Vision pada frame makanan...');
-                setProgressPercent(45);
-            } else if (scanMode === 'ocr') {
-                setAnalysisStep('Tahap 1/2: Menjalankan Optical Character Recognition (OCR) pada kemasan...');
+            if (scanMode === 'ocr') {
+                setAnalysisStep('Membaca teks informasi nilai gizi pada kemasan...');
                 setProgressPercent(40);
                 extractedText = await runOnDeviceOcr(dataUrl);
             } else {
-                setAnalysisStep('Tahap 1/3: Menjalankan Deteksi Multi-Modal (YOLO Food Vision + OCR)...');
-                setProgressPercent(35);
-                extractedText = await runOnDeviceOcr(dataUrl);
+                setAnalysisStep('Menganalisis makanan dengan AI Vision super cepat...');
+                setProgressPercent(50);
             }
 
-            setAnalysisStep('Tahap 2/3: Menghitung estimasi kalori, makronutrisi & beban glikemik...');
-            setProgressPercent(80);
+            setAnalysisStep('Menghitung kalori & beban glikemik...');
+            setProgressPercent(85);
         }
 
         try {
@@ -324,18 +348,35 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         }
     };
 
-    // Capture from Camera Viewfinder (Respects isMirrored state so orientation is un-inverted)
+    // Capture from Camera Viewfinder (Ultra-Fast 720p Optimized)
     const captureSnapshot = () => {
         if (!videoRef.current || !canvasRef.current) return;
         const video = videoRef.current;
         const canvas = canvasRef.current;
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
+
+        const origW = video.videoWidth || 1280;
+        const origH = video.videoHeight || 720;
+        const maxDim = 720;
+        let targetW = origW;
+        let targetH = origH;
+
+        if (origW > maxDim || origH > maxDim) {
+            if (origW > origH) {
+                targetW = maxDim;
+                targetH = Math.round((origH * maxDim) / origW);
+            } else {
+                targetH = maxDim;
+                targetW = Math.round((origW * maxDim) / origH);
+            }
+        }
+
+        canvas.width = targetW;
+        canvas.height = targetH;
         const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
         ctx.save();
         // If user actively enabled mirror mode, flip canvas horizontally to match their view
-        // If isMirrored is false (default), draw normally without inversion!
         if (isMirrored) {
             ctx.translate(canvas.width, 0);
             ctx.scale(-1, 1);
@@ -343,7 +384,7 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.76);
         processImageAnalysis({ dataUrl });
     };
 
@@ -352,14 +393,16 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         processImageAnalysis({ presetKey: presetId });
     };
 
-    // File Upload Handler
+    // File Upload Handler with instant client-side compression
     const handleFileUpload = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onloadend = () => {
-            processImageAnalysis({ dataUrl: reader.result });
+        reader.onloadend = async () => {
+            const rawDataUrl = reader.result;
+            const compressed = await compressImage(rawDataUrl, 720, 0.76);
+            processImageAnalysis({ dataUrl: compressed });
         };
         reader.readAsDataURL(file);
     };

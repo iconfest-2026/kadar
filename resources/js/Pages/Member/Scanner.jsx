@@ -285,14 +285,61 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         }
     };
 
-    // Capture Snapshot from Live Camera Viewfinder
+    // Compress image client-side to ensure lightning-fast upload & AI processing
+    const compressImage = (dataUrl, maxDim = 720, quality = 0.76) => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                let w = img.width;
+                let h = img.height;
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
+                const c = document.createElement('canvas');
+                c.width = w;
+                c.height = h;
+                const ctx = c.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(c.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = () => resolve(dataUrl);
+            img.src = dataUrl;
+        });
+    };
+
+    // Capture Snapshot from Live Camera Viewfinder (Ultra-Fast 720p Optimized)
     const handleCapture = () => {
         if (!videoRef.current || !canvasRef.current) return;
         const video = videoRef.current;
         const canvas = canvasRef.current;
 
-        canvas.width = video.videoWidth || 1280;
-        canvas.height = video.videoHeight || 720;
+        const origW = video.videoWidth || 1280;
+        const origH = video.videoHeight || 720;
+        const maxDim = 720;
+        let targetW = origW;
+        let targetH = origH;
+
+        if (origW > maxDim || origH > maxDim) {
+            if (origW > origH) {
+                targetW = maxDim;
+                targetH = Math.round((origH * maxDim) / origW);
+            } else {
+                targetH = maxDim;
+                targetW = Math.round((origW * maxDim) / origH);
+            }
+        }
+
+        canvas.width = targetW;
+        canvas.height = targetH;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
         // Draw snapshot respecting mirror state
         ctx.save();
         if (isMirrored) {
@@ -302,19 +349,20 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.76);
         processImageAnalysis({ dataUrl });
     };
 
-    // Upload from Gallery / Disk File
+    // Upload from Gallery / Disk File with instant client-side compression
     const handleFileUpload = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = () => {
-            const dataUrl = reader.result;
-            processImageAnalysis({ dataUrl });
+        reader.onload = async () => {
+            const rawUrl = reader.result;
+            const optimizedUrl = await compressImage(rawUrl, 720, 0.76);
+            processImageAnalysis({ dataUrl: optimizedUrl });
         };
         reader.readAsDataURL(file);
     };
