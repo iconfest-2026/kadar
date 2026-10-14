@@ -1,5 +1,5 @@
 {
-    "name": "AEVYRA — Preventive Health Platform",
+    "name": "AEVYRA — Preventive Health",
     "short_name": "AEVYRA",
     "start_url": "/",
     "background_color": "#f7faf8",
@@ -9,64 +9,52 @@
     "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "/icon-72x72.png",
+            "src": "/icon-72x72.png?v=3",
             "sizes": "72x72",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-96x96.png",
+            "src": "/icon-96x96.png?v=3",
             "sizes": "96x96",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-128x128.png",
+            "src": "/icon-128x128.png?v=3",
             "sizes": "128x128",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-144x144.png",
+            "src": "/icon-144x144.png?v=3",
             "sizes": "144x144",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-152x152.png",
+            "src": "/icon-152x152.png?v=3",
             "sizes": "152x152",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-192x192.png",
+            "src": "/icon-192x192.png?v=3",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-384x384.png",
+            "src": "/icon-384x384.png?v=3",
             "sizes": "384x384",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/icon-512x512.png",
+            "src": "/icon-512x512.png?v=3",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/icon-maskable-light-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "/icon-maskable-light-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ],
     "shortcuts": [
@@ -75,21 +63,21 @@
             "short_name": "Dashboard",
             "description": "Buka Dashboard Utama AEVYRA",
             "url": "/member/dashboard",
-            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+            "icons": [{ "src": "/icon-96x96.png?v=3", "sizes": "96x96" }]
         },
         {
             "name": "AI Health Scanner",
             "short_name": "Scanner",
             "description": "Pindai nutrisi & label obat",
             "url": "/member/scanner",
-            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+            "icons": [{ "src": "/icon-96x96.png?v=3", "sizes": "96x96" }]
         },
         {
             "name": "Konsultasi Klinis",
             "short_name": "Konsultasi",
             "description": "Konsultasi dengan dokter dan instruktur",
             "url": "/member/consultations-hub",
-            "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+            "icons": [{ "src": "/icon-96x96.png?v=3", "sizes": "96x96" }]
         }
     ]
 }

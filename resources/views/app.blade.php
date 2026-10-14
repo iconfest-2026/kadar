@@ -14,7 +14,14 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
-    @pwaHead('image/Logo_AEVYRA_Icon.png', '#00433e')
+    <!-- PWA Primary Meta Tags & Manifest (Direct & Cache-Busted) -->
+    <meta name="theme-color" content="#00433e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AEVYRA" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png?v=3" />
+    <link rel="manifest" href="/manifest.json?v=3" />
 
     <!-- Midtrans Snap Telemetry Filter (Prevent Faro ERR_BLOCKED_BY_CLIENT & Telemetry Console Errors) -->
     <script>
