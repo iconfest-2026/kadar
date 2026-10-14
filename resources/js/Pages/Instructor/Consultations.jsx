@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Table } from '@/Components/UI';
+import axios from 'axios';
 
 export default function Consultations({
     consultations = { data: [], links: [] },
     assignedMembers = [],
 }) {
+    const { auth } = usePage().props;
+    const authUser = auth?.user || null;
+
     const [selectedConsultation, setSelectedConsultation] = useState(null);
     const [cancelConsultation, setCancelConsultation] = useState(null);
     const [showScheduleModal, setShowScheduleModal] = useState(false);
@@ -17,20 +21,67 @@ export default function Consultations({
     const [chatSubmitting, setChatSubmitting] = useState(false);
     const chatEndRef = useRef(null);
 
-    const openChatModal = async (cons) => {
-        setChatConsultation(cons);
-        setChatLoading(true);
-        try {
-            const res = await fetch(`/instructor/consultations/${cons.id}/messages`);
-            if (res.ok) {
-                const data = await res.json();
-                setChatMessages(data.messages || []);
-                if (data.consultation) {
+    // Live polling for chat modal when open: every 2.0s
+    useEffect(() => {
+        if (!chatConsultation?.id) return;
+        if (chatConsultation.status === 'CANCELLED') return;
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await axios.get(`/instructor/consultations/${chatConsultation.id}/messages`);
+                const data = res.data;
+                if (data?.messages) {
+                    setChatMessages((prev) => {
+                        const serverMsgs = data.messages || [];
+                        const pendingTemps = prev.filter((m) => {
+                            if (!String(m.id).startsWith('temp_')) return false;
+                            const alreadyPersisted = serverMsgs.some(
+                                (sm) => sm.sender_role === m.sender_role && sm.message === m.message
+                            );
+                            return !alreadyPersisted;
+                        });
+
+                        const prevServerMsgs = prev.filter((m) => !String(m.id).startsWith('temp_'));
+                        const prevLastServer = prevServerMsgs[prevServerMsgs.length - 1];
+                        const newLastServer = serverMsgs[serverMsgs.length - 1];
+
+                        const hasNewServerMessages =
+                            prevServerMsgs.length !== serverMsgs.length ||
+                            prevLastServer?.id !== newLastServer?.id;
+                        const pendingCountChanged =
+                            pendingTemps.length !== prev.filter((m) => String(m.id).startsWith('temp_')).length;
+
+                        if (hasNewServerMessages || pendingCountChanged) {
+                            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+                            return [...serverMsgs, ...pendingTemps];
+                        }
+                        return prev;
+                    });
+                }
+                if (data?.consultation && data.consultation.status !== chatConsultation.status) {
                     setChatConsultation((prev) => ({
                         ...prev,
                         ...data.consultation,
                     }));
                 }
+            } catch (err) {}
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [chatConsultation?.id, chatConsultation?.status]);
+
+    const openChatModal = async (cons) => {
+        setChatConsultation(cons);
+        setChatLoading(true);
+        try {
+            const res = await axios.get(`/instructor/consultations/${cons.id}/messages`);
+            const data = res.data;
+            setChatMessages(data.messages || []);
+            if (data.consultation) {
+                setChatConsultation((prev) => ({
+                    ...prev,
+                    ...data.consultation,
+                }));
             }
         } catch (err) {
             console.error('Failed to load chat:', err);
@@ -48,37 +99,48 @@ export default function Consultations({
         setChatInput('');
         setChatSubmitting(true);
 
+        const tempId = 'temp_' + Date.now();
         const tempMsg = {
-            id: 'temp_' + Date.now(),
-            sender_id: 0,
+            id: tempId,
+            sender_id: authUser?.id || 0,
             sender_role: 'INSTRUCTOR',
             message: text,
             created_at: new Date().toISOString(),
+            sender: { name: authUser?.name || 'Dokter/Instruktur' },
         };
         setChatMessages((prev) => [...prev, tempMsg]);
         setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
 
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const res = await fetch(`/instructor/consultations/${chatConsultation.id}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify({ message: text }),
+            const res = await axios.post(`/instructor/consultations/${chatConsultation.id}/messages`, {
+                message: text,
             });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.message) {
-                    setChatMessages((prev) =>
-                        prev.map((m) => (m.id === tempMsg.id ? data.message : m))
-                    );
-                }
+            if (res.data?.message) {
+                const confirmedMsg = res.data.message;
+                setChatMessages((prev) => {
+                    const hasTemp = prev.some((m) => m.id === tempId);
+                    if (hasTemp) {
+                        return prev.map((m) => (m.id === tempId ? confirmedMsg : m));
+                    }
+                    const alreadyHas = prev.some((m) => m.id === confirmedMsg.id);
+                    if (!alreadyHas) {
+                        return [...prev, confirmedMsg];
+                    }
+                    return prev;
+                });
             }
         } catch (err) {
             console.error('Send error:', err);
+            // Remove failed optimistic message
+            setChatMessages((prev) => prev.filter((m) => m.id !== tempId));
+            // Restore input text so instructor doesn't lose their message
+            setChatInput(text);
+            const errMsg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                err.message ||
+                'Gagal mengirim pesan. Silakan coba beberapa saat lagi.';
+            alert('Gagal mengirim pesan: ' + errMsg);
         } finally {
             setChatSubmitting(false);
             setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);

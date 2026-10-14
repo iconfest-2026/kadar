@@ -178,7 +178,7 @@ export default function MemberFeaturesSection() {
             num: '08',
             title: 'Siaga Ambulans 119 & IGD Faskes',
             summary: 'Hotline darurat nasional terintegrasi GPS SatuSehat untuk penanganan hipoglikemia, krisis kardiometabolik, dan rujukan cepat.',
-            href: authUser ? '/member/dashboard#ambulance' : '/demo/emergency',
+            href: authUser ? '/member/emergency' : '/demo/emergency',
             btnText: 'Siaga 119',
             visual: (
                 <div className="mt-2 sm:mt-3.5 h-20 sm:h-28 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-rose-950 border border-rose-800/40 text-white flex items-center justify-between">

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function TiersAndAmbulanceSection() {
-    const { membership } = usePage().props || {};
+    const { membership, auth } = usePage().props || {};
     const [ambulanceCalling, setAmbulanceCalling] = useState(false);
     const [coords, setCoords] = useState(null);
+    const isAuth = !!auth?.user;
 
     const rawTiers = membership?.active_tiers && membership.active_tiers.length > 0 ? membership.active_tiers : [];
 
@@ -391,11 +392,11 @@ export default function TiersAndAmbulanceSection() {
                                     <span>{ambulanceCalling ? 'Memverifikasi Koordinat...' : 'Hubungi Ambulan Siaga 119'}</span>
                                 </button>
                                 <Link
-                                    href="/demo/emergency"
+                                    href={isAuth ? '/member/emergency' : '/demo/emergency'}
                                     className="h-11 sm:h-12 px-5 sm:px-6 rounded-full bg-white border border-[#ebdcd6] text-[#4d3d39] hover:text-[#182926] text-xs sm:text-sm font-bold hover:bg-[#faf6f4] hover:border-[#dfceca] transition-all active:scale-95 text-center flex items-center justify-center gap-1.5 shadow-2xs"
                                 >
                                     <span className="material-symbols-outlined text-[17px] text-rose-600">emergency</span>
-                                    <span>Buka Demo 119</span>
+                                    <span>{isAuth ? 'Buka Radar 119' : 'Buka Demo 119'}</span>
                                 </Link>
                             </div>
                         </div>

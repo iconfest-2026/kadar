@@ -28,8 +28,9 @@ export function getMemberNavSections() {
             ],
         },
         {
-            title: 'Layanan & Akun',
+            title: 'Layanan & Darurat',
             items: [
+                { id: 'emergency', name: 'Tanggap Darurat 119', href: '/member/emergency', icon: 'emergency', badge: 'SOS', badgeColor: 'bg-rose-600 text-white', iconColor: 'text-rose-600' },
                 { id: 'menu', name: 'Menu & Akun', href: '/member/menu', icon: 'grid_view' },
                 { id: 'faq', name: 'Pusat Bantuan & FAQ', href: '/faq', icon: 'help_outline' },
             ],
@@ -55,9 +56,10 @@ export function getInstructorNavSections() {
             ],
         },
         {
-            title: 'Evaluasi & Laporan',
+            title: 'Evaluasi & Layanan',
             items: [
                 { id: 'reports', name: 'Laporan Klinis & Kohort', href: '/instructor/reports', icon: 'monitoring', badge: 'Fitur 9' },
+                { id: 'emergency', name: 'Tanggap Darurat 119', href: '/demo/emergency', icon: 'emergency', badge: 'SOS', badgeColor: 'bg-rose-600 text-white', iconColor: 'text-rose-600' },
             ],
         },
     ];

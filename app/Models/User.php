@@ -277,5 +277,108 @@ class User extends Authenticatable
     {
         return $this->hasOne(ArcadeScore::class)->ofMany('score', 'max');
     }
+
+    /**
+     * Active membership tier model for this user.
+     */
+    public function activeTier(): ?MembershipTier
+    {
+        return $this->activeMembership?->tier;
+    }
+
+    /**
+     * Active tier slug (e.g. 'free', 'gold', 'platinum').
+     */
+    public function getTierSlug(): string
+    {
+        return strtolower($this->activeTier()?->slug ?? 'free');
+    }
+
+    /**
+     * Active tier display name.
+     */
+    public function getTierName(): string
+    {
+        return $this->activeTier()?->name ?? 'Gratis (Basic)';
+    }
+
+    /**
+     * Check if user is on any paid active membership tier.
+     */
+    public function isPremium(): bool
+    {
+        $tier = $this->activeTier();
+        return $tier && (float) $tier->price > 0;
+    }
+
+    /**
+     * Check if user has Platinum VIP tier.
+     */
+    public function isPlatinum(): bool
+    {
+        $slug = $this->getTierSlug();
+        return $slug === 'platinum' || ($this->activeTier()?->price >= 140000);
+    }
+
+    /**
+     * Get maximum consultation quota per month (-1 for unlimited, 0 for none).
+     */
+    public function maxConsultations(): int
+    {
+        return (int) ($this->activeTier()?->max_consultations ?? 0);
+    }
+
+    /**
+     * Get maximum scanner quota per day (-1 for unlimited, default 10).
+     */
+    public function maxDailyScans(): int
+    {
+        return (int) ($this->activeTier()?->max_scanner ?? 10);
+    }
+
+    /**
+     * Check if user tier has a specific feature by keyword.
+     */
+    public function hasFeature(string $keyword): bool
+    {
+        $features = $this->activeTier()?->features ?? [];
+        if (!is_array($features) || empty($features)) {
+            return false;
+        }
+
+        $kw = strtolower($keyword);
+        foreach ($features as $feat) {
+            if (str_contains(strtolower((string) $feat), $kw)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if member is currently eligible to book a teleconsultation.
+     */
+    public function canBookConsultation(): bool
+    {
+        return app(\App\Services\Membership\ConsultationQuotaService::class)->canMemberBook($this);
+    }
+
+    /**
+     * Check if member has remaining scans available today.
+     */
+    public function canScanFoodToday(): bool
+    {
+        $limit = $this->maxDailyScans();
+        if ($limit === -1) {
+            return true;
+        }
+
+        $todayScans = HealthRecord::where('user_id', $this->id)
+            ->where('source', 'SCANNER')
+            ->whereDate('recorded_at', \Carbon\Carbon::today())
+            ->count();
+
+        return $todayScans < $limit;
+    }
 }
 

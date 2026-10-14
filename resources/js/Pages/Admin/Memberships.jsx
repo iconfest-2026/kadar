@@ -8,21 +8,32 @@ import AdminDeleteConfirmModal from '@/Components/Admin/AdminDeleteConfirmModal'
 import { Table, Modal, Button, Input, Textarea, Select, Switch, DropdownAction } from '@/Components/UI';
 
 const PRESET_FEATURES = [
-    'Pemindai Kamera Makanan & Obat BPOM Tanpa Batas',
+    'Pemindai Kamera Makanan & Obat BPOM (10x / hari)',
+    'Pemindai Kamera OCR & Obat BPOM Bebas Batas (Unlimited)',
     'Deteksi Beban Glikemik & Gramatur Gula Instan (<0.4s)',
     'Buku Harian Glukosa Darah & Log HBE Harian',
-    'Asisten AI Terverifikasi Medis 24/7',
+    'Asisten AI Terverifikasi Medis 24/7 (Edukasi Dasar)',
     'Akses Siaga Panggilan Darurat Ambulans 119',
-    'Akses Komunitas & Forum Pasien Sehat',
-    'Prediksi Lonjakan Glikemik Makanan (Kurva 2 Jam)',
-    'Rencana Intervensi Gizi Personalisasi Mingguan',
-    'Program Tantangan Remisi 14–90 Hari (Pedoman PERKENI)',
+    'Akses Komunitas & Forum Diskusi Pasien Publik',
+    'Semua kapabilitas dalam paket Gratis & Dasar',
+    'Prediksi Lonjakan Glikemik Makanan Spesifik (Kurva 2 Jam)',
+    'Rencana Intervensi Gizi Mingguan Dipersonalisasi',
+    'Program Tantangan Remisi 14-90 Hari (Pedoman PERKENI)',
     '2x Sesi Telekonsultasi Instruktur Gizi per Bulan',
+    '6x Sesi Telekonsultasi Dokter Spesialis per Bulan',
     'Laporan Evaluasi Progres Metabolik Bulanan (Format PDF)',
+    'Akses Penuh Seluruh Modul Gamifikasi & Resep Rendah Gula',
+    'Semua kapabilitas dalam paket Gold & Gratis',
     'Jalur Konsultasi Prioritas Dokter Spesialis Sp.PD (1-on-1)',
     'Analisis Mendalam Hasil Lab Darah (HbA1c & Profil Lipid)',
-    'Starter Kit Glukometer Mandiri Diantar ke Rumah',
+    'Ekspor Resume Medis PDF Terstandar Faskes & Rujukan',
+    'Dedicated Personal Health Coach & Review Mingguan',
     'Hotline Tim Medis Siaga Prioritas 24/7',
+    'Jalur Koordinasi Ambulans dengan Riwayat Klinis Instan',
+    'Rencana Intervensi Gizi & Menu Presisi Personal Khusus',
+    'Program Tantangan Remisi Intensif Klinis Terpandu',
+    'Akses Jalur Cepat Tindakan Klinis & Integrasi SatuSehat',
+    'Starter Kit Glukometer Mandiri Diantar ke Rumah',
 ];
 
 export default function Memberships({
@@ -881,13 +892,13 @@ export default function Memberships({
                                             <div>
                                                 <span className="text-[10px] text-on-surface-variant font-medium block">Konsultasi Dokter:</span>
                                                 <span className="font-label-mono font-bold text-primary">
-                                                    {tier.max_consultations === -1 ? 'Unlimited (Bebas)' : `${tier.max_consultations || 0}x / bulan`}
+                                                    {tier.max_consultations === -1 ? 'Unlimited (Bebas)' : (Number(tier.max_consultations) > 0 ? `${tier.max_consultations}x / bulan` : 'Tidak Ada (0x)')}
                                                 </span>
                                             </div>
                                             <div>
                                                 <span className="text-[10px] text-on-surface-variant font-medium block">Pemindai Scanner:</span>
                                                 <span className="font-label-mono font-bold text-primary">
-                                                    {tier.max_scanner === -1 ? 'Unlimited (Bebas)' : `${tier.max_scanner || 0}x / hari`}
+                                                    {tier.max_scanner === -1 ? 'Unlimited (Bebas)' : (Number(tier.max_scanner) > 0 ? `${tier.max_scanner}x / hari` : 'Nonaktif (0x)')}
                                                 </span>
                                             </div>
                                         </div>
@@ -1183,7 +1194,10 @@ export default function Memberships({
                                 type="number"
                                 min="-1"
                                 value={createTierForm.data.max_consultations}
-                                onChange={(e) => createTierForm.setData('max_consultations', parseInt(e.target.value) || 0)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    createTierForm.setData('max_consultations', val === '' ? 0 : parseInt(val, 10));
+                                }}
                                 error={createTierForm.errors.max_consultations}
                             />
                             <Input
@@ -1191,7 +1205,10 @@ export default function Memberships({
                                 type="number"
                                 min="-1"
                                 value={createTierForm.data.max_scanner}
-                                onChange={(e) => createTierForm.setData('max_scanner', parseInt(e.target.value) || -1)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    createTierForm.setData('max_scanner', val === '' ? -1 : parseInt(val, 10));
+                                }}
                                 error={createTierForm.errors.max_scanner}
                             />
                         </div>
@@ -1407,7 +1424,10 @@ export default function Memberships({
                                 type="number"
                                 min="-1"
                                 value={editTierForm.data.max_consultations}
-                                onChange={(e) => editTierForm.setData('max_consultations', parseInt(e.target.value) || 0)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    editTierForm.setData('max_consultations', val === '' ? 0 : parseInt(val, 10));
+                                }}
                                 error={editTierForm.errors.max_consultations}
                             />
                             <Input
@@ -1415,7 +1435,10 @@ export default function Memberships({
                                 type="number"
                                 min="-1"
                                 value={editTierForm.data.max_scanner}
-                                onChange={(e) => editTierForm.setData('max_scanner', parseInt(e.target.value) || -1)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    editTierForm.setData('max_scanner', val === '' ? -1 : parseInt(val, 10));
+                                }}
                                 error={editTierForm.errors.max_scanner}
                             />
                         </div>

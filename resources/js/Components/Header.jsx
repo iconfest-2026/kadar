@@ -83,7 +83,7 @@ export default function Header() {
         if (cleanCurrent === '/arcade' || cleanCurrent.includes('/arcade')) {
             return item.name === 'Story Game Metabolik';
         }
-        if (cleanCurrent === '/demo/emergency') {
+        if (cleanCurrent === '/demo/emergency' || cleanCurrent === '/member/emergency') {
             return item.name === 'Siaga Ambulan 119 Lokasi GPS';
         }
 
@@ -161,7 +161,7 @@ export default function Header() {
         {
             name: 'Siaga Ambulan 119 Lokasi GPS',
             desc: 'Hotline darurat nasional 1-klik dan IGD faskes terdekat',
-            href: user ? '/member/dashboard#ambulance' : '/demo/emergency',
+            href: user ? '/member/emergency' : '/demo/emergency',
             icon: 'emergency',
             badge: 'Triage Cepat',
             color: 'text-red-700 bg-red-100',
