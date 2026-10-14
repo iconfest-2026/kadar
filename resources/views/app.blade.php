@@ -118,6 +118,171 @@
     @inertiaHead
 </head>
 <body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
+    <!-- AEVYRA Premium In-App Preloader (Modern, Minimalist, Healthcare Elegance) -->
+    <div id="aevyra-app-preloader" aria-hidden="true" style="
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f7faf8;
+        background-image: radial-gradient(circle at 50% 45%, rgba(0, 67, 62, 0.04) 0%, rgba(247, 250, 248, 1) 75%);
+        padding: 56px 24px 36px;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    ">
+        <!-- Top Spacer for balanced vertical harmony -->
+        <div style="height: 24px;"></div>
+
+        <!-- Center Brand Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 340px;">
+            <!-- Logo Icon in Clean Elevated Rounded Card -->
+            <div style="
+                width: 82px;
+                height: 82px;
+                border-radius: 26px;
+                background: #ffffff;
+                border: 1px solid rgba(0, 67, 62, 0.08);
+                box-shadow: 0 14px 34px -8px rgba(0, 67, 62, 0.12), 0 2px 8px rgba(0, 67, 62, 0.04);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 15px;
+                margin-bottom: 22px;
+            ">
+                <img
+                    src="/image/Logo_AEVYRA_Icon.png"
+                    alt="AEVYRA"
+                    style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,67,62,0.08));"
+                />
+            </div>
+
+            <!-- Brand Name Typography -->
+            <h1 style="
+                margin: 0;
+                font-family: 'Newsreader', Georgia, serif;
+                font-size: 28px;
+                font-weight: 700;
+                color: #00433e;
+                letter-spacing: 0.14em;
+                line-height: 1.2;
+            ">
+                AEVYRA
+            </h1>
+
+            <!-- Subtitle Badge -->
+            <div style="
+                margin-top: 10px;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 14px;
+                border-radius: 9999px;
+                background: rgba(0, 67, 62, 0.05);
+                border: 1px solid rgba(0, 67, 62, 0.09);
+            ">
+                <span style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 9999px;
+                    background: #10b981;
+                "></span>
+                <span style="
+                    font-family: 'IBM Plex Mono', monospace;
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: #005a53;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                ">
+                    Preventive Health Platform
+                </span>
+            </div>
+
+            <!-- Ultra-Thin Minimalist Progress Line (Non-AI, Refined & Calm) -->
+            <div style="
+                margin-top: 36px;
+                width: 130px;
+                height: 2.5px;
+                border-radius: 9999px;
+                background: rgba(0, 67, 62, 0.08);
+                overflow: hidden;
+                position: relative;
+            ">
+                <div style="
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    width: 45%;
+                    border-radius: 9999px;
+                    background: linear-gradient(90deg, #00433e 0%, #008069 60%, #10b981 100%);
+                    animation: aevyra-preloader-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                "></div>
+            </div>
+        </div>
+
+        <!-- Bottom Clinical Credentials Footer -->
+        <div style="
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-size: 11.5px;
+            color: #71837e;
+        ">
+            <span>Standar Layanan Preventif Terintegrasi</span>
+        </div>
+    </div>
+
+    <!-- Inline Animation & Dismissal Style -->
+    <style>
+        @keyframes aevyra-preloader-slide {
+            0% {
+                left: -45%;
+                width: 30%;
+            }
+            50% {
+                left: 30%;
+                width: 55%;
+            }
+            100% {
+                left: 100%;
+                width: 30%;
+            }
+        }
+        #aevyra-app-preloader.preloader-fade-out {
+            opacity: 0 !important;
+            transform: scale(1.015) !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+
+    <script>
+        (function() {
+            function dismissPreloader() {
+                var el = document.getElementById('aevyra-app-preloader');
+                if (!el) return;
+                el.classList.add('preloader-fade-out');
+                setTimeout(function() {
+                    if (el && el.parentNode) {
+                        el.parentNode.removeChild(el);
+                    }
+                }, 450);
+            }
+
+            document.addEventListener('inertia:finish', dismissPreloader, { once: true });
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(dismissPreloader, 1000);
+            });
+            setTimeout(dismissPreloader, 3200);
+        })();
+    </script>
+
     @inertia
 
     @laravelPwa
