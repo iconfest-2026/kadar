@@ -160,7 +160,22 @@ export default function Paket(props) {
             }
 
             const rawFeatures = Array.isArray(t.features) && t.features.length > 0
-                ? t.features.map((feat) => ({ text: feat, included: true }))
+                ? t.features.map((feat) => {
+                    if (typeof feat === 'object' && feat !== null) {
+                        return feat;
+                    }
+                    const text = String(feat);
+                    const isNegative = text.startsWith('!') || text.startsWith('[-]');
+                    const cleanText = isNegative ? text.replace(/^(!|\[-\])\s*/, '') : text;
+                    const isHighlight = cleanText.startsWith('Semua ') || 
+                        cleanText.toLowerCase().includes('gold & gratis') || 
+                        cleanText.toLowerCase().includes('gratis & dasar');
+                    return {
+                        text: cleanText,
+                        included: !isNegative,
+                        highlight: isHighlight,
+                    };
+                })
                 : getDefaultFeaturesForSlug(t.slug || t.name);
 
             return {
@@ -450,7 +465,7 @@ export default function Paket(props) {
                 },
                 {
                     name: 'Prediksi Kurva Glukosa Darah Postprandial 2 Jam',
-                    checker: (t) => t.basePrice >= 200000 ? 'Prioritas Presisi' : (t.basePrice > 0 ? 'Tersedia' : 'Tidak Termasuk'),
+                    checker: (t) => t.isPlatinum ? 'Prioritas Presisi' : (t.basePrice > 0 ? 'Tersedia' : 'Tidak Termasuk'),
                 },
             ],
         },
@@ -463,15 +478,15 @@ export default function Paket(props) {
                 },
                 {
                     name: 'Grafik Tren Glikemik & Rata-rata Mingguan',
-                    checker: (t) => t.basePrice >= 200000 ? 'Klinis Multivariabel' : (t.basePrice > 0 ? 'Lanjutan' : 'Dasar'),
+                    checker: (t) => t.isPlatinum ? 'Klinis Multivariabel' : (t.basePrice > 0 ? 'Lanjutan' : 'Dasar'),
                 },
                 {
                     name: 'Laporan Evaluasi Progres Bulanan (PDF)',
-                    checker: (t) => t.basePrice >= 200000 ? 'Format Resume Faskes' : (t.basePrice > 0 ? 'Tersedia' : 'Tidak Termasuk'),
+                    checker: (t) => t.isPlatinum ? 'Format Resume Faskes' : (t.basePrice > 0 ? 'Tersedia' : 'Tidak Termasuk'),
                 },
                 {
                     name: 'Analisis Hasil Uji Laboratorium (HbA1c & Kolesterol)',
-                    checker: (t) => t.basePrice >= 200000 ? 'Review Dokter Spesialis' : 'Tidak Termasuk',
+                    checker: (t) => t.isPlatinum ? 'Review Dokter Spesialis' : 'Tidak Termasuk',
                 },
             ],
         },
@@ -488,7 +503,7 @@ export default function Paket(props) {
                 },
                 {
                     name: 'Dedicated Personal Health Coach',
-                    checker: (t) => t.basePrice >= 200000 ? 'Tersedia' : 'Tidak Termasuk',
+                    checker: (t) => t.isPlatinum ? 'Tersedia (Review Mingguan)' : 'Tidak Termasuk',
                 },
             ],
         },
@@ -501,7 +516,7 @@ export default function Paket(props) {
                 },
                 {
                     name: 'Akses Panggilan Siaga Darurat Ambulans 119',
-                    checker: (t) => t.basePrice >= 200000 ? 'Jalur Cepat + Riwayat' : 'Tersedia',
+                    checker: (t) => t.isPlatinum ? 'Jalur Cepat + Riwayat' : 'Tersedia',
                 },
                 {
                     name: 'Enkripsi Data Medis Standar AES-256',

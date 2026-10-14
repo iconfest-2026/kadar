@@ -64,6 +64,17 @@ class ScannerController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+
+        // Enforce dynamic scan quota based on active membership tier
+        if (!$user->canScanFoodToday()) {
+            return response()->json([
+                'status' => 'quota_exhausted',
+                'success' => false,
+                'is_food' => false,
+                'message' => 'Batas kuota pemindaian kamera harian Anda telah tercapai (' . $user->maxDailyScans() . 'x / hari). Silakan upgrade ke paket Gold atau Platinum untuk pemindaian bebas batas.',
+            ], 429);
+        }
+
         $input = $request->all();
 
         // 1. Process Vision & Nutritional AI

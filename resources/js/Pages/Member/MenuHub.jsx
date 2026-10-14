@@ -129,8 +129,8 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                 },
                 {
                     name: 'Ambulans Darurat GPS 119',
-                    desc: 'Panggilan tanggap darurat ambulans medis',
-                    href: '/demo/emergency',
+                    desc: 'Radar peta GPS & panggil tanggap darurat faskes terdekat',
+                    href: '/member/emergency',
                     icon: 'emergency',
                     color: 'bg-rose-500/10 text-rose-600',
                 },

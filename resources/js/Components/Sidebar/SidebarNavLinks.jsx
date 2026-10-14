@@ -85,7 +85,7 @@ export default function SidebarNavLinks({
                                     <div className="flex items-center gap-2 min-w-0 flex-1">
                                         <span
                                             className={`material-symbols-outlined text-[17px] shrink-0 ${
-                                                isActive ? 'text-white' : 'text-primary'
+                                                isActive ? 'text-white' : (item.iconColor || 'text-primary')
                                             }`}
                                         >
                                             {item.icon}
@@ -98,7 +98,7 @@ export default function SidebarNavLinks({
                                             className={`px-1.5 py-0.2 rounded text-[8.5px] font-bold font-mono shrink-0 ${
                                                 isActive
                                                     ? 'bg-white/20 text-white'
-                                                    : 'bg-surface-container text-on-surface-variant'
+                                                    : (item.badgeColor || 'bg-surface-container text-on-surface-variant')
                                             }`}
                                         >
                                             {item.badge}

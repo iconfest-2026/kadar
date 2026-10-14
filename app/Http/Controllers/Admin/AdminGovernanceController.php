@@ -1007,9 +1007,9 @@ class AdminGovernanceController extends Controller
             'admin_fee_type' => $validated['admin_fee_type'],
             'badge_text' => $validated['badge_text'] ?? $tier->badge_text,
             'is_popular' => $validated['is_popular'] ?? false,
-            'max_consultations' => $validated['max_consultations'] ?? $tier->max_consultations,
-            'max_scanner' => $validated['max_scanner'] ?? $tier->max_scanner,
-            'features' => $validated['features'] ?? $tier->features,
+            'max_consultations' => array_key_exists('max_consultations', $validated) ? (int) $validated['max_consultations'] : $tier->max_consultations,
+            'max_scanner' => array_key_exists('max_scanner', $validated) ? (int) $validated['max_scanner'] : $tier->max_scanner,
+            'features' => array_key_exists('features', $validated) ? ($validated['features'] ?? []) : $tier->features,
         ]);
 
         AuditLog::log(

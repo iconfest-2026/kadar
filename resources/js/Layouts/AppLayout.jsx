@@ -63,6 +63,9 @@ export default function AppLayout({ children, title, activeTab }) {
         if (pageUrl.includes('chat=ai') || pageUrl.includes('open_ai_chat=1')) {
             setIsAiChatOpen(true);
         }
+        if (typeof window !== 'undefined' && (window.location.hash === '#ambulance' || pageUrl.includes('#ambulance'))) {
+            setIsEmergencyOpen(true);
+        }
     }, [pageUrl]);
 
     const handleLogout = () => {

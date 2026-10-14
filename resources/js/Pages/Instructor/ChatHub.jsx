@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import Alert from '@/Components/UI/Alert';
+import axios from 'axios';
 
 const PRESET_MESSAGES = [
     'Pola glukosa Anda menunjukkan tren membaik. Pertahankan porsi karbohidrat kompleks dan perbanyak serat saat santap siang.',
@@ -51,6 +52,16 @@ export default function ChatHub({
     const [chatSubmitting, setChatSubmitting] = useState(false);
     const [showTelemetryDrawer, setShowTelemetryDrawer] = useState(false);
     const chatEndRef = useRef(null);
+    const messagesFeedRef = useRef(null);
+
+    const scrollToBottom = (smooth = true) => {
+        if (messagesFeedRef.current) {
+            messagesFeedRef.current.scrollTo({
+                top: messagesFeedRef.current.scrollHeight,
+                behavior: smooth ? 'smooth' : 'auto',
+            });
+        }
+    };
 
     // Modals
     const [showStartChatModal, setShowStartChatModal] = useState(false);
@@ -97,27 +108,42 @@ export default function ChatHub({
 
         const interval = setInterval(async () => {
             try {
-                const res = await fetch(`/instructor/consultations/${selectedConsultation.id}/messages`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data?.messages) {
-                        setChatMessages((prev) => {
-                            const prevLast = prev[prev.length - 1];
-                            const newLast = data.messages[data.messages.length - 1];
-                            const hasNew = prev.length !== data.messages.length || (prevLast?.id !== newLast?.id);
-                            if (hasNew) {
-                                setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-                                return data.messages;
-                            }
-                            return prev;
+                const res = await axios.get(`/instructor/consultations/${selectedConsultation.id}/messages`);
+                const data = res.data;
+                if (data?.messages) {
+                    setChatMessages((prev) => {
+                        const serverMsgs = data.messages || [];
+                        // Keep any optimistic temporary messages that are still pending
+                        const pendingTemps = prev.filter((m) => {
+                            if (!String(m.id).startsWith('temp_')) return false;
+                            const alreadyPersisted = serverMsgs.some(
+                                (sm) => sm.sender_role === m.sender_role && sm.message === m.message
+                            );
+                            return !alreadyPersisted;
                         });
-                    }
-                    if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
-                        setSelectedConsultation((prev) => ({
-                            ...prev,
-                            ...data.consultation,
-                        }));
-                    }
+
+                        const prevServerMsgs = prev.filter((m) => !String(m.id).startsWith('temp_'));
+                        const prevLastServer = prevServerMsgs[prevServerMsgs.length - 1];
+                        const newLastServer = serverMsgs[serverMsgs.length - 1];
+
+                        const hasNewServerMessages =
+                            prevServerMsgs.length !== serverMsgs.length ||
+                            prevLastServer?.id !== newLastServer?.id;
+                        const pendingCountChanged =
+                            pendingTemps.length !== prev.filter((m) => String(m.id).startsWith('temp_')).length;
+
+                        if (hasNewServerMessages || pendingCountChanged) {
+                            setTimeout(() => scrollToBottom(true), 50);
+                            return [...serverMsgs, ...pendingTemps];
+                        }
+                        return prev;
+                    });
+                }
+                if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
+                    setSelectedConsultation((prev) => ({
+                        ...prev,
+                        ...data.consultation,
+                    }));
                 }
             } catch (err) {}
         }, 2000);
@@ -129,12 +155,10 @@ export default function ChatHub({
     useEffect(() => {
         const convInterval = setInterval(async () => {
             try {
-                const res = await fetch('/instructor/chat/conversations');
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data?.consultations) {
-                        setConsultationsList(data.consultations);
-                    }
+                const res = await axios.get('/instructor/chat/conversations');
+                const data = res.data;
+                if (data?.consultations) {
+                    setConsultationsList(data.consultations);
                 }
             } catch (err) {}
         }, 4000);
@@ -145,23 +169,21 @@ export default function ChatHub({
     const loadMessages = async (consultationId) => {
         setChatLoading(true);
         try {
-            const res = await fetch(`/instructor/consultations/${consultationId}/messages`);
-            if (res.ok) {
-                const data = await res.json();
-                setChatMessages(data.messages || []);
-                if (data.consultation) {
-                    setSelectedConsultation((prev) => ({
-                        ...prev,
-                        ...data.consultation,
-                    }));
-                }
+            const res = await axios.get(`/instructor/consultations/${consultationId}/messages`);
+            const data = res.data;
+            setChatMessages(data.messages || []);
+            if (data.consultation) {
+                setSelectedConsultation((prev) => ({
+                    ...prev,
+                    ...data.consultation,
+                }));
             }
         } catch (err) {
             console.error('Failed to load consultation messages:', err);
         } finally {
             setChatLoading(false);
             setTimeout(() => {
-                chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                scrollToBottom(false);
             }, 80);
         }
     };
@@ -173,8 +195,9 @@ export default function ChatHub({
         if (!customText) setChatInput('');
         setChatSubmitting(true);
 
+        const tempId = 'temp_' + Date.now();
         const tempMsg = {
-            id: 'temp_' + Date.now(),
+            id: tempId,
             sender_id: authUser?.id || 0,
             sender_role: 'INSTRUCTOR',
             message: text,
@@ -182,50 +205,62 @@ export default function ChatHub({
             sender: { name: authUser?.name || 'Dokter/Instruktur' },
         };
         setChatMessages((prev) => [...prev, tempMsg]);
-        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+        setTimeout(() => scrollToBottom(true), 50);
 
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const res = await fetch(`/instructor/consultations/${selectedConsultation.id}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify({ message: text }),
+            const res = await axios.post(`/instructor/consultations/${selectedConsultation.id}/messages`, {
+                message: text,
             });
 
-            if (res.ok) {
-                const data = await res.json();
-                if (data.message) {
-                    setChatMessages((prev) =>
-                        prev.map((m) => (m.id === tempMsg.id ? data.message : m))
-                    );
-                    setConsultationsList((prev) =>
-                        prev.map((c) =>
-                            c.id === selectedConsultation.id
-                                ? {
-                                      ...c,
-                                      last_message: {
-                                          text: data.message.message,
-                                          created_at: new Date(data.message.created_at).toLocaleTimeString('id-ID', {
-                                              hour: '2-digit',
-                                              minute: '2-digit',
-                                          }),
-                                          sender_role: 'INSTRUCTOR',
-                                      },
-                                  }
-                                : c
-                        )
-                    );
-                }
+            if (res.data?.message) {
+                const confirmedMsg = res.data.message;
+                setChatMessages((prev) => {
+                    const hasTemp = prev.some((m) => m.id === tempId);
+                    if (hasTemp) {
+                        return prev.map((m) => (m.id === tempId ? confirmedMsg : m));
+                    }
+                    const alreadyHas = prev.some((m) => m.id === confirmedMsg.id);
+                    if (!alreadyHas) {
+                        return [...prev, confirmedMsg];
+                    }
+                    return prev;
+                });
+
+                setConsultationsList((prev) =>
+                    prev.map((c) =>
+                        c.id === selectedConsultation.id
+                            ? {
+                                  ...c,
+                                  last_message: {
+                                      text: confirmedMsg.message,
+                                      created_at: new Date(confirmedMsg.created_at).toLocaleTimeString('id-ID', {
+                                          hour: '2-digit',
+                                          minute: '2-digit',
+                                      }),
+                                      sender_role: 'INSTRUCTOR',
+                                  },
+                              }
+                            : c
+                    )
+                );
             }
         } catch (err) {
             console.error('Failed to send message:', err);
+            // Remove the failed optimistic message
+            setChatMessages((prev) => prev.filter((m) => m.id !== tempId));
+            // Restore typed message in input field so instructor doesn't lose their input
+            if (!customText) {
+                setChatInput(text);
+            }
+            const errMsg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                err.message ||
+                'Gagal mengirim pesan. Silakan coba beberapa saat lagi.';
+            alert('Gagal mengirim pesan: ' + errMsg);
         } finally {
             setChatSubmitting(false);
-            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+            setTimeout(() => scrollToBottom(true), 50);
         }
     };
 
@@ -310,81 +345,79 @@ export default function ChatHub({
         <InstructorLayout activeNav="chat" title="Ruang Chat Pasien & Telemedisin">
             <Head title="Ruang Chat Pasien & Telemedisin - Instruktur AEVYRA" />
 
-            <div className="space-y-4 max-w-7xl mx-auto">
-                {/* 1. Header Overview Banner */}
-                <div className="rounded-3xl bg-linear-to-r from-[#003833] via-[#004e47] to-[#0a5c54] p-5 sm:p-6 text-white shadow-xs relative overflow-hidden">
-                    <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl"
-                    />
-                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="space-y-1.5 max-w-2xl">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
-                                <span className="material-symbols-outlined text-[15px]">support_agent</span>
-                                <span>Human-in-the-Loop Telemedicine Room</span>
-                            </div>
-                            <h1 className="text-xl sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
+            <div className="flex flex-col h-[calc(100vh-8.5rem)] min-h-[580px] max-h-[860px] max-w-7xl mx-auto space-y-2">
+                {/* 1. Sleek Compact Toolbar */}
+                <div className="flex items-center justify-between gap-3 px-1 shrink-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                            <span className="material-symbols-outlined text-[18px]">forum</span>
+                        </div>
+                        <div className="min-w-0">
+                            <h1 className="font-heading font-black text-sm sm:text-base text-on-surface leading-tight truncate">
                                 Ruang Chat Tele-Konsultasi Pasien
                             </h1>
-                            <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
-                                Jalin komunikasi langsung 1-on-1 dengan member binaan Anda, evaluasi data biomarker kuantitatif secara real-time, dan berikan arahan gaya hidup presisi.
+                            <p className="text-[11px] text-on-surface-variant hidden sm:block truncate">
+                                Komunikasi terarah 1-on-1 dengan member binaan &amp; evaluasi biomarker terukur
                             </p>
                         </div>
+                    </div>
 
-                        {/* Action buttons */}
-                        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-                            <button
-                                type="button"
-                                onClick={() => setShowStartChatModal(true)}
-                                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-400 hover:bg-emerald-300 text-emerald-950 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
-                            >
-                                <span className="material-symbols-outlined text-[18px]">add_comment</span>
-                                <span>Mulai Chat Pasien Baru</span>
-                            </button>
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-2 shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setShowStartChatModal(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold transition-all shadow-2xs cursor-pointer active:scale-95"
+                        >
+                            <span className="material-symbols-outlined text-[16px]">add_comment</span>
+                            <span className="hidden sm:inline">Mulai Chat Pasien Baru</span>
+                            <span className="sm:hidden">Baru</span>
+                        </button>
 
-                            <Link
-                                href="/instructor/consultations"
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white border border-white/20 text-xs font-semibold transition-all shadow-xs"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">calendar_month</span>
-                                <span>Lihat Tabel Jadwal</span>
-                            </Link>
-                        </div>
+                        <Link
+                            href="/instructor/consultations"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-semibold transition-all shadow-2xs"
+                        >
+                            <span className="material-symbols-outlined text-[16px] text-primary">calendar_month</span>
+                            <span className="hidden md:inline">Tabel Jadwal</span>
+                        </Link>
                     </div>
                 </div>
 
-                {/* 2. Main Two-Pane Chat Hub Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[750px] min-h-[600px] rounded-3xl overflow-hidden border border-surface-container bg-white dark:bg-surface shadow-xs">
+                {/* 2. Main Two-Pane Chat Container */}
+                <div className="flex-1 flex overflow-hidden rounded-2xl border border-surface-container bg-white dark:bg-surface shadow-xs min-h-0">
                     
-                    {/* LEFT PANEL: Daftar Pasien / Percakapan (Cols 1 to 4) */}
-                    <div className="lg:col-span-4 border-r border-surface-container flex flex-col h-full bg-[#fcfefd] dark:bg-surface">
+                    {/* LEFT PANEL: Daftar Pasien / Percakapan (w-72 sm:w-80 shrink-0) */}
+                    <div className={`w-full lg:w-80 lg:shrink-0 border-r border-surface-container flex flex-col h-full bg-[#fcfefd] dark:bg-surface ${
+                        selectedConsultation ? 'hidden lg:flex' : 'flex'
+                    }`}>
                         {/* Search & Filter Header */}
-                        <div className="p-3.5 border-b border-surface-container space-y-2.5 bg-surface-container-lowest">
+                        <div className="p-3 border-b border-surface-container space-y-2 bg-surface-container-lowest shrink-0">
                             <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[18px]">
+                                <span className="material-symbols-outlined absolute left-2.5 top-2 text-on-surface-variant text-[17px]">
                                     search
                                 </span>
                                 <input
                                     type="text"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="Cari pasien atau topik..."
-                                    className="w-full pl-9 pr-3 py-2 bg-surface-container-low rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary text-xs text-on-surface font-medium"
+                                    placeholder="Cari nama pasien atau agenda..."
+                                    className="w-full pl-8 pr-3 py-1.5 bg-surface-container-low rounded-xl border border-surface-container focus:outline-none focus:ring-1 focus:ring-primary text-xs text-on-surface font-medium"
                                 />
                             </div>
 
                             {/* Filter Chips */}
-                            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
                                 {[
                                     { key: 'ALL', label: 'Semua' },
-                                    { key: 'ACTIVE', label: 'Aktif / Terjadwal' },
+                                    { key: 'ACTIVE', label: 'Aktif' },
                                     { key: 'COMPLETED', label: 'Selesai' },
                                 ].map((tab) => (
                                     <button
                                         key={tab.key}
                                         type="button"
                                         onClick={() => setStatusFilter(tab.key)}
-                                        className={`px-3 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer ${
+                                        className={`px-2.5 py-0.5 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all cursor-pointer ${
                                             statusFilter === tab.key
                                                 ? 'bg-primary text-white shadow-2xs'
                                                 : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant'
@@ -399,11 +432,11 @@ export default function ChatHub({
                         {/* Conversations List */}
                         <div className="flex-1 overflow-y-auto divide-y divide-surface-container/60 p-1.5 space-y-1">
                             {filteredConsultations.length === 0 ? (
-                                <div className="py-16 text-center text-on-surface-variant px-4 space-y-2">
+                                <div className="py-12 text-center text-on-surface-variant px-4 space-y-2">
                                     <span className="material-symbols-outlined text-3xl text-primary/40">forum</span>
                                     <p className="text-xs font-semibold text-on-surface">Tidak ada percakapan ditemukan</p>
                                     <p className="text-[11px]">
-                                        {searchTerm ? 'Coba ubah kata kunci pencarian Anda.' : 'Gunakan tombol "Mulai Chat Pasien Baru" untuk membuka sesi bimbingan.'}
+                                        {searchTerm ? 'Coba ubah kata kunci pencarian Anda.' : 'Gunakan tombol "+ Chat Baru" untuk membuka sesi bimbingan.'}
                                     </p>
                                 </div>
                             ) : (
@@ -416,14 +449,14 @@ export default function ChatHub({
                                         <div
                                             key={cons.id}
                                             onClick={() => setSelectedConsultation(cons)}
-                                            className={`p-3 rounded-2xl cursor-pointer transition-all flex items-start gap-3 select-none ${
+                                            className={`p-2.5 rounded-xl cursor-pointer transition-all flex items-start gap-2.5 select-none ${
                                                 isSelected
                                                     ? 'bg-primary/10 border border-primary/30 shadow-2xs'
                                                     : 'hover:bg-surface-container-low border border-transparent'
                                             }`}
                                         >
                                             {/* Avatar */}
-                                            <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-primary/20 to-primary/10 border border-primary/20 text-primary font-bold flex items-center justify-center text-sm shrink-0 shadow-2xs">
+                                            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 border border-primary/20 text-primary font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
                                                 {cons.member_name?.charAt(0) || 'M'}
                                             </div>
 
@@ -438,12 +471,12 @@ export default function ChatHub({
                                                     </span>
                                                 </div>
 
-                                                <p className="text-[11px] text-primary font-medium truncate mb-1">
+                                                <p className="text-[11px] text-primary font-medium truncate mb-0.5">
                                                     {cons.purpose}
                                                 </p>
 
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <p className="text-[11px] text-on-surface-variant line-clamp-1 truncate">
+                                                <div className="flex items-center justify-between gap-1.5">
+                                                    <p className="text-[10.5px] text-on-surface-variant line-clamp-1 truncate">
                                                         {cons.last_message
                                                             ? `${cons.last_message.sender_role === 'INSTRUCTOR' ? 'Anda: ' : ''}${cons.last_message.text}`
                                                             : 'Ketuk untuk membuka ruang chat'}
@@ -451,7 +484,7 @@ export default function ChatHub({
 
                                                     {/* Status Badge */}
                                                     <span
-                                                        className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase shrink-0 border ${
+                                                        className={`text-[9px] font-mono px-1.5 py-0.2 rounded-md font-bold uppercase shrink-0 border ${
                                                             isCompleted
                                                                 ? 'bg-primary/10 text-primary border-primary/20'
                                                                 : isCancelled
@@ -470,29 +503,41 @@ export default function ChatHub({
                         </div>
 
                         {/* Bottom Summary Pill */}
-                        <div className="p-3 border-t border-surface-container bg-surface-container-lowest text-[11px] text-on-surface-variant flex items-center justify-between">
-                            <span>{consultations.length} total sesi terdata</span>
+                        <div className="p-2.5 px-3 border-t border-surface-container bg-surface-container-lowest text-[10.5px] text-on-surface-variant flex items-center justify-between shrink-0">
+                            <span>{consultations.length} total sesi</span>
                             <span className="font-bold text-primary">{assignedMembers.length} member binaan</span>
                         </div>
                     </div>
 
-                    {/* RIGHT PANEL: Ruang Percakapan Chat & Clinical Telemetry (Cols 5 to 12) */}
-                    <div className="lg:col-span-8 flex flex-col h-full bg-white dark:bg-surface relative">
+                    {/* RIGHT PANEL: Ruang Percakapan Chat & Clinical Telemetry */}
+                    <div className={`flex-1 flex flex-col h-full min-w-0 bg-white dark:bg-surface relative overflow-hidden ${
+                        !selectedConsultation ? 'hidden lg:flex' : 'flex'
+                    }`}>
                         {selectedConsultation ? (
                             <>
-                                {/* Chat Header */}
-                                <div className="p-3.5 sm:p-4 border-b border-surface-container flex items-center justify-between gap-3 bg-surface-container-lowest shrink-0">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <div className="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs">
+                                {/* Pinned Sticky Patient Header (Always Visible) */}
+                                <div className="p-2.5 sm:px-4 border-b border-surface-container flex items-center justify-between gap-2.5 bg-surface-container-lowest shrink-0 z-10 shadow-2xs">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                        {/* Mobile Back Button to conversation list */}
+                                        <button
+                                            type="button"
+                                            onClick={() => setSelectedConsultation(null)}
+                                            className="lg:hidden p-1.5 -ml-1 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                                            title="Kembali ke Daftar Pasien"
+                                        >
+                                            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+                                        </button>
+
+                                        <div className="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs ring-2 ring-primary/20">
                                             {selectedConsultation.member_name?.charAt(0) || 'M'}
                                         </div>
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <h2 className="font-bold text-sm text-on-surface truncate">
+                                                <h2 className="font-bold text-xs sm:text-sm text-on-surface truncate">
                                                     {selectedConsultation.member_name}
                                                 </h2>
                                                 <span
-                                                    className={`text-[10px] px-2 py-0.2 rounded-full font-bold border ${
+                                                    className={`text-[9px] px-2 py-0.2 rounded-full font-bold uppercase border shrink-0 ${
                                                         selectedConsultation.status === 'COMPLETED'
                                                             ? 'bg-primary/10 text-primary border-primary/20'
                                                             : selectedConsultation.status === 'CANCELLED'
@@ -507,8 +552,11 @@ export default function ChatHub({
                                                         : 'Sesi Aktif'}
                                                 </span>
                                             </div>
-                                            <p className="text-[11px] text-on-surface-variant truncate">
-                                                Agenda: {selectedConsultation.purpose} • {selectedConsultation.member_email}
+                                            <p className="text-[10.5px] sm:text-[11px] text-on-surface-variant truncate">
+                                                <span className="font-medium text-primary">{selectedConsultation.purpose}</span>
+                                                {selectedConsultation.member_email && (
+                                                    <span className="opacity-75 hidden sm:inline"> • {selectedConsultation.member_email}</span>
+                                                )}
                                             </p>
                                         </div>
                                     </div>
@@ -615,104 +663,109 @@ export default function ChatHub({
                                 )}
 
                                 {/* Chat Body Area with optional Telemetry Drawer overlay */}
-                                <div className="flex-1 flex overflow-hidden relative">
+                                <div className="flex-1 flex overflow-hidden relative min-h-0">
                                     
                                     {/* Messages Feed */}
-                                    <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-3.5 bg-[#fbfdfc] dark:bg-surface/50 text-xs">
-                                        {chatLoading ? (
-                                            <div className="py-20 text-center text-on-surface-variant space-y-2">
-                                                <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-                                                <p className="text-xs">Memuat percakapan telemedisin...</p>
-                                            </div>
-                                        ) : chatMessages.length === 0 ? (
-                                            <div className="py-20 text-center text-on-surface-variant space-y-2">
-                                                <span className="material-symbols-outlined text-4xl text-primary/40">chat_bubble_outline</span>
-                                                <p className="text-xs font-semibold text-on-surface">Belum ada pesan pada sesi ini</p>
-                                                <p className="text-[11px]">Kirimkan pesan sapaan klinis atau evaluasi awal menggunakan formulir di bawah.</p>
-                                            </div>
-                                        ) : (
-                                            chatMessages.map((m) => {
-                                                const isSystem = m.sender_role === 'SYSTEM';
-                                                const isInstructor = m.sender_role === 'INSTRUCTOR';
-                                                const hasMetric = m.metric_payload && typeof m.metric_payload === 'object';
+                                    <div
+                                        ref={messagesFeedRef}
+                                        className="flex-1 p-3.5 sm:p-5 overflow-y-auto bg-[#fbfdfc] dark:bg-surface/50 text-xs"
+                                    >
+                                        <div className="max-w-2xl lg:max-w-3xl mx-auto space-y-3 pb-2">
+                                            {chatLoading ? (
+                                                <div className="py-20 text-center text-on-surface-variant space-y-2">
+                                                    <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                                                    <p className="text-xs">Memuat percakapan telemedisin...</p>
+                                                </div>
+                                            ) : chatMessages.length === 0 ? (
+                                                <div className="py-20 text-center text-on-surface-variant space-y-2">
+                                                    <span className="material-symbols-outlined text-4xl text-primary/40">chat_bubble_outline</span>
+                                                    <p className="text-xs font-semibold text-on-surface">Belum ada pesan pada sesi ini</p>
+                                                    <p className="text-[11px]">Kirimkan pesan sapaan klinis atau evaluasi awal menggunakan formulir di bawah.</p>
+                                                </div>
+                                            ) : (
+                                                chatMessages.map((m) => {
+                                                    const isSystem = m.sender_role === 'SYSTEM';
+                                                    const isInstructor = m.sender_role === 'INSTRUCTOR';
+                                                    const hasMetric = m.metric_payload && typeof m.metric_payload === 'object';
 
-                                                if (isSystem) {
+                                                    if (isSystem) {
+                                                        return (
+                                                            <div
+                                                                key={m.id}
+                                                                className="py-2 px-3.5 my-2 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-center text-[11px] max-w-lg mx-auto leading-relaxed shadow-2xs"
+                                                            >
+                                                                <div className="flex items-center justify-center gap-1 font-bold text-amber-800 dark:text-amber-300 mb-0.5">
+                                                                    <span className="material-symbols-outlined text-[15px]">info</span>
+                                                                    <span>Sistem AEVYRA</span>
+                                                                </div>
+                                                                <p className="whitespace-pre-wrap">{m.message}</p>
+                                                            </div>
+                                                        );
+                                                    }
+
                                                     return (
                                                         <div
                                                             key={m.id}
-                                                            className="py-2.5 px-4 my-2 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-center text-[11px] max-w-lg mx-auto leading-relaxed shadow-2xs"
+                                                            className={`flex flex-col ${isInstructor ? 'items-end' : 'items-start'} space-y-1`}
                                                         >
-                                                            <div className="flex items-center justify-center gap-1 font-bold text-amber-800 dark:text-amber-300 mb-0.5">
-                                                                <span className="material-symbols-outlined text-[15px]">info</span>
-                                                                <span>Sistem AEVYRA</span>
-                                                            </div>
-                                                            <p className="whitespace-pre-wrap">{m.message}</p>
-                                                        </div>
-                                                    );
-                                                }
+                                                            <span className="text-[10px] text-on-surface-variant font-mono px-1">
+                                                                {isInstructor ? 'Anda (Instruktur)' : (selectedConsultation.member_name || 'Member')} •{' '}
+                                                                {m.created_at
+                                                                    ? new Date(m.created_at).toLocaleTimeString('id-ID', {
+                                                                          hour: '2-digit',
+                                                                          minute: '2-digit',
+                                                                      })
+                                                                    : 'Sekarang'}
+                                                            </span>
 
-                                                return (
-                                                    <div
-                                                        key={m.id}
-                                                        className={`flex flex-col ${isInstructor ? 'items-end' : 'items-start'} space-y-1`}
-                                                    >
-                                                        <span className="text-[10px] text-on-surface-variant font-mono px-1">
-                                                            {isInstructor ? 'Anda (Instruktur)' : (selectedConsultation.member_name || 'Member')} •{' '}
-                                                            {m.created_at
-                                                                ? new Date(m.created_at).toLocaleTimeString('id-ID', {
-                                                                      hour: '2-digit',
-                                                                      minute: '2-digit',
-                                                                  })
-                                                                : 'Sekarang'}
-                                                        </span>
-
-                                                        <div
-                                                            className={`p-3.5 sm:p-4 rounded-3xl max-w-[85%] leading-relaxed shadow-2xs space-y-2.5 ${
-                                                                isInstructor
-                                                                    ? 'bg-[#00433e] text-white rounded-br-xs'
-                                                                    : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
-                                                            }`}
-                                                        >
-                                                            {/* Render Metric Card if Shared by Patient */}
-                                                            {hasMetric && (
-                                                                <div
-                                                                    className={`p-3 rounded-2xl border text-left space-y-1.5 ${
-                                                                        isInstructor
-                                                                            ? 'bg-white/10 border-white/20 text-white'
-                                                                            : 'bg-surface-container-low border-surface-container text-on-surface'
-                                                                    }`}
-                                                                >
-                                                                    <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase">
-                                                                        <span className="flex items-center gap-1.5">
-                                                                            <span className="material-symbols-outlined text-[15px] text-emerald-400">
-                                                                                analytics
+                                                            <div
+                                                                className={`p-3 sm:p-3.5 rounded-2xl max-w-[85%] sm:max-w-[78%] leading-relaxed shadow-2xs space-y-2 ${
+                                                                    isInstructor
+                                                                        ? 'bg-[#00433e] text-white rounded-br-xs'
+                                                                        : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
+                                                                }`}
+                                                            >
+                                                                {/* Render Metric Card if Shared by Patient */}
+                                                                {hasMetric && (
+                                                                    <div
+                                                                        className={`p-2.5 rounded-xl border text-left space-y-1 ${
+                                                                            isInstructor
+                                                                                ? 'bg-white/10 border-white/20 text-white'
+                                                                                : 'bg-surface-container-low border-surface-container text-on-surface'
+                                                                        }`}
+                                                                    >
+                                                                        <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase">
+                                                                            <span className="flex items-center gap-1.5">
+                                                                                <span className="material-symbols-outlined text-[15px] text-emerald-400">
+                                                                                    analytics
+                                                                                </span>
+                                                                                <span>{m.metric_payload.title || 'Data Telemetri Pasien'}</span>
                                                                             </span>
-                                                                            <span>{m.metric_payload.title || 'Data Telemetri Pasien'}</span>
-                                                                        </span>
-                                                                        <span className="text-[9px] opacity-80">{m.metric_payload.recorded_at}</span>
-                                                                    </div>
-                                                                    <div className="flex items-baseline gap-1.5">
-                                                                        <span className="text-xl font-mono font-black">{m.metric_payload.value}</span>
-                                                                        {m.metric_payload.unit && (
-                                                                            <span className="text-xs font-mono">{m.metric_payload.unit}</span>
+                                                                            <span className="text-[9px] opacity-80">{m.metric_payload.recorded_at}</span>
+                                                                        </div>
+                                                                        <div className="flex items-baseline gap-1.5">
+                                                                            <span className="text-lg font-mono font-black">{m.metric_payload.value}</span>
+                                                                            {m.metric_payload.unit && (
+                                                                                <span className="text-xs font-mono">{m.metric_payload.unit}</span>
+                                                                            )}
+                                                                        </div>
+                                                                        {m.metric_payload.status && (
+                                                                            <div className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-black/10 text-[9.5px] font-bold">
+                                                                                <span>Status:</span>
+                                                                                <span>{m.metric_payload.status}</span>
+                                                                            </div>
                                                                         )}
                                                                     </div>
-                                                                    {m.metric_payload.status && (
-                                                                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/10 text-[10px] font-bold">
-                                                                            <span>Status:</span>
-                                                                            <span>{m.metric_payload.status}</span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            )}
+                                                                )}
 
-                                                            <p className="text-xs sm:text-[13px] whitespace-pre-wrap">{m.message}</p>
+                                                                <p className="text-xs sm:text-[12.5px] whitespace-pre-wrap">{m.message}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })
-                                        )}
-                                        <div ref={chatEndRef} />
+                                                    );
+                                                })
+                                            )}
+                                            <div ref={chatEndRef} />
+                                        </div>
                                     </div>
 
                                     {/* Collapsible Patient Telemetry Drawer */}

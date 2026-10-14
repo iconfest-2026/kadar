@@ -131,39 +131,81 @@ export default function EmergencyModal({ isOpen, onClose }) {
                     </a>
                 </div>
 
-                {/* GPS Dispatch / Nearest Hospital Card */}
+                {/* GPS Dispatch / Nearest Hospital Card (Solid Opaque High-Contrast Card) */}
                 <div className="pt-1">
                     {gpsSent ? (
-                        <div className="space-y-2 animate-in fade-in zoom-in-95">
-                            <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-900 dark:text-emerald-200 text-xs font-medium space-y-1.5">
-                                <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-[18px] text-emerald-600 shrink-0">verified</span>
-                                    <span className="font-bold">Sinyal GPS Berhasil Dikirim</span>
-                                </div>
-                                <div className="text-[11px] font-mono text-emerald-800 dark:text-emerald-300">
-                                    ID Event: <strong>#{eventId}</strong>
+                        <div className="space-y-2.5 animate-in fade-in zoom-in-95">
+                            <div className="p-3.5 rounded-2xl bg-[#e8f5ee] dark:bg-[#0a2f26] border-2 border-[#1c6454]/40 dark:border-[#2fa38a]/60 shadow-md space-y-2.5">
+                                {/* Header Badge: Verified Signal */}
+                                <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#1c6454]/20 dark:border-[#2fa38a]/30">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                                            <span className="material-symbols-outlined text-[15px]">verified</span>
+                                        </div>
+                                        <span className="font-extrabold text-xs text-[#0a352c] dark:text-[#a7f3d0] truncate">
+                                            Sinyal GPS Berhasil Dikirim
+                                        </span>
+                                    </div>
+                                    <span className="font-mono text-[10.5px] font-bold px-2 py-0.5 rounded-md bg-white dark:bg-[#123e34] text-[#0f4d40] dark:text-[#6ee7b7] border border-[#1c6454]/30 shadow-2xs shrink-0">
+                                        ID: #{eventId}
+                                    </span>
                                 </div>
 
-                                {nearestHospital && (
-                                    <div className="pt-1.5 border-t border-emerald-500/20 text-[11px] space-y-1">
-                                        <div className="font-bold text-emerald-950 dark:text-emerald-100 flex items-center justify-between">
-                                            <span className="truncate">{nearestHospital.name}</span>
-                                            <span className="shrink-0 font-mono bg-emerald-200 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded text-[10px]">
+                                {/* Hospital Details: Solid White Container */}
+                                {nearestHospital ? (
+                                    <div className="p-3 rounded-xl bg-white dark:bg-[#162723] border border-[#cfe1d7] dark:border-[#23423b] shadow-xs space-y-2">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-0.5">
+                                                    <span className="material-symbols-outlined text-[14px]">local_hospital</span>
+                                                    <span>Faskes / RS Rujukan Terdekat</span>
+                                                </div>
+                                                <h4 className="font-extrabold text-xs text-slate-900 dark:text-white leading-snug break-words">
+                                                    {nearestHospital.name}
+                                                </h4>
+                                            </div>
+                                            <span className="shrink-0 font-bold text-[10.5px] px-2 py-0.5 rounded-full bg-emerald-700 text-white shadow-xs">
                                                 {nearestHospital.distance_formatted}
                                             </span>
                                         </div>
-                                        <p className="text-[10.5px] text-emerald-900/80 dark:text-emerald-200/80 truncate">
-                                            {nearestHospital.address}
-                                        </p>
+
+                                        {nearestHospital.address && (
+                                            <div className="flex items-start gap-1.5 text-[11px] text-slate-800 dark:text-slate-200 pt-1.5 border-t border-slate-100 dark:border-slate-800/80">
+                                                <span className="material-symbols-outlined text-[14px] text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5">location_on</span>
+                                                <span className="leading-snug break-words font-medium">
+                                                    {nearestHospital.address}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {nearestHospital.phone && (
+                                            <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[11px]">
+                                                <span className="text-slate-600 dark:text-slate-400 text-[10px] font-medium">Hotline IGD:</span>
+                                                <a
+                                                    href={`tel:${nearestHospital.phone.split('/')[0].trim()}`}
+                                                    className="font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
+                                                >
+                                                    <span className="material-symbols-outlined text-[13px]">call</span>
+                                                    <span>{nearestHospital.phone}</span>
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="p-3 rounded-xl bg-white dark:bg-[#162723] border border-[#cfe1d7] text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-[16px] text-emerald-600 animate-spin">
+                                            sync
+                                        </span>
+                                        <span className="font-medium">Mendeteksi faskes rujukan Kemenkes RI terdekat...</span>
                                     </div>
                                 )}
                             </div>
 
                             {/* Direct Navigation Button to Live Radar */}
                             <Link
-                                href="/demo/emergency"
+                                href="/member/emergency"
                                 onClick={onClose}
-                                className="w-full py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-all"
+                                className="w-full py-2.5 px-3 rounded-xl bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 active:scale-98 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-rose-600/25 transition-all"
                             >
                                 <span className="material-symbols-outlined text-[17px]">radar</span>
                                 <span>Buka Radar Peta &amp; Rute Ambulans 119</span>
@@ -174,7 +216,7 @@ export default function EmergencyModal({ isOpen, onClose }) {
                             type="button"
                             onClick={handleSendGps}
                             disabled={sendingGps}
-                            className="w-full py-2.5 px-3 rounded-xl bg-primary/10 hover:bg-primary/15 text-primary border border-primary/20 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                            className="w-full py-2.5 px-3 rounded-xl bg-[#edf5f0] hover:bg-[#d4e8dd] dark:bg-[#0d382f] dark:hover:bg-[#164e42] text-[#1c6454] dark:text-[#a7f3d0] border-2 border-[#cfe1d7] dark:border-[#2fa38a]/40 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 shadow-2xs active:scale-98"
                         >
                             <span className={`material-symbols-outlined text-[17px] ${sendingGps ? 'animate-spin' : ''}`}>
                                 {sendingGps ? 'sync' : 'share_location'}

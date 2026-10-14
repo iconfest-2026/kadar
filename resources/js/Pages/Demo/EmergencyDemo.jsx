@@ -711,8 +711,8 @@ export default function EmergencyDemo() {
                 {/* Header Section */}
                 <div className="space-y-3 border-b border-surface-container pb-6">
                     <div className="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
-                        <Link href="/" className="hover:text-primary transition-colors">
-                            Beranda
+                        <Link href={isAuthenticated ? "/member/dashboard" : "/"} className="hover:text-primary transition-colors">
+                            {isAuthenticated ? "Dashboard" : "Beranda"}
                         </Link>
                         <span>/</span>
                         <span className="text-primary font-bold">Siaga Tanggap Darurat &amp; 119</span>

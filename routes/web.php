@@ -283,6 +283,16 @@ Route::get('/demo/gender-vitality', function () {
 })->name('demo.gender-vitality');
 
 Route::get('/demo/emergency', function () {
+    if (\Illuminate\Support\Facades\Auth::check()) {
+        /** @var \App\Models\User $user */
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->hasRole('member')) {
+            return redirect()->route('member.emergency.index');
+        }
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.emergency');
+        }
+    }
     return Inertia::render('Demo/EmergencyDemo');
 })->name('demo.emergency');
 
@@ -478,6 +488,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Feature 12: Dedicated Gender Health & Vitality Page
         Route::get('/vitality', [GenderVitalityController::class, 'index'])->name('vitality');
+        Route::post('/vitality/metrics', [GenderVitalityController::class, 'saveMetrics'])->name('vitality.metrics');
+        Route::post('/vitality/screening', [GenderVitalityController::class, 'saveScreening'])->name('vitality.screening');
 
         // Quick Health Log & HBE Trigger
         Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log');

@@ -255,9 +255,7 @@ export default function Dashboard({
                 {/* 4. Ringkasan Singkat & Shortcut: Kesehatan Spesifik Gender (Fitur 12) */}
                 <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-2xs flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${
-                            profile?.sex === 'FEMALE' ? 'bg-primary/10 text-primary' : 'bg-sky-500/10 text-sky-600'
-                        }`}>
+                        <div className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 bg-primary/10 text-primary">
                             <span className="material-symbols-outlined text-[22px]">
                                 {profile?.sex === 'FEMALE' ? 'calendar_month' : 'fitness_center'}
                             </span>
@@ -267,9 +265,7 @@ export default function Dashboard({
                                 <h3 className="font-heading font-bold text-xs sm:text-sm text-on-surface truncate">
                                     {profile?.sex === 'FEMALE' ? 'Siklus Hormonal & Haid' : 'Skrining Lemak Viseral & Vitalitas'}
                                 </h3>
-                                <span className={`px-2 py-0.2 rounded-full text-[9px] font-label-mono font-bold uppercase ${
-                                    profile?.sex === 'FEMALE' ? 'bg-primary/10 text-primary' : 'bg-sky-500/10 text-sky-600'
-                                }`}>
+                                <span className="px-2 py-0.2 rounded-full text-[9px] font-label-mono font-bold uppercase bg-primary/10 text-primary">
                                     {profile?.sex === 'FEMALE' ? 'Wanita' : 'Pria'}
                                 </span>
                             </div>

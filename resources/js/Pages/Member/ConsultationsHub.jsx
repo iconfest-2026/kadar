@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Head, router, usePage, Link } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
 import Alert from '../../Components/UI/Alert';
+import axios from 'axios';
 
 export default function ConsultationsHub({
     instructors = [],
@@ -49,7 +50,18 @@ export default function ConsultationsHub({
     const [chatInput, setChatInput] = useState('');
     const [chatSubmitting, setChatSubmitting] = useState(false);
     const [showTelemetryDrawer, setShowTelemetryDrawer] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
     const chatEndRef = useRef(null);
+    const memberFeedRef = useRef(null);
+
+    const scrollToBottom = (smooth = true) => {
+        if (memberFeedRef.current) {
+            memberFeedRef.current.scrollTo({
+                top: memberFeedRef.current.scrollHeight,
+                behavior: smooth ? 'smooth' : 'auto',
+            });
+        }
+    };
 
     // Cancel Consultation Modal State
     const [cancelModalCons, setCancelModalCons] = useState(null);
@@ -106,8 +118,8 @@ export default function ConsultationsHub({
         } finally {
             setChatLoading(false);
             setTimeout(() => {
-                chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+                scrollToBottom(false);
+            }, 80);
         }
     };
 
@@ -118,27 +130,41 @@ export default function ConsultationsHub({
 
         const interval = setInterval(async () => {
             try {
-                const res = await fetch(`/member/consultations/${selectedConsultation.id}/messages`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data?.messages) {
-                        setChatMessages((prev) => {
-                            const prevLast = prev[prev.length - 1];
-                            const newLast = data.messages[data.messages.length - 1];
-                            const hasNew = prev.length !== data.messages.length || (prevLast?.id !== newLast?.id);
-                            if (hasNew) {
-                                setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-                                return data.messages;
-                            }
-                            return prev;
+                const res = await axios.get(`/member/consultations/${selectedConsultation.id}/messages`);
+                const data = res.data;
+                if (data?.messages) {
+                    setChatMessages((prev) => {
+                        const serverMsgs = data.messages || [];
+                        const pendingTemps = prev.filter((m) => {
+                            if (!String(m.id).startsWith('temp_')) return false;
+                            const alreadyPersisted = serverMsgs.some(
+                                (sm) => sm.sender_role === m.sender_role && sm.message === m.message
+                            );
+                            return !alreadyPersisted;
                         });
-                    }
-                    if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
-                        setSelectedConsultation((prev) => ({
-                            ...prev,
-                            ...data.consultation,
-                        }));
-                    }
+
+                        const prevServerMsgs = prev.filter((m) => !String(m.id).startsWith('temp_'));
+                        const prevLastServer = prevServerMsgs[prevServerMsgs.length - 1];
+                        const newLastServer = serverMsgs[serverMsgs.length - 1];
+
+                        const hasNewServerMessages =
+                            prevServerMsgs.length !== serverMsgs.length ||
+                            prevLastServer?.id !== newLastServer?.id;
+                        const pendingCountChanged =
+                            pendingTemps.length !== prev.filter((m) => String(m.id).startsWith('temp_')).length;
+
+                        if (hasNewServerMessages || pendingCountChanged) {
+                            setTimeout(() => scrollToBottom(true), 50);
+                            return [...serverMsgs, ...pendingTemps];
+                        }
+                        return prev;
+                    });
+                }
+                if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
+                    setSelectedConsultation((prev) => ({
+                        ...prev,
+                        ...data.consultation,
+                    }));
                 }
             } catch (err) {}
         }, 2000);
@@ -155,8 +181,8 @@ export default function ConsultationsHub({
 
     const fetchSlots = async (doctorId, date) => {
         try {
-            const res = await fetch(`/member/booking/slots/${doctorId}?date=${date}`);
-            const data = await res.json();
+            const res = await axios.get(`/member/booking/slots/${doctorId}?date=${date}`);
+            const data = res.data;
             if (data.slots && data.slots.length > 0) {
                 setAvailableSlots(data.slots);
                 setSelectedSlot(data.slots[0]);
@@ -179,42 +205,52 @@ export default function ConsultationsHub({
         setChatInput('');
         setChatSubmitting(true);
 
+        const tempId = 'temp_' + Date.now();
         const tempMsg = {
-            id: 'temp_' + Date.now(),
-            sender_id: authUser?.id,
+            id: tempId,
+            sender_id: authUser?.id || 0,
             sender_role: 'MEMBER',
             message: text,
             created_at: new Date().toISOString(),
             sender: { name: authUser?.name || 'Saya' },
         };
         setChatMessages((prev) => [...prev, tempMsg]);
-        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+        setTimeout(() => scrollToBottom(true), 50);
 
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const res = await fetch(`/member/consultations/${selectedConsultation.id}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify({ message: text }),
+            const res = await axios.post(`/member/consultations/${selectedConsultation.id}/messages`, {
+                message: text,
             });
 
-            if (res.ok) {
-                const data = await res.json();
-                if (data.message) {
-                    setChatMessages((prev) =>
-                        prev.map((m) => (m.id === tempMsg.id ? data.message : m))
-                    );
-                }
+            if (res.data?.message) {
+                const confirmedMsg = res.data.message;
+                setChatMessages((prev) => {
+                    const hasTemp = prev.some((m) => m.id === tempId);
+                    if (hasTemp) {
+                        return prev.map((m) => (m.id === tempId ? confirmedMsg : m));
+                    }
+                    const alreadyHas = prev.some((m) => m.id === confirmedMsg.id);
+                    if (!alreadyHas) {
+                        return [...prev, confirmedMsg];
+                    }
+                    return prev;
+                });
             }
         } catch (err) {
             console.error('Send message error:', err);
+            // Remove failed optimistic message
+            setChatMessages((prev) => prev.filter((m) => m.id !== tempId));
+            // Restore input text
+            setChatInput(text);
+            const errMsg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                err.message ||
+                'Gagal mengirim pesan. Silakan coba beberapa saat lagi.';
+            alert('Gagal mengirim pesan: ' + errMsg);
         } finally {
             setChatSubmitting(false);
-            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+            setTimeout(() => scrollToBottom(true), 50);
         }
     };
 
@@ -274,9 +310,10 @@ export default function ConsultationsHub({
         if (!payload) return;
 
         setChatSubmitting(true);
+        const tempId = 'temp_' + Date.now();
         const tempMsg = {
-            id: 'temp_' + Date.now(),
-            sender_id: authUser?.id,
+            id: tempId,
+            sender_id: authUser?.id || 0,
             sender_role: 'MEMBER',
             message: shareText,
             metric_payload: payload,
@@ -284,36 +321,40 @@ export default function ConsultationsHub({
             sender: { name: authUser?.name || 'Saya' },
         };
         setChatMessages((prev) => [...prev, tempMsg]);
-        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+        setTimeout(() => scrollToBottom(true), 50);
 
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const res = await fetch(`/member/consultations/${selectedConsultation.id}/messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify({
-                    message: shareText,
-                    metric_payload: payload,
-                }),
+            const res = await axios.post(`/member/consultations/${selectedConsultation.id}/messages`, {
+                message: shareText,
+                metric_payload: payload,
             });
 
-            if (res.ok) {
-                const data = await res.json();
-                if (data.message) {
-                    setChatMessages((prev) =>
-                        prev.map((m) => (m.id === tempMsg.id ? data.message : m))
-                    );
-                }
+            if (res.data?.message) {
+                const confirmedMsg = res.data.message;
+                setChatMessages((prev) => {
+                    const hasTemp = prev.some((m) => m.id === tempId);
+                    if (hasTemp) {
+                        return prev.map((m) => (m.id === tempId ? confirmedMsg : m));
+                    }
+                    const alreadyHas = prev.some((m) => m.id === confirmedMsg.id);
+                    if (!alreadyHas) {
+                        return [...prev, confirmedMsg];
+                    }
+                    return prev;
+                });
             }
         } catch (err) {
             console.error('Metric share error:', err);
+            setChatMessages((prev) => prev.filter((m) => m.id !== tempId));
+            const errMsg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                err.message ||
+                'Gagal membagikan data biomarker.';
+            alert('Gagal membagikan data: ' + errMsg);
         } finally {
             setChatSubmitting(false);
-            setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+            setTimeout(() => scrollToBottom(true), 50);
         }
     };
 
@@ -421,560 +462,267 @@ export default function ConsultationsHub({
         <AppLayout title="Konsultasi & Telemedisin Instruktur" activeTab="consultations">
             <Head title="Konsultasi Terukur Dokter & Instruktur Medis - AEVYRA" />
 
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
-                
-                {/* 1. Header & Quota Overview Banner */}
-                <div className="rounded-3xl bg-linear-to-r from-[#00433e] via-[#08544e] to-[#0f5c56] p-5 sm:p-7 text-white shadow-xs relative overflow-hidden">
-                    <div 
-                        aria-hidden="true" 
-                        className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl" 
-                    />
-                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="space-y-1.5 max-w-2xl">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
-                                <span className="material-symbols-outlined text-[15px]">clinical_notes</span>
-                                <span>Bimbingan Klinis 1-on-1 Terukur</span>
-                            </div>
-                            <h1 className="text-xl sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
-                                Ruang Konsultasi Dokter &amp; Instruktur Medis
-                            </h1>
-                            <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
-                                Diskusikan data glukosa, pola makan, dan gaya hidup Anda secara personal bersama dokter spesialis berlisensi STR Kemenkes.
-                            </p>
-                        </div>
-
-                        {/* Quota & Quick Action */}
-                        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
-                            <div className="bg-black/25 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 text-center min-w-36">
-                                <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
-                                    Sisa Kuota Sesi
-                                </span>
-                                <div className="flex items-baseline justify-center gap-1 mt-0.5">
-                                    {isUnlimited ? (
-                                        <span className="font-mono font-black text-xl text-white">Bebas Batas</span>
-                                    ) : (
-                                        <>
-                                            <span className="font-mono font-black text-2xl text-white">{remainingQuota}</span>
-                                            <span className="text-xs font-mono text-white/70">/ {totalQuota} Sesi</span>
-                                        </>
-                                    )}
+            {activeTab === 'live_chat' ? (
+                /* SINGLE-PAGE AI CHATBOT INTERFACE (NO OUTER SCROLLING) */
+                <div className="max-w-4xl mx-auto px-2 sm:px-4 py-1 sm:py-2">
+                    <div className="h-[calc(100vh-5.5rem)] min-h-[560px] max-h-[860px] flex flex-col bg-white dark:bg-surface border border-surface-container rounded-3xl overflow-hidden shadow-xs relative">
+                        {/* 1. Pinned Sticky Top Header Bar */}
+                        <div className="p-2.5 sm:px-4 border-b border-surface-container flex items-center justify-between gap-2.5 bg-surface-container-lowest shrink-0 z-20 shadow-2xs">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="w-10 h-10 rounded-2xl bg-primary/10 overflow-hidden ring-2 ring-primary/20 shrink-0 relative flex items-center justify-center font-bold text-primary text-sm shadow-2xs">
+                                    <img
+                                        src="/image/doctor-portrait.jpg"
+                                        alt="Dokter"
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                    />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0 animate-pulse" />
                                 </div>
-                                <span className="text-[9px] font-mono text-white/70 block mt-0.5">
-                                    Paket: {membership?.tier || quota.tier_name || 'Silver'}
-                                </span>
-                            </div>
-
-                            {!canBook && (
-                                <Link
-                                    href="/paket"
-                                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs"
-                                    title="Tingkatkan paket untuk menambah sesi konsultasi"
-                                >
-                                    <span className="material-symbols-outlined text-[17px]">upgrade</span>
-                                    <span>Upgrade Paket</span>
-                                </Link>
-                            )}
-
-                            {/* Floating AI Helper Shortcut */}
-                            <Link
-                                href="/member/dashboard"
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white border border-white/20 text-xs font-semibold transition-all shadow-xs"
-                                title="Buka Asisten AI 24/7 untuk tanya jawab umum"
-                            >
-                                <span className="material-symbols-outlined text-[17px]">smart_toy</span>
-                                <span className="hidden sm:inline">Tanya AI 24/7</span>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 2. Clear Segmented Tabs (Alur Tidak Pusing) */}
-                <div className="grid grid-cols-3 p-1.5 rounded-2xl bg-surface-container border border-surface-container-high/60 gap-1.5">
-                    <button
-                        type="button"
-                        onClick={() => setActiveTab('live_chat')}
-                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center ${
-                            activeTab === 'live_chat'
-                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                : 'text-on-surface-variant hover:text-on-surface'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined text-[18px]">chat</span>
-                        <span className="truncate">Ruang Chat &amp; Telemetri</span>
-                        {upcomingConsultations.length > 0 && (
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse hidden sm:inline-block" />
-                        )}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setActiveTab('booking')}
-                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center ${
-                            activeTab === 'booking'
-                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                : 'text-on-surface-variant hover:text-on-surface'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined text-[18px]">calendar_add_on</span>
-                        <span className="truncate">Jadwalkan Konsultasi</span>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setActiveTab('history')}
-                        className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center ${
-                            activeTab === 'history'
-                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                : 'text-on-surface-variant hover:text-on-surface'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined text-[18px]">history_edu</span>
-                        <span className="truncate">Riwayat &amp; Catatan Medis ({pastConsultations.length})</span>
-                    </button>
-                </div>
-
-                {/* TAB 1: RUANG CHAT & TELEMETRI KLINIS TERUKUR */}
-                {activeTab === 'live_chat' && (
-                    <div className="space-y-4">
-                        {selectedConsultation ? (
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-                                
-                                {/* KOLOM KIRI: Profil Dokter & Data Telemetri Terukur (Desktop & Tablet) */}
-                                <div className="lg:col-span-4 space-y-4">
-                                    
-                                    {/* Selector jika member memiliki lebih dari 1 sesi konsultasi */}
-                                    {consultations.length > 1 && (
-                                        <div className="p-3.5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-2">
-                                            <div className="flex items-center justify-between text-[11px] font-bold text-on-surface">
-                                                <span className="flex items-center gap-1.5 text-primary">
-                                                    <span className="material-symbols-outlined text-[16px]">swap_horiz</span>
-                                                    <span>Ganti Ruang Sesi Dokter</span>
-                                                </span>
-                                                <span className="text-[10px] text-on-surface-variant font-mono">
-                                                    {consultations.length} sesi
-                                                </span>
-                                            </div>
-                                            <select
-                                                value={selectedConsultation?.id || ''}
-                                                onChange={(e) => {
-                                                    const found = consultations.find((c) => String(c.id) === String(e.target.value));
-                                                    if (found) setSelectedConsultation(found);
-                                                }}
-                                                className="w-full px-3 py-2 bg-surface-container-low rounded-xl border border-surface-container text-xs text-on-surface font-medium focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                                            >
-                                                {consultations.map((c) => (
-                                                    <option key={c.id} value={c.id}>
-                                                        {c.instructor_name} - {c.purpose} ({c.status === 'CONFIRMED' || c.status === 'SCHEDULED' ? 'Aktif' : c.status === 'CANCELLED' ? 'Dibatalkan' : c.status === 'COMPLETED' ? 'Selesai' : c.status})
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-
-                                    {/* Kartu Status Konsultasi Aktif */}
-                                    <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3.5">
-                                        <div className="flex items-center justify-between gap-2 pb-3 border-b border-surface-container">
-                                            <div className="flex items-center gap-2">
-                                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary">
-                                                    Sesi Telemedisin Terhubung
-                                                </span>
-                                            </div>
-                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
+                                <div className="min-w-0">
+                                    <div className="flex items-center gap-1.5 sm:gap-2">
+                                        <h2 className="font-bold text-xs sm:text-sm text-on-surface truncate">
+                                            {selectedConsultation?.instructor_name || 'dr. Spesialis Pendamping'}
+                                        </h2>
+                                        {selectedConsultation && (
+                                            <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase border shrink-0 ${
                                                 selectedConsultation.status === 'CANCELLED'
-                                                    ? 'bg-rose-50 text-rose-800 border-rose-200'
+                                                    ? 'bg-rose-50 text-rose-700 border-rose-200'
                                                     : selectedConsultation.status === 'COMPLETED'
                                                     ? 'bg-primary/10 text-primary border-primary/20'
                                                     : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                                             }`}>
                                                 {selectedConsultation.status === 'CANCELLED'
-                                                    ? 'Dibatalkan'
+                                                    ? 'Batal'
                                                     : selectedConsultation.status === 'COMPLETED'
                                                     ? 'Selesai'
-                                                    : '45 Menit'}
+                                                    : 'Aktif'}
                                             </span>
-                                        </div>
-
-                                        {/* Doctor Mini Card */}
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-2xl bg-surface-container overflow-hidden shrink-0 border border-surface-container-high">
-                                                <img
-                                                    src="/image/doctor-portrait.jpg"
-                                                    alt="Dokter"
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <div className="min-w-0">
-                                                <h3 className="font-bold text-sm text-on-surface truncate">
-                                                    {selectedConsultation.instructor_name}
-                                                </h3>
-                                                <p className="text-xs text-primary font-medium truncate">
-                                                    Spesialis Gizi Klinis &amp; Pre-Diabetes
-                                                </p>
-                                                <p className="text-[10px] text-on-surface-variant font-mono mt-0.5">
-                                                    Jadwal: {selectedConsultation.scheduled_start || 'Sesi Aktif'} WIB
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Purpose Pill */}
-                                        <div className="p-3 rounded-2xl bg-surface-container-low border border-surface-container text-xs text-on-surface-variant">
-                                            <span className="font-bold text-primary block text-[11px] mb-0.5">
-                                                Fokus Bimbingan:
-                                            </span>
-                                            <p className="line-clamp-2 leading-relaxed">
-                                                {selectedConsultation.purpose}
-                                            </p>
-                                        </div>
-
-                                        {/* Meeting Room Button if available and active */}
-                                        {selectedConsultation.meeting_url && selectedConsultation.status !== 'CANCELLED' && (
-                                            <a
-                                                href={selectedConsultation.meeting_url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="w-full py-2.5 px-4 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium text-xs shadow-xs flex items-center justify-center gap-2 transition-all active:scale-98"
-                                            >
-                                                <span className="material-symbols-outlined text-[17px]">videocam</span>
-                                                <span>Buka Ruang Tatap Muka (Video)</span>
-                                            </a>
                                         )}
                                     </div>
+                                    <p className="text-[10px] sm:text-[11px] text-on-surface-variant truncate">
+                                        Spesialis Gizi Klinis &amp; Pre-Diabetes
+                                        {selectedConsultation?.scheduled_start && (
+                                            <span className="hidden sm:inline"> • {selectedConsultation.scheduled_start.slice(11, 16)} WIB</span>
+                                        )}
+                                    </p>
+                                </div>
+                            </div>
 
-                                    {/* PANEL DATA TERUKUR: Metrik Pasien Terintegrasi */}
-                                    <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-bold text-on-surface flex items-center gap-1.5 font-sans">
-                                                <span className="material-symbols-outlined text-[18px] text-primary">monitoring</span>
-                                                <span>Telemetri Metrik Terukur Pasien</span>
-                                            </span>
-                                            <span className="text-[10px] text-on-surface-variant font-mono">
-                                                Sinkronisasi HBE
-                                            </span>
-                                        </div>
-                                        <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                                            {selectedConsultation.status === 'CANCELLED'
-                                                ? 'Sesi tele-konsultasi telah dibatalkan sehingga sinkronisasi telemetri dinonaktifkan.'
-                                                : 'Kirimkan data fisiologis terukur Anda ke ruang chat agar evaluasi dokter tepat sasaran:'}
-                                        </p>
+                            {/* Center: Switch room if > 1 consultation */}
+                            {consultations.length > 1 && (
+                                <div className="hidden md:flex items-center gap-1">
+                                    <select
+                                        value={selectedConsultation?.id || ''}
+                                        onChange={(e) => {
+                                            const found = consultations.find((c) => String(c.id) === String(e.target.value));
+                                            if (found) setSelectedConsultation(found);
+                                        }}
+                                        className="px-2 py-1 bg-surface-container-low rounded-xl border border-surface-container text-[11px] text-on-surface font-semibold focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer max-w-[150px] truncate"
+                                    >
+                                        {consultations.map((c) => (
+                                            <option key={c.id} value={c.id}>
+                                                {c.instructor_name} ({c.status === 'CONFIRMED' || c.status === 'SCHEDULED' ? 'Aktif' : c.status === 'COMPLETED' ? 'Selesai' : 'Batal'})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
-                                        {/* Quick Data Sharing Chips */}
-                                        <div className="grid grid-cols-2 gap-2 pt-1">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleShareMetric('glucose')}
-                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
-                                            >
-                                                <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
-                                                    <span className="font-medium">Gula Puasa</span>
-                                                    <span className="material-symbols-outlined text-[15px] text-emerald-600 group-hover:translate-x-0.5 transition-transform">send</span>
-                                                </div>
-                                                <div className="font-mono font-bold text-sm text-primary">
-                                                    {healthMetrics.blood_glucose?.value || 108} <span className="text-[10px] font-normal text-on-surface-variant">mg/dL</span>
-                                                </div>
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleShareMetric('diet')}
-                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
-                                            >
-                                                <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
-                                                    <span className="font-medium">Asupan Gizi</span>
-                                                    <span className="material-symbols-outlined text-[15px] text-emerald-600 group-hover:translate-x-0.5 transition-transform">send</span>
-                                                </div>
-                                                <div className="font-mono font-bold text-sm text-primary">
-                                                    {healthMetrics.calories?.value || 1650} <span className="text-[10px] font-normal text-on-surface-variant">kkal</span>
-                                                </div>
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleShareMetric('sleep')}
-                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
-                                            >
-                                                <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
-                                                    <span className="font-medium">Durasi Tidur</span>
-                                                    <span className="material-symbols-outlined text-[15px] text-emerald-600 group-hover:translate-x-0.5 transition-transform">send</span>
-                                                </div>
-                                                <div className="font-mono font-bold text-sm text-primary">
-                                                    {healthMetrics.sleep_duration?.value || 7.2} <span className="text-[10px] font-normal text-on-surface-variant">Jam</span>
-                                                </div>
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleShareMetric('steps')}
-                                                disabled={chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                                className="p-2.5 rounded-2xl bg-surface-container-low hover:bg-emerald-50 border border-surface-container hover:border-emerald-300 text-left transition-all cursor-pointer group active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
-                                            >
-                                                <div className="flex items-center justify-between text-[11px] text-on-surface-variant mb-1">
-                                                    <span className="font-medium">Langkah Kaki</span>
-                                                    <span className="material-symbols-outlined text-[15px] text-emerald-600 group-hover:translate-x-0.5 transition-transform">send</span>
-                                                </div>
-                                                <div className="font-mono font-bold text-sm text-primary">
-                                                    {(healthMetrics.steps?.value || 8420).toLocaleString('id-ID')} <span className="text-[10px] font-normal text-on-surface-variant">Langkah</span>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
+                            {/* Right: Actions */}
+                            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                                {/* Sisa Kuota pill */}
+                                <div className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-xl bg-surface-container-low border border-surface-container text-[10px] font-mono">
+                                    <span className="text-on-surface-variant">Kuota:</span>
+                                    <span className="font-bold text-primary">{isUnlimited ? 'Bebas' : `${remainingQuota}/${totalQuota}`}</span>
                                 </div>
 
-                                {/* KOLOM KANAN: Ruang Obrolan Tele-Konsultasi Interaktif */}
-                                <div className="lg:col-span-8 bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-xs flex flex-col h-[600px] overflow-hidden">
-                                    
-                                    {/* Chat Room Top Bar */}
-                                    <div className="p-3.5 sm:p-4 border-b border-surface-container flex items-center justify-between gap-3 bg-surface-container-lowest/50">
-                                        <div className="flex items-center gap-3 min-w-0">
-                                            <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base border border-primary/20 shrink-0">
-                                                {selectedConsultation.instructor_name?.charAt(0) || 'D'}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <div className="flex items-center gap-2">
-                                                    <h4 className="font-bold text-xs sm:text-sm text-on-surface truncate">
-                                                        {selectedConsultation.instructor_name}
-                                                    </h4>
-                                                    <span className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.2 rounded-full font-bold border ${
-                                                        selectedConsultation.status === 'CANCELLED'
-                                                            ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                                            : selectedConsultation.status === 'COMPLETED'
-                                                            ? 'bg-primary/10 text-primary border-primary/20'
-                                                            : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                                    }`}>
-                                                        <span className={`w-1.5 h-1.5 rounded-full ${
-                                                            selectedConsultation.status === 'CANCELLED'
-                                                                ? 'bg-rose-500'
-                                                                : selectedConsultation.status === 'COMPLETED'
-                                                                ? 'bg-primary'
-                                                                : 'bg-emerald-500'
-                                                        }`} />
-                                                        <span>
-                                                            {selectedConsultation.status === 'CANCELLED'
-                                                                ? 'Dibatalkan'
-                                                                : selectedConsultation.status === 'COMPLETED'
-                                                                ? 'Selesai'
-                                                                : 'Terjadwal'}
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                                <p className="text-[11px] text-on-surface-variant truncate">
-                                                    Topik: {selectedConsultation.purpose}
-                                                </p>
-                                            </div>
-                                        </div>
+                                {/* Video Call Meeting button */}
+                                {selectedConsultation?.meeting_url && selectedConsultation?.status !== 'CANCELLED' && (
+                                    <a
+                                        href={selectedConsultation.meeting_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-transform active:scale-95"
+                                        title="Buka Ruang Video Call Tatap Muka"
+                                    >
+                                        <span className="material-symbols-outlined text-[16px]">videocam</span>
+                                        <span className="hidden md:inline">Video Call</span>
+                                    </a>
+                                )}
 
-                                        <div className="flex items-center gap-2 shrink-0">
-                                            {/* Cancel Button if upcoming/scheduled */}
-                                            {(selectedConsultation.is_upcoming || selectedConsultation.status === 'CONFIRMED' || selectedConsultation.status === 'SCHEDULED') && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => openCancelModal(selectedConsultation)}
-                                                    className="px-2.5 py-1.5 rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
-                                                    title="Batalkan konsultasi dan pulihkan kuota"
-                                                >
-                                                    <span className="material-symbols-outlined text-[15px]">cancel</span>
-                                                    <span className="hidden sm:inline">Batalkan Sesi</span>
-                                                </button>
-                                            )}
+                                {/* Sesi Detail modal button */}
+                                {selectedConsultation && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowDetailModal(true)}
+                                        className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
+                                        title="Detail Sesi & Catatan Dokter"
+                                    >
+                                        <span className="material-symbols-outlined text-[17px] text-primary">clinical_notes</span>
+                                        <span className="hidden sm:inline">Info Sesi</span>
+                                    </button>
+                                )}
 
-                                            {/* Mobile Toggle Telemetry Drawer */}
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowTelemetryDrawer(!showTelemetryDrawer)}
-                                                className="lg:hidden p-2 rounded-xl bg-surface-container-low text-primary hover:bg-surface-container border border-surface-container text-xs flex items-center gap-1 cursor-pointer"
-                                                title="Lihat Data Metrik Terukur"
-                                            >
-                                                <span className="material-symbols-outlined text-[18px]">monitoring</span>
-                                                <span className="text-[11px] font-semibold">Data</span>
-                                            </button>
+                                {/* Switch to Booking */}
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTab('booking')}
+                                    className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
+                                    title="Jadwalkan Konsultasi Baru"
+                                >
+                                    <span className="material-symbols-outlined text-[17px] text-primary">calendar_add_on</span>
+                                    <span className="hidden lg:inline">Jadwal</span>
+                                </button>
+
+                                {/* Switch to History */}
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTab('history')}
+                                    className="p-1.5 sm:px-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
+                                    title="Riwayat Sesi"
+                                >
+                                    <span className="material-symbols-outlined text-[17px] text-on-surface-variant">history</span>
+                                    <span className="hidden xl:inline">({pastConsultations.length})</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 2. Cancelled Banner if cancelled */}
+                        {selectedConsultation?.status === 'CANCELLED' && (
+                            <div className="p-2.5 sm:p-3 bg-rose-50 dark:bg-rose-950/30 border-b border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 flex items-start gap-2 text-xs shrink-0">
+                                <span className="material-symbols-outlined text-[18px] text-rose-600 shrink-0">cancel</span>
+                                <div className="space-y-0.5">
+                                    <span className="font-bold block">Sesi Tele-Konsultasi Dibatalkan</span>
+                                    <p className="text-[11px] leading-relaxed">
+                                        Alasan: "{selectedConsultation.cancellation_reason || 'Dibatalkan oleh pengguna/dokter'}". Kuota telah dikembalikan.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 3. Messages Feed */}
+                        {selectedConsultation ? (
+                            <div
+                                ref={memberFeedRef}
+                                className="flex-1 p-3.5 sm:p-5 overflow-y-auto bg-[#fbfdfc] dark:bg-surface/50 text-xs min-h-0"
+                            >
+                                <div className="max-w-2xl mx-auto space-y-3 pb-2">
+                                    {/* Welcoming AI Chatbot Style Greeting */}
+                                    <div className="py-3 px-4 rounded-2xl bg-linear-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 text-center max-w-lg mx-auto space-y-1 my-2">
+                                        <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center mx-auto text-sm font-bold shadow-2xs">
+                                            <span className="material-symbols-outlined text-[18px]">verified</span>
                                         </div>
+                                        <p className="font-bold text-xs text-on-surface">
+                                            Konsultasi Telemedisin: {selectedConsultation.instructor_name}
+                                        </p>
+                                        <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                                            Topik: <span className="text-primary font-medium">{selectedConsultation.purpose}</span>.
+                                            Diskusikan keluhan klinis atau kirimkan data biomarker harian Anda melalui tombol cepat di bawah.
+                                        </p>
                                     </div>
 
-                                    {/* Mobile Expandable Telemetry Drawer */}
-                                    {showTelemetryDrawer && (
-                                        <div className="lg:hidden p-3 bg-surface-container-low border-b border-surface-container space-y-2">
-                                            <span className="text-[11px] font-bold text-primary block">Bagikan Data Terukur ke Chat:</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => { handleShareMetric('glucose'); setShowTelemetryDrawer(false); }}
-                                                    disabled={selectedConsultation.status === 'CANCELLED'}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
-                                                >
-                                                    <span className="material-symbols-outlined text-[14px]">water_drop</span>
-                                                    <span>Glukosa ({healthMetrics.blood_glucose?.value || 108} mg/dL)</span>
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => { handleShareMetric('diet'); setShowTelemetryDrawer(false); }}
-                                                    disabled={selectedConsultation.status === 'CANCELLED'}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
-                                                >
-                                                    <span className="material-symbols-outlined text-[14px]">nutrition</span>
-                                                    <span>Nutrisi ({healthMetrics.calories?.value || 1650} kkal)</span>
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => { handleShareMetric('sleep'); setShowTelemetryDrawer(false); }}
-                                                    disabled={selectedConsultation.status === 'CANCELLED'}
-                                                    className="px-2.5 py-1.5 rounded-xl bg-white text-xs font-medium border border-surface-container text-primary flex items-center gap-1 disabled:opacity-40"
-                                                >
-                                                    <span className="material-symbols-outlined text-[14px]">bedtime</span>
-                                                    <span>Tidur ({healthMetrics.sleep_duration?.value || 7.2} Jam)</span>
-                                                </button>
-                                            </div>
+                                    {chatLoading ? (
+                                        <div className="py-16 text-center text-on-surface-variant space-y-2">
+                                            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                                            <p className="text-xs">Memuat pesan...</p>
                                         </div>
-                                    )}
-
-                                    {/* Banner if Cancelled */}
-                                    {selectedConsultation.status === 'CANCELLED' && (
-                                        <div className="p-3.5 bg-rose-50 dark:bg-rose-950/30 border-b border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 flex items-start gap-2.5 text-xs">
-                                            <span className="material-symbols-outlined text-[20px] text-rose-600 shrink-0">cancel</span>
-                                            <div className="space-y-0.5">
-                                                <span className="font-bold block">Sesi Tele-Konsultasi Ini Telah Dibatalkan</span>
-                                                <p className="text-[11px] leading-relaxed">
-                                                    {selectedConsultation.cancelled_by_role === 'INSTRUCTOR'
-                                                        ? `Dibatalkan oleh Dokter/Instruktur dengan alasan: "${selectedConsultation.cancellation_reason || '-'}"`
-                                                        : `Dibatalkan oleh Anda dengan alasan: "${selectedConsultation.cancellation_reason || '-'}"`}
-                                                    . 1 kuota sesi konsultasi telah dikembalikan ke saldo akun Anda secara otomatis.
-                                                </p>
-                                            </div>
+                                    ) : chatMessages.length === 0 ? (
+                                        <div className="py-12 text-center text-on-surface-variant space-y-2">
+                                            <span className="material-symbols-outlined text-3xl text-primary/50">chat_bubble_outline</span>
+                                            <p className="text-xs font-semibold text-on-surface">Mulai percakapan dengan dokter pendamping Anda</p>
+                                            <p className="text-[11px]">Kirimkan salam atau sampaikan perkembangan pola makan Anda hari ini.</p>
                                         </div>
-                                    )}
+                                    ) : (
+                                        chatMessages.map((msg) => {
+                                            const isSystem = msg.sender_role === 'SYSTEM';
+                                            const isUser = msg.sender_role === 'MEMBER';
+                                            const hasMetric = msg.metric_payload && typeof msg.metric_payload === 'object';
 
-                                    {/* Messages Feed */}
-                                    <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-3.5 bg-[#fbfdfc] dark:bg-surface/50 text-xs">
-                                        {chatLoading ? (
-                                            <div className="py-12 text-center text-on-surface-variant space-y-2">
-                                                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-                                                <p className="text-xs">Memuat riwayat bimbingan telemedisin...</p>
-                                            </div>
-                                        ) : chatMessages.length === 0 ? (
-                                            <div className="py-12 text-center text-on-surface-variant space-y-2">
-                                                <span className="material-symbols-outlined text-3xl text-primary/50">chat_bubble_outline</span>
-                                                <p className="text-xs">Mulai percakapan dengan dokter pendamping Anda.</p>
-                                            </div>
-                                        ) : (
-                                            chatMessages.map((msg) => {
-                                                const isSystem = msg.sender_role === 'SYSTEM';
-                                                const isUser = msg.sender_role === 'MEMBER';
-                                                const hasMetric = msg.metric_payload && typeof msg.metric_payload === 'object';
-
-                                                if (isSystem) {
-                                                    return (
-                                                        <div key={msg.id} className="py-2.5 px-3.5 my-2 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-200 text-center text-[11px] max-w-lg mx-auto leading-relaxed shadow-2xs">
-                                                            <div className="flex items-center justify-center gap-1 font-bold text-amber-800 dark:text-amber-300 mb-0.5">
-                                                                <span className="material-symbols-outlined text-[15px]">info</span>
-                                                                <span>Pemberitahuan Sistem</span>
-                                                            </div>
-                                                            <p className="whitespace-pre-wrap">{msg.message}</p>
-                                                        </div>
-                                                    );
-                                                }
-
+                                            if (isSystem) {
                                                 return (
-                                                    <div
-                                                        key={msg.id}
-                                                        className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} space-y-1`}
-                                                    >
-                                                        <span className="text-[10px] text-on-surface-variant font-mono px-1">
-                                                            {isUser ? 'Anda' : (selectedConsultation.instructor_name?.split(',')[0] || 'Dokter')} •{' '}
-                                                            {msg.created_at
-                                                                ? new Date(msg.created_at).toLocaleTimeString('id-ID', {
-                                                                      hour: '2-digit',
-                                                                      minute: '2-digit',
-                                                                  })
-                                                                : 'Sekarang'}
-                                                        </span>
-
-                                                        <div
-                                                            className={`p-3.5 sm:p-4 rounded-3xl max-w-[88%] sm:max-w-[75%] leading-relaxed shadow-2xs space-y-2.5 ${
-                                                                isUser
-                                                                    ? 'bg-[#00433e] text-white rounded-br-xs'
-                                                                    : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
-                                                            }`}
-                                                        >
-                                                            {/* Structured Quantitative Metric Card inside Chat */}
-                                                            {hasMetric && (
-                                                                <div className={`p-3 rounded-2xl border text-left space-y-1.5 ${
-                                                                    isUser 
-                                                                        ? 'bg-white/10 border-white/20 text-white' 
-                                                                        : 'bg-surface-container-low border-surface-container text-on-surface'
-                                                                }`}>
-                                                                    <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider">
-                                                                        <span>{msg.metric_payload.title || 'Data Klinis Terukur'}</span>
-                                                                        <span className="text-[9px] opacity-80">{msg.metric_payload.recorded_at}</span>
-                                                                    </div>
-                                                                    <div className="flex items-baseline gap-1.5">
-                                                                        <span className="text-lg font-mono font-black">{msg.metric_payload.value}</span>
-                                                                        {msg.metric_payload.unit && (
-                                                                            <span className="text-xs font-mono">{msg.metric_payload.unit}</span>
-                                                                        )}
-                                                                    </div>
-                                                                    {msg.metric_payload.status && (
-                                                                        <div className="text-[10px] font-bold">
-                                                                            Status: {msg.metric_payload.status}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            )}
-
-                                                            {/* Plain text message */}
-                                                            <p className="text-xs whitespace-pre-wrap">
-                                                                {msg.message}
-                                                            </p>
+                                                    <div key={msg.id} className="py-2 px-3.5 my-2 rounded-2xl bg-[#fffbeb] dark:bg-[#2a1b05] border border-[#f59e0b]/40 text-[#78350f] dark:text-[#fef3c7] text-center text-[11px] max-w-lg mx-auto leading-relaxed shadow-xs">
+                                                        <div className="flex items-center justify-center gap-1 font-bold text-[#b45309] dark:text-[#fde68a] mb-0.5">
+                                                            <span className="material-symbols-outlined text-[15px]">info</span>
+                                                            <span>Pemberitahuan Sistem</span>
                                                         </div>
+                                                        <p className="whitespace-pre-wrap font-medium">{msg.message}</p>
                                                     </div>
                                                 );
-                                            })
-                                        )}
-                                        <div ref={chatEndRef} />
-                                    </div>
-
-                                    {/* Chat Input Bar */}
-                                    <form
-                                        onSubmit={handleSendMessage}
-                                        className="p-3 border-t border-surface-container bg-white dark:bg-surface flex items-center gap-2"
-                                    >
-                                        <input
-                                            type="text"
-                                            value={chatInput}
-                                            disabled={selectedConsultation.status === 'CANCELLED'}
-                                            onChange={(e) => setChatInput(e.target.value)}
-                                            placeholder={
-                                                selectedConsultation.status === 'CANCELLED'
-                                                    ? 'Sesi tele-konsultasi telah dibatalkan. Ruang chat dinonaktifkan.'
-                                                    : 'Ketik pertanyaan atau diskusikan keluhan klinis Anda...'
                                             }
-                                            className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium disabled:opacity-60 disabled:cursor-not-allowed"
-                                        />
-                                        <button
-                                            type="submit"
-                                            disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                            className="px-5 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                                        >
-                                            <span className="material-symbols-outlined text-[16px]">send</span>
-                                            <span className="hidden sm:inline">Kirim</span>
-                                        </button>
-                                    </form>
+
+                                            return (
+                                                <div
+                                                    key={msg.id}
+                                                    className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} space-y-1`}
+                                                >
+                                                    <span className="text-[10px] text-on-surface-variant font-mono px-1">
+                                                        {isUser ? 'Anda' : (selectedConsultation.instructor_name?.split(',')[0] || 'Dokter')} •{' '}
+                                                        {msg.created_at
+                                                            ? new Date(msg.created_at).toLocaleTimeString('id-ID', {
+                                                                  hour: '2-digit',
+                                                                  minute: '2-digit',
+                                                              })
+                                                            : 'Sekarang'}
+                                                    </span>
+
+                                                    <div
+                                                        className={`p-3 sm:p-3.5 rounded-2xl max-w-[85%] sm:max-w-[78%] leading-relaxed shadow-2xs space-y-2 ${
+                                                            isUser
+                                                                ? 'bg-[#00433e] text-white rounded-br-xs'
+                                                                : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
+                                                        }`}
+                                                    >
+                                                        {/* Quantitative Metric Card */}
+                                                        {hasMetric && (
+                                                            <div className={`p-2.5 rounded-xl border text-left space-y-1 ${
+                                                                isUser 
+                                                                    ? 'bg-white/10 border-white/20 text-white' 
+                                                                    : 'bg-surface-container-low border-surface-container text-on-surface'
+                                                            }`}>
+                                                                <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider">
+                                                                    <span className="flex items-center gap-1">
+                                                                        <span className="material-symbols-outlined text-[14px] text-emerald-400">vital_signs</span>
+                                                                        <span>{msg.metric_payload.title || 'Data Klinis Terukur'}</span>
+                                                                    </span>
+                                                                    <span className="text-[9px] opacity-80">{msg.metric_payload.recorded_at}</span>
+                                                                </div>
+                                                                <div className="flex items-baseline gap-1">
+                                                                    <span className="text-lg font-mono font-black">{msg.metric_payload.value}</span>
+                                                                    {msg.metric_payload.unit && (
+                                                                        <span className="text-xs font-mono">{msg.metric_payload.unit}</span>
+                                                                    )}
+                                                                </div>
+                                                                {msg.metric_payload.status && (
+                                                                    <div className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-black/10 text-[9.5px] font-bold">
+                                                                        <span>Status:</span>
+                                                                        <span>{msg.metric_payload.status}</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+
+                                                        <p className="text-xs sm:text-[12.5px] whitespace-pre-wrap">{msg.message}</p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                    <div ref={chatEndRef} />
                                 </div>
                             </div>
                         ) : (
                             /* State when no consultations exist */
-                            <div className="p-8 sm:p-12 text-center rounded-3xl bg-white dark:bg-surface border border-dashed border-surface-container space-y-4 max-w-lg mx-auto shadow-2xs">
+                            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
                                 <div className="w-14 h-14 rounded-3xl bg-[#eef7f2] border border-[#d3e7dc] text-[#00433e] flex items-center justify-center mx-auto shadow-xs">
                                     <span className="material-symbols-outlined text-3xl">chat_bubble_outline</span>
                                 </div>
-                                <div className="space-y-1">
+                                <div className="space-y-1 max-w-sm">
                                     <h3 className="font-serif text-lg font-normal text-on-surface">
                                         Belum Ada Sesi Konsultasi Aktif
                                     </h3>
-                                    <p className="text-xs text-on-surface-variant max-w-sm mx-auto leading-relaxed">
+                                    <p className="text-xs text-on-surface-variant leading-relaxed">
                                         {canBook
-                                            ? 'Anda belum memiliki jadwal sesi bimbingan bersama dokter pendamping. Buat reservasi baru untuk memulai tele-konsultasi terukur.'
+                                            ? 'Anda belum memiliki jadwal sesi bimbingan bersama dokter pendamping. Jadwalkan sesi tele-konsultasi Anda sekarang.'
                                             : (quota.reason || 'Paket langganan aktif Anda tidak mencakup kuota konsultasi dokter. Tingkatkan paket langganan untuk menjadwalkan konsultasi.')}
                                     </p>
                                 </div>
@@ -982,10 +730,10 @@ export default function ConsultationsHub({
                                     <button
                                         type="button"
                                         onClick={() => setActiveTab('booking')}
-                                        className="px-6 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-medium shadow-xs transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer"
+                                        className="px-6 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer"
                                     >
-                                        <span className="material-symbols-outlined text-[16px]">add_circle</span>
-                                        <span>Jadwalkan Sesi Sekarang (+10 Poin)</span>
+                                        <span className="material-symbols-outlined text-[16px]">calendar_add_on</span>
+                                        <span>Jadwalkan Sesi Sekarang</span>
                                     </button>
                                 ) : (
                                     <Link
@@ -998,8 +746,192 @@ export default function ConsultationsHub({
                                 )}
                             </div>
                         )}
+
+                        {/* 4. Quick Biomarker Prompt Chips (Chatbot Suggested Prompts) */}
+                        {selectedConsultation && selectedConsultation.status !== 'CANCELLED' && (
+                            <div className="px-3 sm:px-4 py-2 bg-white/95 dark:bg-surface/95 backdrop-blur border-t border-surface-container shrink-0">
+                                <div className="max-w-2xl mx-auto flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider shrink-0 flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[14px] text-primary">add_chart</span>
+                                        <span>Kirim Data:</span>
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleShareMetric('glucose')}
+                                        disabled={chatSubmitting}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-emerald-50 hover:text-emerald-800 border border-surface-container hover:border-emerald-300 text-[10.5px] font-medium text-on-surface transition-all shrink-0 cursor-pointer disabled:opacity-40"
+                                        title="Bagikan Data Gula Darah Puasa"
+                                    >
+                                        <span className="material-symbols-outlined text-[13px] text-rose-500">water_drop</span>
+                                        <span>Glukosa {healthMetrics.blood_glucose?.value || 108} mg/dL</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleShareMetric('diet')}
+                                        disabled={chatSubmitting}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-emerald-50 hover:text-emerald-800 border border-surface-container hover:border-emerald-300 text-[10.5px] font-medium text-on-surface transition-all shrink-0 cursor-pointer disabled:opacity-40"
+                                        title="Bagikan Ringkasan Asupan Kalori"
+                                    >
+                                        <span className="material-symbols-outlined text-[13px] text-emerald-600">restaurant</span>
+                                        <span>Nutrisi {healthMetrics.calories?.value || 1650} kkal</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleShareMetric('sleep')}
+                                        disabled={chatSubmitting}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-emerald-50 hover:text-emerald-800 border border-surface-container hover:border-emerald-300 text-[10.5px] font-medium text-on-surface transition-all shrink-0 cursor-pointer disabled:opacity-40"
+                                        title="Bagikan Durasi Tidur"
+                                    >
+                                        <span className="material-symbols-outlined text-[13px] text-indigo-500">bedtime</span>
+                                        <span>Tidur {healthMetrics.sleep_duration?.value || 7.2} Jam</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleShareMetric('steps')}
+                                        disabled={chatSubmitting}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low hover:bg-emerald-50 hover:text-emerald-800 border border-surface-container hover:border-emerald-300 text-[10.5px] font-medium text-on-surface transition-all shrink-0 cursor-pointer disabled:opacity-40"
+                                        title="Bagikan Akumulasi Langkah Kaki"
+                                    >
+                                        <span className="material-symbols-outlined text-[13px] text-amber-500">directions_walk</span>
+                                        <span>{(healthMetrics.steps?.value || 8420).toLocaleString('id-ID')} Langkah</span>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 5. Sticky Bottom Chat Composer */}
+                        {selectedConsultation && (
+                            <form
+                                onSubmit={handleSendMessage}
+                                className="p-2.5 sm:p-3 bg-white dark:bg-surface border-t border-surface-container shrink-0"
+                            >
+                                <div className="max-w-2xl mx-auto flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        value={chatInput}
+                                        disabled={selectedConsultation.status === 'CANCELLED'}
+                                        onChange={(e) => setChatInput(e.target.value)}
+                                        placeholder={
+                                            selectedConsultation.status === 'CANCELLED'
+                                                ? 'Sesi tele-konsultasi telah dibatalkan.'
+                                                : 'Ketik pesan atau konsultasikan keluhan Anda...'
+                                        }
+                                        className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                        className="w-10 h-10 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
+                                        title="Kirim Pesan"
+                                    >
+                                        <span className="material-symbols-outlined text-[18px]">send</span>
+                                    </button>
+                                </div>
+                            </form>
+                        )}
                     </div>
-                )}
+                </div>
+            ) : (
+                <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-4 pb-2">
+                    {/* 1. Header & Quota Overview Banner */}
+                    <div className="rounded-2xl bg-linear-to-r from-[#00433e] via-[#08544e] to-[#0f5c56] p-4 sm:p-5 text-white shadow-xs relative overflow-hidden">
+                        <div 
+                            aria-hidden="true" 
+                            className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl" 
+                        />
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="space-y-1 max-w-2xl">
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
+                                    <span className="material-symbols-outlined text-[14px]">clinical_notes</span>
+                                    <span>Konsultasi Dokter</span>
+                                </div>
+                                <h1 className="text-lg sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
+                                    Ruang Konsultasi Dokter
+                                </h1>
+                                <p className="text-xs sm:text-sm text-white/85 leading-relaxed hidden sm:block">
+                                    Diskusikan data glukosa, pola makan, dan gaya hidup Anda secara personal bersama dokter spesialis berlisensi.
+                                </p>
+                            </div>
+
+                            {/* Quota & Quick Action */}
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
+                                <div className="bg-black/25 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/15 text-center min-w-28 sm:min-w-36">
+                                    <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
+                                        Sisa Kuota
+                                    </span>
+                                    <div className="flex items-baseline justify-center gap-1 mt-0.5">
+                                        {isUnlimited ? (
+                                            <span className="font-mono font-black text-lg sm:text-xl text-white">Bebas Batas</span>
+                                        ) : (
+                                            <>
+                                                <span className="font-mono font-black text-xl sm:text-2xl text-white">{remainingQuota}</span>
+                                                <span className="text-[11px] sm:text-xs font-mono text-white/70">/ {totalQuota} Sesi</span>
+                                            </>
+                                        )}
+                                    </div>
+                                    <span className="text-[9px] font-mono text-white/70 block mt-0.5">
+                                        Paket: {membership?.tier || quota.tier_name || 'Silver'}
+                                    </span>
+                                </div>
+
+                                {!canBook && (
+                                    <Link
+                                        href="/paket"
+                                        className="inline-flex items-center gap-1 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs"
+                                        title="Tingkatkan paket untuk menambah sesi konsultasi"
+                                    >
+                                        <span className="material-symbols-outlined text-[16px]">upgrade</span>
+                                        <span>Upgrade</span>
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 2. Clear Segmented Tabs */}
+                    <div className="grid grid-cols-3 p-1 rounded-2xl bg-surface-container border border-surface-container-high/60 gap-1">
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab('live_chat')}
+                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                                activeTab === 'live_chat'
+                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                    : 'text-on-surface-variant hover:text-on-surface'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">chat</span>
+                            <span className="truncate">Chat Dokter</span>
+                            {upcomingConsultations.length > 0 && (
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse hidden sm:inline-block" />
+                            )}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab('booking')}
+                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                                activeTab === 'booking'
+                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                    : 'text-on-surface-variant hover:text-on-surface'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">calendar_add_on</span>
+                            <span className="truncate">Jadwalkan</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab('history')}
+                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                                activeTab === 'history'
+                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                    : 'text-on-surface-variant hover:text-on-surface'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">history_edu</span>
+                            <span className="truncate">Riwayat ({pastConsultations.length})</span>
+                        </button>
+                    </div>
 
                 {/* TAB 2: JADWALKAN KONSULTASI (ALUR 3 LANGKAH YANG JELAS & TIDAK PUSING) */}
                 {activeTab === 'booking' && (
@@ -1022,47 +954,47 @@ export default function ConsultationsHub({
                             </Alert>
                         )}
 
-                        {/* Quota Exhausted or No Quota Notice Banner */}
+                        {/* Quota Exhausted or No Quota Notice Banner (Solid Opaque High-Contrast Card) */}
                         {!canBook && (
-                            <div className="p-4 sm:p-5 rounded-3xl bg-amber-500/10 border border-amber-500/25 text-amber-950 dark:text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 shadow-xs">
-                                <div className="flex items-start gap-3">
-                                    <div className="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
+                            <div className="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-[#fffbeb] dark:bg-[#2a1b05] border border-amber-300 dark:border-amber-700/60 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                                <div className="flex items-center sm:items-start gap-3 min-w-0 flex-1">
+                                    <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border border-amber-300/50 flex items-center justify-center shrink-0">
                                         <span className="material-symbols-outlined text-[20px]">lock</span>
                                     </div>
-                                    <div>
-                                        <h4 className="font-heading font-bold text-xs sm:text-sm text-amber-900 dark:text-amber-200">
-                                            {Number(quota.total) === 0 ? `Fitur Konsultasi Belum Tersedia (Paket ${membership?.tier || 'Silver'})` : 'Kuota Konsultasi Periode Ini Telah Habis'}
+                                    <div className="min-w-0">
+                                        <h4 className="font-bold text-xs sm:text-sm text-amber-950 dark:text-amber-100 leading-snug">
+                                            {Number(quota.total) === 0 ? 'Konsultasi Belum Tersedia' : 'Kuota Konsultasi Habis'}
                                         </h4>
-                                        <p className="text-xs text-amber-800/80 dark:text-amber-300/80 mt-0.5 leading-relaxed">
-                                            {quota.reason || 'Silakan tingkatkan paket langganan Anda ke Gold atau Platinum untuk menikmati kuota sesi konsultasi dokter.'}
+                                        <p className="text-[11px] sm:text-xs font-medium text-amber-900/85 dark:text-amber-200/90 mt-0.5 leading-relaxed">
+                                            {quota.reason || 'Tingkatkan paket untuk konsultasi dokter privat.'}
                                         </p>
                                     </div>
                                 </div>
                                 <Link
                                     href="/paket"
-                                    className="px-4 py-2 rounded-xl bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-bold shrink-0 transition-all shadow-xs flex items-center gap-1.5"
+                                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-bold shrink-0 transition-all text-center flex items-center justify-center gap-1.5"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">upgrade</span>
-                                    <span>Lihat Pilihan Paket</span>
+                                    <span>Upgrade Paket</span>
                                 </Link>
                             </div>
                         )}
 
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                        <div className="space-y-4">
                             
                             {/* LANGKAH 1: PILIH DOKTER SPESIALIS */}
-                            <div className="lg:col-span-6 space-y-3">
+                            <div className="space-y-3">
                                 <div className="flex items-center justify-between px-1">
                                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                                         <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">1</span>
-                                        <span>Pilih Dokter Spesialis Pendamping</span>
+                                        <span>Pilih Dokter <span className="hidden sm:inline">Spesialis</span></span>
                                     </span>
-                                    <span className="text-[11px] text-on-surface-variant">
-                                        {instructors.length} Tenaga Medis
+                                    <span className="text-[11px] text-on-surface-variant font-mono">
+                                        {instructors.length} Dokter
                                     </span>
                                 </div>
 
-                                <div className="space-y-2.5">
+                                <div className="space-y-2">
                                     {instructors.map((doc) => {
                                         const isSelected = selectedDoctor?.id === doc.id;
                                         const isAssigned = assignedInstructorIds.includes(doc.id);
@@ -1071,14 +1003,14 @@ export default function ConsultationsHub({
                                             <div
                                                 key={doc.id}
                                                 onClick={() => setSelectedDoctor(doc)}
-                                                className={`p-3.5 sm:p-4 rounded-3xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                                                className={`p-3 sm:p-4 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                                                     isSelected
                                                         ? 'border-[#00433e] bg-[#eef7f2]/50 shadow-xs ring-1 ring-[#00433e]/30'
                                                         : 'border-surface-container bg-white dark:bg-surface hover:border-primary/40'
                                                 }`}
                                             >
                                                 <div className="flex items-center gap-3 min-w-0">
-                                                    <div className="w-12 h-12 rounded-2xl bg-surface-container border border-surface-container flex items-center justify-center overflow-hidden shrink-0">
+                                                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-surface-container border border-surface-container flex items-center justify-center overflow-hidden shrink-0">
                                                         <img
                                                             src={doc.avatar || '/image/doctor-portrait.jpg'}
                                                             alt={doc.name}
@@ -1100,7 +1032,8 @@ export default function ConsultationsHub({
                                                             {doc.specialty || 'Spesialis Gizi Klinis'}
                                                         </p>
                                                         <p className="text-[10px] text-on-surface-variant font-mono truncate">
-                                                            {doc.str_number || 'STR Kemenkes Terverifikasi'}
+                                                            <span className="sm:hidden">STR Terverifikasi</span>
+                                                            <span className="hidden sm:inline">{doc.str_number || 'STR Kemenkes Terverifikasi'}</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -1129,13 +1062,13 @@ export default function ConsultationsHub({
                             </div>
 
                             {/* LANGKAH 2 & 3: FORM JADWAL & KELUHAN KLINIS */}
-                            <div className="lg:col-span-6 space-y-3">
+                            <div className="space-y-3">
                                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary flex items-center gap-1.5 px-1">
                                     <span className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">2</span>
-                                    <span>Tentukan Waktu &amp; Topik Bimbingan</span>
+                                    <span>Jadwal &amp; Topik Konsultasi</span>
                                 </span>
 
-                                <div className="p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-4">
+                                <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-4">
                                     <form onSubmit={handleConfirmBooking} className="space-y-4">
                                         
                                         {/* Tanggal & Jam */}
@@ -1185,7 +1118,7 @@ export default function ConsultationsHub({
                                                 value={complaint}
                                                 onChange={(e) => setComplaint(e.target.value)}
                                                 rows={2}
-                                                placeholder="Contoh: Diskusi hasil lab HbA1c, remisi glukosa 14 hari, atau rekomendasi asupan..."
+                                                placeholder="Contoh: Evaluasi hasil gula darah, target nutrisi harian, keluhan gejala..."
                                                 className="w-full p-3 rounded-2xl border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary leading-relaxed"
                                                 required
                                             />
@@ -1194,13 +1127,13 @@ export default function ConsultationsHub({
                                         {/* Konteks Tambahan (Opsional) */}
                                         <div className="space-y-1.5">
                                             <label className="text-[11px] font-medium text-on-surface-variant block">
-                                                Catatan Gejala / Obat yang Dikonsumsi (Opsional):
+                                                Catatan / Obat Dikonsumsi (Opsional):
                                             </label>
                                             <input
                                                 type="text"
                                                 value={healthContext}
                                                 onChange={(e) => setHealthContext(e.target.value)}
-                                                placeholder="Contoh: Sedang konsumsi suplemen kromium / metformin"
+                                                placeholder="Contoh: Metformin 500mg, suplemen..."
                                                 className="w-full px-3 py-2 rounded-xl border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
                                             />
                                         </div>
@@ -1214,14 +1147,14 @@ export default function ConsultationsHub({
                                             <span className="material-symbols-outlined text-[18px]">
                                                 {canBook ? 'verified' : 'lock'}
                                             </span>
-                                            <span>
+                                            <span className="truncate">
                                                 {bookingSubmitting
                                                     ? 'Memproses Jadwal...'
                                                     : !canBook
                                                     ? (Number(quota.total) === 0
-                                                        ? 'Paket Anda Tidak Memiliki Kuota Konsultasi • Upgrade Paket'
-                                                        : 'Kuota Habis • Silakan Upgrade Paket')
-                                                    : 'Konfirmasi Sesi Konsultasi (+10 Poin)'}
+                                                        ? 'Upgrade Paket untuk Booking'
+                                                        : 'Kuota Habis • Upgrade Paket')
+                                                    : 'Konfirmasi Jadwal (+10 Poin)'}
                                             </span>
                                         </button>
                                     </form>
@@ -1233,7 +1166,7 @@ export default function ConsultationsHub({
 
                 {/* TAB 3: RIWAYAT KONSULTASI & CATATAN EVALUASI DOKTER */}
                 {activeTab === 'history' && (
-                    <div className="space-y-3.5 max-w-4xl mx-auto">
+                    <div className="space-y-3">
                         {consultations.length > 0 ? (
                             consultations.map((c) => {
                                 const isCompleted = c.status === 'COMPLETED';
@@ -1242,7 +1175,7 @@ export default function ConsultationsHub({
                                 return (
                                     <div
                                         key={c.id}
-                                        className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3"
+                                        className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3"
                                     >
                                         <div className="flex flex-wrap items-center justify-between gap-2">
                                             <div className="flex items-center gap-2">
@@ -1343,6 +1276,106 @@ export default function ConsultationsHub({
                     </div>
                 )}
             </div>
+            )}
+
+            {/* MODAL: Informasi Sesi & Catatan Dokter (AI Chatbot Info Sheet) */}
+            {showDetailModal && selectedConsultation && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+                    onClick={() => setShowDetailModal(false)}
+                >
+                    <div
+                        className="bg-white dark:bg-surface rounded-3xl border border-surface-container shadow-2xl max-w-md w-full p-6 space-y-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between border-b border-surface-container pb-3">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary text-[22px]">clinical_notes</span>
+                                <h3 className="font-heading font-bold text-base text-on-surface">
+                                    Informasi Sesi Konsultasi
+                                </h3>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowDetailModal(false)}
+                                className="p-1 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container cursor-pointer"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">close</span>
+                            </button>
+                        </div>
+
+                        {/* Doctor info */}
+                        <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-primary/10 overflow-hidden shrink-0 border border-primary/20 flex items-center justify-center font-bold text-primary">
+                                <img
+                                    src="/image/doctor-portrait.jpg"
+                                    alt="Dokter"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                                <h4 className="font-bold text-xs sm:text-sm text-on-surface truncate">
+                                    {selectedConsultation.instructor_name}
+                                </h4>
+                                <p className="text-xs text-primary font-medium truncate">
+                                    Spesialis Gizi Klinis &amp; Pre-Diabetes
+                                </p>
+                                <p className="text-[10px] text-on-surface-variant font-mono mt-0.5">
+                                    Jadwal: {selectedConsultation.scheduled_start || 'Sesi Aktif'} WIB
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Focus / Purpose */}
+                        <div className="space-y-1 text-xs">
+                            <span className="font-bold text-on-surface block text-[11px]">Fokus Bimbingan:</span>
+                            <p className="p-2.5 rounded-xl bg-surface-container-low text-on-surface-variant leading-relaxed text-[11px]">
+                                {selectedConsultation.purpose}
+                            </p>
+                        </div>
+
+                        {/* Doctor Notes if any */}
+                        {selectedConsultation.notes && (
+                            <div className="space-y-1 text-xs">
+                                <span className="font-bold text-primary block text-[11px]">Catatan Evaluasi Dokter:</span>
+                                <p className="p-2.5 rounded-xl bg-primary/5 border border-primary/20 text-on-surface leading-relaxed text-[11px]">
+                                    {selectedConsultation.notes}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Actions in Modal */}
+                        <div className="pt-2 space-y-2">
+                            {selectedConsultation.meeting_url && selectedConsultation.status !== 'CANCELLED' && (
+                                <a
+                                    href={selectedConsultation.meeting_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[17px]">videocam</span>
+                                    <span>Masuk Ruang Video Call</span>
+                                </a>
+                            )}
+
+                            {(selectedConsultation.is_upcoming || selectedConsultation.status === 'CONFIRMED' || selectedConsultation.status === 'SCHEDULED') && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowDetailModal(false);
+                                        openCancelModal(selectedConsultation);
+                                    }}
+                                    className="w-full py-2 px-3 rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">cancel</span>
+                                    <span>Batalkan Sesi Konsultasi Ini</span>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* MODAL: Batalkan Sesi Konsultasi Pasien */}
             {cancelModalCons && (
