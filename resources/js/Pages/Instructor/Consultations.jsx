@@ -276,16 +276,16 @@ export default function Consultations({
 
                 return (
                     <div className="flex items-center justify-end gap-1.5 flex-wrap">
-                        <button
-                            type="button"
-                            onClick={() => openChatModal(cons)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary border border-surface-container font-semibold text-xs transition-all shadow-2xs cursor-pointer"
+                        <Link
+                            href={`/instructor/chat?consultation_id=${cons.id}`}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 font-bold text-xs transition-all shadow-2xs cursor-pointer"
+                            title="Buka percakapan telemedisin di Ruang Chat"
                         >
                             <span className="material-symbols-outlined text-[14px]">
-                                chat
+                                forum
                             </span>
                             <span>Chat</span>
-                        </button>
+                        </Link>
 
                         {isScheduled && (
                             <>
@@ -367,7 +367,14 @@ export default function Consultations({
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+                        <Link
+                            href="/instructor/chat"
+                            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer active:scale-95"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">forum</span>
+                            <span>Ruang Chat Pasien</span>
+                        </Link>
                         <button
                             type="button"
                             onClick={() => setShowScheduleModal(true)}

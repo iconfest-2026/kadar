@@ -40,6 +40,176 @@ class ConsultationController extends Controller
         ]);
     }
 
+    public function chatHub(Request $request)
+    {
+        /** @var \App\Models\User $instructor */
+        $instructor = Auth::user();
+
+        $assignedMemberIds = InstructorMemberAssignment::where('instructor_id', $instructor->id)
+            ->where('status', 'ACTIVE')
+            ->pluck('member_id');
+
+        $assignedMembers = User::whereIn('id', $assignedMemberIds)
+            ->with('memberProfile')
+            ->select('id', 'name', 'email')
+            ->get();
+
+        // Target consultation / member from query parameters
+        $targetConsultationId = $request->query('consultation_id');
+        $targetMemberId = $request->query('member_id');
+
+        if ($targetMemberId && in_array((int) $targetMemberId, $assignedMemberIds->toArray())) {
+            $existing = Consultation::where('instructor_id', $instructor->id)
+                ->where('member_id', $targetMemberId)
+                ->whereIn('status', ['SCHEDULED', 'CONFIRMED', 'IN_PROGRESS'])
+                ->latest('scheduled_start')
+                ->first();
+
+            if (!$existing) {
+                $existing = Consultation::where('instructor_id', $instructor->id)
+                    ->where('member_id', $targetMemberId)
+                    ->latest('created_at')
+                    ->first();
+            }
+
+            if (!$existing) {
+                // Auto-create initial consultation so instructor can immediately start chatting
+                $member = User::find($targetMemberId);
+                $meetingId = 'AEVYRA-ROOM-' . strtoupper(substr(md5(uniqid()), 0, 8));
+                $existing = Consultation::create([
+                    'member_id' => $targetMemberId,
+                    'instructor_id' => $instructor->id,
+                    'status' => 'CONFIRMED',
+                    'scheduled_start' => now(),
+                    'scheduled_end' => now()->addMinutes(45),
+                    'purpose' => 'Sesi Bimbingan & Tele-Konsultasi Terpadu',
+                    'meeting_url' => 'https://telemed.aevyra.health/' . $meetingId,
+                    'notes' => 'Sesi bimbingan klinis dibuka oleh instruktur pendamping.',
+                ]);
+
+                ConsultationMessage::create([
+                    'consultation_id' => $existing->id,
+                    'sender_id' => $instructor->id,
+                    'sender_role' => 'INSTRUCTOR',
+                    'message' => "Halo {$member->name}! Saya {$instructor->name}, dokter/instruktur pendamping Anda. Ruang chat tele-konsultasi kita telah dibuka. Silakan sampaikan keluhan, tanyakan pola nutrisi harian, atau bagikan data kesehatan terukur Anda di sini.",
+                    'is_read' => false,
+                ]);
+            }
+
+            $targetConsultationId = $existing->id;
+        }
+
+        $allConsultations = Consultation::where('instructor_id', $instructor->id)
+            ->with(['member:id,name,email', 'cancelledBy:id,name'])
+            ->withCount(['messages as unread_messages_count' => function ($q) {
+                $q->where('sender_role', 'MEMBER')->where('is_read', false);
+            }])
+            ->orderBy('scheduled_start', 'desc')
+            ->get()
+            ->map(function ($c) {
+                $lastMsg = ConsultationMessage::where('consultation_id', $c->id)
+                    ->latest('created_at')
+                    ->first();
+
+                return [
+                    'id' => $c->id,
+                    'member_id' => $c->member_id,
+                    'member_name' => $c->member?->name ?? 'Member Binaan',
+                    'member_email' => $c->member?->email ?? '-',
+                    'purpose' => $c->purpose,
+                    'status' => $c->status,
+                    'scheduled_start' => $c->scheduled_start?->format('Y-m-d H:i'),
+                    'scheduled_end' => $c->scheduled_end?->format('Y-m-d H:i'),
+                    'meeting_url' => $c->meeting_url,
+                    'notes' => $c->notes,
+                    'cancellation_reason' => $c->cancellation_reason,
+                    'cancelled_at' => $c->cancelled_at?->format('Y-m-d H:i'),
+                    'cancelled_by_id' => $c->cancelled_by_id,
+                    'cancelled_by_name' => $c->cancelledBy?->name,
+                    'unread_count' => $c->unread_messages_count ?? 0,
+                    'last_message' => $lastMsg ? [
+                        'text' => $lastMsg->message,
+                        'created_at' => $lastMsg->created_at?->format('H:i'),
+                        'sender_role' => $lastMsg->sender_role,
+                    ] : null,
+                ];
+            });
+
+        // Health metrics of all assigned members for instant clinical telemetry inspection
+        $memberMetrics = [];
+        if ($assignedMemberIds->isNotEmpty()) {
+            $latestRecords = \App\Models\HealthRecord::whereIn('user_id', $assignedMemberIds)
+                ->whereIn('metric_type', ['blood_glucose', 'sleep_duration', 'steps', 'water_intake', 'calories', 'blood_pressure_systolic'])
+                ->orderBy('recorded_at', 'desc')
+                ->get()
+                ->groupBy('user_id');
+
+            foreach ($latestRecords as $uId => $records) {
+                $memberMetrics[$uId] = $records->groupBy('metric_type')->map(function ($items) {
+                    $first = $items->first();
+                    return [
+                        'value' => (float) $first->value_numeric,
+                        'unit' => $first->unit,
+                        'recorded_at' => $first->recorded_at ? $first->recorded_at->format('d M H:i') : null,
+                    ];
+                });
+            }
+        }
+
+        return Inertia::render('Instructor/ChatHub', [
+            'consultations' => $allConsultations,
+            'assignedMembers' => $assignedMembers,
+            'initialConsultationId' => $targetConsultationId ? (int) $targetConsultationId : null,
+            'memberMetrics' => $memberMetrics,
+        ]);
+    }
+
+    public function getConversations(Request $request)
+    {
+        /** @var \App\Models\User $instructor */
+        $instructor = Auth::user();
+
+        $allConsultations = Consultation::where('instructor_id', $instructor->id)
+            ->with(['member:id,name,email', 'cancelledBy:id,name'])
+            ->withCount(['messages as unread_messages_count' => function ($q) {
+                $q->where('sender_role', 'MEMBER')->where('is_read', false);
+            }])
+            ->orderBy('scheduled_start', 'desc')
+            ->get()
+            ->map(function ($c) {
+                $lastMsg = ConsultationMessage::where('consultation_id', $c->id)
+                    ->latest('created_at')
+                    ->first();
+
+                return [
+                    'id' => $c->id,
+                    'member_id' => $c->member_id,
+                    'member_name' => $c->member?->name ?? 'Member Binaan',
+                    'member_email' => $c->member?->email ?? '-',
+                    'purpose' => $c->purpose,
+                    'status' => $c->status,
+                    'scheduled_start' => $c->scheduled_start?->format('Y-m-d H:i'),
+                    'scheduled_end' => $c->scheduled_end?->format('Y-m-d H:i'),
+                    'meeting_url' => $c->meeting_url,
+                    'notes' => $c->notes,
+                    'cancellation_reason' => $c->cancellation_reason,
+                    'cancelled_at' => $c->cancelled_at?->format('Y-m-d H:i'),
+                    'cancelled_by_id' => $c->cancelled_by_id,
+                    'cancelled_by_name' => $c->cancelledBy?->name,
+                    'unread_count' => $c->unread_messages_count ?? 0,
+                    'last_message' => $lastMsg ? [
+                        'text' => $lastMsg->message,
+                        'created_at' => $lastMsg->created_at?->format('H:i'),
+                        'sender_role' => $lastMsg->sender_role,
+                    ] : null,
+                ];
+            });
+
+        return response()->json([
+            'consultations' => $allConsultations,
+        ]);
+    }
+
     public function store(Request $request)
     {
         /** @var \App\Models\User $instructor */
@@ -47,8 +217,8 @@ class ConsultationController extends Controller
 
         $validated = $request->validate([
             'member_id' => 'required|exists:users,id',
-            'scheduled_start' => 'required|date|after:now',
-            'scheduled_end' => 'required|date|after:scheduled_start',
+            'scheduled_start' => 'required|date',
+            'scheduled_end' => 'required|date|after_or_equal:scheduled_start',
             'purpose' => 'required|string|max:255',
         ]);
 
@@ -141,7 +311,7 @@ class ConsultationController extends Controller
         /** @var \App\Models\User $instructor */
         $instructor = Auth::user();
 
-        if ($consultation->instructor_id !== $instructor->id) {
+        if ((int)$consultation->instructor_id !== (int)$instructor->id) {
             abort(403, 'Anda tidak memiliki hak akses ke konsultasi ini.');
         }
 
@@ -212,7 +382,7 @@ class ConsultationController extends Controller
         /** @var \App\Models\User $instructor */
         $instructor = Auth::user();
 
-        if ($consultation->instructor_id !== $instructor->id) {
+        if ((int)$consultation->instructor_id !== (int)$instructor->id) {
             abort(403, 'Anda tidak memiliki hak akses ke konsultasi ini.');
         }
 

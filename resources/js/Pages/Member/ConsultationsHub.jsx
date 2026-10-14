@@ -111,6 +111,41 @@ export default function ConsultationsHub({
         }
     };
 
+    // Real-time near-instant polling for Member Chat: every 2.0 seconds
+    useEffect(() => {
+        if (!selectedConsultation?.id) return;
+        if (selectedConsultation.status === 'CANCELLED') return;
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`/member/consultations/${selectedConsultation.id}/messages`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.messages) {
+                        setChatMessages((prev) => {
+                            const prevLast = prev[prev.length - 1];
+                            const newLast = data.messages[data.messages.length - 1];
+                            const hasNew = prev.length !== data.messages.length || (prevLast?.id !== newLast?.id);
+                            if (hasNew) {
+                                setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+                                return data.messages;
+                            }
+                            return prev;
+                        });
+                    }
+                    if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
+                        setSelectedConsultation((prev) => ({
+                            ...prev,
+                            ...data.consultation,
+                        }));
+                    }
+                }
+            } catch (err) {}
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [selectedConsultation?.id, selectedConsultation?.status]);
+
     // Slot fetching on doctor or date change
     useEffect(() => {
         if (selectedDoctor && bookingDate) {
@@ -507,6 +542,35 @@ export default function ConsultationsHub({
                                 {/* KOLOM KIRI: Profil Dokter & Data Telemetri Terukur (Desktop & Tablet) */}
                                 <div className="lg:col-span-4 space-y-4">
                                     
+                                    {/* Selector jika member memiliki lebih dari 1 sesi konsultasi */}
+                                    {consultations.length > 1 && (
+                                        <div className="p-3.5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-2">
+                                            <div className="flex items-center justify-between text-[11px] font-bold text-on-surface">
+                                                <span className="flex items-center gap-1.5 text-primary">
+                                                    <span className="material-symbols-outlined text-[16px]">swap_horiz</span>
+                                                    <span>Ganti Ruang Sesi Dokter</span>
+                                                </span>
+                                                <span className="text-[10px] text-on-surface-variant font-mono">
+                                                    {consultations.length} sesi
+                                                </span>
+                                            </div>
+                                            <select
+                                                value={selectedConsultation?.id || ''}
+                                                onChange={(e) => {
+                                                    const found = consultations.find((c) => String(c.id) === String(e.target.value));
+                                                    if (found) setSelectedConsultation(found);
+                                                }}
+                                                className="w-full px-3 py-2 bg-surface-container-low rounded-xl border border-surface-container text-xs text-on-surface font-medium focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+                                            >
+                                                {consultations.map((c) => (
+                                                    <option key={c.id} value={c.id}>
+                                                        {c.instructor_name} - {c.purpose} ({c.status === 'CONFIRMED' || c.status === 'SCHEDULED' ? 'Aktif' : c.status === 'CANCELLED' ? 'Dibatalkan' : c.status === 'COMPLETED' ? 'Selesai' : c.status})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
+
                                     {/* Kartu Status Konsultasi Aktif */}
                                     <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-surface border border-surface-container shadow-xs space-y-3.5">
                                         <div className="flex items-center justify-between gap-2 pb-3 border-b border-surface-container">

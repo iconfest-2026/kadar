@@ -209,6 +209,13 @@ export default function MemberDetail({
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+                        <Link
+                            href={`/instructor/chat?member_id=${member.id}`}
+                            className="flex-1 md:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer active:scale-95"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">forum</span>
+                            <span>Chat Pasien</span>
+                        </Link>
                         <button
                             type="button"
                             onClick={() => setShowConsultationModal(true)}
@@ -558,6 +565,13 @@ export default function MemberDetail({
                                                 minute: '2-digit'
                                             }) : 'Tercatat'}
                                         </span>
+                                        <Link
+                                            href={`/instructor/chat?consultation_id=${c.id}`}
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-all"
+                                        >
+                                            <span className="material-symbols-outlined text-[15px]">chat</span>
+                                            <span>Buka Chat</span>
+                                        </Link>
                                     </div>
                                 </div>
                             ))}

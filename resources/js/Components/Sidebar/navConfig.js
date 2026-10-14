@@ -49,6 +49,7 @@ export function getInstructorNavSections() {
         {
             title: 'Tindakan Klinis & Intervensi',
             items: [
+                { id: 'chat', name: 'Ruang Chat Pasien', href: '/instructor/chat', icon: 'forum', badge: 'Live' },
                 { id: 'interventions', name: 'Rencana Intervensi', href: '/instructor/interventions', icon: 'clinical_notes', badge: 'HBE' },
                 { id: 'consultations', name: 'Jadwal Tele-Konsultasi', href: '/instructor/consultations', icon: 'calendar_month' },
             ],

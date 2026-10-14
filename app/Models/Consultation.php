@@ -26,6 +26,10 @@ class Consultation extends Model
     protected function casts(): array
     {
         return [
+            'member_id' => 'integer',
+            'instructor_id' => 'integer',
+            'program_id' => 'integer',
+            'cancelled_by_id' => 'integer',
             'scheduled_start' => 'datetime',
             'scheduled_end' => 'datetime',
             'cancelled_at' => 'datetime',
