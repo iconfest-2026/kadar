@@ -235,7 +235,7 @@ class YoloFoodVisionService
 
         // 2. Try Vision AI if available and imageData provided
         if (!empty($imageData)) {
-            // Priority 1: Google Gemini Multimodal Vision (from .env)
+            // Priority 1: Google Gemini Multimodal Vision (from .env - ultra-fast flash-lite)
             $geminiDetected = $this->detectWithGeminiVision($imageData, $rawText);
             if ($geminiDetected) {
                 if (isset($geminiDetected['is_food']) && $geminiDetected['is_food'] === false) {
@@ -251,19 +251,21 @@ class YoloFoodVisionService
                 }
             }
 
-            // Priority 2: Groq High-Speed Vision
-            $groqDetected = $this->detectWithGroqVision($imageData, $rawText);
-            if ($groqDetected) {
-                if (isset($groqDetected['is_food']) && $groqDetected['is_food'] === false) {
-                    return [
-                        'status' => 'not_food',
-                        'success' => false,
-                        'is_food' => false,
-                        'message' => $groqDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
-                    ];
-                }
-                if (!empty($groqDetected['name'])) {
-                    return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
+            // Priority 2: Groq High-Speed Reasoning if text hints or OCR detected
+            if (!empty($rawText)) {
+                $groqDetected = $this->detectWithGroqVision($imageData, $rawText);
+                if ($groqDetected) {
+                    if (isset($groqDetected['is_food']) && $groqDetected['is_food'] === false) {
+                        return [
+                            'status' => 'not_food',
+                            'success' => false,
+                            'is_food' => false,
+                            'message' => $groqDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
+                        ];
+                    }
+                    if (!empty($groqDetected['name'])) {
+                        return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
+                    }
                 }
             }
         }
@@ -276,7 +278,7 @@ class YoloFoodVisionService
             }
         }
 
-        // If not food or no food recognized, DO NOT default to sample! Return not_food.
+        // If not food or no food recognized, DO NOT default to sample! Return not_food cleanly without delay.
         return [
             'status' => 'not_food',
             'success' => false,
@@ -344,14 +346,15 @@ class YoloFoodVisionService
             return null;
         }
 
+        // Use confirmed, fastest available multimodal models with short timeouts
+        $primaryModel = env('GEMINI_MODEL_VISION', 'gemini-flash-lite-latest');
         $models = array_unique(array_filter([
-            env('GEMINI_MODEL_VISION'),
-            env('GEMINI_MODEL'),
-            'gemini-3.8-flash',
-            'gemini-3.5-flash',
+            $primaryModel,
+            'gemini-flash-lite-latest',
             'gemini-flash-latest',
-            'gemini-3-flash-preview',
         ]));
+        // Cap to at most 2 model attempts to prevent long latency
+        $modelsToTry = array_slice($models, 0, 2);
 
         $prompt = "Tugas: Analisis citra makanan atau label gizi untuk aplikasi kesehatan Indonesia AEVYRA.\n"
             . "Periksa gambar ini secara seksama:\n"
@@ -384,11 +387,12 @@ class YoloFoodVisionService
             . "}\n"
             . (!empty($rawText) ? "Petunjuk tambahan: " . mb_substr($rawText, 0, 300) : "");
 
-        foreach ($models as $model) {
+        foreach ($modelsToTry as $model) {
             try {
                 $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($apiKey);
 
-                $response = Http::timeout(10)->post($endpoint, [
+                // Strict 4.5s timeout for ultra-fast, snappy scanning response
+                $response = Http::timeout(4.5)->post($endpoint, [
                     'contents' => [
                         [
                             'role' => 'user',
@@ -446,10 +450,11 @@ class YoloFoodVisionService
             return null;
         }
 
-        // Use high-speed text/vision model if text or payload provided
+        // Use high-speed text reasoning model with strict 3.5s timeout
         try {
             $prompt = "Identifikasi makanan langsung ini untuk estimasi kalori dan glikemik Indonesia. Format JSON murni:\n"
                 . "{\n"
+                . "  \"is_food\": true,\n"
                 . "  \"name\": \"Nama Makanan\",\n"
                 . "  \"category\": \"Kategori Makanan\",\n"
                 . "  \"portion\": \"1 porsi\",\n"
@@ -468,10 +473,11 @@ class YoloFoodVisionService
                 . "  \"clinical_note\": \"Catatan klinis...\"\n"
                 . "}";
 
+            $groqModel = env('GROQ_MODEL', 'openai/gpt-oss-20b');
             $response = Http::withToken($apiKey)
-                ->timeout(6)
+                ->timeout(3.5)
                 ->post('https://api.groq.com/openai/v1/chat/completions', [
-                    'model' => 'openai/gpt-oss-120b',
+                    'model' => $groqModel,
                     'messages' => [
                         ['role' => 'system', 'content' => "Anda adalah model YOLO Food Object Detection dan ahli gizi klinis."],
                         ['role' => 'user', 'content' => $prompt . "\nPetunjuk tambahan: " . mb_substr($rawText ?? '', 0, 300)]
