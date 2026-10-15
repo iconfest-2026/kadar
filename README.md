@@ -22,21 +22,22 @@ Laravel 12 &nbsp;·&nbsp; React 19 &nbsp;·&nbsp; Inertia.js &nbsp;·&nbsp; Tail
 
 1. [Konsep Brand dan Filosofi](#konsep-brand-dan-filosofi)
 2. [Latar Belakang](#latar-belakang)
-3. [Ringkasan Fitur](#ringkasan-fitur)
-4. [Peran Pengguna](#peran-pengguna)
-5. [Health Behavior Engine](#health-behavior-engine)
-6. [Asisten AI dan Pengaman Klinis](#asisten-ai-dan-pengaman-klinis)
-7. [Protokol Darurat 119](#protokol-darurat-119)
-8. [Paket Keanggotaan](#paket-keanggotaan)
-9. [Teknologi](#teknologi)
-10. [Struktur Proyek](#struktur-proyek)
-11. [Instalasi](#instalasi)
-12. [Konfigurasi Lingkungan](#konfigurasi-lingkungan)
-13. [Akun Demo](#akun-demo)
-14. [Pengujian](#pengujian)
-15. [Identitas Visual](#identitas-visual)
-16. [Privasi dan Keamanan Data](#privasi-dan-keamanan-data)
-17. [Lisensi](#lisensi)
+3. [Fitur dan Urgensi Masalah](#fitur-dan-urgensi-masalah)
+4. [Ringkasan Fitur Teknis](#ringkasan-fitur-teknis)
+5. [Peran Pengguna](#peran-pengguna)
+6. [Health Behavior Engine](#health-behavior-engine)
+7. [Asisten AI dan Pengaman Klinis](#asisten-ai-dan-pengaman-klinis)
+8. [Protokol Darurat 119](#protokol-darurat-119)
+9. [Paket Keanggotaan](#paket-keanggotaan)
+10. [Teknologi](#teknologi)
+11. [Struktur Proyek](#struktur-proyek)
+12. [Instalasi](#instalasi)
+13. [Konfigurasi Lingkungan](#konfigurasi-lingkungan)
+14. [Akun Demo](#akun-demo)
+15. [Pengujian](#pengujian)
+16. [Identitas Visual](#identitas-visual)
+17. [Privasi dan Keamanan Data](#privasi-dan-keamanan-data)
+18. [Lisensi](#lisensi)
 
 ---
 
@@ -65,7 +66,57 @@ Platform ini bersifat **non-diagnostik**. AEVYRA tidak pernah memberikan vonis p
 
 ---
 
-## Ringkasan Fitur
+## Fitur dan Urgensi Masalah
+
+AEVYRA dibangun sebagai platform Website (Progressive Web App) HealthCheck terpadu yang memadukan tiga peran pengguna: **Admin**, **Instruktur**, dan **Member**. Seluruh fitur dikembangkan untuk menjawab urgensi permasalahan kesehatan nyata:
+
+### 1. Scanner Open Cam (Makanan, Minuman, Kesehatan, Obat)
+- **Fungsi:** Pemindaian kamera langsung untuk mendeteksi makanan, minuman, parameter kesehatan fisik, serta kemasan obat BPOM.
+- **Urgensi:** Mempercepat dan mempermudah pengguna memahami kandungan gizi dan obat tanpa perlu riset manual. Hal ini sangat penting karena tingkat literasi membaca label pangan dan obat kemasan di masyarakat masih rendah.
+
+### 2. Konsultasi Chat (AI & Instruktur)
+- **Fungsi:** Dialog kesehatan terpadu melalui edukasi asisten AI preventif dan sesi percakapan bimbingan langsung dengan instruktur klinis.
+- **Urgensi:** Menjawab kebutuhan konsultasi cepat tanpa antre atau birokrasi rumah sakit, terutama untuk pertanyaan gaya hidup dan keluhan non-akut yang tidak memerlukan tatap muka langsung.
+
+### 3. Riwayat & Tracker Kesehatan Pribadi
+- **Fungsi:** Pencatatan metrik harian berkelanjutan yang dipetakan secara objektif terhadap garis acuan personal 14 hari.
+- **Urgensi:** Pengguna sering kali tidak menyadari bahwa pola makan atau kebiasaan tidurnya memburuk karena tidak adanya pencatatan rutin. Fitur ini memungkinkan anomali kesehatan terdeteksi jauh lebih dini.
+
+### 4. Rekomendasi Personal Berbasis Profil
+- **Fungsi:** Kurasi rekomendasi kebiasaan mikro adaptif yang disesuaikan dengan profil biologis, riwayat biomarker, dan preferensi unik pengguna.
+- **Urgensi:** Kondisi kesehatan setiap orang berbeda (seperti riwayat alergi, pra-diabetes, atau pola kerja). Rekomendasi generik berpotensi salah sasaran atau bahkan berbahaya, sehingga personalisasi menjadi krusial demi keamanan pengguna.
+
+### 5. Program Challenge Kesehatan
+- **Fungsi:** Program tantangan kesehatan terjadwal dengan target tugas harian bertahap untuk pembentukan rutinitas baru.
+- **Urgensi:** Tanpa target terstruktur, masyarakat kesulitan menjaga konsistensi pola hidup sehat. Program dengan jadwal yang jelas meningkatkan tingkat keberhasilan perubahan perilaku jangka panjang.
+
+### 6. Booking Konsultasi Terjadwal
+- **Fungsi:** Penjadwalan janji temu telekonsultasi resmi bersama dokter spesialis dan instruktur kesehatan bersertifikasi.
+- **Urgensi:** Memberikan kepastian waktu dan akses langsung ke tenaga ahli sungguhan, menumbuhkan kepercayaan klinis yang lebih tinggi dibandingkan hanya mengandalkan interaksi AI.
+
+### 7. Komunitas / Forum Diskusi
+- **Fungsi:** Wadah diskusi antar-pengguna dengan alur interaksi terarah, opsi pelaporan konten, dan moderasi admin.
+- **Urgensi:** Dukungan sosial terbukti secara empiris meningkatkan motivasi menjaga kesehatan, memastikan pengguna merasa didampingi dan tidak berjuang sendirian.
+
+### 8. Badge & Gamifikasi
+- **Fungsi:** Sistem perolehan poin keaktifan, pencatatan konsisten (*daily streak*), lencana pencapaian, serta modul visual novel Metabolic Arcade.
+- **Urgensi:** Menjawab permasalahan rendahnya retensi pada aplikasi kesehatan digital, di mana banyak aplikasi dihapus setelah beberapa hari pemakaian karena ketiadaan motivasi untuk kembali mencatat.
+
+### 9. Laporan untuk Instruktur & Admin
+- **Fungsi:** Dasbor visualisasi perkembangan kesehatan binaan bagi instruktur, serta ringkasan kepatuhan dan analitik sistem bagi admin.
+- **Urgensi:** Instruktur memerlukan data objektif historis untuk memberikan bimbingan yang tepat sasaran dan bukan sekadar perkiraan. Admin membutuhkan wawasan operasional untuk menjaga mutu platform.
+
+### 10. Tingkatan Member (Silver, Gold, Platinum)
+- **Fungsi:** Struktur keanggotaan berjenjang yang mengatur batas kuota pemindai OCR, sesi konsultasi spesialis, dan hak akses fitur premium.
+- **Urgensi:** Mendorong loyalitas dan keberlanjutan pemakaian jangka panjang, sekaligus membuka peluang monetisasi berkelanjutan melalui model freemium yang transparan.
+
+### 11. Telepon Ambulans Berbasis Lokasi (Short)
+- **Fungsi:** Panggilan darurat ambulans 119/112 instan beserta pemetaan direktori IGD dan rumah sakit rujukan terdekat dari posisi perangkat.
+- **Urgensi:** Dalam kondisi gawat darurat medis, setiap detik sangat berharga. Fitur ini memangkas waktu pencarian kontak darurat yang sering memakan waktu dan memicu kepanikan di saat krisis.
+
+---
+
+## Ringkasan Fitur Teknis
 
 ### Pemantauan dan Wawasan
 
