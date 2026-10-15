@@ -352,6 +352,7 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 withCredentials: true,
+                timeout: 18000,
             });
 
             const data = res.data;
@@ -364,9 +365,14 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
                 };
                 setScanResult(resultPayload);
                 if (onScanned) onScanned(resultPayload);
+            } else if (data.status === 'service_error') {
+                setCameraError(data.message || 'Layanan AI pemindai sedang sibuk. Silakan coba kembali atau gunakan menu sampel cepat.');
+            } else if (data.status === 'not_food' || data.is_food === false) {
+                setCameraError(data.message || 'Objek tidak terdeteksi sebagai makanan atau informasi gizi. Arahkan lensa kamera ke makanan dengan jelas.');
             }
         } catch (err) {
             console.error('Scan analyze error:', err);
+            setCameraError(err.response?.data?.message || err.message || 'Gagal memproses pemindaian gambar.');
         } finally {
             setAnalyzing(false);
             setAnalysisStep('');
@@ -374,15 +380,21 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         }
     };
 
-    // Capture from Camera Viewfinder (Ultra-Fast 720p Optimized)
+    // Capture from Camera Viewfinder (Optimized 960p Sharp Focus)
     const captureSnapshot = () => {
         if (!videoRef.current || !canvasRef.current) return;
         const video = videoRef.current;
         const canvas = canvasRef.current;
 
-        const origW = video.videoWidth || 1280;
-        const origH = video.videoHeight || 720;
-        const maxDim = 720;
+        // Ensure video is actively rendering valid frames
+        if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+            setCameraError('Mohon tunggu sejenak hingga kamera aktif sepenuhnya.');
+            return;
+        }
+
+        const origW = video.videoWidth;
+        const origH = video.videoHeight;
+        const maxDim = 960;
         let targetW = origW;
         let targetH = origH;
 
