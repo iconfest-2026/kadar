@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import Alert from '@/Components/UI/Alert';
+import Toast from '@/Components/UI/Toast';
+import VideoCallModal from '@/Components/VideoCallModal';
 import axios from 'axios';
 
 const PRESET_MESSAGES = [
@@ -30,6 +32,18 @@ export default function ChatHub({
     const { auth, flash } = usePage().props;
     const authUser = auth?.user || null;
 
+    // Toast Notification State
+    const [toast, setToast] = useState(null); // { type, title, message }
+    const showToast = (type, title, message) => setToast({ type, title, message });
+
+    useEffect(() => {
+        if (flash?.error) {
+            showToast('error', 'Pemberitahuan', flash.error);
+        } else if (flash?.success) {
+            showToast('success', 'Berhasil', flash.success);
+        }
+    }, [flash]);
+
     // Filter consultations
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('ALL'); // ALL, ACTIVE, COMPLETED
@@ -51,6 +65,7 @@ export default function ChatHub({
     const [chatInput, setChatInput] = useState('');
     const [chatSubmitting, setChatSubmitting] = useState(false);
     const [showTelemetryDrawer, setShowTelemetryDrawer] = useState(false);
+    const [showVideoModal, setShowVideoModal] = useState(false);
     const chatEndRef = useRef(null);
     const messagesFeedRef = useRef(null);
 
@@ -139,11 +154,16 @@ export default function ChatHub({
                         return prev;
                     });
                 }
-                if (data?.consultation && data.consultation.status !== selectedConsultation.status) {
-                    setSelectedConsultation((prev) => ({
-                        ...prev,
-                        ...data.consultation,
-                    }));
+                if (data?.consultation) {
+                    if (data.consultation.status !== selectedConsultation.status) {
+                        setSelectedConsultation((prev) => ({
+                            ...prev,
+                            ...data.consultation,
+                        }));
+                    }
+                    if (data.consultation.status === 'COMPLETED' || data.consultation.status === 'CANCELLED') {
+                        setShowVideoModal(false);
+                    }
                 }
             } catch (err) {}
         }, 2000);
@@ -190,7 +210,15 @@ export default function ChatHub({
 
     const handleSendMessage = async (customText = null) => {
         const text = (typeof customText === 'string' ? customText : chatInput).trim();
-        if (!text || chatSubmitting || !selectedConsultation || selectedConsultation.status === 'CANCELLED') return;
+        if (
+            !text ||
+            chatSubmitting ||
+            !selectedConsultation ||
+            selectedConsultation.status === 'CANCELLED' ||
+            selectedConsultation.status === 'COMPLETED'
+        ) {
+            return;
+        }
 
         if (!customText) setChatInput('');
         setChatSubmitting(true);
@@ -257,7 +285,7 @@ export default function ChatHub({
                 err.response?.data?.message ||
                 err.message ||
                 'Gagal mengirim pesan. Silakan coba beberapa saat lagi.';
-            alert('Gagal mengirim pesan: ' + errMsg);
+            showToast('error', 'Gagal Mengirim Pesan', errMsg);
         } finally {
             setChatSubmitting(false);
             setTimeout(() => scrollToBottom(true), 50);
@@ -274,6 +302,8 @@ export default function ChatHub({
                 const id = selectedCompleteCons.id;
                 setSelectedCompleteCons(null);
                 completeForm.reset();
+                setShowVideoModal(false);
+                showToast('success', 'Sesi Diselesaikan', 'Sesi konsultasi berhasil diselesaikan dan rekam evaluasi telah diarsipkan.');
                 if (selectedConsultation?.id === id) {
                     setSelectedConsultation((prev) => ({
                         ...prev,
@@ -281,6 +311,10 @@ export default function ChatHub({
                     }));
                     loadMessages(id);
                 }
+            },
+            onError: (errs) => {
+                const msg = errs?.error || 'Gagal menyelesaikan sesi tele-konsultasi.';
+                showToast('error', 'Gagal Menyelesaikan', msg);
             },
         });
     };
@@ -296,6 +330,8 @@ export default function ChatHub({
                 const reasonUsed = cancelForm.data.reason;
                 setSelectedCancelCons(null);
                 cancelForm.reset();
+                setShowVideoModal(false);
+                showToast('success', 'Sesi Dibatalkan', 'Sesi konsultasi telah dibatalkan dan kuota member telah dikembalikan.');
                 if (selectedConsultation?.id === id) {
                     setSelectedConsultation((prev) => ({
                         ...prev,
@@ -304,6 +340,10 @@ export default function ChatHub({
                     }));
                     loadMessages(id);
                 }
+            },
+            onError: (errs) => {
+                const msg = errs?.reason || errs?.error || 'Gagal membatalkan sesi konsultasi.';
+                showToast('error', 'Gagal Membatalkan', msg);
             },
         });
     };
@@ -344,6 +384,9 @@ export default function ChatHub({
     return (
         <InstructorLayout activeNav="chat" title="Ruang Chat Pasien & Telemedisin">
             <Head title="Ruang Chat Pasien & Telemedisin - Instruktur AEVYRA" />
+
+            {/* Modern Floating Toast Notification */}
+            <Toast toast={toast} onClose={() => setToast(null)} />
 
             <div className="flex flex-col h-[calc(100vh-8.5rem)] min-h-[580px] max-h-[860px] max-w-7xl mx-auto space-y-2">
                 {/* 1. Sleek Compact Toolbar */}
@@ -578,18 +621,21 @@ export default function ChatHub({
                                             <span className="hidden sm:inline">Telemetri</span>
                                         </button>
 
-                                        {/* Video Call Meeting Room */}
-                                        {selectedConsultation.meeting_url && selectedConsultation.status !== 'CANCELLED' && (
-                                            <a
-                                                href={selectedConsultation.meeting_url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
-                                                title="Buka Ruang Video Call Telemedisin"
+                                        {/* Video Call Meeting Room - Hanya aktif jika sesi aktif */}
+                                        {selectedConsultation && (selectedConsultation.status === 'CONFIRMED' || selectedConsultation.status === 'IN_PROGRESS' || selectedConsultation.status === 'SCHEDULED') && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowVideoModal(true)}
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer active:scale-95"
+                                                title="Mulai / Masuk Ruang Video Call Telemedisin"
                                             >
+                                                <span className="relative flex h-2 w-2">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                                                </span>
                                                 <span className="material-symbols-outlined text-[16px]">videocam</span>
                                                 <span className="hidden md:inline">Video Call</span>
-                                            </a>
+                                            </button>
                                         )}
 
                                         {/* View Member Clinical Medical Record */}
@@ -834,7 +880,7 @@ export default function ChatHub({
                                 </div>
 
                                 {/* Quick Recommendation Chips */}
-                                {selectedConsultation.status !== 'CANCELLED' && (
+                                {selectedConsultation.status !== 'CANCELLED' && selectedConsultation.status !== 'COMPLETED' && (
                                     <div className="px-3.5 py-2 border-t border-surface-container bg-[#fcfefd] dark:bg-surface overflow-x-auto no-scrollbar flex items-center gap-1.5 shrink-0">
                                         <span className="text-[10px] font-bold text-on-surface-variant uppercase shrink-0">
                                             Saran Cepat:
@@ -864,18 +910,25 @@ export default function ChatHub({
                                     <input
                                         type="text"
                                         value={chatInput}
-                                        disabled={selectedConsultation.status === 'CANCELLED'}
+                                        disabled={selectedConsultation.status === 'CANCELLED' || selectedConsultation.status === 'COMPLETED'}
                                         onChange={(e) => setChatInput(e.target.value)}
                                         placeholder={
                                             selectedConsultation.status === 'CANCELLED'
                                                 ? 'Sesi tele-konsultasi telah dibatalkan. Tidak dapat mengirim pesan baru.'
+                                                : selectedConsultation.status === 'COMPLETED'
+                                                ? 'Sesi tele-konsultasi ini telah selesai dan diarsipkan.'
                                                 : 'Ketik arahan klinis, evaluasi nutrisi, atau respon untuk member...'
                                         }
                                         className="flex-1 px-4 py-2.5 rounded-full border border-surface-container bg-surface-container-low text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary font-medium disabled:opacity-60 disabled:cursor-not-allowed"
                                     />
                                     <button
                                         type="submit"
-                                        disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                        disabled={
+                                            !chatInput.trim() ||
+                                            chatSubmitting ||
+                                            selectedConsultation.status === 'CANCELLED' ||
+                                            selectedConsultation.status === 'COMPLETED'
+                                        }
                                         className="px-5 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">send</span>
@@ -914,7 +967,7 @@ export default function ChatHub({
             {/* MODAL: Mulai Sesi Chat Pasien Baru */}
             {showStartChatModal && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+                    className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
                     onClick={() => setShowStartChatModal(false)}
                 >
                     <div
@@ -1016,7 +1069,7 @@ export default function ChatHub({
             {/* MODAL: Selesaikan Konsultasi (SOAP Evaluation) */}
             {selectedCompleteCons && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+                    className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
                     onClick={() => setSelectedCompleteCons(null)}
                 >
                     <div
@@ -1084,7 +1137,7 @@ export default function ChatHub({
             {/* MODAL: Batalkan Sesi Konsultasi */}
             {selectedCancelCons && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+                    className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
                     onClick={() => setSelectedCancelCons(null)}
                 >
                     <div
@@ -1155,6 +1208,16 @@ export default function ChatHub({
                     </div>
                 </div>
             )}
+
+            {/* MODAL: Video Call Telemedisin Terpadu */}
+            <VideoCallModal
+                isOpen={showVideoModal}
+                onClose={() => setShowVideoModal(false)}
+                consultation={selectedConsultation}
+                currentUser={authUser}
+                peerName={selectedConsultation?.member_name || selectedConsultation?.member?.name || 'Pasien Member'}
+                peerRole="Pasien Member Binaan"
+            />
         </InstructorLayout>
     );
 }

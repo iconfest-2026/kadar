@@ -703,6 +703,25 @@ export default function EmergencyDemo() {
 
     const cleanHotline = (activeFaskes?.phone || '119').split('/')[0].trim();
 
+    const buildEmergencyWaUrl = (phone, serviceName) => {
+        let msg = `🚨 *[DARURAT MEDIS 119 - AEVYRA SOS]* 🚨\n`;
+        msg += `Kepada: *${serviceName}*\n`;
+        msg += `Mohon bantuan penanganan medis darurat segera!\n\n`;
+        msg += `📍 *Alamat:* ${geoState.address || 'Dalam pelacakan satelit GPS'}\n`;
+        msg += `📌 *Koordinat GPS:* https://www.google.com/maps?q=${geoState.lat},${geoState.lng} (Akurasi ±${geoState.accuracy}m)\n`;
+        if (activeFaskes?.name) {
+            msg += `🏥 *IGD Terdekat:* ${activeFaskes.name} (${activeFaskes.distanceFormatted || ''}, ETA: ${activeFaskes.etaFormatted || ''})\n`;
+            msg += `📞 *Hotline IGD:* ${activeFaskes.phone}\n`;
+        }
+        msg += `🆔 *ID Dispatch:* #${sosSessionId}\n\n`;
+        msg += `_Laporan dikirim otomatis melalui Radar Ambulans AEVYRA._`;
+
+        if (phone) {
+            return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+        }
+        return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    };
+
     return (
         <Layout {...layoutProps}>
             <Head title="Siaga Ambulans 119 & Geolocation IGD Presisi - AEVYRA" />
@@ -965,30 +984,85 @@ export default function EmergencyDemo() {
                                         </div>
                                     </div>
 
-                                    {/* Action Buttons: Direct Call & WhatsApp Share */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-rose-200">
+                                    {/* Action Buttons: Direct Calls (112 / 119) & WhatsApp Emergency Channels */}
+                                    <div className="pt-2 border-t border-rose-200 space-y-2.5">
+                                        {/* Direct Voice Calls */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <a
+                                                href="tel:112"
+                                                className="px-4 py-2.5 rounded-xl bg-linear-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95"
+                                            >
+                                                <span className="material-symbols-outlined text-[17px]">e911_emergency</span>
+                                                <span>Panggilan Darurat 112 (Bebas Pulsa)</span>
+                                            </a>
+                                            <a
+                                                href="tel:119"
+                                                className="px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95"
+                                            >
+                                                <span className="material-symbols-outlined text-[17px]">call</span>
+                                                <span>Hubungi 119 Langsung</span>
+                                            </a>
+                                        </div>
+
+                                        {/* WhatsApp Emergency Redirect Options */}
+                                        <div className="space-y-1.5 pt-1">
+                                            <span className="text-[10.5px] font-bold text-rose-950 uppercase tracking-wider block">
+                                                Layanan Tanggap Darurat via WhatsApp Otomatis:
+                                            </span>
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                                <a
+                                                    href={buildEmergencyWaUrl('6281110500567', 'PSC 119 Kemenkes RI')}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="p-2.5 rounded-xl bg-white hover:bg-emerald-50 border border-emerald-300 hover:border-emerald-500 text-emerald-950 flex flex-col items-start gap-1 transition-all shadow-2xs group"
+                                                >
+                                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
+                                                        <span className="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+                                                        <span>PSC 119 Kemenkes</span>
+                                                    </div>
+                                                    <span className="text-[10.5px] text-emerald-700 font-mono font-bold">0811-10-500-567</span>
+                                                    <span className="text-[9px] text-emerald-600/80">Kemenkes RI • Nasional</span>
+                                                </a>
+
+                                                <a
+                                                    href={buildEmergencyWaUrl('628112119119', 'PK3D DKI Jakarta')}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="p-2.5 rounded-xl bg-white hover:bg-emerald-50 border border-emerald-300 hover:border-emerald-500 text-emerald-950 flex flex-col items-start gap-1 transition-all shadow-2xs group"
+                                                >
+                                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
+                                                        <span className="material-symbols-outlined text-[16px] text-emerald-600">ambulance</span>
+                                                        <span>PK3D DKI Jakarta</span>
+                                                    </div>
+                                                    <span className="text-[10.5px] text-emerald-700 font-mono font-bold">0811-2119-119</span>
+                                                    <span className="text-[9px] text-emerald-600/80">Ambulans AGD DKI</span>
+                                                </a>
+
+                                                <a
+                                                    href={buildEmergencyWaUrl('6285691231100', 'Patriot Siaga Kota Bekasi')}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="p-2.5 rounded-xl bg-white hover:bg-emerald-50 border border-emerald-300 hover:border-emerald-500 text-emerald-950 flex flex-col items-start gap-1 transition-all shadow-2xs group"
+                                                >
+                                                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
+                                                        <span className="material-symbols-outlined text-[16px] text-emerald-600">shield_with_heart</span>
+                                                        <span>Patriot Siaga Bekasi</span>
+                                                    </div>
+                                                    <span className="text-[10.5px] text-emerald-700 font-mono font-bold">0856-9123-1100</span>
+                                                    <span className="text-[9px] text-emerald-600/80">Laporan Darurat & Info</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        {/* Share to Family / Personal Contact */}
                                         <a
-                                            href="tel:119"
-                                            className="px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all"
-                                        >
-                                            <span className="material-symbols-outlined text-[16px]">call</span>
-                                            <span>Hubungi 119 Langsung</span>
-                                        </a>
-                                        <a
-                                            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                                                `[DARURAT MEDIS 119] Mohon bantuan medis segera! Pasien membutuhkan pertolongan.\n\n` +
-                                                `📍 Alamat: ${geoState.address}\n` +
-                                                `📌 Koordinat GPS: https://www.google.com/maps?q=${geoState.lat},${geoState.lng} (Akurasi ±${geoState.accuracy}m)\n` +
-                                                `🏥 IGD Terdekat: ${activeFaskes?.name} (${activeFaskes?.distanceFormatted}, ETA Ambulans: ${activeFaskes?.etaFormatted})\n` +
-                                                `📞 Hotline IGD: ${activeFaskes?.phone}\n` +
-                                                `🆔 ID Dispatch: #${sosSessionId}`
-                                            )}`}
+                                            href={buildEmergencyWaUrl(null, 'Keluarga & Kerabat Terdekat')}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all"
+                                            className="w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95"
                                         >
                                             <span className="material-symbols-outlined text-[16px]">share_location</span>
-                                            <span>Kirim WA ke Keluarga</span>
+                                            <span>Bagikan Titik Koordinat GPS ke WhatsApp Keluarga</span>
                                         </a>
                                     </div>
                                 </div>

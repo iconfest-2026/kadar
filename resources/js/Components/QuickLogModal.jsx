@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useForm } from '@inertiajs/react';
 
 const METRIC_OPTIONS = [
@@ -10,6 +11,7 @@ const METRIC_OPTIONS = [
 ];
 
 export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_duration' }) {
+    const [mounted, setMounted] = useState(false);
     const [selectedMetric, setSelectedMetric] = useState(defaultMetric);
 
     const activeConfig = METRIC_OPTIONS.find((m) => m.type === selectedMetric) || METRIC_OPTIONS[0];
@@ -21,6 +23,31 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
         notes: '',
         source: 'manual',
     });
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Body scroll lock & reset state when opening
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && onClose) {
+                onClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = originalOverflow;
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
 
     const handleSelectMetric = (metric) => {
         setSelectedMetric(metric.type);
@@ -42,11 +69,19 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
         });
     };
 
-    if (!isOpen) return null;
+    if (!mounted || !isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-            <div className="w-full max-w-md bg-surface rounded-3xl border border-surface-container shadow-2xl overflow-hidden animate-scale-up">
+    const modalContent = (
+        <div 
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={onClose}
+            role="dialog"
+            aria-modal="true"
+        >
+            <div 
+                className="w-full max-w-md bg-surface rounded-3xl border border-surface-container shadow-2xl overflow-hidden animate-scale-up"
+                onClick={(e) => e.stopPropagation()}
+            >
                 {/* Header */}
                 <div className="px-6 py-4 border-b border-surface-container flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -56,7 +91,8 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-on-surface-variant hover:text-on-surface p-1 rounded-full hover:bg-surface-container"
+                        className="text-on-surface-variant hover:text-on-surface p-1 rounded-full hover:bg-surface-container cursor-pointer transition-colors"
+                        aria-label="Tutup"
                     >
                         <span className="material-symbols-outlined text-[20px]">close</span>
                     </button>
@@ -70,7 +106,7 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
                                 key={metric.type}
                                 type="button"
                                 onClick={() => handleSelectMetric(metric)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all ${
+                                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all cursor-pointer ${
                                     selectedMetric === metric.type
                                         ? 'bg-primary text-on-primary shadow-xs'
                                         : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface'
@@ -127,14 +163,14 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container"
+                                className="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container cursor-pointer transition-colors"
                             >
                                 Batal
                             </button>
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="py-2.5 px-5 bg-primary hover:bg-primary-container text-on-primary text-xs font-semibold rounded-xl shadow-xs flex items-center gap-2"
+                                className="py-2.5 px-5 bg-primary hover:bg-primary-container text-on-primary text-xs font-semibold rounded-xl shadow-xs flex items-center gap-2 cursor-pointer transition-colors"
                             >
                                 {processing ? (
                                     <>
@@ -154,4 +190,6 @@ export default function QuickLogModal({ isOpen, onClose, defaultMetric = 'sleep_
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }

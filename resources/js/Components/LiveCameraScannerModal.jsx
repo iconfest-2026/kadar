@@ -1,10 +1,36 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 
 export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
+    const [mounted, setMounted] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Body scroll lock
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && onClose) {
+                onClose();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = originalOverflow;
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
 
     // Camera & Mirror States
     const [cameraActive, setCameraActive] = useState(false);
@@ -454,10 +480,10 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
         }
     };
 
-    if (!isOpen) return null;
+    if (!mounted || !isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+    const modalContent = (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
             <div className="bg-white dark:bg-surface rounded-3xl max-w-2xl w-full shadow-2xl border border-primary/20 overflow-hidden flex flex-col max-h-[92vh]">
                 
                 {/* Header */}
@@ -1160,4 +1186,6 @@ export default function LiveCameraScannerModal({ isOpen, onClose, onScanned }) {
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }

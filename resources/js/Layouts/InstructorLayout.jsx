@@ -79,7 +79,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
             <Head title={title ? `${title} - Panel Instruktur AEVYRA` : 'Instruktur Panel - AEVYRA'} />
 
             {/* Ambient Background Soft Blobs */}
-            <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-paint">
+            <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden contain-paint">
                 <div className="absolute -top-32 left-1/4 w-150 h-80 bg-linear-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute top-1/2 -right-20 w-120 h-100 bg-[#f4ebe1]/30 blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-linear-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
@@ -88,14 +88,14 @@ export default function InstructorLayout({ children, title, activeNav }) {
             {/* Mobile Overlay */}
             {mobileMenuOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-xs z-30 lg:hidden transition-opacity duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                 />
             )}
 
             {/* Sidebar Navigation */}
             <aside 
-                className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-3rem)] bg-white dark:bg-surface border-r border-surface-container flex flex-col transition-transform duration-300 shadow-sm lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-40 lg:z-20 w-72 max-w-[calc(100vw-3rem)] bg-white dark:bg-surface border-r border-surface-container flex flex-col transition-transform duration-300 shadow-sm lg:translate-x-0 ${
                     mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
@@ -219,10 +219,10 @@ export default function InstructorLayout({ children, title, activeNav }) {
             </aside>
 
             {/* Main Content Area */}
-            <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
+            <div className="lg:pl-72 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative">
                 
                 {/* Top Header Bar */}
-                <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-surface/80 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-6 lg:px-8 min-w-0 w-full">
+                <header className="sticky top-0 z-20 h-16 bg-white/80 dark:bg-surface/80 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-6 lg:px-8 min-w-0 w-full">
                     <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 mr-2">
                         <button
                             type="button"
@@ -358,7 +358,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
 
             {/* Native Mobile Bottom Navigation Bar (Visible on < lg screens) */}
             <nav 
-                className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-surface/95 backdrop-blur-xl border-t border-surface-container shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
+                className="lg:hidden fixed bottom-0 inset-x-0 z-20 bg-white/95 dark:bg-surface/95 backdrop-blur-xl border-t border-surface-container shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
                 aria-label="Navigasi Bawah Instruktur"
             >
                 <div className="flex items-center justify-around max-w-lg mx-auto">

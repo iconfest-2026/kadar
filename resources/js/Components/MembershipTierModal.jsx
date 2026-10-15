@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { usePage } from '@inertiajs/react';
 
 // Fallback tiers mirroring exact database configuration
@@ -178,22 +179,36 @@ const parseFeatures = (t) => {
 };
 
 export default function MembershipTierModal({ isOpen, onClose, currentTier = null, availableTiers = [] }) {
+    const [mounted, setMounted] = useState(false);
     const { membership, midtrans } = usePage().props;
     const [processingTierId, setProcessingTierId] = useState(null);
     const [statusMessage, setStatusMessage] = useState(null); // { type: 'success' | 'error' | 'info', text: string }
 
-    // Keyboard navigation (Esc to close)
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Keyboard navigation (Esc to close) & Body Scroll Lock
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
         const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && isOpen) {
+            if (e.key === 'Escape') {
                 onClose();
             }
         };
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = originalOverflow;
+            window.removeEventListener('keydown', handleKeyDown);
+        };
     }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
+    if (!mounted || !isOpen) return null;
 
     // Pick tiers dynamically: prefer passed prop, then inertia shared membership tiers, then fallback
     const rawTiers = (Array.isArray(availableTiers) && availableTiers.length > 0)
@@ -429,9 +444,9 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
         }
     };
 
-    return (
+    const modalContent = (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto"
             onClick={onClose}
         >
             <div
@@ -660,4 +675,6 @@ export default function MembershipTierModal({ isOpen, onClose, currentTier = nul
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }

@@ -518,7 +518,7 @@ export default function Consultations({
                                         Tautan Tatap Muka:
                                     </span>
                                     <a
-                                        href={selectedConsultation.meeting_url}
+                                        href={selectedConsultation.meeting_url.includes('telemed.aevyra.health') ? selectedConsultation.meeting_url.replace('https://telemed.aevyra.health/', 'https://meet.jit.si/') : selectedConsultation.meeting_url}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="font-bold text-emerald-700 underline text-[11px] inline-flex items-center gap-1"
