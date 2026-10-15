@@ -554,10 +554,113 @@ export default function ConsultationsHub({
         <AppLayout title="Konsultasi & Telemedisin Instruktur" activeTab="consultations">
             <Head title="Konsultasi Terukur Dokter & Instruktur Medis - AEVYRA" />
 
-            {activeTab === 'live_chat' ? (
-                /* SINGLE-PAGE AI CHATBOT INTERFACE (NO OUTER SCROLLING) */
-                <div className="max-w-4xl mx-auto px-2 sm:px-4 py-1 sm:py-2">
-                    <div className="h-[calc(100vh-5.5rem)] min-h-[560px] max-h-[860px] flex flex-col bg-white dark:bg-surface border border-surface-container rounded-3xl overflow-hidden shadow-xs relative">
+            {/* Modern Floating Toast Notification */}
+            <Toast toast={toast} onClose={() => setToast(null)} />
+
+            <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-4">
+                {/* 1. Header & Quota Overview Banner */}
+                <div className="rounded-2xl bg-linear-to-r from-[#00433e] via-[#08544e] to-[#0f5c56] p-4 sm:p-5 text-white shadow-xs relative overflow-hidden">
+                    <div 
+                        aria-hidden="true" 
+                        className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl" 
+                    />
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="space-y-1 max-w-2xl">
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
+                                <span className="material-symbols-outlined text-[14px]">clinical_notes</span>
+                                <span>Konsultasi Dokter</span>
+                            </div>
+                            <h1 className="text-lg sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
+                                Ruang Konsultasi Dokter
+                            </h1>
+                            <p className="text-xs sm:text-sm text-white/85 leading-relaxed hidden sm:block">
+                                Diskusikan data glukosa, pola makan, dan gaya hidup Anda secara personal bersama dokter spesialis berlisensi.
+                            </p>
+                        </div>
+
+                        {/* Quota & Quick Action */}
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
+                            <div className="bg-black/25 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/15 text-center min-w-28 sm:min-w-36">
+                                <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
+                                    Sisa Kuota
+                                </span>
+                                <div className="flex items-baseline justify-center gap-1 mt-0.5">
+                                    {isUnlimited ? (
+                                        <span className="font-mono font-black text-lg sm:text-xl text-white">Bebas Batas</span>
+                                    ) : (
+                                        <>
+                                            <span className="font-mono font-black text-xl sm:text-2xl text-white">{remainingQuota}</span>
+                                            <span className="text-[11px] sm:text-xs font-mono text-white/70">/ {totalQuota} Sesi</span>
+                                        </>
+                                    )}
+                                </div>
+                                <span className="text-[9px] font-mono text-white/70 block mt-0.5">
+                                    Paket: {membership?.tier || quota.tier_name || 'Silver'}
+                                </span>
+                            </div>
+
+                            {!canBook && (
+                                <Link
+                                    href="/paket"
+                                    className="inline-flex items-center gap-1 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs"
+                                    title="Tingkatkan paket untuk menambah sesi konsultasi"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">upgrade</span>
+                                    <span>Upgrade</span>
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Unified Segmented Tabs */}
+                <div className="grid grid-cols-3 p-1 rounded-2xl bg-surface-container border border-surface-container-high/60 gap-1">
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('live_chat')}
+                        className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                            activeTab === 'live_chat'
+                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <span className="material-symbols-outlined text-[17px] sm:text-[18px]">chat</span>
+                        <span className="truncate">Chat Dokter</span>
+                        {upcomingConsultations.length > 0 && (
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse hidden sm:inline-block" />
+                        )}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('booking')}
+                        className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                            activeTab === 'booking'
+                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <span className="material-symbols-outlined text-[17px] sm:text-[18px]">calendar_add_on</span>
+                        <span className="truncate">Jadwalkan</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('history')}
+                        className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
+                            activeTab === 'history'
+                                ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
+                                : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                    >
+                        <span className="material-symbols-outlined text-[17px] sm:text-[18px]">history_edu</span>
+                        <span className="truncate">Riwayat ({consultations.length})</span>
+                    </button>
+                </div>
+
+                {/* TAB 1: CHAT DOKTER INTERFACE (INTEGRATED & BALANCED) */}
+                {activeTab === 'live_chat' && (
+                    <div className="h-[600px] flex flex-col bg-white dark:bg-surface border border-surface-container rounded-2xl overflow-hidden shadow-xs relative">
                         {/* 1. Pinned Sticky Top Header Bar */}
                         <div className="p-2.5 sm:px-4 border-b border-surface-container flex items-center justify-between gap-2.5 bg-surface-container-lowest shrink-0 z-20 shadow-2xs">
                             <div className="flex items-center gap-2.5 min-w-0">
@@ -646,18 +749,6 @@ export default function ConsultationsHub({
                                     <span className="font-bold text-primary">{isUnlimited ? 'Bebas' : `${remainingQuota}/${totalQuota}`}</span>
                                 </div>
 
-                                {/* Upgrade Action if Quota is 0 / not eligible */}
-                                {!canBook && (
-                                    <Link
-                                        href="/paket"
-                                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-2xs transition-all active:scale-95"
-                                        title="Upgrade paket untuk mendapatkan kuota telekonsultasi dokter"
-                                    >
-                                        <span className="material-symbols-outlined text-[15px]">upgrade</span>
-                                        <span>Upgrade</span>
-                                    </Link>
-                                )}
-
                                 {/* Video Call Meeting button - Hanya aktif jika sesi aktif */}
                                 {selectedConsultation && (selectedConsultation.status === 'CONFIRMED' || selectedConsultation.status === 'IN_PROGRESS' || selectedConsultation.status === 'SCHEDULED') && (
                                     <button
@@ -687,28 +778,6 @@ export default function ConsultationsHub({
                                         <span className="hidden sm:inline">Info Sesi</span>
                                     </button>
                                 )}
-
-                                {/* Switch to Booking */}
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveTab('booking')}
-                                    className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
-                                    title="Jadwalkan Konsultasi Baru"
-                                >
-                                    <span className="material-symbols-outlined text-[17px] text-primary">calendar_add_on</span>
-                                    <span className="hidden lg:inline">Jadwal</span>
-                                </button>
-
-                                {/* Switch to History */}
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveTab('history')}
-                                    className="p-1.5 sm:px-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
-                                    title="Riwayat Sesi"
-                                >
-                                    <span className="material-symbols-outlined text-[17px] text-on-surface-variant">history</span>
-                                    <span className="hidden xl:inline">({pastConsultations.length})</span>
-                                </button>
                             </div>
                         </div>
 
@@ -947,7 +1016,12 @@ export default function ConsultationsHub({
                                     />
                                     <button
                                         type="submit"
-                                        disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
+                                        disabled={
+                                            !chatInput.trim() ||
+                                            chatSubmitting ||
+                                            selectedConsultation.status === 'CANCELLED' ||
+                                            selectedConsultation.status === 'COMPLETED'
+                                        }
                                         className="w-10 h-10 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
                                         title="Kirim Pesan"
                                     >
@@ -956,109 +1030,31 @@ export default function ConsultationsHub({
                                 </div>
                             </form>
                         )}
-                    </div>
-                </div>
-            ) : (
-                <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-4 pb-2">
-                    {/* 1. Header & Quota Overview Banner */}
-                    <div className="rounded-2xl bg-linear-to-r from-[#00433e] via-[#08544e] to-[#0f5c56] p-4 sm:p-5 text-white shadow-xs relative overflow-hidden">
-                        <div 
-                            aria-hidden="true" 
-                            className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl" 
-                        />
-                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="space-y-1 max-w-2xl">
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
-                                    <span className="material-symbols-outlined text-[14px]">clinical_notes</span>
-                                    <span>Konsultasi Dokter</span>
+
+                        {/* Empty state if no consultation selected */}
+                        {!selectedConsultation && (
+                            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 bg-surface-container-lowest">
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-2xl">chat_bubble_outline</span>
                                 </div>
-                                <h1 className="text-lg sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
-                                    Ruang Konsultasi Dokter
-                                </h1>
-                                <p className="text-xs sm:text-sm text-white/85 leading-relaxed hidden sm:block">
-                                    Diskusikan data glukosa, pola makan, dan gaya hidup Anda secara personal bersama dokter spesialis berlisensi.
-                                </p>
-                            </div>
-
-                            {/* Quota & Quick Action */}
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-                                <div className="bg-black/25 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/15 text-center min-w-28 sm:min-w-36">
-                                    <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
-                                        Sisa Kuota
-                                    </span>
-                                    <div className="flex items-baseline justify-center gap-1 mt-0.5">
-                                        {isUnlimited ? (
-                                            <span className="font-mono font-black text-lg sm:text-xl text-white">Bebas Batas</span>
-                                        ) : (
-                                            <>
-                                                <span className="font-mono font-black text-xl sm:text-2xl text-white">{remainingQuota}</span>
-                                                <span className="text-[11px] sm:text-xs font-mono text-white/70">/ {totalQuota} Sesi</span>
-                                            </>
-                                        )}
-                                    </div>
-                                    <span className="text-[9px] font-mono text-white/70 block mt-0.5">
-                                        Paket: {membership?.tier || quota.tier_name || 'Silver'}
-                                    </span>
+                                <div className="space-y-1 max-w-sm">
+                                    <h3 className="font-bold text-sm text-on-surface">Belum Ada Sesi Konsultasi</h3>
+                                    <p className="text-xs text-on-surface-variant leading-relaxed">
+                                        Jadwalkan sesi konsultasi pertama Anda bersama dokter spesialis untuk memulai bimbingan kesehatan personal.
+                                    </p>
                                 </div>
-
-                                {!canBook && (
-                                    <Link
-                                        href="/paket"
-                                        className="inline-flex items-center gap-1 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs"
-                                        title="Tingkatkan paket untuk menambah sesi konsultasi"
-                                    >
-                                        <span className="material-symbols-outlined text-[16px]">upgrade</span>
-                                        <span>Upgrade</span>
-                                    </Link>
-                                )}
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTab('booking')}
+                                    className="px-4 py-2 rounded-xl bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">calendar_add_on</span>
+                                    <span>Jadwalkan Konsultasi Sekarang</span>
+                                </button>
                             </div>
-                        </div>
+                        )}
                     </div>
-
-                    {/* 2. Clear Segmented Tabs */}
-                    <div className="grid grid-cols-3 p-1 rounded-2xl bg-surface-container border border-surface-container-high/60 gap-1">
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('live_chat')}
-                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
-                                activeTab === 'live_chat'
-                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                    : 'text-on-surface-variant hover:text-on-surface'
-                            }`}
-                        >
-                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">chat</span>
-                            <span className="truncate">Chat Dokter</span>
-                            {upcomingConsultations.length > 0 && (
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse hidden sm:inline-block" />
-                            )}
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('booking')}
-                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
-                                activeTab === 'booking'
-                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                    : 'text-on-surface-variant hover:text-on-surface'
-                            }`}
-                        >
-                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">calendar_add_on</span>
-                            <span className="truncate">Jadwalkan</span>
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('history')}
-                            className={`py-2 px-1.5 sm:px-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center ${
-                                activeTab === 'history'
-                                    ? 'bg-white dark:bg-surface text-primary shadow-xs font-bold'
-                                    : 'text-on-surface-variant hover:text-on-surface'
-                            }`}
-                        >
-                            <span className="material-symbols-outlined text-[17px] sm:text-[18px]">history_edu</span>
-                            <span className="truncate">Riwayat ({pastConsultations.length})</span>
-                        </button>
-                    </div>
+                )}
 
                 {/* TAB 2: JADWALKAN KONSULTASI (ALUR 2 LANGKAH YANG JELAS & TIDAK PUSING) */}
                 {activeTab === 'booking' && (
@@ -1448,14 +1444,9 @@ export default function ConsultationsHub({
                         </div>
 
                         {/* Doctor info */}
-                        <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-2xl bg-primary/10 overflow-hidden shrink-0 border border-primary/20 flex items-center justify-center font-bold text-primary">
-                                <img
-                                    src="/image/doctor-portrait.jpg"
-                                    alt="Dokter"
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => { e.target.style.display = 'none'; }}
-                                />
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-container-low border border-surface-container">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary font-bold text-sm flex items-center justify-center shrink-0 border border-primary/20">
+                                {selectedConsultation.instructor_name?.charAt(0) || 'D'}
                             </div>
                             <div className="min-w-0 flex-1">
                                 <p className="font-bold text-xs text-on-surface truncate">
