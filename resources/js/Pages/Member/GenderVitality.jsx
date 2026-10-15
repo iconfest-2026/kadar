@@ -831,9 +831,11 @@ export default function GenderVitality({
 
                                 {/* Pillar 1: Gizi */}
                                 {femaleActivePillar === 'nutrition' && (
-                                    <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 font-medium">
-                                        <b className="font-bold text-sm block mb-1">Fokus Gizi Klinis Fase {activeFemalePhase.name}:</b>
-                                        <ul className="list-disc pl-5 mt-2 space-y-1.5 text-xs">
+                                    <div className="p-4 rounded-2xl bg-[#eef8f2] border border-[#bfe0cd] text-xs font-medium">
+                                        <b className="font-bold text-sm text-[#0a382c] block mb-1.5">
+                                            Fokus Gizi Klinis {activeFemalePhase.name.startsWith('Fase') ? activeFemalePhase.name : `Fase ${activeFemalePhase.name}`}:
+                                        </b>
+                                        <ul className="list-disc pl-5 mt-2 space-y-1.5 text-xs text-[#134e3d]">
                                             {activeFemalePhase.dietAdvice.map((item, idx) => (
                                                 <li key={idx} className="leading-relaxed">{item}</li>
                                             ))}
@@ -908,9 +910,11 @@ export default function GenderVitality({
 
                                 {/* Pillar 3: Exercise */}
                                 {femaleActivePillar === 'exercise' && (
-                                    <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 font-medium space-y-2">
-                                        <b className="font-bold text-sm block">Panduan Aktivitas Fisik Fase {activeFemalePhase.name}:</b>
-                                        <ul className="list-disc pl-5 space-y-1.5">
+                                    <div className="p-4 rounded-2xl bg-[#eef8f2] border border-[#bfe0cd] text-xs font-medium space-y-2">
+                                        <b className="font-bold text-sm text-[#0a382c] block mb-1">
+                                            Panduan Aktivitas Fisik {activeFemalePhase.name.startsWith('Fase') ? activeFemalePhase.name : `Fase ${activeFemalePhase.name}`}:
+                                        </b>
+                                        <ul className="list-disc pl-5 space-y-1.5 text-xs text-[#134e3d]">
                                             {activeFemalePhase.exerciseAdvice.map((item, idx) => (
                                                 <li key={idx} className="leading-relaxed">{item}</li>
                                             ))}
@@ -938,12 +942,12 @@ export default function GenderVitality({
 
                                 {/* Pillar 5: Glucose Hacks */}
                                 {femaleActivePillar === 'glucose' && (
-                                    <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-xs text-amber-950 dark:text-amber-200 font-medium space-y-2">
-                                        <b className="font-bold text-sm block">Protokol Anti-Lonjakan Glukosa:</b>
-                                        <p className="leading-relaxed">
+                                    <div className="p-4 rounded-2xl bg-[#fffbeb] border border-[#fde68a] text-xs font-medium space-y-2">
+                                        <b className="font-bold text-sm text-[#78350f] block">Protokol Anti-Lonjakan Glukosa:</b>
+                                        <p className="leading-relaxed text-[#854d0e]">
                                             Pada fase progesteron tinggi (luteal), transporter GLUT-4 di jaringan adiposa dan otot membutuhkan hingga 25-30% lebih banyak insulin untuk memasukkan glukosa yang sama. Terapkan 3 trik sederhana ini:
                                         </p>
-                                        <ol className="list-decimal pl-5 space-y-1 text-xs">
+                                        <ol className="list-decimal pl-5 space-y-1.5 text-xs text-[#854d0e]">
                                             <li><b>Food Sequencing:</b> Santap sayuran hijau berserat tinggi 10 menit sebelum nasi atau karbohidrat.</li>
                                             <li><b>Soleus Activation:</b> Lakukan soleus calf raise saat duduk bekerja pasca-makan siang selama 5-10 menit.</li>
                                             <li><b>Cuka Apel Terlarut:</b> 1 sendok makan cuka apel dalam segelas air sebelum santap malam mengurangi lonjakan glukosa pasca makan hingga 20%.</li>
@@ -996,7 +1000,7 @@ export default function GenderVitality({
                                             key={item.key}
                                             className={`p-3 rounded-2xl border flex items-center gap-3 cursor-pointer transition-all ${
                                                 pcosAnswers[item.key]
-                                                    ? 'bg-rose-50 dark:bg-rose-950/20 border-rose-300 text-rose-950 dark:text-rose-200 font-bold'
+                                                    ? 'bg-rose-50 border-rose-300 text-rose-950 font-bold'
                                                     : 'bg-surface-container-low border-surface-container text-on-surface hover:bg-surface-container'
                                             }`}
                                         >
@@ -1067,7 +1071,7 @@ export default function GenderVitality({
                                 </div>
 
                                 <div className="overflow-x-auto">
-                                    <table className="w-full min-w-[600px] text-left border-collapse text-xs">
+                                    <table className="w-full min-w-150 text-left border-collapse text-xs">
                                         <thead>
                                             <tr className="border-b border-surface-container text-on-surface-variant font-mono">
                                                 <th className="py-2.5 px-3 font-bold">Biomarker</th>
@@ -1508,7 +1512,7 @@ export default function GenderVitality({
                                 </div>
 
                                 <div className="overflow-x-auto">
-                                    <table className="w-full min-w-[600px] text-left border-collapse text-xs">
+                                    <table className="w-full min-w-150 text-left border-collapse text-xs">
                                         <thead>
                                             <tr className="border-b border-surface-container text-on-surface-variant font-mono">
                                                 <th className="py-2.5 px-3 font-bold">Biomarker</th>

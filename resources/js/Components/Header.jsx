@@ -350,7 +350,7 @@ export default function Header() {
                                     >
                                         <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs overflow-hidden shrink-0">
                                             {user.avatar_url ? (
-                                                <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                                <img src={user.avatar_url} alt={user.name} referrerPolicy="no-referrer" crossOrigin="anonymous" className="w-full h-full object-cover" />
                                             ) : (
                                                 user.name?.charAt(0) || 'U'
                                             )}
@@ -556,7 +556,7 @@ export default function Header() {
                                         <div className="flex items-center gap-3 overflow-hidden">
                                             <div className="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0 overflow-hidden">
                                                 {user.avatar_url ? (
-                                                    <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+                                                    <img src={user.avatar_url} alt={user.name} referrerPolicy="no-referrer" crossOrigin="anonymous" className="w-full h-full object-cover" />
                                                 ) : (
                                                     user.name?.charAt(0) || 'U'
                                                 )}

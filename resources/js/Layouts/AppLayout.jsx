@@ -73,7 +73,7 @@ export default function AppLayout({ children, title, activeTab }) {
     };
 
     return (
-        <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
+        <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-clip">
             
             {/* Ambient Background Soft Blobs */}
             <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden contain-paint">
@@ -142,18 +142,11 @@ export default function AppLayout({ children, title, activeTab }) {
                             <span className="material-symbols-outlined text-[15px]">e911_emergency</span>
                             <span>SOS 119</span>
                         </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setIsAiChatOpen(true)}
-                            className="w-8 h-8 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary flex items-center justify-center font-bold text-xs shadow-2xs cursor-pointer active:scale-95 border border-surface-container"
-                            title="Asisten AI Preventif"
-                            aria-label="Buka Asisten AI"
-                        >
-                            <span className="material-symbols-outlined text-[17px]">smart_toy</span>
-                        </button>
                     </div>
                 </header>
+
+                {/* Mobile Header Spacer to prevent content from hiding underneath fixed header */}
+                <div className="lg:hidden h-14 shrink-0" aria-hidden="true" />
 
                 {/* Flash Messages */}
                 {flash?.success && (
@@ -178,8 +171,8 @@ export default function AppLayout({ children, title, activeTab }) {
 
                 {/* Footer (Compact Mobile-Friendly with clearance for fixed bottom nav) */}
                 <footer className="border-t border-surface-container/60 py-3.5 mb-24 lg:mb-0 bg-white/40 dark:bg-surface/40 text-[10px] text-on-surface-variant/75">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
-                        <p className="font-medium text-[10.5px]">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
+                        <p className="font-medium text-[10.5px] text-center">
                             © 2026 AEVYRA • Platform Kesehatan Preventif
                         </p>
                     </div>
@@ -197,41 +190,95 @@ export default function AppLayout({ children, title, activeTab }) {
                             {/* Instructor Bottom Nav */}
                             <Link
                                 href="/instructor/dashboard"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'dashboard' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[22px]">dashboard</span>
-                                <span className="text-[10px] mt-0.5">Caseload</span>
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'dashboard'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
+                                        dashboard
+                                    </span>
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Caseload
+                                    </span>
+                                </div>
                             </Link>
+
                             <Link
                                 href="/instructor/members"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'members' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[22px]">groups</span>
-                                <span className="text-[10px] mt-0.5">Member</span>
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'members'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
+                                        groups
+                                    </span>
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Member
+                                    </span>
+                                </div>
                             </Link>
-                            <div className="flex flex-col items-center justify-center flex-1 -mt-6">
+
+                            <div className="group flex flex-col items-center justify-center flex-1 -mt-5">
                                 <Link
                                     href="/instructor/interventions"
-                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform"
+                                    className={`relative w-12 h-12 rounded-2xl flex items-center justify-center bg-linear-to-br from-emerald-600 via-primary to-[#004d46] text-white shadow-[0_10px_22px_-2px_rgba(0,67,62,0.38)] border-2 border-white dark:border-surface transition-all duration-300 cursor-pointer active:scale-95 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:shadow-xl group-hover:shadow-primary/50 ${
+                                        activeTab === 'interventions' ? 'ring-3 ring-emerald-500/40 ring-offset-2 ring-offset-white dark:ring-offset-surface scale-105' : ''
+                                    }`}
+                                    title="Manajemen Intervensi Klinis"
                                 >
-                                    <span className="material-symbols-outlined text-[24px]">clinical_notes</span>
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-t from-black/15 to-white/20 pointer-events-none" />
+                                    <span className="material-symbols-outlined text-[23px] transition-transform duration-300 group-hover:scale-110 relative z-10">
+                                        clinical_notes
+                                    </span>
                                 </Link>
-                                <span className="text-[10px] font-bold text-primary mt-1">Intervensi</span>
+                                <span className="text-[10px] mt-1 font-bold text-primary tracking-tight transition-colors duration-200 group-hover:text-emerald-700">
+                                    Intervensi
+                                </span>
                             </div>
+
                             <Link
                                 href="/instructor/consultations"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 ${activeTab === 'consultations' ? 'text-primary font-bold' : 'text-on-surface-variant'}`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[22px]">calendar_month</span>
-                                <span className="text-[10px] mt-0.5">Jadwal</span>
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'consultations'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
+                                        calendar_month
+                                    </span>
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Jadwal
+                                    </span>
+                                </div>
                             </Link>
+
                             <button
                                 type="button"
                                 onClick={() => setSidebarOpen(true)}
-                                className="flex flex-col items-center justify-center flex-1 py-1 text-on-surface-variant hover:text-primary cursor-pointer"
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <span className="material-symbols-outlined text-[22px]">grid_view</span>
-                                <span className="text-[10px] mt-0.5">Menu</span>
+                                <div className="w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6">
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
+                                        grid_view
+                                    </span>
+                                    <span className="text-[10px] mt-0.5 tracking-tight font-medium group-hover:text-primary transition-colors duration-200">
+                                        Menu
+                                    </span>
+                                </div>
                             </button>
                         </>
                     ) : (
@@ -239,94 +286,109 @@ export default function AppLayout({ children, title, activeTab }) {
                             {/* Member & Public Bottom Nav */}
                             <Link
                                 href="/member/dashboard"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'dashboard'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'dashboard'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
                                         monitoring
                                     </span>
-                                    {activeTab === 'dashboard' && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Beranda
+                                    </span>
                                 </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Beranda</span>
                             </Link>
 
                             <Link
                                 href="/member/timeline"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'timeline'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'timeline'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
                                         history_edu
                                     </span>
-                                    {activeTab === 'timeline' && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Riwayat
+                                    </span>
                                 </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Riwayat</span>
                             </Link>
 
-                            <div className="flex flex-col items-center justify-center flex-1 -mt-6">
+                            {/* Center Elevated Action: Scan AI */}
+                            <div className="group flex flex-col items-center justify-center flex-1 -mt-5">
                                 <Link
                                     href="/member/scanner"
-                                    className={`w-12 h-12 rounded-full flex items-center justify-center bg-linear-to-tr from-primary to-[#006059] text-white shadow-lg shadow-primary/30 border-3 border-white dark:border-surface active:scale-90 transition-transform ${
-                                        activeTab === 'scanner' ? 'ring-2 ring-primary ring-offset-1' : ''
+                                    className={`relative w-12 h-12 rounded-2xl flex items-center justify-center bg-linear-to-br from-emerald-600 via-primary to-[#004d46] text-white shadow-[0_10px_22px_-2px_rgba(0,67,62,0.38)] border-2 border-white dark:border-surface transition-all duration-300 cursor-pointer active:scale-95 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:shadow-xl group-hover:shadow-primary/50 group-hover:from-emerald-500 group-hover:to-primary ${
+                                        activeTab === 'scanner'
+                                            ? 'ring-3 ring-emerald-500/40 ring-offset-2 ring-offset-white dark:ring-offset-surface scale-105'
+                                            : ''
                                     }`}
-                                    title="Pindai Gizi & BPOM OCR"
+                                    title="Pindai Gizi & BPOM OCR (AI Scanner)"
                                 >
-                                    <span className="material-symbols-outlined text-[24px]">photo_camera</span>
+                                    {/* Subtle internal glass sheen */}
+                                    <div className="absolute inset-0 rounded-2xl bg-linear-to-t from-black/15 to-white/20 pointer-events-none" />
+
+                                    {/* Camera icon with hover scale */}
+                                    <span className="material-symbols-outlined text-[24px] transition-transform duration-300 group-hover:scale-110 relative z-10">
+                                        photo_camera
+                                    </span>
                                 </Link>
-                                <span className={`text-[10px] mt-1 font-bold ${activeTab === 'scanner' ? 'text-primary' : 'text-primary'}`}>
+                                <span className={`text-[10px] mt-1 font-bold tracking-tight transition-colors duration-200 flex items-center gap-0.5 ${
+                                    activeTab === 'scanner' ? 'text-primary' : 'text-primary/90 group-hover:text-primary group-hover:scale-105'
+                                }`}>
                                     Scan AI
                                 </span>
                             </div>
 
                             <Link
                                 href="/member/consultations-hub"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'consultations' || activeTab === 'instructors'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                             >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'consultations' || activeTab === 'instructors'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
                                         support_agent
                                     </span>
-                                    {(activeTab === 'consultations' || activeTab === 'instructors') && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Konsultasi
+                                    </span>
                                 </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Konsultasi</span>
                             </Link>
 
                             <Link
                                 href="/member/menu"
-                                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-xl transition-all ${
-                                    activeTab === 'menu' || activeTab === 'onboarding' || activeTab === 'profile'
-                                        ? 'text-primary font-bold'
-                                        : 'text-on-surface-variant hover:text-on-surface'
-                                }`}
+                                className="group flex flex-col items-center justify-center flex-1 py-0.5 transition-all cursor-pointer"
                                 aria-label="Menu & Profil Lengkap"
                             >
-                                <div className="relative flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[22px]">
+                                <div
+                                    className={`w-full max-w-17 px-1.5 py-1 rounded-2xl transition-all duration-200 flex flex-col items-center justify-center ${
+                                        activeTab === 'menu' || activeTab === 'onboarding' || activeTab === 'profile'
+                                            ? 'bg-primary/10 border border-primary/20 text-primary shadow-xs font-bold'
+                                            : 'text-on-surface-variant/80 group-hover:text-primary group-hover:bg-primary/6'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-[21px] transition-transform duration-200 group-hover:-translate-y-0.5">
                                         grid_view
                                     </span>
-                                    {(activeTab === 'menu' || activeTab === 'onboarding' || activeTab === 'profile') && (
-                                        <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                                    )}
+                                    <span className="text-[10px] mt-0.5 tracking-tight transition-colors duration-200">
+                                        Menu
+                                    </span>
                                 </div>
-                                <span className="text-[10px] mt-0.5 tracking-tight font-medium">Menu</span>
                             </Link>
                         </>
                     )}

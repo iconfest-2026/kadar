@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import AppLayout from '../../Layouts/AppLayout';
+import { DatePicker } from '../../Components/UI';
 
 export default function Account({ user, profile, membership }) {
     const fileInputRef = useRef(null);
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [avatarError, setAvatarError] = useState(null);
+    const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
 
     const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
     const [showCurrentPass, setShowCurrentPass] = useState(false);
@@ -72,6 +74,7 @@ export default function Account({ user, profile, membership }) {
         }
 
         setAvatarError(null);
+        setAvatarLoadFailed(false);
         setPreviewUrl(URL.createObjectURL(file));
         setIsUploadingAvatar(true);
 
@@ -124,10 +127,13 @@ export default function Account({ user, profile, membership }) {
                             {/* Avatar Picker Interaktif */}
                             <div className="relative group shrink-0">
                                 <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden border-2 border-white/40 shadow-md bg-white/20 backdrop-blur-md flex items-center justify-center">
-                                    {previewUrl || user.avatar_url ? (
+                                    {(previewUrl || user.avatar_url) && !avatarLoadFailed ? (
                                         <img
                                             src={previewUrl || user.avatar_url}
                                             alt={user.name}
+                                            referrerPolicy="no-referrer"
+                                            crossOrigin="anonymous"
+                                            onError={() => setAvatarLoadFailed(true)}
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
@@ -137,21 +143,6 @@ export default function Account({ user, profile, membership }) {
                                     )}
                                 </div>
 
-                                {/* Floating Camera Button */}
-                                <button
-                                    type="button"
-                                    onClick={triggerFileInput}
-                                    disabled={isUploadingAvatar}
-                                    className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white text-primary hover:bg-emerald-50 shadow-md flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer border border-white/60"
-                                    title="Pilih & Unggah Foto Baru"
-                                    aria-label="Unggah Foto Profil"
-                                >
-                                    {isUploadingAvatar ? (
-                                        <span className="material-symbols-outlined text-[15px] animate-spin">progress_activity</span>
-                                    ) : (
-                                        <span className="material-symbols-outlined text-[16px]">photo_camera</span>
-                                    )}
-                                </button>
 
                                 <input
                                     type="file"
@@ -305,53 +296,57 @@ export default function Account({ user, profile, membership }) {
                 </div>
 
                 {/* 3. FORM EDIT INFORMASI PROFIL */}
-                <div className="rounded-3xl bg-white dark:bg-surface border border-surface-container p-5 sm:p-6 shadow-xs space-y-5">
-                    <div className="flex items-center justify-between border-b border-surface-container pb-3">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                <span className="material-symbols-outlined text-[18px]">person</span>
+                <div className="rounded-3xl bg-white dark:bg-surface border border-surface-container p-5 sm:p-7 shadow-xs space-y-6">
+                    <div className="flex items-center justify-between border-b border-surface-container pb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                                <span className="material-symbols-outlined text-[20px]">person</span>
                             </div>
                             <div>
-                                <h3 className="font-heading font-bold text-sm text-on-surface leading-tight">
+                                <h3 className="font-heading font-bold text-base text-on-surface leading-tight">
                                     Informasi Pribadi &amp; Profil
                                 </h3>
-                                <p className="text-[11px] text-on-surface-variant">
+                                <p className="text-xs text-on-surface-variant mt-0.5">
                                     Perbarui data identitas diri dan profil kesehatan Anda
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSaveProfile} className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <form onSubmit={handleSaveProfile} className="space-y-5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             {/* Baris 1: Nama Lengkap & Nama Panggilan */}
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Nama Lengkap <span className="text-rose-500">*</span>
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                                <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                         badge
                                     </span>
                                     <input
                                         type="text"
                                         value={profileForm.data.name}
                                         onChange={(e) => profileForm.setData('name', e.target.value)}
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                        autoComplete="name"
+                                        className="w-full pl-10 pr-3.5 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden"
                                         required
                                     />
                                 </div>
                                 {profileForm.errors.name && (
-                                    <p className="text-[11px] text-rose-500 mt-1">{profileForm.errors.name}</p>
+                                    <p className="text-[11px] text-rose-500 font-medium flex items-center gap-1 mt-1">
+                                        <span className="material-symbols-outlined text-[14px]">error</span>
+                                        {profileForm.errors.name}
+                                    </p>
                                 )}
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Nama Panggilan (Display Name)
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                                <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                         sentiment_satisfied
                                     </span>
                                     <input
@@ -359,18 +354,19 @@ export default function Account({ user, profile, membership }) {
                                         value={profileForm.data.display_name}
                                         onChange={(e) => profileForm.setData('display_name', e.target.value)}
                                         placeholder="Nama sapaan"
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                        autoComplete="nickname"
+                                        className="w-full pl-10 pr-3.5 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden placeholder:text-on-surface-variant/40"
                                     />
                                 </div>
                             </div>
 
                             {/* Baris 2: Pekerjaan & Jenis Kelamin */}
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Pekerjaan / Aktivitas
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                                <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                         work
                                     </span>
                                     <input
@@ -378,74 +374,85 @@ export default function Account({ user, profile, membership }) {
                                         value={profileForm.data.occupation}
                                         onChange={(e) => profileForm.setData('occupation', e.target.value)}
                                         placeholder="Contoh: Karyawan Swasta, Wirausaha"
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                        autoComplete="organization-title"
+                                        className="w-full pl-10 pr-3.5 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden placeholder:text-on-surface-variant/40"
                                     />
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Jenis Kelamin
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
-                                        wc
-                                    </span>
-                                    <select
-                                        value={profileForm.data.sex}
-                                        onChange={(e) => profileForm.setData('sex', e.target.value)}
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
-                                    >
-                                        <option value="MALE">Laki-laki</option>
-                                        <option value="FEMALE">Perempuan</option>
-                                        <option value="OTHER">Lainnya</option>
-                                    </select>
+                                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                                    {[
+                                        { value: 'MALE', label: 'Laki-laki', icon: 'male' },
+                                        { value: 'FEMALE', label: 'Perempuan', icon: 'female' },
+                                        { value: 'OTHER', label: 'Lainnya', icon: 'person' },
+                                    ].map((option) => {
+                                        const isSelected = profileForm.data.sex === option.value;
+                                        return (
+                                            <button
+                                                key={option.value}
+                                                type="button"
+                                                onClick={() => profileForm.setData('sex', option.value)}
+                                                className={`flex items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 sm:px-2 rounded-2xl text-[11px] sm:text-xs transition-all border cursor-pointer active:scale-95 ${
+                                                    isSelected
+                                                        ? 'bg-primary text-white border-primary shadow-xs font-bold'
+                                                        : 'bg-surface-container-lowest dark:bg-surface text-on-surface hover:bg-surface-container-low border-surface-container-high font-semibold'
+                                                }`}
+                                            >
+                                                <span className="material-symbols-outlined text-[15px] shrink-0">
+                                                    {option.icon}
+                                                </span>
+                                                <span className="whitespace-nowrap">{option.label}</span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
-                            {/* Baris 3: Tanggal Lahir & Email Akun (100% Simetris 2 Kolom) */}
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
-                                    Tanggal Lahir
-                                </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
-                                        calendar_today
-                                    </span>
-                                    <input
-                                        type="date"
-                                        value={profileForm.data.date_of_birth}
-                                        onChange={(e) => profileForm.setData('date_of_birth', e.target.value)}
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
-                                    />
-                                </div>
-                            </div>
+                            {/* Baris 3: Tanggal Lahir & Email Akun */}
+                            <DatePicker
+                                label="Tanggal Lahir"
+                                value={profileForm.data.date_of_birth}
+                                onChange={(val) => profileForm.setData('date_of_birth', val)}
+                                placeholder="Pilih tanggal lahir..."
+                                leftIcon="calendar_today"
+                                error={profileForm.errors.date_of_birth}
+                            />
 
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
-                                    Alamat Email Terdaftar
-                                </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                    <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
+                                        Alamat Email Terdaftar
+                                    </label>
+                                    <span className="text-[10px] font-semibold text-on-surface-variant/70 bg-surface-container px-2 py-0.5 rounded-full">
+                                        Terkunci
+                                    </span>
+                                </div>
+                                <div className="relative flex items-center rounded-2xl border border-surface-container bg-surface-container-low text-on-surface-variant shadow-2xs opacity-85">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/50 text-[18px]">
                                         mail
                                     </span>
                                     <input
                                         type="email"
                                         value={user?.email || ''}
                                         disabled
-                                        className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-low text-xs text-on-surface-variant cursor-not-allowed select-none opacity-85"
+                                        autoComplete="email"
+                                        className="w-full pl-10 pr-3.5 py-2.5 bg-transparent text-xs font-medium cursor-not-allowed select-none"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="pt-3 border-t border-surface-container flex items-center justify-end">
+                        <div className="pt-4 border-t border-surface-container flex items-center justify-end">
                             <button
                                 type="submit"
                                 disabled={profileForm.processing}
-                                className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                                className="px-6 py-2.5 rounded-2xl bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-2"
                             >
-                                <span className="material-symbols-outlined text-[16px]">save</span>
+                                <span className="material-symbols-outlined text-[17px]">save</span>
                                 <span>{profileForm.processing ? 'Menyimpan...' : 'Simpan Perubahan'}</span>
                             </button>
                         </div>
@@ -453,31 +460,43 @@ export default function Account({ user, profile, membership }) {
                 </div>
 
                 {/* 4. FORM PENGATURAN KATA SANDI */}
-                <div className="rounded-3xl bg-white dark:bg-surface border border-surface-container p-5 sm:p-6 shadow-xs space-y-5">
-                    <div className="flex items-center justify-between border-b border-surface-container pb-3">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                <span className="material-symbols-outlined text-[18px]">lock</span>
+                <div className="rounded-3xl bg-white dark:bg-surface border border-surface-container p-5 sm:p-7 shadow-xs space-y-6">
+                    <div className="flex items-center justify-between border-b border-surface-container pb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                                <span className="material-symbols-outlined text-[20px]">lock</span>
                             </div>
                             <div>
-                                <h3 className="font-heading font-bold text-sm text-on-surface leading-tight">
+                                <h3 className="font-heading font-bold text-base text-on-surface leading-tight">
                                     Keamanan Kata Sandi
                                 </h3>
-                                <p className="text-[11px] text-on-surface-variant">
+                                <p className="text-xs text-on-surface-variant mt-0.5">
                                     Perbarui kata sandi akun untuk menjaga keamanan akses
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSavePassword} className="space-y-4">
+                    <form onSubmit={handleSavePassword} className="space-y-5">
+                        {/* Hidden username field for browser password managers & DOM accessibility (fixes goo.gl/9p2vKq) */}
+                        <input
+                            type="text"
+                            name="username"
+                            value={user?.email || user?.name || ''}
+                            autoComplete="username"
+                            readOnly
+                            tabIndex={-1}
+                            aria-hidden="true"
+                            className="hidden"
+                        />
+
                         {/* Baris 1: Kata Sandi Lama */}
-                        <div>
-                            <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                 Kata Sandi Lama
                             </label>
-                            <div className="relative">
-                                <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                            <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                     key
                                 </span>
                                 <input
@@ -485,12 +504,13 @@ export default function Account({ user, profile, membership }) {
                                     value={passwordForm.data.current_password}
                                     onChange={(e) => passwordForm.setData('current_password', e.target.value)}
                                     placeholder="Masukkan kata sandi saat ini"
-                                    className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                    autoComplete="current-password"
+                                    className="w-full pl-10 pr-11 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden placeholder:text-on-surface-variant/40"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowCurrentPass(!showCurrentPass)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+                                    className="absolute right-3 p-1 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-all cursor-pointer"
                                     title={showCurrentPass ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi'}
                                 >
                                     <span className="material-symbols-outlined text-[18px]">
@@ -498,22 +518,25 @@ export default function Account({ user, profile, membership }) {
                                     </span>
                                 </button>
                             </div>
-                            <p className="text-[11px] text-on-surface-variant mt-1">
+                            <p className="text-[11px] text-on-surface-variant">
                                 * Kosongkan jika Anda mendaftar pertama kali menggunakan akun Google.
                             </p>
                             {passwordForm.errors.current_password && (
-                                <p className="text-[11px] text-rose-500 mt-1">{passwordForm.errors.current_password}</p>
+                                <p className="text-[11px] text-rose-500 font-medium flex items-center gap-1 mt-1">
+                                    <span className="material-symbols-outlined text-[14px]">error</span>
+                                    {passwordForm.errors.current_password}
+                                </p>
                             )}
                         </div>
 
-                        {/* Baris 2: Kata Sandi Baru & Konfirmasi Kata Sandi (Simetris 2 Kolom) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                        {/* Baris 2: Kata Sandi Baru & Konfirmasi Kata Sandi */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Kata Sandi Baru <span className="text-rose-500">*</span>
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                                <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                         lock
                                     </span>
                                     <input
@@ -521,13 +544,14 @@ export default function Account({ user, profile, membership }) {
                                         value={passwordForm.data.password}
                                         onChange={(e) => passwordForm.setData('password', e.target.value)}
                                         placeholder="Minimal 8 karakter"
-                                        className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                        autoComplete="new-password"
+                                        className="w-full pl-10 pr-11 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden placeholder:text-on-surface-variant/40"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowNewPass(!showNewPass)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+                                        className="absolute right-3 p-1 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-all cursor-pointer"
                                         title={showNewPass ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi'}
                                     >
                                         <span className="material-symbols-outlined text-[18px]">
@@ -536,16 +560,19 @@ export default function Account({ user, profile, membership }) {
                                     </button>
                                 </div>
                                 {passwordForm.errors.password && (
-                                    <p className="text-[11px] text-rose-500 mt-1">{passwordForm.errors.password}</p>
+                                    <p className="text-[11px] text-rose-500 font-medium flex items-center gap-1 mt-1">
+                                        <span className="material-symbols-outlined text-[14px]">error</span>
+                                        {passwordForm.errors.password}
+                                    </p>
                                 )}
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-semibold text-on-surface mb-1.5">
+                            <div className="space-y-1.5">
+                                <label className="block text-[11px] font-bold text-on-surface tracking-wider uppercase">
                                     Konfirmasi Kata Sandi Baru <span className="text-rose-500">*</span>
                                 </label>
-                                <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-[18px]">
+                                <div className="group relative flex items-center rounded-2xl border border-surface-container-high bg-surface-container-lowest hover:border-primary/40 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xs">
+                                    <span className="material-symbols-outlined absolute left-3.5 text-on-surface-variant/60 group-focus-within:text-primary transition-colors text-[18px]">
                                         verified_user
                                     </span>
                                     <input
@@ -553,13 +580,14 @@ export default function Account({ user, profile, membership }) {
                                         value={passwordForm.data.password_confirmation}
                                         onChange={(e) => passwordForm.setData('password_confirmation', e.target.value)}
                                         placeholder="Ulangi kata sandi baru"
-                                        className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                                        autoComplete="new-password"
+                                        className="w-full pl-10 pr-11 py-2.5 bg-transparent text-xs text-on-surface font-medium focus:outline-hidden placeholder:text-on-surface-variant/40"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPass(!showConfirmPass)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+                                        className="absolute right-3 p-1 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-all cursor-pointer"
                                         title={showConfirmPass ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi'}
                                     >
                                         <span className="material-symbols-outlined text-[18px]">
@@ -570,13 +598,13 @@ export default function Account({ user, profile, membership }) {
                             </div>
                         </div>
 
-                        <div className="pt-3 border-t border-surface-container flex items-center justify-end">
+                        <div className="pt-4 border-t border-surface-container flex items-center justify-end">
                             <button
                                 type="submit"
                                 disabled={passwordForm.processing}
-                                className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                                className="px-6 py-2.5 rounded-2xl bg-primary hover:bg-primary-container text-white text-xs font-bold shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer disabled:opacity-50 flex items-center gap-2"
                             >
-                                <span className="material-symbols-outlined text-[16px]">lock_reset</span>
+                                <span className="material-symbols-outlined text-[17px]">lock_reset</span>
                                 <span>{passwordForm.processing ? 'Memperbarui...' : 'Perbarui Kata Sandi'}</span>
                             </button>
                         </div>

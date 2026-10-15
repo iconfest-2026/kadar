@@ -445,40 +445,42 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                     </div>
 
                     {/* TOP CONTROLS OVERLAY */}
-                    <div className="relative z-20 pt-safe px-4 pt-4 pb-2 flex items-center justify-between bg-linear-to-b from-black/80 via-black/40 to-transparent">
+                    <div className="relative z-20 pt-safe px-2.5 sm:px-4 pt-3.5 sm:pt-4 pb-2 flex items-center justify-between gap-1.5 sm:gap-2 bg-linear-to-b from-black/85 via-black/40 to-transparent">
                         {/* Tombol Kembali (Back Button) */}
                         <Link
                             href="/member/dashboard"
-                            className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/60 active:scale-95 transition-all shadow-lg"
+                            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/70 active:scale-95 transition-all shadow-lg shrink-0 cursor-pointer"
                             title="Kembali ke Dashboard"
                         >
-                            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+                            <span className="material-symbols-outlined text-[19px] sm:text-[20px]">arrow_back</span>
                         </Link>
 
-                        {/* Status Header Badge */}
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-white/90 shadow-md">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span>AEVYRA AI Vision</span>
-                            <span className="text-white/40">•</span>
-                            <span className="text-emerald-300 font-mono text-[10px]">
+                        {/* Status Header Badge (Single Line Guaranteed) */}
+                        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-md shrink-0 whitespace-nowrap">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                            <span className="whitespace-nowrap font-bold text-[10px] sm:text-[11px] tracking-tight text-white/95 shrink-0">
+                                AEVYRA AI Vision
+                            </span>
+                            <span className="text-white/40 text-[10px] shrink-0">•</span>
+                            <span className="text-emerald-300 font-mono text-[9.5px] sm:text-[10.5px] font-bold whitespace-nowrap shrink-0">
                                 {facingMode === 'user' ? 'Kamera Depan' : (tier?.name || 'Member')}
                             </span>
                         </div>
 
                         {/* Top Right Utilities (Torch, Mirror & Flip Camera) */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                             {/* Tombol Balik Cermin / Mirror Toggle */}
                             <button
                                 type="button"
                                 onClick={toggleMirror}
-                                className={`w-10 h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all active:scale-95 shadow-lg ${
+                                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all active:scale-95 shadow-lg shrink-0 cursor-pointer ${
                                     isMirrored
                                         ? 'bg-amber-500/80 text-white border-amber-300 shadow-[0_0_15px_#f59e0b]'
-                                        : 'bg-black/40 text-white border-white/20 hover:bg-black/60'
+                                        : 'bg-black/50 text-white border-white/20 hover:bg-black/70'
                                 }`}
                                 title={isMirrored ? "Cermin AKTIF (Klik untuk mode Non-Mirror / Asli)" : "Mode Non-Mirror (Klik untuk balik seperti Cermin)"}
                             >
-                                <span className="material-symbols-outlined text-[20px]">
+                                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">
                                     {isMirrored ? 'flip' : 'sync_alt'}
                                 </span>
                             </button>
@@ -487,14 +489,14 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                             <button
                                 type="button"
                                 onClick={toggleTorch}
-                                className={`w-10 h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all active:scale-95 shadow-lg ${
+                                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all active:scale-95 shadow-lg shrink-0 cursor-pointer ${
                                     torchOn
                                         ? 'bg-amber-400 text-black border-amber-300 shadow-[0_0_15px_#fbbf24]'
-                                        : 'bg-black/40 text-white border-white/20 hover:bg-black/60'
+                                        : 'bg-black/50 text-white border-white/20 hover:bg-black/70'
                                 }`}
                                 title={torchOn ? 'Matikan Senter' : 'Nyalakan Senter'}
                             >
-                                <span className="material-symbols-outlined text-[20px]">
+                                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">
                                     {torchOn ? 'flashlight_on' : 'flashlight_off'}
                                 </span>
                             </button>
@@ -503,10 +505,10 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                             <button
                                 type="button"
                                 onClick={toggleFacingMode}
-                                className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/60 active:scale-95 transition-all shadow-lg"
+                                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/70 active:scale-95 transition-all shadow-lg shrink-0 cursor-pointer"
                                 title={`Ganti ke ${facingMode === 'environment' ? 'Kamera Depan' : 'Kamera Belakang'}`}
                             >
-                                <span className="material-symbols-outlined text-[20px]">flip_camera_ios</span>
+                                <span className="material-symbols-outlined text-[18px] sm:text-[20px]">flip_camera_ios</span>
                             </button>
                         </div>
                     </div>

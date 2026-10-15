@@ -145,8 +145,7 @@ export default function PublicPromoSection() {
                         {/* Top Content: Header, Title, Points */}
                         <div className="flex-1 flex flex-col space-y-2 sm:space-y-4">
                             <div className="flex items-center justify-between gap-1 pb-1.5 sm:pb-3 border-b border-[#ebdcd5]">
-                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center gap-1.5 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#9c5f51] shrink-0"></span>
+                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#8c594c] uppercase tracking-wider flex items-center min-w-0">
                                     <span className="truncate">Konvensional</span>
                                 </span>
                                 <span className="text-[7.5px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full bg-white text-[#9c5f51] border border-[#ecdcd5] font-medium shrink-0">
@@ -209,8 +208,7 @@ export default function PublicPromoSection() {
                         {/* Top Content: Header, Title, Points */}
                         <div className="flex-1 flex flex-col space-y-2 sm:space-y-4">
                             <div className="flex items-center justify-between gap-1 pb-1.5 sm:pb-3 border-b border-[#d6e7dd]">
-                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center gap-1.5 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1c6454] shrink-0"></span>
+                                <span className="text-[8.5px] sm:text-[11px] font-medium text-[#1c6454] uppercase tracking-wider flex items-center min-w-0">
                                     <span className="truncate">AEVYRA (Preventif)</span>
                                 </span>
                                 <span className="text-[7.5px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full bg-white text-[#1c6454] border border-[#cbe0d4] font-medium shrink-0">

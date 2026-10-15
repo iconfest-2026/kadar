@@ -449,15 +449,17 @@ export default function MenstrualTrackerCard() {
 
             {/* 3. METABOLIC GLYCEMIC CONTEXT (Subtle Card) */}
             <div className="p-3.5 rounded-2xl bg-white dark:bg-surface border border-surface-container space-y-1.5 max-w-md mx-auto text-xs shadow-2xs">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 font-bold text-primary">
-                        <span className="material-symbols-outlined text-[16px]">insights</span>
-                        <span>Fase {summary.phase_name || 'Siklus'} &amp; Sensitivitas Insulin</span>
+                <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 font-bold text-primary min-w-0">
+                        <span className="material-symbols-outlined text-[16px] shrink-0">insights</span>
+                        <span className="truncate">
+                            Fase {(summary.phase_name || 'Siklus').replace(/^Fase\s+/i, '')} &amp; Sensitivitas Insulin
+                        </span>
                     </div>
                     <button
                         type="button"
                         onClick={() => setSettingsModalOpen(true)}
-                        className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                        className="text-[11px] font-bold text-primary hover:underline cursor-pointer shrink-0 whitespace-nowrap"
                     >
                         Atur Siklus
                     </button>

@@ -75,7 +75,7 @@ export default function InstructorLayout({ children, title, activeNav }) {
     };
 
     return (
-        <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-hidden">
+        <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-clip">
             <Head title={title ? `${title} - Panel Instruktur AEVYRA` : 'Instruktur Panel - AEVYRA'} />
 
             {/* Ambient Background Soft Blobs */}

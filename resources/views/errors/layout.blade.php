@@ -4,6 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>@yield('title') - AEVYRA Health Platform</title>
+    <meta name="description" content="AEVYRA — Personal Preventive Health Intelligence." />
+    @php
+        $isSecure = request()->isSecure() || str_starts_with(config('app.url'), 'https://');
+        $ogImageUrl = $isSecure ? secure_asset('og-image.jpg') : asset('og-image.jpg');
+    @endphp
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AEVYRA" />
+    <meta property="og:title" content="@yield('title') - AEVYRA Health Platform" />
+    <meta property="og:description" content="AEVYRA — Personal Preventive Health Intelligence." />
+    <meta property="og:image" content="{{ $ogImageUrl }}" />
+    <meta property="og:image:secure_url" content="{{ $ogImageUrl }}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="{{ $ogImageUrl }}" />
     <link rel="icon" type="image/png" href="/image/Logo_AEVYRA_Icon.png" />
 
     <!-- Google Fonts -->
