@@ -233,40 +233,59 @@ class YoloFoodVisionService
             return $this->formatYoloResult($food, 'YOLO_OBJECT_DETECTION');
         }
 
-        // 2. Try Vision AI if available and imageData provided
+        // 2. Multi-Tier AI Vision Pipeline if imageData provided
         if (!empty($imageData)) {
-            // Priority 1: Google Gemini Multimodal Vision (from .env - ultra-fast flash-lite)
-            $geminiDetected = $this->detectWithGeminiVision($imageData, $rawText);
-            if ($geminiDetected) {
-                if (isset($geminiDetected['is_food']) && $geminiDetected['is_food'] === false) {
-                    return [
-                        'status' => 'not_food',
-                        'success' => false,
-                        'is_food' => false,
-                        'message' => $geminiDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
-                    ];
-                }
-                if (!empty($geminiDetected['name'])) {
-                    return $this->formatYoloResult($geminiDetected, 'GEMINI_VISION_NEURAL_AI');
+            $groqResult = null;
+            $geminiResult = null;
+            $aiAttempted = false;
+
+            // Tier 1: Groq Cloud High-Speed Multimodal Vision (~0.8s ultra-fast response)
+            $groqApiKey = env('GROQ_API_KEY');
+            if (!empty($groqApiKey)) {
+                $aiAttempted = true;
+                $groqResult = $this->detectWithGroqVision($imageData, $rawText);
+
+                // If Groq successfully identified food, return immediately!
+                if ($groqResult && !empty($groqResult['is_food']) && !empty($groqResult['name'])) {
+                    return $this->formatYoloResult($groqResult, 'GROQ_VISION_NEURAL_AI');
                 }
             }
 
-            // Priority 2: Groq High-Speed Reasoning if text hints or OCR detected
-            if (!empty($rawText)) {
-                $groqDetected = $this->detectWithGroqVision($imageData, $rawText);
-                if ($groqDetected) {
-                    if (isset($groqDetected['is_food']) && $groqDetected['is_food'] === false) {
-                        return [
-                            'status' => 'not_food',
-                            'success' => false,
-                            'is_food' => false,
-                            'message' => $groqDetected['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
-                        ];
-                    }
-                    if (!empty($groqDetected['name'])) {
-                        return $this->formatYoloResult($groqDetected, 'GROQ_VISION_NEURAL_AI');
-                    }
+            // Tier 2: Google Gemini Multimodal Vision (Primary if Groq absent or secondary if Groq returned false/failed)
+            $geminiApiKey = env('GEMINI_API_KEY');
+            if (!empty($geminiApiKey)) {
+                $aiAttempted = true;
+                $geminiResult = $this->detectWithGeminiVision($imageData, $rawText);
+
+                // If Gemini successfully identified food, return immediately!
+                if ($geminiResult && !empty($geminiResult['is_food']) && !empty($geminiResult['name'])) {
+                    return $this->formatYoloResult($geminiResult, 'GEMINI_VISION_NEURAL_AI');
                 }
+            }
+
+            // If at least one engine evaluated the image and explicitly determined it is NOT food
+            if (
+                ($groqResult && isset($groqResult['is_food']) && $groqResult['is_food'] === false) ||
+                ($geminiResult && isset($geminiResult['is_food']) && $geminiResult['is_food'] === false)
+            ) {
+                $msg = $groqResult['message'] ?? $geminiResult['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi. Silakan arahkan kamera ke makanan atau label gizi dengan jelas.';
+                return [
+                    'status' => 'not_food',
+                    'success' => false,
+                    'is_food' => false,
+                    'message' => $msg,
+                ];
+            }
+
+            // If AI was attempted but both engines timed out or failed to connect (network/quota failure)
+            if ($aiAttempted && is_null($groqResult) && is_null($geminiResult)) {
+                Log::warning('Both Groq and Gemini Vision services failed or timed out.');
+                return [
+                    'status' => 'service_error',
+                    'success' => false,
+                    'is_food' => false,
+                    'message' => 'Layanan AI pemindai sedang sibuk atau koneksi internet tidak stabil. Silakan coba kembali beberapa saat lagi atau pilih dari menu sampel.',
+                ];
             }
         }
 
@@ -278,7 +297,7 @@ class YoloFoodVisionService
             }
         }
 
-        // If not food or no food recognized, DO NOT default to sample! Return not_food cleanly without delay.
+        // If not food or no food recognized
         return [
             'status' => 'not_food',
             'success' => false,
@@ -323,7 +342,7 @@ class YoloFoodVisionService
     }
 
     /**
-     * Google Gemini Multimodal Vision detection (Primary AI from .env)
+     * Google Gemini Multimodal Vision detection
      */
     protected function detectWithGeminiVision(string $imageData, ?string $rawText = null): ?array
     {
@@ -346,28 +365,14 @@ class YoloFoodVisionService
             return null;
         }
 
-        // Use confirmed, fastest available multimodal models with short timeouts
-        $primaryModel = env('GEMINI_MODEL_VISION', 'gemini-flash-lite-latest');
-        $models = array_unique(array_filter([
-            $primaryModel,
-            'gemini-flash-lite-latest',
-            'gemini-flash-latest',
-        ]));
-        // Cap to at most 2 model attempts to prevent long latency
-        $modelsToTry = array_slice($models, 0, 2);
-
         $prompt = "Tugas: Analisis citra makanan atau label gizi untuk aplikasi kesehatan Indonesia AEVYRA.\n"
             . "Periksa gambar ini secara seksama:\n"
-            . "1. Apakah gambar ini menampilkan MAKANAN, MINUMAN, BUAH, SAYUR, KEMASAN PANGAN, atau TABEL INFORMASI NILAI GIZI / BPOM?\n"
-            . "2. Jika BUKAN makanan/minuman (misalnya: wajah/orang, ruangan, meja kosong, laptop/gadget, pakaian, kendaraan, hewan bukan hidangan, pemandangan, atau gambar buram/tidak jelas), maka jawab persis format JSON ini:\n"
-            . "{\n"
-            . "  \"is_food\": false,\n"
-            . "  \"message\": \"Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.\"\n"
-            . "}\n\n"
-            . "3. Jika BENAR merupakan makanan, minuman, atau produk pangan/gizi, identifikasi hidangannya secara akurat sesuai yang tampak di gambar (JANGAN MENGARANG ATAU DEFAULT KE NASI JIKA BUKAN NASI), lalu kembalikan JSON murni:\n"
+            . "1. Fokuskan perhatian pada makanan, minuman, bahan pangan, sayur, buah, camilan, lauk pauk, atau kemasan pangan yang tampak.\n"
+            . "2. Jika ada makanan/minuman yang terlihat di gambar (meskipun ada piring, sendok, meja, atau tangan yang memegang):\n"
+            . "   Identifikasi hidangannya secara spesifik dalam bahasa Indonesia dan estimasi gizinya berdasarkan standar Tabel Komposisi Pangan Indonesia (TKPI/Kemenkes). Kembalikan JSON murni:\n"
             . "{\n"
             . "  \"is_food\": true,\n"
-            . "  \"name\": \"Nama Makanan / Minuman Nyata Sesuai Gambar\",\n"
+            . "  \"name\": \"Nama Makanan Nyata Sesuai Gambar\",\n"
             . "  \"category\": \"Kategori Makanan / Minuman\",\n"
             . "  \"portion\": \"1 porsi (misal 200g atau 1 mangkok/piring/gelas)\",\n"
             . "  \"calories\": 350,\n"
@@ -385,14 +390,27 @@ class YoloFoodVisionService
             . "  \"warning\": \"Catatan peringatan jika ada (opsional)\",\n"
             . "  \"clinical_note\": \"Analisis respon gula darah postprandial 2 jam dan saran gizi\"\n"
             . "}\n"
-            . (!empty($rawText) ? "Petunjuk tambahan: " . mb_substr($rawText, 0, 300) : "");
+            . "3. HANYA JIKA SAMA SEKALI TIDAK ADA MAKANAN/MINUMAN (contoh murni: wajah orang tanpa makanan, layar monitor/gadget kosong, dinding/lantai kosong, kendaraan), kembalikan:\n"
+            . "{\n"
+            . "  \"is_food\": false,\n"
+            . "  \"message\": \"Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.\"\n"
+            . "}"
+            . (!empty($rawText) ? "\nPetunjuk teks tambahan: " . mb_substr($rawText, 0, 300) : "");
+
+        $primaryModel = env('GEMINI_MODEL_VISION', 'gemini-flash-lite-latest');
+        $models = array_unique(array_filter([
+            $primaryModel,
+            'gemini-flash-lite-latest',
+            'gemini-flash-latest',
+        ]));
+        $modelsToTry = array_slice($models, 0, 2);
 
         foreach ($modelsToTry as $model) {
             try {
                 $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key=" . urlencode($apiKey);
 
-                // Strict 4.5s timeout for ultra-fast, snappy scanning response
-                $response = Http::timeout(4.5)->post($endpoint, [
+                // Use 10s timeout to allow full payload upload & inference over mobile/broadband
+                $response = Http::timeout(10.0)->post($endpoint, [
                     'contents' => [
                         [
                             'role' => 'user',
@@ -441,7 +459,7 @@ class YoloFoodVisionService
     }
 
     /**
-     * High-speed Vision AI detection with Groq
+     * High-speed Multimodal Vision AI detection with Groq (Sub-second ~0.8s)
      */
     protected function detectWithGroqVision(string $imageData, ?string $rawText = null): ?array
     {
@@ -450,50 +468,92 @@ class YoloFoodVisionService
             return null;
         }
 
-        // Use high-speed text reasoning model with strict 3.5s timeout
-        try {
-            $prompt = "Identifikasi makanan langsung ini untuk estimasi kalori dan glikemik Indonesia. Format JSON murni:\n"
-                . "{\n"
-                . "  \"is_food\": true,\n"
-                . "  \"name\": \"Nama Makanan\",\n"
-                . "  \"category\": \"Kategori Makanan\",\n"
-                . "  \"portion\": \"1 porsi\",\n"
-                . "  \"calories\": 350,\n"
-                . "  \"carbs_g\": 40,\n"
-                . "  \"sugar_g\": 2,\n"
-                . "  \"protein_g\": 20,\n"
-                . "  \"fat_g\": 10,\n"
-                . "  \"fiber_g\": 3,\n"
-                . "  \"sodium_mg\": 300,\n"
-                . "  \"glycemic_index\": 60,\n"
-                . "  \"glycemic_load_score\": 24,\n"
-                . "  \"glycemic_load_level\": \"TINGGI/SEDANG/RENDAH\",\n"
-                . "  \"confidence\": 0.95,\n"
-                . "  \"box_2d\": [20, 20, 80, 80],\n"
-                . "  \"clinical_note\": \"Catatan klinis...\"\n"
-                . "}";
+        // Parse base64 and mime-type
+        $mimeType = 'image/jpeg';
+        $base64 = $imageData;
+        if (preg_match('/^data:(image\/[a-zA-Z0-9\+\-\.]+);base64,(.*)$/s', $imageData, $matches)) {
+            $mimeType = $matches[1];
+            $base64 = $matches[2];
+        }
+        $base64 = preg_replace('/\s+/', '', $base64);
+        if (empty($base64) || strlen($base64) < 100) {
+            return null;
+        }
+        $dataUrl = "data:{$mimeType};base64,{$base64}";
 
-            $groqModel = env('GROQ_MODEL', 'openai/gpt-oss-20b');
+        $prompt = "Tugas: Analisis citra makanan atau label gizi untuk aplikasi kesehatan Indonesia AEVYRA.\n"
+            . "Periksa gambar ini secara seksama:\n"
+            . "1. Fokuskan perhatian pada makanan, minuman, bahan pangan, sayur, buah, camilan, lauk pauk, atau kemasan pangan yang tampak.\n"
+            . "2. Jika ada makanan/minuman yang terlihat di gambar (meskipun ada piring, sendok, meja, atau tangan yang memegang):\n"
+            . "   Identifikasi hidangannya secara spesifik dalam bahasa Indonesia dan estimasi gizinya berdasarkan standar Tabel Komposisi Pangan Indonesia (TKPI/Kemenkes). Kembalikan JSON murni:\n"
+            . "{\n"
+            . "  \"is_food\": true,\n"
+            . "  \"name\": \"Nama Makanan Nyata\",\n"
+            . "  \"category\": \"Kategori Makanan / Minuman\",\n"
+            . "  \"portion\": \"1 porsi (misal 200g atau 1 mangkok/piring/gelas)\",\n"
+            . "  \"calories\": 350,\n"
+            . "  \"carbs_g\": 42.0,\n"
+            . "  \"sugar_g\": 3.5,\n"
+            . "  \"protein_g\": 18.0,\n"
+            . "  \"fat_g\": 12.0,\n"
+            . "  \"fiber_g\": 3.2,\n"
+            . "  \"sodium_mg\": 380,\n"
+            . "  \"glycemic_index\": 60,\n"
+            . "  \"glycemic_load_score\": 25.2,\n"
+            . "  \"glycemic_load_level\": \"TINGGI / SEDANG / RENDAH\",\n"
+            . "  \"confidence\": 0.96,\n"
+            . "  \"bpom_number\": \"-\",\n"
+            . "  \"warning\": \"Catatan peringatan jika ada (opsional)\",\n"
+            . "  \"clinical_note\": \"Analisis respon gula darah postprandial 2 jam dan saran gizi\"\n"
+            . "}\n"
+            . "3. HANYA JIKA SAMA SEKALI TIDAK ADA MAKANAN/MINUMAN (contoh murni: wajah orang tanpa makanan, layar monitor/gadget kosong, dinding/lantai kosong, kendaraan), kembalikan:\n"
+            . "{\n"
+            . "  \"is_food\": false,\n"
+            . "  \"message\": \"Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.\"\n"
+            . "}"
+            . (!empty($rawText) ? "\nPetunjuk teks tambahan: " . mb_substr($rawText, 0, 300) : "");
+
+        try {
+            $groqModel = env('GROQ_VISION_MODEL', 'qwen/qwen3.8-27b');
             $response = Http::withToken($apiKey)
-                ->timeout(3.5)
+                ->timeout(8.0)
                 ->post('https://api.groq.com/openai/v1/chat/completions', [
                     'model' => $groqModel,
                     'messages' => [
-                        ['role' => 'system', 'content' => "Anda adalah model YOLO Food Object Detection dan ahli gizi klinis."],
-                        ['role' => 'user', 'content' => $prompt . "\nPetunjuk tambahan: " . mb_substr($rawText ?? '', 0, 300)]
+                        [
+                            'role' => 'user',
+                            'content' => [
+                                ['type' => 'text', 'text' => $prompt],
+                                ['type' => 'image_url', 'image_url' => ['url' => $dataUrl]]
+                            ]
+                        ]
                     ],
                     'response_format' => ['type' => 'json_object'],
                     'temperature' => 0.1,
+                    'max_tokens' => 800,
                 ]);
 
             if ($response->successful()) {
-                $decoded = json_decode($response->json('choices.0.message.content'), true);
-                if (is_array($decoded) && isset($decoded['name'])) {
-                    return $decoded;
+                $content = $response->json('choices.0.message.content');
+                if ($content) {
+                    $cleanJson = preg_replace('/^```(?:json)?\s*|\s*```$/m', '', trim($content));
+                    $decoded = json_decode($cleanJson, true);
+                    if (is_array($decoded)) {
+                        if (isset($decoded['is_food']) && $decoded['is_food'] === false) {
+                            return [
+                                'is_food' => false,
+                                'message' => $decoded['message'] ?? 'Objek tidak terdeteksi sebagai makanan atau informasi nilai gizi.',
+                            ];
+                        }
+                        if (!empty($decoded['name'])) {
+                            $decoded['is_food'] = true;
+                            return $decoded;
+                        }
+                    }
                 }
             }
         } catch (\Throwable $e) {
-            Log::warning('Groq Food Vision inference fallback: ' . $e->getMessage());
+            Log::warning('Groq Vision detection failed: ' . $e->getMessage());
         }
 
         return null;

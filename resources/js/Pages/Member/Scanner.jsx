@@ -223,11 +223,29 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 withCredentials: true,
+                timeout: 18000,
             });
 
             const data = res.data;
 
-            // KONDISI: Objek tidak terdeteksi sebagai makanan / gizi (Layaknya QRIS E-Wallet)
+            // KONDISI 1: Layanan AI Sedang Sibuk / Masalah Koneksi Server
+            if (data.status === 'service_error') {
+                if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+                setScanToast({
+                    type: 'error',
+                    title: 'Layanan AI Sibuk',
+                    message: data.message || 'Koneksi AI pemindai sedang tidak stabil. Silakan coba pindai lagi atau pilih dari menu sampel cepat.',
+                });
+
+                toastTimerRef.current = setTimeout(() => {
+                    setScanToast(null);
+                }, 5000);
+
+                videoRef.current?.play()?.catch(() => {});
+                return;
+            }
+
+            // KONDISI 2: Objek tidak terdeteksi sebagai makanan / gizi (Layaknya QRIS E-Wallet)
             if (data.status === 'not_food' || data.is_food === false || (!data.success && !data.result)) {
                 if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
                 setScanToast({
@@ -286,7 +304,7 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
     };
 
     // Compress image client-side to ensure lightning-fast upload & AI processing
-    const compressImage = (dataUrl, maxDim = 720, quality = 0.76) => {
+    const compressImage = (dataUrl, maxDim = 960, quality = 0.82) => {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
@@ -313,15 +331,25 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         });
     };
 
-    // Capture Snapshot from Live Camera Viewfinder (Ultra-Fast 720p Optimized)
+    // Capture Snapshot from Live Camera Viewfinder (Optimized 960p Sharp Focus)
     const handleCapture = () => {
         if (!videoRef.current || !canvasRef.current) return;
         const video = videoRef.current;
         const canvas = canvasRef.current;
 
-        const origW = video.videoWidth || 1280;
-        const origH = video.videoHeight || 720;
-        const maxDim = 720;
+        // Ensure video stream is actively rendering valid frames
+        if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+            setScanToast({
+                type: 'warning',
+                title: 'Kamera Belum Siap',
+                message: 'Mohon tunggu sejenak hingga kamera aktif dan menampilkan gambar.',
+            });
+            return;
+        }
+
+        const origW = video.videoWidth;
+        const origH = video.videoHeight;
+        const maxDim = 960;
         let targetW = origW;
         let targetH = origH;
 
@@ -349,7 +377,7 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.76);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
         processImageAnalysis({ dataUrl });
     };
 
@@ -361,7 +389,7 @@ export default function Scanner({ tier, profile, recentScans = [] }) {
         const reader = new FileReader();
         reader.onload = async () => {
             const rawUrl = reader.result;
-            const optimizedUrl = await compressImage(rawUrl, 720, 0.76);
+            const optimizedUrl = await compressImage(rawUrl, 960, 0.82);
             processImageAnalysis({ dataUrl: optimizedUrl });
         };
         reader.readAsDataURL(file);

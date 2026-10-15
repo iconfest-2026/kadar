@@ -80,9 +80,19 @@ class ScannerController extends Controller
         // 1. Process Vision & Nutritional AI
         $result = $this->yoloService->analyze($input);
 
+        // Check if AI services had a connection or timeout error
+        if (isset($result['status']) && $result['status'] === 'service_error') {
+            return response()->json([
+                'status' => 'service_error',
+                'success' => false,
+                'is_food' => false,
+                'message' => $result['message'] ?? 'Layanan AI pemindai sedang sibuk atau koneksi internet tidak stabil. Silakan coba kembali beberapa saat lagi atau pilih dari menu sampel cepat.',
+            ]);
+        }
+
         // Check if not food or unrecognized
         if (
-            (isset($result['status']) && in_array($result['status'], ['not_food', 'unrecognized', 'error'])) ||
+            (isset($result['status']) && in_array($result['status'], ['not_food', 'unrecognized'])) ||
             (isset($result['is_food']) && $result['is_food'] === false) ||
             (isset($result['success']) && $result['success'] === false)
         ) {
