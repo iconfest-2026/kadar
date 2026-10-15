@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Forum Diskusi Komunitas (GitHub Discussions)
+    url: https://github.com/iconfest-2026/kadar/discussions
+    about: Ajukan pertanyaan umum, bagikan ide awal, atau diskusikan implementasi teknis bersama komunitas.
+  - name: Pelaporan Kerentanan Keamanan (Private Advisory)
+    url: https://github.com/iconfest-2026/kadar/security/advisories/new
+    about: Laporkan masalah kerentanan keamanan, kebocoran privasi, atau eksploitasi secara rahasia langsung kepada tim pengembang.
+  - name: Dokumentasi Resmi dan Arsitektur
+    url: https://github.com/iconfest-2026/kadar#readme
+    about: Pelajari konsep filosofi AEVYRA, panduan instalasi, dan batasan klinis sistem.

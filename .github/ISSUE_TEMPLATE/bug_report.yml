@@ -1,0 +1,115 @@
+name: Laporan Bug (Bug Report)
+description: Laporkan kendala teknis, anomali data, atau galat fungsional pada platform AEVYRA.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih telah meluangkan waktu untuk melaporkan bug. Harap berikan informasi selengkap mungkin agar tim pengembang dapat mereproduksi dan menuntaskan masalah secara cepat.
+        
+        > [!NOTE]
+        > Jika temuan Anda berkaitan dengan celah keamanan atau kebocoran data sensitif, harap laporkan secara privat melalui tab **Security Advisories** atau surel `security@aevyra.id` sesuai panduan di `SECURITY.md`.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Deskripsi Kendala
+      description: Jelaskan secara singkat dan jelas masalah apa yang terjadi.
+      placeholder: Contoh - Pemindaian kamera pada fitur Scanner Obat tidak memicu ekstraksi teks OCR pada peramban mobile Safari.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Komponen atau Modul Terdampak
+      description: Pilih bagian aplikasi yang mengalami kendala.
+      options:
+        - "Scanner Open Cam (Makanan, Minuman, Obat BPOM)"
+        - "Personal Baseline & Health Behavior Engine"
+        - "Riwayat & Tracker Kesehatan Pribadi"
+        - "Konsultasi Chat (AI & Instruktur)"
+        - "Protokol Darurat 119"
+        - "Booking Konsultasi Terjadwal"
+        - "Program Challenge Kesehatan"
+        - "Komunitas & Forum Diskusi"
+        - "Autentikasi & Manajemen Akun"
+        - "Admin Dashboard & Audit Trail"
+        - "Instalasi / Tooling / Build System"
+        - "Lainnya"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah-Langkah Reproduksi
+      description: Jelaskan urutan tindakan terperinci untuk memicu bug tersebut.
+      placeholder: |
+        1. Masuk sebagai Member dengan akun demo.
+        2. Buka menu 'Scanner' pada bilah navigasi bawah.
+        3. Arahkan kamera ke kemasan obat dan klik tombol 'Ambil Gambar'.
+        4. Perhatikan bahwa indikator pemrosesan berputar tanpa henti dan tidak menampilkan hasil.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang Diharapkan
+      description: Jelaskan apa yang seharusnya terjadi jika sistem bekerja secara normal.
+      placeholder: Contoh - Hasil ekstraksi label obat BPOM ditampilkan dalam kartu ringkasan dalam waktu kurang dari 3 detik.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Perilaku Aktual
+      description: Apa yang sebenarnya terjadi di layar atau di konsol peramban saat masalah muncul?
+      placeholder: Contoh - Konsol menampilkan error JavaScript Uncaught TypeError pada berkas worker Tesseract.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Tingkat Keparahan (Severity)
+      description: Pilih dampak keparahan masalah ini terhadap operasional aplikasi.
+      options:
+        - "Rendah - Masalah kosmetik, ketidakselarasan tampilan UI minor"
+        - "Sedang - Fungsi terganggu namun terdapat alur alternatif (workaround)"
+        - "Tinggi - Fitur inti gagal berfungsi secara menyeluruh"
+        - "Kritis - Kerusakan integritas data atau sistem tidak dapat dijalankan"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Lingkungan Pengujian
+      description: Cantumkan informasi OS, Peramban, Versi PHP, dan Perangkat yang digunakan.
+      placeholder: Contoh - Windows 11 / Chrome 124 / PHP 8.2 / iPhone 14 Safari iOS 17
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Tangkapan Layar atau Log Galat
+      description: Lampirkan tangkapan layar, cuplikan pesan galat dari log Laravel (`storage/logs/laravel.log`), atau konsol peramban.
+      placeholder: Tempelkan cuplikan pesan error (stack trace) di sini.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Konfirmasi Pelapor
+      description: Harap verifikasi poin-poin berikut sebelum mengirimkan laporan.
+      options:
+        - label: Saya telah memastikan masalah ini belum dilaporkan sebelumnya pada daftar Issue yang aktif.
+          required: true
+        - label: Saya mengonfirmasi bahwa laporan ini tidak memuat kredensial, token API, atau data pribadi riil pengguna.
+          required: true

@@ -1,0 +1,77 @@
+name: Usulan Fitur (Feature Request)
+description: Ajukan ide perbaikan, optimalisasi alur pengguna, atau fitur baru untuk platform AEVYRA.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih atas kontribusi ide Anda untuk kemajuan ekosistem AEVYRA. Silakan jelaskan usulan fitur secara terstruktur di bawah ini.
+        
+        > [!IMPORTANT]
+        > Seluruh fitur baru harus mematuhi batasan **Non-Diagnostik** dan menjaga independensi alur tanggap darurat 119.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Latar Belakang dan Urgensi Masalah
+      description: Masalah apa yang ingin Anda selesaikan atau kebutuhan apa yang belum terpenuhi pada versi saat ini?
+      placeholder: Contoh - Member kesulitan memantau tren asupan air harian secara visual saat melihat kartu metrik personal baseline.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Usulan Solusi atau Fitur Baru
+      description: Jelaskan bagaimana fitur ini bekerja dan bagaimana pengguna akan berinteraksi dengannya.
+      placeholder: Contoh - Menambahkan grafik mini (sparkline) asupan hidrasi 7 hari pada widget ringkasan dashboard member.
+    validations:
+      required: true
+
+  - type: textarea
+    id: clinical-alignment
+    attributes:
+      label: Relevansi dengan Pilar Kesehatan Preventif
+      description: Bagaimana usulan ini mendukung salah satu dari 6 pilar AEVYRA (Awareness, Evolution, Vitality, Your, Recognition, Action)?
+      placeholder: Contoh - Mendukung pilar 'Awareness' dan 'Action' dengan memberikan pengingat visual kebiasaan mikro hidrasi harian.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: target-roles
+    attributes:
+      label: Peran Pengguna Sasaran
+      description: Siapa saja yang akan memanfaatkan atau berinteraksi dengan fitur ini?
+      options:
+        - label: Member (Pengguna Umum)
+        - label: Instruktur (Tenaga Kesehatan / Pelatih)
+        - label: Admin (Pengelola Sistem)
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif Solusi yang Telah Dipertimbangkan
+      description: Apakah ada pendekatan atau pustaka pihak ketiga lain yang pernah Anda pertimbangkan sebelum mengusulkan solusi ini?
+      placeholder: Contoh - Menggunakan modal popup peringatan, namun opsi grafik mini dinilai lebih tidak mengganggu alur navigasi.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Referensi Tambahan atau Mockup
+      description: Sertakan tautan referensi, sketsa antarmuka, atau dokumen spesifikasi bila relevan.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Kepatuhan Standar Klinis
+      description: Konfirmasi kepatuhan prinsip arsitektur kesehatan preventif.
+      options:
+        - label: Saya mengonfirmasi bahwa fitur yang diusulkan tidak menghasilkan vonis diagnosis medis atau resep obat mandiri.
+          required: true
+        - label: Fitur ini tidak mengubah atau memperlambat jalur tanggap darurat medis 119.
+          required: true
