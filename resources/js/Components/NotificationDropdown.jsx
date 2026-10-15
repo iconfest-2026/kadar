@@ -179,7 +179,11 @@ export default function NotificationDropdown({
                 onClick={() => setIsOpen(!isOpen)}
                 className={
                     buttonClassName ||
-                    "relative p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-surface/90 text-on-surface-variant hover:text-primary hover:bg-white dark:hover:bg-surface border border-primary/10 shadow-xs transition-all cursor-pointer flex items-center justify-center shrink-0"
+                    `relative p-2 sm:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
+                        isOpen
+                            ? 'bg-primary/10 dark:bg-primary/20 text-primary border-primary/30 shadow-xs ring-2 ring-primary/15'
+                            : 'bg-white/90 dark:bg-surface/90 text-on-surface-variant hover:text-primary hover:bg-white dark:hover:bg-surface border-primary/10 shadow-xs'
+                    }`
                 }
                 title={`Notifikasi (${unreadCount} belum dibaca)`}
                 aria-label="Pusat Notifikasi"
@@ -194,10 +198,10 @@ export default function NotificationDropdown({
                 )}
             </button>
 
-            {/* Mobile Backdrop */}
+            {/* Mobile Backdrop - Frosted Glass Depth instead of flat muddy dark grey */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/25 backdrop-blur-2xs z-40 sm:hidden"
+                    className="fixed inset-0 bg-[#00433e]/10 dark:bg-black/45 backdrop-blur-sm z-40 sm:hidden transition-opacity duration-200 animate-in fade-in"
                     onClick={() => setIsOpen(false)}
                     aria-hidden="true"
                 />
@@ -208,14 +212,17 @@ export default function NotificationDropdown({
                 <div
                     className={`fixed sm:absolute inset-x-3 sm:inset-x-auto ${
                         align === 'right' ? 'sm:right-0' : 'sm:left-0'
-                    } top-16 sm:top-full mt-0 sm:mt-2 w-auto sm:w-96 max-w-[calc(100vw-1.5rem)] sm:max-w-none bg-white dark:bg-surface border border-surface-container rounded-3xl shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
+                    } top-15 sm:top-full mt-1.5 sm:mt-2 w-auto sm:w-96 max-w-[calc(100vw-1.5rem)] sm:max-w-none bg-white/98 dark:bg-[#12201c]/98 backdrop-blur-2xl border border-primary/15 dark:border-primary/25 rounded-3xl shadow-[0_20px_50px_rgba(0,67,62,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5 dark:ring-white/10`}
                 >
                     {/* Header */}
-                    <div className="p-3.5 sm:p-4 border-b border-surface-container flex items-center justify-between bg-surface-container-low/50">
+                    <div className="p-3.5 sm:p-4 border-b border-surface-container flex items-center justify-between bg-linear-to-r from-primary/10 via-primary/5 to-transparent">
                         <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/15">
+                                <span className="material-symbols-outlined text-[17px]">notifications</span>
+                            </div>
                             <span className="font-heading font-bold text-sm text-on-surface">Notifikasi</span>
                             {unreadCount > 0 && (
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300 font-mono">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-700 dark:text-rose-300 font-mono border border-rose-500/20">
                                     {unreadCount} Baru
                                 </span>
                             )}
@@ -226,15 +233,16 @@ export default function NotificationDropdown({
                                 <button
                                     type="button"
                                     onClick={handleMarkAllAsRead}
-                                    className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+                                    className="text-[11px] font-bold text-primary hover:text-primary-container hover:underline cursor-pointer flex items-center gap-1 transition-colors"
                                 >
-                                    Tandai Dibaca
+                                    <span className="material-symbols-outlined text-[14px]">done_all</span>
+                                    <span>Tandai Dibaca</span>
                                 </button>
                             )}
                             <button
                                 type="button"
                                 onClick={() => setIsOpen(false)}
-                                className="sm:hidden p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                                className="sm:hidden w-7 h-7 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
                                 aria-label="Tutup notifikasi"
                             >
                                 <span className="material-symbols-outlined text-[18px]">close</span>
@@ -243,33 +251,35 @@ export default function NotificationDropdown({
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className="px-3.5 sm:px-4 py-2 border-b border-surface-container flex items-center gap-2 text-xs">
-                        <button
-                            type="button"
-                            onClick={() => setFilter('all')}
-                            className={`px-3 py-1 rounded-full font-semibold text-[11px] transition-colors cursor-pointer ${
-                                filter === 'all'
-                                    ? 'bg-primary text-white shadow-2xs'
-                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                            }`}
-                        >
-                            Semua ({recentList.length})
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setFilter('unread')}
-                            className={`px-3 py-1 rounded-full font-semibold text-[11px] transition-colors cursor-pointer ${
-                                filter === 'unread'
-                                    ? 'bg-primary text-white shadow-2xs'
-                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
-                            }`}
-                        >
-                            Belum Dibaca{unreadCount > 0 ? ` (${unreadCount})` : ''}
-                        </button>
+                    <div className="px-3.5 sm:px-4 py-2 border-b border-surface-container/60 bg-surface-container-lowest/70 dark:bg-surface-container-low/30">
+                        <div className="flex items-center p-0.5 bg-surface-container-low dark:bg-surface-container/40 rounded-xl border border-surface-container/60">
+                            <button
+                                type="button"
+                                onClick={() => setFilter('all')}
+                                className={`flex-1 py-1 px-3 rounded-lg font-semibold text-[11px] transition-all cursor-pointer text-center ${
+                                    filter === 'all'
+                                        ? 'bg-white dark:bg-surface text-primary shadow-2xs font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
+                            >
+                                Semua ({recentList.length})
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setFilter('unread')}
+                                className={`flex-1 py-1 px-3 rounded-lg font-semibold text-[11px] transition-all cursor-pointer text-center ${
+                                    filter === 'unread'
+                                        ? 'bg-white dark:bg-surface text-primary shadow-2xs font-bold'
+                                        : 'text-on-surface-variant hover:text-on-surface'
+                                }`}
+                            >
+                                Belum Dibaca{unreadCount > 0 ? ` (${unreadCount})` : ''}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Notifications List */}
-                    <div className="divide-y divide-surface-container max-h-[60vh] sm:max-h-84 overflow-y-auto">
+                    <div className="divide-y divide-surface-container/70 max-h-[60vh] sm:max-h-84 overflow-y-auto">
                         {displayedNotifications.length > 0 ? (
                             displayedNotifications.map((notif) => {
                                 const isUnread = !notif.read_at;
@@ -279,14 +289,19 @@ export default function NotificationDropdown({
                                     <div
                                         key={notif.id}
                                         onClick={() => handleItemClick(notif)}
-                                        className={`p-3 sm:p-3.5 flex items-start gap-3 transition-colors cursor-pointer group ${
+                                        className={`p-3 sm:p-3.5 flex items-start gap-3 transition-colors cursor-pointer group relative ${
                                             isUnread
-                                                ? 'bg-primary/5 dark:bg-primary/10 hover:bg-primary/10'
-                                                : 'hover:bg-surface-container-low'
+                                                ? 'bg-primary/[0.04] dark:bg-primary/[0.08] hover:bg-primary/[0.08]'
+                                                : 'hover:bg-surface-container-low/70'
                                         }`}
                                     >
+                                        {/* Unread Accent Bar */}
+                                        {isUnread && (
+                                            <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-primary" />
+                                        )}
+
                                         <div
-                                            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border mt-0.5 ${iconInfo.color}`}
+                                            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border mt-0.5 shadow-2xs ${iconInfo.color}`}
                                         >
                                             <span className="material-symbols-outlined text-[18px]">
                                                 {iconInfo.icon}
@@ -295,12 +310,12 @@ export default function NotificationDropdown({
 
                                         <div className="flex-1 min-w-0 space-y-0.5">
                                             <div className="flex items-center justify-between gap-1.5">
-                                                <h4 className={`text-xs font-bold truncate ${
-                                                    isUnread ? 'text-on-surface' : 'text-on-surface-variant'
+                                                <h4 className={`text-xs truncate ${
+                                                    isUnread ? 'font-bold text-on-surface' : 'font-medium text-on-surface-variant'
                                                 }`}>
                                                     {notif.title}
                                                 </h4>
-                                                <span className="text-[10px] text-on-surface-variant font-label-mono shrink-0 whitespace-nowrap">
+                                                <span className="text-[10px] text-on-surface-variant/80 font-label-mono shrink-0 whitespace-nowrap">
                                                     {formatRelativeTime(notif.created_at)}
                                                 </span>
                                             </div>
@@ -341,16 +356,18 @@ export default function NotificationDropdown({
                                         </div>
 
                                         {isUnread && (
-                                            <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1.5"></span>
+                                            <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1.5 ring-2 ring-primary/20 animate-pulse"></span>
                                         )}
                                     </div>
                                 );
                             })
                         ) : (
                             <div className="p-8 text-center space-y-2">
-                                <span className="material-symbols-outlined text-3xl text-on-surface-variant/50">
-                                    notifications_paused
-                                </span>
+                                <div className="w-12 h-12 rounded-2xl bg-surface-container/60 mx-auto flex items-center justify-center text-on-surface-variant/50">
+                                    <span className="material-symbols-outlined text-2xl">
+                                        notifications_paused
+                                    </span>
+                                </div>
                                 <p className="text-xs font-semibold text-on-surface">Tidak ada notifikasi baru</p>
                                 <p className="text-[10px] text-on-surface-variant max-w-xs mx-auto">
                                     {filter === 'unread'
@@ -362,11 +379,11 @@ export default function NotificationDropdown({
                     </div>
 
                     {/* Footer */}
-                    <div className="p-3 border-t border-surface-container bg-surface-container-low/50 text-center">
+                    <div className="p-3 border-t border-surface-container/70 bg-linear-to-b from-transparent to-surface-container-low/40 text-center">
                         <Link
                             href="/notifications"
                             onClick={() => setIsOpen(false)}
-                            className="text-xs font-bold text-primary hover:underline inline-flex items-center gap-1"
+                            className="text-xs font-bold text-primary hover:text-primary-container hover:underline inline-flex items-center gap-1.5 transition-colors"
                         >
                             <span>Buka Semua di Pusat Notifikasi</span>
                             <span className="material-symbols-outlined text-[15px]">open_in_new</span>
