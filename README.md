@@ -1,241 +1,349 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-# Kadar (AEVYRA) — Personal Preventive Health & Early Intervention Platform
+# AEVYRA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-[![Laravel 12](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
-[![React 19](https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![Inertia.js v2](https://img.shields.io/badge/Inertia.js-v2.x-9553E9?style=for-the-badge&logo=inertia&logoColor=white)](https://inertiajs.com)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![PHP 8.2+](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
-[![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
-[![Tests Passing](https://img.shields.io/badge/Tests-19%20Passed-success?style=for-the-badge&logo=githubactions&logoColor=white)]()
-[![Compliance](https://img.shields.io/badge/Security-AES--256%20Encrypted-00433e?style=for-the-badge)]()
+**Personal Preventive Health Intelligence**
 
-## About Laravel
-> **Platform PWA cerdas untuk pemantauan garis acuan biologis personal (*Personal Baseline*), deteksi dini pergeseran perilaku gaya hidup (*Health Behavior Engine*), bimbingan tenaga ahli terverifikasi, dan tanggap darurat medis ambulans 119 mandiri.**
+AEVYRA adalah platform kesehatan preventif berbasis Progressive Web App yang membangun garis acuan biologis personal setiap pengguna, mendeteksi pergeseran perilaku gaya hidup sejak dini, menghubungkan pengguna dengan tenaga kesehatan terverifikasi, dan menyediakan akses tanggap darurat medis 119 yang sepenuhnya independen dari AI.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
----
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-## 📌 Daftar Isi
-1. [Tentang Platform & Visi](#-tentang-platform--visi)
-2. [Arsitektur Inti: Health Behavior Engine (HBE)](#-arsitektur-inti-health-behavior-engine-hbe)
-3. [Kerangka Keselamatan Klinis & Panggilan Darurat](#-kerangka-keselamatan-klinis--panggilan-darurat)
-4. [Asisten AI Gaya Hidup (Gemini & Fallback Engine)](#-asisten-ai-gaya-hidup-gemini--fallback-engine)
-5. [3 Peran Pengguna (Multi-Role RBAC)](#-3-peran-pengguna-multi-role-rbac)
-6. [Akun & Kredensial Demo Siap Pakai](#-akun--kredensial-demo-siap-pakai)
-7. [Fitur-Fitur Unggulan Sistem](#-fitur-fitur-unggulan-sistem)
-8. [Struktur Proyek & Modul Arsitektur](#-struktur-proyek--modul-arsitektur)
-9. [Panduan Instalasi & Menjalankan Aplikasi](#-panduan-instalasi--menjalankan-aplikasi)
-10. [Verifikasi Pengujian Otomatis (Testing)](#-verifikasi-pengujian-otomatis-testing)
-11. [Design Tokens & Identitas Visual](#-design-tokens--identitas-visual)
-12. [Kepatuhan Regulasi & Perlindungan Data](#-kepatuhan-regulasi--perlindungan-data)
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
----
-
-## Learning Laravel
-## 📖 Tentang Platform & Visi
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
-Mayoritas aplikasi kesehatan konvensional mengandalkan ambang batas populasi umum statis (misal: semua orang harus 10.000 langkah atau 8 jam tidur) yang kerap memicu alarm palsu atau mengabaikan deviasi halus pada individu. 
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-**Kadar (AEVYRA)** hadir sebagai platform kesehatan preventif berbasis perilaku dan intervensi dini yang membangun **Garis Acuan Personal (*Personal Baseline*)** berbasis jendela bergulir 14-hari data objektif pengguna. Melalui pendekatan berbasis wawasan preventif, Kadar mendeteksi pergeseran ritme biologis lebih awal, menyajikan wawasan empati yang didukung data bukti, serta menghubungkan pengguna dengan instruktur kesehatan berlisensi dan layanan ambulans gawat darurat nasional (119).
-
-## Laravel Sponsors
----
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-## 🧠 Arsitektur Inti: Health Behavior Engine (HBE)
-
-### Premium Partners
-Health Behavior Engine (HBE) adalah mesin komputasi deterministik modular di namespace `App\Services\HealthBehaviorEngine`:
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-```
-┌─────────────────┐     ┌───────────────────────┐     ┌──────────────────────┐
-│  Health Record  │ ──> │ DataNormalizerService │ ──> │ DataQualityEvaluator │
-│  (Input Mentah) │     │ (Konversi Kanonikal)  │     │ (Validasi & DQS)     │
-└─────────────────┘     └───────────────────────┘     └──────────────────────┘
-                                                                 │
-                                                                 ▼
-┌──────────────────────┐     ┌────────────────────────┐     ┌──────────────────────┐
-│ SignalQualifier      │ <── │ ChangeDetectorService  │ <── │ BaselineBuilder      │
-│ (Severity & Triase)  │     │ (Rasio Sigma & Arah)   │     │ (14-Hari Rolling)    │
-└──────────────────────┘     └────────────────────────┘     └──────────────────────┘
-          │
-          ▼
-┌──────────────────────┐     ┌────────────────────────┐     ┌──────────────────────┐
-│ InsightGenerator     │ ──> │ RecommendationService  │ ──> │ OutcomeEvaluator     │
-│ (Wawasan Komparasi)  │     │ (Mikro-Kebiasaan)      │     │ (Evaluasi Intervensi)│
-└──────────────────────┘     └────────────────────────┘     └──────────────────────┘
+```text
+A E V Y R A
+│ │ │ │ │ └─ Action
+│ │ │ │ └─── Recognition
+│ │ │ └───── Your
+│ │ └─────── Vitality
+│ └───────── Evolution
+└─────────── Awareness
 ```
 
-## Contributing
-1. **`DataNormalizerService`**: Menormalisasi unit input mentah ke representasi kanonikal standar (contoh: jam/detik $\rightarrow$ menit, gelas/botol/liter $\rightarrow$ ml, mmol/L $\rightarrow$ mg/dL).
-2. **`DataQualityEvaluatorService`**: Evaluasi kewajaran biologis, pengecekan tanggal masa depan, pembobotan sumber data, dan kalkulasi skor komposit **DQS (*Data Quality Score*)** $0.0 - 1.0$.
-3. **`BaselineBuilderService`**: Menghitung rata-rata bergulir 14-hari (*Mean, Median, Standard Deviation, IQR*). Status otomatis bertransisi dari `COLLECTING` (<7 hari) menjadi `AVAILABLE` ($\ge 7-14$ hari).
-4. **`FeatureExtractorService`**: Ekstraksi vektor fitur 5-hari: Rata-rata, Variabilitas, Rasio Konsistensi, Kemiringan Regresi Linear, dan Selisih Deviasi.
-5. **`ChangeDetectorService`**: Menghitung magnitudo pergeseran berdasarkan rasio deviasi terhadap standar deviasi ($\sigma$-ratio) ke dalam kategori `NEGLIGIBLE`, `SMALL`, `MODERATE`, atau `LARGE`.
-6. **`SignalQualifierService`**: Mengkualifikasi sinyal anomali persisten (`SLEEP_DECLINE`, `ACTIVITY_DROP`, `WATER_DEFICIT`, dll) dengan skor prioritas triase $0 - 100$ dan asosiasi data bukti pendukung.
-7. **`InsightGeneratorService`**: Menyusun kartu wawasan empati non-diagnostik disertai perbandingan eksplisit: `baseline_value`, `current_value`, dan `difference_value`.
-8. **`RecommendationService`**: Memetakan wawasan ke dalam rekomendasi mikro-kebiasaan bertingkat kesulitan rendah (*low-friction micro-habits*) yang dapat diaktifkan member dengan 1 ketukan.
-9. **`OutcomeEvaluatorService`**: Mengevaluasi tren pra- vs. pasca-intervensi untuk mengukur keberhasilan perubahan perilaku.
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
----
-
-## Code of Conduct
-## 🛡️ Kerangka Keselamatan Klinis & Panggilan Darurat
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-Platform Kadar menerapkan pembatas keselamatan berlapis (*clinical guardrails*) sesuai standar etika medis:
-
-## Security Vulnerabilities
-### 1. Pembatas Keselamatan Klinis (`ClinicalSafetyGuardService`)
-- **Penolakan Vonis Diagnosis**: Sistem tidak pernah memberikan diagnosa penyakit medis. Permintaan diagnosis otomatis ditolak secara aman (`DIAGNOSTIC_VERDICT_REFUSAL`).
-- **Pelarangan Dosis Obat & Farmakoterapi**: Dilarang keras meresepkan, menyarankan penyesuaian dosis obat, atau mengubah rejimen farmakoterapi (`MEDICATION_DOSING_REFUSAL`).
-- **Pencegahan Injeksi Prompt**: Pertahanan terhadap teknik *jailbreak* atau instruksi pengabaian batasan etika (`PROMPT_INJECTION_DEFENSE`).
-- **Redireksi Darurat Otomatis**: Mendeteksi keluhan akut kritis (nyeri dada hebat, sesak napas berat, bibir membiru, hilang kesadaran) dan seketika menghentikan dialog AI untuk mengarahkan ke 119 (`ACUTE_EMERGENCY_REDIRECTION`).
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-### 2. Kedaulatan Protokol Darurat 119 (`EmergencyService`)
-- **100% Independen dari AI**: Tombol darurat **SOS 119** merespons instan (< 200ms) tanpa menunggu respon LLM atau jaringan eksternal.
-- **Integrasi Layanan Darurat Nasional**: Menghubungkan langsung ke Panggilan Darurat Medis **119** (Kemenkes RI), Panggilan Darurat Terpadu **112**, serta direktori hotline IGD 24 Jam rumah sakit rujukan.
-- **Pencatatan Audit Medis**: Setiap aktivasi tombol darurat mencatat log kejadian forensik (`emergency_events`) dengan izin lokasi yang diproses secara aman.
-
-## License
----
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-## 🤖 Asisten AI Gaya Hidup (Gemini & Fallback Engine)
-
-Arsitektur AI Kadar dirancang terisolasi (*decoupled*) melalui `AiDriverInterface`:
-- **`FallbackAiDriver`**: Driver bawaan aktif tanpa perlu API key. Beroperasi secara cerdas dengan aturan preventif gaya hidup lokal, menjamin aplikasi tidak pernah crash atau terhambat saat evaluasi awal.
-- **`GeminiAiDriver`**: Driver Google Gemini 2.5/Flash yang siap digunakan. Begitu parameter `GEMINI_API_KEY` diisi pada file `.env`, sistem akan otomatis mengalihkan inferensi ke Gemini AI dengan pengawalan ketat guardrail klinis.
+Laravel 12 &nbsp;·&nbsp; React 19 &nbsp;·&nbsp; Inertia.js &nbsp;·&nbsp; Tailwind CSS 4 &nbsp;·&nbsp; Vite 7 &nbsp;·&nbsp; PHP 8.2+ &nbsp;·&nbsp; MySQL
 
 ---
 
-## 👥 3 Peran Pengguna (Multi-Role RBAC)
+## Daftar Isi
 
-| Peran | Akses Dashboard | Kapabilitas Utama |
+1. [Konsep Brand dan Filosofi](#konsep-brand-dan-filosofi)
+2. [Latar Belakang](#latar-belakang)
+3. [Ringkasan Fitur](#ringkasan-fitur)
+4. [Peran Pengguna](#peran-pengguna)
+5. [Health Behavior Engine](#health-behavior-engine)
+6. [Asisten AI dan Pengaman Klinis](#asisten-ai-dan-pengaman-klinis)
+7. [Protokol Darurat 119](#protokol-darurat-119)
+8. [Paket Keanggotaan](#paket-keanggotaan)
+9. [Teknologi](#teknologi)
+10. [Struktur Proyek](#struktur-proyek)
+11. [Instalasi](#instalasi)
+12. [Konfigurasi Lingkungan](#konfigurasi-lingkungan)
+13. [Akun Demo](#akun-demo)
+14. [Pengujian](#pengujian)
+15. [Identitas Visual](#identitas-visual)
+16. [Privasi dan Keamanan Data](#privasi-dan-keamanan-data)
+17. [Lisensi](#lisensi)
+
+---
+
+## Konsep Brand dan Filosofi
+
+Nama **AEVYRA** merupakan akronim dari enam pilar kecerdasan kesehatan preventif:
+
+| Huruf | Pilar | Makna Klinis & Perilaku |
 | :--- | :--- | :--- |
-| **Member** | `/member/dashboard` | Pantau status baseline personal (Tidur, Air, Langkah, Glukosa), catat metrik harian 1-tap, feed kronologis timeline kesehatan, terima rekomendasi kebiasaan mikro, tantangan gamifikasi, dan tombol SOS 119. |
-| **Instruktur** | `/instructor/dashboard` | Tinjau caseload member bimbingan, pantau triase sinyal HBE aktif berdasarkan skor urgensi, tugaskan rencana intervensi terstruktur, dan simpan rekam catatan konsultasi gaya hidup. |
-| **Admin** | `/admin/dashboard` | Monitor KPI kepatuhan & stabilitas sistem, lihat log jejak audit forensik dengan hashing satu arah SHA-256 (Enkripsi Terstandar), serta kelola aktivasi/penangguhan akun pengguna. |
+| **A** | **Awareness** | Membangun kesadaran objektif melalui pemantauan garis acuan biologis personal (*Personal Baseline*). |
+| **E** | **Evolution** | Mendukung evolusi gaya hidup sehat yang bertahap, realistis, dan berkesinambungan. |
+| **V** | **Vitality** | Menjaga kebugaran metabolik, ritme sirkadian, serta keseimbangan hormonal jangka panjang. |
+| **Y** | **Your** | Pendekatan terpersonalisasi penuh pada keunikan data biologis individu, bukan norma populasi generik. |
+| **R** | **Recognition** | Pengenalan dini pergeseran pola perilaku metabolik serta deteksi cerdas nutrisi pangan. |
+| **A** | **Action** | Mendorong aksi nyata melalui komitmen mikro-kebiasaan (*micro-habits*) dan intervensi terpandu. |
 
 ---
 
-## 🔑 Akun & Kredensial Demo Siap Pakai
+## Latar Belakang
 
-Database demo telah diisi dengan skenario klinis nyata (*seeders*). Semua akun menggunakan password: `password`.
+Sebagian besar aplikasi kesehatan menilai pengguna dengan ambang batas populasi yang statis, misalnya 10.000 langkah atau 8 jam tidur untuk semua orang. Pendekatan ini sering memicu peringatan palsu dan justru melewatkan perubahan halus yang penting bagi individu.
 
-| Peran | Email Login | Profil Skenario Demo |
+AEVYRA mengambil pendekatan berbeda. Sistem membangun **Personal Baseline** dari jendela bergulir 14 hari data objektif milik pengguna sendiri, lalu membandingkan kondisi terkini terhadap pola normal orang tersebut. Ketika terjadi deviasi yang persisten, pengguna menerima wawasan yang transparan beserta data pendukungnya, rekomendasi kebiasaan mikro yang mudah dijalankan, dan jalur langsung ke instruktur kesehatan berlisensi.
+
+Platform ini bersifat **non-diagnostik**. AEVYRA tidak pernah memberikan vonis penyakit maupun resep obat.
+
+---
+
+## Ringkasan Fitur
+
+### Pemantauan dan Wawasan
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Personal Baseline Tracker | Visualisasi metrik harian terhadap garis acuan personal 14 hari untuk tidur, hidrasi, aktivitas, dan glukosa. |
+| Quick Health Log | Pencatatan metrik dalam satu ketukan yang otomatis dinormalisasi ke satuan kanonikal dan dinilai kualitas datanya. |
+| Behavioral Insights | Kartu wawasan yang menampilkan nilai baseline, nilai saat ini, selisih, serta alasan mengapa perubahan tersebut penting. |
+| Micro-Habit Recommendations | Rekomendasi kebiasaan bertingkat kesulitan rendah yang dapat diaktifkan langsung oleh member. |
+| Unified Health Timeline | Linimasa kronologis yang menyatukan catatan metrik, sinyal perilaku, dan status intervensi. |
+
+### Pemindai Nutrisi dan Obat
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Live Camera Scanner | Pemindaian makanan, minuman, dan kemasan obat langsung dari kamera perangkat. |
+| OCR Label Gizi | Ekstraksi teks label menggunakan Tesseract.js di sisi klien, kemudian diurai menjadi data gizi terstruktur. |
+| Food Vision Recognition | Pengenalan jenis makanan dengan basis data gizi yang mengacu pada Tabel Komposisi Pangan Indonesia. |
+| Proyeksi Beban Glikemik | Estimasi indeks glikemik, beban glikemik, dan kurva respons glukosa dua jam setelah makan. |
+
+### Kesehatan Spesifik
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Gender Vitality | Modul kesehatan yang menyesuaikan konteks biologis pengguna, termasuk skrining dan pencatatan metrik vitalitas. |
+| Menstrual Tracker | Pencatatan siklus menstruasi, pengaturan siklus personal, dan ringkasan fase untuk konteks metabolik. |
+
+### Konsultasi dan Pendampingan
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Direktori Instruktur | Daftar dokter dan instruktur terverifikasi lengkap dengan spesialisasi, nomor STR/SIP, dan institusi. |
+| Consultations Hub | Pemesanan sesi, riwayat konsultasi, pembatalan, dan percakapan langsung dengan instruktur. |
+| Kuota Konsultasi | Pembatasan sesi bulanan otomatis sesuai paket keanggotaan yang aktif. |
+
+### Komunitas dan Gamifikasi
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Komunitas | Forum diskusi dengan unggahan, komentar, reaksi, pelaporan, dan moderasi oleh admin. |
+| Challenges | Program tantangan kesehatan dengan tugas harian, progres partisipasi, dan pencapaian. |
+| Poin dan Streak | Buku besar poin aktivitas serta penghitung konsistensi pencatatan harian. |
+| Metabolic Arcade | Permainan edukasi berbentuk visual novel interaktif tentang kesehatan metabolik, lengkap dengan papan peringkat. |
+
+### Platform
+
+| Fitur | Deskripsi |
+| :--- | :--- |
+| Progressive Web App | Dapat dipasang di perangkat, dilengkapi service worker dan halaman luring. |
+| Google Sign-In | Masuk dan menautkan akun menggunakan Google OAuth. |
+| Pembayaran Midtrans | Checkout paket keanggotaan melalui Midtrans Snap, verifikasi status, serta penjadwalan downgrade. |
+| Notifikasi | Pusat notifikasi per pengguna dan siaran notifikasi massal oleh admin. |
+
+---
+
+## Peran Pengguna
+
+Akses dikendalikan melalui Role-Based Access Control dengan middleware `EnsureUserHasRole`. Instruktur juga melalui proses verifikasi oleh admin sebelum dapat mengakses ruang kerjanya (`EnsureInstructorIsVerified`).
+
+| Peran | Dashboard | Kapabilitas Utama |
 | :--- | :--- | :--- |
-| **Member** | `member@kadar.id` | **Reza Rahardian (Gold Member)**<br>• Memiliki riwayat log 18 hari.<br>• Baseline tidur stabil 14-hari: **7 jam 15 menit**.<br>• Skenario aktif: penurunan tidur 4 hari berturut-turut (**5 jam 42 menit**).<br>• Terdeteksi sinyal `SLEEP_DECLINE` (Prioritas 78.50) & wawasan komparasi.<br>• Rekomendasi aktif: *Digital Sunset 45 menit sebelum tidur*.<br>• Streak: 5 hari, Poin: 170. |
-| **Instruktur** | `instruktur@kadar.id` | **Coach Nabila Sp.GK (Health Coach)**<br>• Membimbing member `member@kadar.id`.<br>• Memiliki akses caseload, evaluasi deviasi tidur member, penugasan intervensi, dan log konsultasi. |
-| **Admin** | `admin@kadar.id` | **Dr. Budi Pratama (Super Admin)**<br>• Akses metrik platform, log forensik audit sistem, dan tata kelola direktori pengguna. |
+| Member | `/member/dashboard` | Memantau baseline personal, mencatat metrik harian, memindai makanan dan obat, menerima wawasan dan rekomendasi, berkonsultasi dengan instruktur, mengikuti tantangan dan komunitas, serta mengakses tombol darurat 119. |
+| Instruktur | `/instructor/dashboard` | Meninjau daftar member binaan berdasarkan prioritas sinyal, melihat detail riwayat kesehatan member, menyusun rencana intervensi, mengelola jadwal dan percakapan konsultasi, serta menyusun laporan. |
+| Admin | `/admin/dashboard` | Mengelola pengguna dan peran, memverifikasi instruktur, mengatur paket dan langganan, memoderasi komunitas, mengelola program dan tantangan, menyiarkan notifikasi, meninjau jejak audit, serta mengatur konfigurasi sistem. |
+
+### Halaman Publik
+
+| Rute | Keterangan |
+| :--- | :--- |
+| `/` | Halaman utama |
+| `/paket` | Perbandingan paket keanggotaan |
+| `/faq` | Pertanyaan yang sering diajukan |
+| `/arcade` | Metabolic Arcade |
+| `/privacy`, `/terms` | Kebijakan privasi dan syarat layanan |
+| `/demo/*` | Pratinjau interaktif fitur: scanner, tracker, konsultasi, tantangan, komunitas, gender vitality, dan darurat |
 
 ---
 
-## 🚀 Fitur-Fitur Unggulan Sistem
+## Health Behavior Engine
 
-1. **Personal Baseline Tracker**: Memvisualisasikan perbandingan metrik harian vs. garis acuan personal stabil 14-hari (bukan norma populasi generik).
-2. **Behavioral Shift Insights**: Narasi empati yang menjelaskan fakta deviasi, implikasi kesehatan, dan data bukti secara transparan.
-3. **Low-Friction Recommendations**: Komitmen kebiasaan mikro terukur dengan tingkat kesulitan terkalibrasi.
-4. **1-Tap Quick Health Logger**: Pencatatan cepat metrik harian yang otomatis dinormalisasi dan dievaluasi kualitas biologisnya (DQS).
-5. **Unified Health Timeline**: Feed kronologis yang menyatukan entri catatan metrik, kualifikasi sinyal HBE, dan status intervensi.
-6. **Instruktur Caseload Workspace**: Antarmuka bagi tenaga ahli untuk memantau anggota binaan berdasarkan prioritas deviasi perilaku.
-7. **Forensic Audit Logs**: Jejak audit tamper-evident dengan anonimisir IP berbasis SHA-256 untuk kepatuhan perlindungan data pribadi.
-8. **Gamifikasi Berkelanjutan**: Poin aktivitas, pencatatan konsisten harian (*daily streak*), dan tantangan komunitas berhadiah badge.
+Health Behavior Engine adalah mesin komputasi deterministik yang berada di namespace `App\Services\HealthBehaviorEngine`. Setiap tahap dirancang modular dan dapat diuji secara terpisah.
+
+```
+Health Record
+     |
+     v
+DataNormalizer  -->  DataQualityEvaluator  -->  BaselineBuilder
+                                                      |
+                                                      v
+SignalQualifier  <--  ChangeDetector  <--  FeatureExtractor
+     |
+     v
+InsightGenerator  -->  Recommendation  -->  OutcomeEvaluator
+```
+
+| Tahap | Tanggung Jawab |
+| :--- | :--- |
+| `DataNormalizerService` | Mengonversi satuan mentah ke representasi kanonikal, misalnya jam menjadi menit, gelas atau liter menjadi mililiter, dan mmol/L menjadi mg/dL. |
+| `DataQualityEvaluatorService` | Memeriksa kewajaran biologis, menolak tanggal di masa depan, membobot sumber data, dan menghitung Data Quality Score antara 0 dan 1. |
+| `BaselineBuilderService` | Menghitung statistik bergulir 14 hari (mean, median, simpangan baku, IQR). Status berubah dari `COLLECTING` menjadi `AVAILABLE` setelah data mencukupi. |
+| `FeatureExtractorService` | Mengekstraksi fitur jendela pendek: rata-rata, variabilitas, rasio konsistensi, kemiringan tren, dan selisih deviasi. |
+| `ChangeDetectorService` | Mengukur besar pergeseran berdasarkan rasio deviasi terhadap simpangan baku ke dalam kategori `NEGLIGIBLE`, `SMALL`, `MODERATE`, atau `LARGE`. |
+| `SignalQualifierService` | Mengkualifikasi sinyal persisten seperti `SLEEP_DECLINE`, `ACTIVITY_DROP`, dan `WATER_DEFICIT` dengan skor prioritas 0 sampai 100 beserta data bukti. |
+| `InsightGeneratorService` | Menyusun kartu wawasan non-diagnostik dengan perbandingan eksplisit antara nilai baseline, nilai saat ini, dan selisihnya. |
+| `RecommendationService` | Memetakan wawasan menjadi rekomendasi kebiasaan mikro yang terkalibrasi tingkat kesulitannya. |
+| `OutcomeEvaluatorService` | Membandingkan tren sebelum dan sesudah intervensi untuk mengukur keberhasilan perubahan perilaku. |
 
 ---
 
-## 📁 Struktur Proyek & Modul Arsitektur
+## Asisten AI dan Pengaman Klinis
 
-```plaintext
+Asisten AI dirancang terpisah dari logika inti melalui `AiDriverInterface`, dengan rantai failover berlapis agar layanan tetap tersedia meskipun salah satu penyedia gagal atau mencapai batas kuota.
+
+| Urutan | Driver | Keterangan |
+| :--- | :--- | :--- |
+| 1 | `GeminiAiDriver` | Penyedia utama menggunakan Google Gemini. |
+| 2 | `GroqAiDriver` | Penyedia cadangan berkecepatan tinggi, juga digunakan untuk mengurai hasil OCR label gizi. |
+| 3 | `CloudflareAiDriver` | Penyedia cadangan ketiga melalui Cloudflare Workers AI. |
+| 4 | `FallbackAiDriver` | Mesin aturan lokal yang selalu aktif tanpa API key, menjamin aplikasi tetap berjalan. |
+
+Setiap penyedia dibatasi oleh `AiRateLimiter` per menit dan per hari sesuai nilai yang dikonfigurasi pada `.env`.
+
+Sebelum pesan diteruskan ke model mana pun, `ClinicalSafetyGuardService` melakukan inspeksi terlebih dahulu:
+
+| Pengaman | Perilaku |
+| :--- | :--- |
+| `DIAGNOSTIC_VERDICT_REFUSAL` | Menolak permintaan diagnosis penyakit secara aman. |
+| `MEDICATION_DOSING_REFUSAL` | Menolak permintaan resep, dosis, atau perubahan regimen obat. |
+| `PROMPT_INJECTION_DEFENSE` | Menangkal upaya jailbreak dan instruksi untuk mengabaikan batasan etika. |
+| `ACUTE_EMERGENCY_REDIRECTION` | Mendeteksi keluhan akut kritis seperti nyeri dada hebat atau sesak napas berat, lalu menghentikan dialog dan mengarahkan pengguna ke 119. |
+
+Setiap pemicu pengaman dicatat ke tabel `ai_safety_events` untuk keperluan audit.
+
+---
+
+## Protokol Darurat 119
+
+Fitur darurat dikelola oleh `EmergencyService` dan sengaja dibuat **tidak bergantung pada AI maupun penyedia eksternal**.
+
+- Tombol SOS langsung menampilkan akses panggilan ke 119 (Layanan Gawat Darurat Kemenkes) dan 112 (Panggilan Darurat Terpadu).
+- Direktori hotline IGD dan pencarian rumah sakit terdekat dengan peta interaktif berbasis Leaflet.
+- Setiap aktivasi dicatat ke `emergency_events` sebagai jejak audit, dengan lokasi yang hanya digunakan selama sesi darurat berlangsung.
+
+---
+
+## Paket Keanggotaan
+
+Paket dikelola secara dinamis oleh admin. Nilai bawaan dari seeder adalah sebagai berikut.
+
+| Paket | Harga | Konsultasi per Bulan | Pemindai | Ringkasan |
+| :--- | :--- | :--- | :--- | :--- |
+| Gratis (Basic) | Rp0, seumur hidup | Tidak termasuk | 10 kali per hari | Pemantauan baseline dasar, asisten AI edukasi, komunitas, dan akses darurat 119. |
+| Gold Preventif | Rp49.000 per bulan | 2 sesi | Tanpa batas | Prediksi lonjakan glikemik, rencana intervensi gizi mingguan, program tantangan remisi, dan laporan bulanan. |
+| Platinum Concierge | Rp149.000 per bulan | 6 sesi | Tanpa batas | Jalur prioritas dokter spesialis, analisis hasil laboratorium, personal health coach, dan hotline medis prioritas. |
+
+Biaya administrasi sebesar Rp4.000 berlaku untuk paket berbayar.
+
+---
+
+## Teknologi
+
+| Lapisan | Teknologi |
+| :--- | :--- |
+| Backend | Laravel 12, PHP 8.2+, Laravel Socialite |
+| Frontend | React 19, Inertia.js, Tailwind CSS 4, Vite 7 |
+| Basis Data | MySQL atau MariaDB |
+| AI dan Visi | Google Gemini, Groq, Cloudflare Workers AI, Tesseract.js |
+| Pembayaran | Midtrans Snap |
+| Peta | Leaflet |
+| PWA | ladumor/laravel-pwa, service worker kustom |
+| Pengujian | PHPUnit 11 |
+
+---
+
+## Struktur Proyek
+
+```
 kadar/
 ├── app/
-│   ├── Enums/                              # Enums domain (MetricType, BaselineStatus, SignalSeverity, dll.)
+│   ├── Enums/                      Status baseline, jenis metrik, tingkat sinyal, peran
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── Auth/AuthController.php     # Autentikasi multi-role & redirect terarah
-│   │   │   ├── Member/                     # Onboarding, Dashboard, QuickLog, Timeline, Insight, Emergency, AiChat
-│   │   │   ├── Instructor/                 # Caseload management & intervensi
-│   │   │   └── Admin/                      # Governance console & audit forensik
-│   │   └── Middleware/
-│   │       ├── EnsureUserHasRole.php       # Proteksi RBAC berbasis role
-│   │       └── HandleInertiaRequests.php   # Berbagi data auth, profil, dan pesan flash
-│   ├── Models/                             # 28 Eloquent Models mencakup 11 layer data
+│   │   │   ├── Admin/              Tata kelola, pengguna, program, tantangan, laporan, audit
+│   │   │   ├── Auth/               Login, registrasi, Google OAuth
+│   │   │   ├── Instructor/         Caseload, konsultasi, intervensi, profil, laporan
+│   │   │   ├── Member/             Dashboard, tracker, scanner, konsultasi, komunitas, darurat
+│   │   │   └── Payment/            Integrasi Midtrans
+│   │   └── Middleware/             RBAC, verifikasi instruktur, shared props Inertia
+│   ├── Models/                     47 model Eloquent
 │   └── Services/
-│       ├── HealthBehaviorEngine/           # 9 Service inti komputasi HBE
-│       ├── Safety/                         # Clinical safety guard & emergency 119
-│       └── Ai/                             # AiAssistantService, GeminiDriver, FallbackDriver
+│       ├── Ai/                     Asisten AI, driver, rate limiter, food vision
+│       ├── HealthBehaviorEngine/   9 tahap komputasi HBE
+│       ├── Membership/             Kuota konsultasi
+│       ├── Ocr/                    Penguraian label gizi
+│       ├── Safety/                 Pengaman klinis dan protokol darurat
+│       └── MidtransService.php
 ├── database/
-│   ├── migrations/                         # 11 Migrasi terstruktur mencakup seluruh skema
-│   └── seeders/                            # Seeders demo (Roles, Tiers, Challenges, DemoUserSeeder)
+│   ├── migrations/                 20 migrasi skema
+│   └── seeders/                    Peran, paket, tantangan, akun demo, notifikasi
+├── public/
+│   ├── image/                      Aset gambar dan logo
+│   ├── manifest.json               Manifest PWA
+│   ├── sw.js                       Service worker
+│   └── offline.html                Halaman luring
 ├── resources/
-│   ├── css/app.css                         # Tailwind CSS v4 Theme Tokens & palet warna
+│   ├── css/app.css                 Design token Tailwind
+│   ├── views/                      Root template Inertia dan halaman error
 │   └── js/
-│       ├── Components/                     # EmergencyModal, QuickLogModal, Navbar, dll.
-│       ├── Layouts/                        # AppLayout, AuthLayout, MarketingLayout
-│       └── Pages/
-│           ├── Auth/                       # Login & Register
-│           ├── Member/                     # Dashboard, Onboarding, Timeline
-│           ├── Instructor/                 # Dashboard Caseload & MemberDetail
-│           └── Admin/                      # Governance & Audit Log Dashboard
-├── routes/web.php                          # Rute terproteksi middleware role
+│       ├── Components/             Komponen fitur, Sidebar, UI, Admin
+│       ├── Layouts/                App, Admin, Instructor, Auth, Marketing
+│       └── Pages/                  Admin, Auth, Demo, Instructor, Member, Notifications, publik
+├── routes/web.php                  Rute publik dan rute terproteksi per peran
 └── tests/
-    ├── Feature/                            # HealthBehaviorEngineTest, AuthTest
-    └── Unit/                               # Normalizer, QualityEvaluator, SafetyGuardTest
+    ├── Feature/                    Autentikasi, HBE, komunitas, notifikasi
+    └── Unit/                       Normalizer, quality evaluator, safety guard
 ```
 
 ---
 
-## ⚙️ Panduan Instalasi & Menjalankan Aplikasi
+## Instalasi
 
-### 1. Prasyarat Sistem
-- **PHP** $\ge$ 8.2 (dengan extension `pdo_mysql`, `mbstring`, `curl`, `xml`)
-- **Composer** $\ge$ 2.x
-- **Node.js** $\ge$ 20.x & **NPM**
-- **MySQL / MariaDB** (dapat menggunakan Laragon atau XAMPP)
+### Prasyarat
 
-### 2. Kloning & Setup Proyek
-```bash
-git clone <repository-url> kadar
-cd kadar
-composer install
-npm install
-```
+- PHP 8.2 atau lebih baru dengan ekstensi `pdo_mysql`, `mbstring`, `curl`, dan `xml`
+- Composer 2
+- Node.js 20 atau lebih baru beserta NPM
+- MySQL 8 atau MariaDB (Laragon atau XAMPP dapat digunakan)
 
-### 3. Konfigurasi Lingkungan (`.env`)
-Salin file `.env.example` ke `.env`:
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+### Langkah Instalasi
 
-Sesuaikan konfigurasi database MySQL pada file `.env`:
+1. Kloning repositori dan pasang dependensi.
+
+   ```bash
+   git clone <repository-url> kadar
+   cd kadar
+   composer install
+   npm install
+   ```
+
+2. Siapkan berkas lingkungan.
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+3. Buat basis data `kadar`, lalu sesuaikan koneksi pada `.env` (lihat bagian berikutnya).
+
+4. Jalankan migrasi beserta data demo.
+
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+5. Hubungkan direktori penyimpanan publik.
+
+   ```bash
+   php artisan storage:link
+   ```
+
+6. Jalankan aplikasi.
+
+   ```bash
+   composer dev
+   ```
+
+   Perintah ini menjalankan server Laravel, queue worker, dan Vite secara bersamaan. Aplikasi dapat diakses di `http://127.0.0.1:8000`.
+
+   Untuk build produksi, gunakan `npm run build`.
+
+---
+
+## Konfigurasi Lingkungan
+
+### Basis Data
+
+`.env.example` bawaan menggunakan SQLite. Untuk MySQL, ubah menjadi:
+
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -245,109 +353,116 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-*(Opsional)* Jika Anda telah memiliki API key Gemini:
+### Layanan Opsional
+
+Seluruh layanan berikut bersifat opsional. Tanpa konfigurasi apa pun, asisten AI tetap berjalan menggunakan `FallbackAiDriver`.
+
 ```env
-GEMINI_API_KEY=kunci_api_gemini_anda
-```
-*(Catatan: Jika dikosongkan, aplikasi secara otomatis menggunakan Fallback AI Engine tanpa kendala).*
+# Asisten AI
+GEMINI_API_KEY=
+GROQ_API_KEY=
+CLOUDFLARE_API_TOKEN=
+CLOUDFLARE_ACCOUNT_ID=
 
-### 4. Migrasi & Pengisian Data Demo (*Seeding*)
-Jalankan migrasi bersih beserta seeders untuk mengisi akun demo dan riwayat baseline:
-```bash
-php artisan migrate:fresh --seed
+# Pembayaran
+MIDTRANS_MERCHANT_ID=
+MIDTRANS_CLIENT_KEY=
+MIDTRANS_SERVER_KEY=
+MIDTRANS_IS_PRODUCTION=false
+
+# Google Sign-In
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=${APP_URL}/auth/google/callback
 ```
 
-### 5. Kompilasi Aset Frontend
-```bash
-# Untuk kompilasi aset produksi:
-npm run build
-
-# Atau untuk mode hot-reload pengembangan:
-npm run dev
-```
-
-### 6. Menjalankan Server Aplikasi
-```bash
-php artisan serve
-```
-Akses aplikasi melalui peramban di: **`http://127.0.0.1:8000`**
+Model dan batas kuota setiap penyedia AI dapat diatur melalui variabel seperti `GEMINI_MODEL`, `GEMINI_RPM_LIMIT`, `GEMINI_RPD_LIMIT`, serta padanannya untuk Groq dan Cloudflare. Daftar lengkap tersedia di `config/services.php`.
 
 ---
 
-## 🧪 Verifikasi Pengujian Otomatis (Testing)
+## Akun Demo
 
-Proyek ini dilengkapi dengan suite pengujian komprehensif yang menguji validasi batas biologis, konversi unit kanonikal, pertahanan keamanan klinis, alur kalkulasi HBE 14-hari, independensi darurat 119, dan otentikasi login:
+Seeder mengisi basis data dengan skenario klinis yang realistis. Seluruh akun menggunakan kata sandi `password`.
 
-Jalankan perintah pengujian:
+| Peran | Email | Profil |
+| :--- | :--- | :--- |
+| Admin | `admin@aevyra.health` | Administrator AEVYRA dengan akses penuh ke konsol tata kelola. |
+| Instruktur | `instruktur@aevyra.health` | dr. Nabila Sarah, Sp.GK. Instruktur pendamping utama bagi member demo. |
+| Member | `member@aevyra.health` | Reza Rahardian, member paket Gold. Lihat skenario di bawah. |
+
+Instruktur terverifikasi tambahan:
+
+| Email | Nama | Spesialisasi |
+| :--- | :--- | :--- |
+| `bramantyo@aevyra.health` | dr. H. Bramantyo, Sp.PD, K-EMD, FINASIM | Penyakit Dalam dan Endokrinologi |
+| `sarah.nindya@aevyra.health` | dr. Sarah Nindya, M.Gizi, Sp.GK, AIFO-K | Gizi Klinis |
+| `rayhan.pratama@aevyra.health` | dr. Rayhan Pratama, Sp.JP, FIHA | Kardiologi Preventif |
+| `nadia.salsabila@aevyra.health` | dr. Nadia Salsabila, Sp.OG, Subsp.FER | Obstetri dan Ginekologi |
+
+### Skenario Member Demo
+
+- Riwayat pencatatan tidur dan hidrasi selama 18 hari.
+- Baseline tidur 14 hari yang stabil di angka 7 jam 15 menit.
+- Penurunan tidur selama 4 hari terakhir dengan rata-rata 5 jam 42 menit.
+- Sinyal `SLEEP_DECLINE` terkualifikasi dengan skor prioritas 78,5.
+- Kartu wawasan aktif yang membandingkan baseline dan kondisi terkini.
+- Dua rekomendasi aktif: Digital Sunset 45 menit sebelum tidur dan jadwal evaluasi dengan instruktur.
+- Streak pencatatan 5 hari (rekor 14 hari) dengan total 170 poin.
+
+---
+
+## Pengujian
+
 ```bash
 php artisan test
 ```
 
-### Hasil Pengujian Suite:
-```text
-   PASS  Tests\Unit\ClinicalSafetyGuardServiceTest
-  ✓ allows safe lifestyle inquiry
-  ✓ blocks medical diagnostic requests
-  ✓ blocks medication dosing alterations
-  ✓ intercepts acute medical emergency
-  ✓ neutralizes prompt injection attempts
+Hasil terakhir: **26 test lulus dengan 145 assertion.**
 
-   PASS  Tests\Unit\DataNormalizerServiceTest
-  ✓ normalizes sleep duration from hours to minutes
-  ✓ normalizes water intake from glasses to ml
-  ✓ normalizes water intake from liters to ml
-  ✓ keeps canonical units unchanged
-
-   PASS  Tests\Unit\DataQualityEvaluatorServiceTest
-  ✓ accepts valid sleep duration within bounds
-  ✓ rejects future timestamp
-  ✓ flags out of biological bounds
-
-   PASS  Tests\Unit\ExampleTest
-  ✓ that true is true
-
-   PASS  Tests\Feature\AuthTest
-  ✓ login screen can be rendered
-  ✓ register screen can be rendered
-  ✓ users can authenticate using the login screen
-
-   PASS  Tests\Feature\ExampleTest
-  ✓ the application returns a successful response
-
-   PASS  Tests\Feature\HealthBehaviorEngineTest
-  ✓ hbe calculates 14 day baseline and qualifies deviation signal
-  ✓ emergency service executes independently of ai
-
-  Tests:    19 passed (53 assertions)
-  Duration: 0.38s
-```
+| Suite | Cakupan |
+| :--- | :--- |
+| `Unit\ClinicalSafetyGuardServiceTest` | Penolakan diagnosis dan dosis obat, pertahanan prompt injection, deteksi keadaan darurat akut. |
+| `Unit\DataNormalizerServiceTest` | Konversi satuan tidur dan asupan air ke bentuk kanonikal. |
+| `Unit\DataQualityEvaluatorServiceTest` | Validasi batas biologis dan penolakan tanggal di masa depan. |
+| `Feature\HealthBehaviorEngineTest` | Perhitungan baseline 14 hari, kualifikasi sinyal deviasi, dan independensi layanan darurat dari AI. |
+| `Feature\AuthTest` | Tampilan login dan registrasi serta proses autentikasi. |
+| `Feature\CommunityE2ETest` | Alur komunitas menyeluruh antara member dan admin. |
+| `Feature\NotificationTest` | Isolasi notifikasi per pengguna, penandaan telah dibaca, penghapusan, dan shared props untuk semua peran. |
 
 ---
 
-## 🎨 Design Tokens & Identitas Visual
+## Identitas Visual
 
-Aplikasi mengadopsi standar visual medis premium modern yang dikonfigurasi pada `resources/css/app.css`:
+Design token didefinisikan pada `resources/css/app.css` menggunakan direktif `@theme` Tailwind CSS 4.
 
-- **Primary Brand (Deep Clinical Teal):** `#00433e`
-- **Surface Background (Soft Mint Neutral):** `#f3fbf6`
-- **Secondary Accent (Amber/Gold Guidance):** `#835500` / `#feb958`
-- **Emergency Accent (SOS 119 Red):** `#dc2626` / `#701d11`
-- **Tipografi:**
-  - *Display & Headlines:* `Newsreader, serif` (Kredibilitas klinis & kehangatan jurnal kesehatan)
-  - *Antarmuka & Body Text:* `IBM Plex Sans, sans-serif` (Keterbacaan optimal)
-  - *Data & Metrik Numerik:* `IBM Plex Mono, monospace` (Presisi data objektif)
+| Token | Nilai | Penggunaan |
+| :--- | :--- | :--- |
+| Primary | `#00433e` | Warna merek utama, deep clinical teal |
+| Secondary | `#835500` / `#feb958` | Aksen panduan dan sorotan |
+| Tertiary | `#701d11` | Aksen peringatan dan darurat |
+| Surface | `#f3fbf6` | Latar belakang netral |
+| Error | `#ba1a1a` | Status galat |
 
----
-
-## ⚖️ Kepatuhan Regulasi & Perlindungan Data
-
-Kadar dirancang dengan mematuhi prinsip perlindungan data pribadi dan enkripsi medis modern:
-1. **Anonimisir Data Jejak Audit**: Alamat IP pengguna pada jejak audit forensik disamarkan menggunakan fungsi hash satu arah SHA-256 (`ip_reference`), sehingga tidak dapat didekripsi balik.
-2. **Prinsip Minimisir Data Lokasi**: Koordinat GPS perangkat hanya digunakan secara temporer saat panggilan darurat 119 diaktifkan pengguna, tanpa disimpan permanen sebagai riwayat perjalanan.
-3. **Pemisahan Peran Tegas**: Hak akses riwayat kesehatan dibatasi secara ketat antar peran melalui kebijakan otorisasi berbasis relasi penugasan aktif (*assignment-based authorization*).
+| Peran Tipografi | Jenis Huruf |
+| :--- | :--- |
+| Judul dan tampilan | Newsreader |
+| Antarmuka dan teks | IBM Plex Sans |
+| Data dan angka | IBM Plex Mono |
 
 ---
 
-## 📄 Lisensi
-Hak Cipta © 2026 **Kadar (AEVYRA) Protocol**. Seluruh hak cipta dilindungi undang-undang.
-Dikembangkan untuk menghadirkan pemantauan kesehatan preventif mandiri yang aman, ilmiah, dan berdaya guna bagi masyarakat.
+## Privasi dan Keamanan Data
+
+- **Anonimisasi jejak audit.** Alamat IP pada log audit disimpan sebagai hash SHA-256 satu arah sehingga tidak dapat dikembalikan ke nilai aslinya.
+- **Minimisasi data lokasi.** Koordinat perangkat hanya digunakan saat fitur darurat diaktifkan dan tidak disimpan sebagai riwayat perjalanan.
+- **Otorisasi berbasis penugasan.** Instruktur hanya dapat mengakses data kesehatan member yang secara aktif ditugaskan kepadanya.
+- **Audit perubahan data kesehatan.** Setiap perubahan catatan kesehatan direkam pada tabel audit tersendiri.
+- **Batasan non-diagnostik.** Seluruh keluaran sistem bersifat edukatif dan preventif, bukan pengganti pemeriksaan tenaga medis.
+
+---
+
+## Lisensi
+
+Hak Cipta © 2026 AEVYRA. Seluruh hak cipta dilindungi.
+
+Dikembangkan untuk menghadirkan pemantauan kesehatan preventif yang aman, berbasis bukti, dan bermanfaat bagi masyarakat.

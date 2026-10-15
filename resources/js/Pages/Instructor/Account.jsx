@@ -132,21 +132,6 @@ export default function Account({ user, profile }) {
                                     )}
                                 </div>
 
-                                {/* Floating Camera Button */}
-                                <button
-                                    type="button"
-                                    onClick={triggerFileInput}
-                                    disabled={isUploadingAvatar}
-                                    className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white text-primary hover:bg-emerald-50 shadow-md flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer border border-white/60"
-                                    title="Pilih & Unggah Foto Baru"
-                                    aria-label="Unggah Foto Profil Instruktur"
-                                >
-                                    {isUploadingAvatar ? (
-                                        <span className="material-symbols-outlined text-[15px] animate-spin">progress_activity</span>
-                                    ) : (
-                                        <span className="material-symbols-outlined text-[16px]">photo_camera</span>
-                                    )}
-                                </button>
 
                                 <input
                                     type="file"
@@ -394,6 +379,18 @@ export default function Account({ user, profile }) {
                         </div>
 
                         <form onSubmit={handleSavePassword} className="space-y-4">
+                            {/* Hidden username field for browser password managers & DOM accessibility */}
+                            <input
+                                type="text"
+                                name="username"
+                                value={user?.email || user?.name || ''}
+                                autoComplete="username"
+                                readOnly
+                                tabIndex={-1}
+                                aria-hidden="true"
+                                className="hidden"
+                            />
+
                             <div>
                                 <label className="block text-xs font-semibold text-on-surface mb-1.5">
                                     Kata Sandi Saat Ini
@@ -407,6 +404,7 @@ export default function Account({ user, profile }) {
                                         value={passwordForm.data.current_password}
                                         onChange={(e) => passwordForm.setData('current_password', e.target.value)}
                                         placeholder="Masukkan kata sandi saat ini"
+                                        autoComplete="current-password"
                                         className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                                     />
                                     <button
@@ -442,6 +440,7 @@ export default function Account({ user, profile }) {
                                             value={passwordForm.data.password}
                                             onChange={(e) => passwordForm.setData('password', e.target.value)}
                                             placeholder="Minimal 8 karakter"
+                                            autoComplete="new-password"
                                             className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                                             required
                                         />
@@ -474,6 +473,7 @@ export default function Account({ user, profile }) {
                                             value={passwordForm.data.password_confirmation}
                                             onChange={(e) => passwordForm.setData('password_confirmation', e.target.value)}
                                             placeholder="Ulangi kata sandi baru"
+                                            autoComplete="new-password"
                                             className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-surface-container-high bg-surface-container-lowest text-xs text-on-surface focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                                             required
                                         />

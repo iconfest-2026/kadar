@@ -181,6 +181,182 @@ const PRESET_CITIES = [
 ];
 
 // =============================================================================
+// COMPREHENSIVE MEDICAL FIRST-AID PROTOCOLS (STANDAR AHA & PERKENI)
+// =============================================================================
+const EMERGENCY_PROTOCOLS = [
+    {
+        id: 'cpr',
+        name: 'Henti Jantung (CPR / RJP)',
+        shortName: 'CPR Jantung',
+        badge: 'Pedoman AHA 2020-2025 • Hands-Only CPR',
+        icon: 'cardiology',
+        summary: 'Tindakan resusitasi darurat saat korban tidak sadar, tidak bernapas normal, atau bernapas megap-megap (gasping).',
+        steps: [
+            {
+                step: '1',
+                title: 'Aman Diri, Cek Respon & 119',
+                desc: 'Pastikan lingkungan aman. Tepuk bahu korban tegas & panggil keras. Jika tidak merespon, segera telepon 119 atau tekan tombol SOS darurat.',
+                caution: 'Pastikan 3A: Aman Diri, Aman Pasien, dan Aman Lingkungan sebelum menolong.'
+            },
+            {
+                step: '2',
+                title: 'Periksa Napas (< 10 Detik)',
+                desc: 'Lihat pergerakan naik-turun dada maks 10 detik. Jika TIDAK bernapas atau megap-megap (agonal gasps), posisikan telentang di lantai datar keras.',
+                caution: 'Bagi penolong awam, abaikan meraba nadi karotis agar tidak menunda resusitasi.'
+            },
+            {
+                step: '3',
+                title: 'Kompresi Dada Cepat & Kuat',
+                desc: 'Letakkan tumit tangan di tengah tulang dada, kunci jari tangan lain. Tekan sedalam 5-6 cm, kecepatan 100-120x/menit (irama "Stayin\' Alive").',
+                caution: 'Pertahankan lengan lurus vertikal dan biarkan dada mengembang penuh (full recoil) tiap ketukan.'
+            },
+            {
+                step: '4',
+                title: 'Pasang AED Segera Jika Ada',
+                desc: 'Nyalakan alat AED jika tersedia, tempel pad sesuai diagram dada korban, ikuti perintah suara AED untuk analisis dan kejut listrik.',
+                caution: 'Dilarang menyentuh tubuh korban saat AED menganalisis ritme jantung atau memberi kejut.'
+            }
+        ]
+    },
+    {
+        id: 'hypo',
+        name: 'Krisis Hipoglikemia Akut',
+        shortName: 'Hipoglikemia',
+        badge: 'Pedoman PERKENI 2021 • Rule of 15',
+        icon: 'bloodtype',
+        summary: 'Protokol penanganan cepat hipoglikemia bagi pasien diabetes melitus atau pengguna insulin untuk mencegah syok dan ensefalopati.',
+        steps: [
+            {
+                step: '1',
+                title: '15-20g Karbohidrat Cepat',
+                desc: 'Jika pasien SADAR: Berikan 15-20g gula murni cepat serap (1/2 cangkir jus buah manis, 3 sdt gula dilarutkan dalam 100ml air, atau 1 sdm madu).',
+                caution: 'DILARANG memberi makanan/minuman apapun jika pasien mengantuk berat/pingsan (risiko aspirasi paru).'
+            },
+            {
+                step: '2',
+                title: 'Istirahat Total 15 Menit',
+                desc: 'Baringkan dan istirahatkan pasien dengan rileks selama 15 menit agar glukosa diserap usus ke dalam peredaran darah sistemik.',
+                caution: 'Hindari cokelat berlemak tinggi karena lemak memperlambat proses penyerapan gula di lambung.'
+            },
+            {
+                step: '3',
+                title: 'Evaluasi Glukosa Kapiler',
+                desc: 'Periksa ulang glukosa darah (glukometer). Bila masih < 70 mg/dL, ulangi pemberian 15g karbohidrat cepat dosis kedua.',
+                caution: 'Jika sudah > 100 mg/dL namun waktu makan masih lama, beri biskuit gandum atau roti.'
+            },
+            {
+                step: '4',
+                title: 'Bila Hilang Kesadaran',
+                desc: 'Miringkan tubuh pasien ke posisi pemulihan (posisi miring mantap), jangan paksa minum, dan segera rujuk IGD untuk Dextrose 40% IV.',
+                caution: 'Hubungi 119 segera jika pasien mengalami kejang atau kebingungan berat.'
+            }
+        ]
+    },
+    {
+        id: 'stroke',
+        name: 'Stroke Akut (Algoritma F.A.S.T)',
+        shortName: 'Stroke (F.A.S.T)',
+        badge: 'AHA/ASA Stroke Guidelines • Time is Brain',
+        icon: 'neurology',
+        summary: 'Identifikasi darurat defisit neurologis fokal akut akibat sumbatan trombus atau ruptur pembuluh darah otak.',
+        steps: [
+            {
+                step: 'F',
+                title: 'Face Drooping (Wajah Terkulai)',
+                desc: 'Minta pasien tersenyum lebar. Perhatikan apakah senyum asimetris, sudut bibir miring ke satu sisi, atau pipi tampak terkulai.',
+                caution: 'Gejala sering muncul mendadak tanpa disertai rasa nyeri kepala hebat.'
+            },
+            {
+                step: 'A',
+                title: 'Arm Weakness (Lengan Lemah)',
+                desc: 'Minta pasien mengangkat kedua lengan lurus ke depan selama 10 detik. Amati apakah satu lengan terkulai jatuh atau tidak mampu terangkat.',
+                caution: 'Dapat disertai keluhan baal atau mati rasa pada separuh sisi tubuh (hemiparesis).'
+            },
+            {
+                step: 'S',
+                title: 'Speech Slurred (Bicara Pelo)',
+                desc: 'Minta pasien mengulang kalimat sederhana. Perhatikan apakah artikulasi suara pelo, cadel, atau pasien sulit mengerti kata-kata.',
+                caution: 'Pasien bisa tampak sadar penuh namun kesulitan menemukan kata (afasia).'
+            },
+            {
+                step: 'T',
+                title: 'Time to Call 119 & Jam Onset',
+                desc: 'Jika ada minimal SATU tanda di atas, catat jam persis gejala muncul dan segera larikan ke RS yang memiliki fasilitas CT-Scan 24 jam.',
+                caution: 'JANGAN beri makanan, minuman, obat penurun tensi, atau aspirin sebelum hasil CT-Scan RS keluar.'
+            }
+        ]
+    },
+    {
+        id: 'choking',
+        name: 'Tersedak (Manuver Heimlich)',
+        shortName: 'Tersedak (Heimlich)',
+        badge: 'ERC / AHA Choking Protocol • Obstruksi Napas',
+        icon: 'air',
+        summary: 'Pembebasan sumbatan mekanik benda asing atau makanan pada jalan napas atas yang memicu gagal napas mendadak.',
+        steps: [
+            {
+                step: '1',
+                title: 'Kenali Tanda Universal Tersedak',
+                desc: 'Korban memegang leher dengan kedua tangan, mata panik, tidak dapat bersuara, batuk, atau bernapas. Tanyakan: "Anda tersedak?".',
+                caution: 'Jika korban masih bisa batuk kuat, dukung untuk terus batuk dan JANGAN pukul punggungnya.'
+            },
+            {
+                step: '2',
+                title: 'Posisikan di Belakang Korban',
+                desc: 'Berdiri di belakang korban dengan satu kaki di antara kaki korban. Lingkarkan kedua lengan di pinggang korban dengan tubuh sedikit condong ke depan.',
+                caution: 'Bagi ibu hamil tua atau pasien obesitas berat, lakukan dorongan dada (chest thrusts).'
+            },
+            {
+                step: '3',
+                title: 'Hentakan Cepat ke Dalam & Atas',
+                desc: 'Kepalkan satu tangan di atas pusar (bawah tulang dada), genggam dengan tangan lain, lalu hentakkan kuat ke arah dalam dan atas berulang kali.',
+                caution: 'Lakukan hentakan tegas seperti mengangkat tubuh korban hingga benda asing terlontar keluar.'
+            },
+            {
+                step: '4',
+                title: 'Bila Korban Hilang Kesadaran',
+                desc: 'Baringkan korban perlahan di lantai, aktifkan 119, dan segera mulai kompresi dada (CPR) untuk memberi tekanan pendorong sumbatan keluar.',
+                caution: 'Setiap membuka jalan napas intip mulut; ambil benda HANYA jika tampak jelas (jangan sapu buta).'
+            }
+        ]
+    },
+    {
+        id: 'hypertension',
+        name: 'Krisis Hipertensi & Nyeri Dada',
+        shortName: 'Hipertensi & Dada',
+        badge: 'Pedoman PERKI / AHA • Kardiovaskular Cito',
+        icon: 'monitor_heart',
+        summary: 'Kondisi gawat darurat akibat lonjakan tekanan darah ekstrem disertai ancaman iskemia miokard atau perdarahan intrakranial.',
+        steps: [
+            {
+                step: '1',
+                title: 'Posisikan Setengah Duduk (30-45°)',
+                desc: 'Dudukkan pasien dengan sandaran punggung 30-45 derajat untuk meringankan beban jantung dan mengurangi tekanan pembuluh darah kepala.',
+                caution: 'Dilarang membiarkan pasien berjalan atau beraktivitas fisik tergesa-gesa.'
+            },
+            {
+                step: '2',
+                title: 'Longgarkan Pakaian & Tenangkan',
+                desc: 'Buka kancing baju yang ketat, dasi, atau ikat pinggang. Pandu pernapasan dalam dan teratur untuk meredakan lonjakan hormon stres.',
+                caution: 'Kepanikan hebat memicu pelepasan katekolamin yang memperburuk kenaikan tensi darah.'
+            },
+            {
+                step: '3',
+                title: 'Waspadai Nyeri Dada Khas Jantung',
+                desc: 'Rasa dada tertindih beban berat atau diremas yang menjalar ke leher, rahang, atau lengan kiri > 15 menit disertai keringat dingin.',
+                caution: 'Bila pasien memiliki resep Nitroglycerin sublingual resmi dari dokter jantung, bantu konsumsi 1 tablet di bawah lidah.'
+            },
+            {
+                step: '4',
+                title: 'Panggil Ambulans 119 Berfasilitas EKG',
+                desc: 'Segera hubungi 119 untuk evakuasi ambulans gawat darurat yang dilengkapi fasilitas oksigen, monitor EKG 12-lead, dan infus.',
+                caution: 'Jangan mencoba menurunkan tensi secara drastis mandiri tanpa pemantauan dokter IGD.'
+            }
+        ]
+    }
+];
+
+// =============================================================================
 // HAVERSINE DISTANCE FORMULA (FALLBACK CLIENT CALCULATION)
 // =============================================================================
 function haversineDistanceKm(lat1, lon1, lat2, lon2) {
@@ -226,6 +402,13 @@ export default function EmergencyDemo() {
     const [sosDispatchStep, setSosDispatchStep] = useState(1);
     const [sosSessionId, setSosSessionId] = useState('SOS-119-892401');
     const [copiedCoords, setCopiedCoords] = useState(false);
+
+    // Critical First-Aid Protocols State
+    const [selectedProtocolId, setSelectedProtocolId] = useState('cpr');
+    const currentProtocol = useMemo(
+        () => EMERGENCY_PROTOCOLS.find((p) => p.id === selectedProtocolId) || EMERGENCY_PROTOCOLS[0],
+        [selectedProtocolId]
+    );
 
     // Leaflet Map References
     const mapContainerRef = useRef(null);
@@ -456,6 +639,25 @@ export default function EmergencyDemo() {
     const activeFaskes = useMemo(() => {
         return sortedHospitals.find((h) => h.id === selectedFaskesId) || sortedHospitals[0] || MASTER_HOSPITALS[0];
     }, [sortedHospitals, selectedFaskesId]);
+
+    // Hospital List Pagination State (4 hospitals per page)
+    const [hospitalPage, setHospitalPage] = useState(1);
+    const hospitalsPerPage = 4;
+    const totalHospitalPages = Math.max(1, Math.ceil(sortedHospitals.length / hospitalsPerPage));
+    const paginatedHospitals = useMemo(() => {
+        const start = (hospitalPage - 1) * hospitalsPerPage;
+        return sortedHospitals.slice(start, start + hospitalsPerPage);
+    }, [sortedHospitals, hospitalPage, hospitalsPerPage]);
+
+    // Keep pagination in sync if selected faskes is on another page
+    useEffect(() => {
+        if (!selectedFaskesId || sortedHospitals.length === 0) return;
+        const idx = sortedHospitals.findIndex((h) => h.id === selectedFaskesId);
+        if (idx !== -1) {
+            const targetPage = Math.floor(idx / hospitalsPerPage) + 1;
+            setHospitalPage(targetPage);
+        }
+    }, [selectedFaskesId, sortedHospitals, hospitalsPerPage]);
 
     // Keep active faskes in sync with closest hospital on first location lock
     useEffect(() => {
@@ -720,10 +922,6 @@ export default function EmergencyDemo() {
 
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-400 text-xs font-semibold mb-2 border border-rose-500/20">
-                                <span className="material-symbols-outlined text-[16px]">emergency</span>
-                                <span>GEOLOCATION ASLI PRESISI • DATA RUMAH SAKIT REAL-TIME</span>
-                            </div>
                             <h1 className="font-heading font-black text-2xl sm:text-4xl text-on-surface tracking-tight">
                                 Siaga Ambulans 119 &amp; Triase Darurat Presisi
                             </h1>
@@ -732,24 +930,31 @@ export default function EmergencyDemo() {
                             </p>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:items-center">
                             <button
                                 type="button"
                                 onClick={requestAccurateLocation}
-                                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-white border border-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface shadow-2xs transition-all cursor-pointer active:scale-95"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2.5 rounded-2xl bg-white border border-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface shadow-2xs transition-all cursor-pointer active:scale-95"
                                 title="Pindai ulang koordinat satelit GPS"
                             >
-                                <span className={`material-symbols-outlined text-[18px] text-emerald-700 ${geoState.status === 'requesting' ? 'animate-spin' : ''}`}>
+                                <span className={`material-symbols-outlined text-[17px] text-emerald-700 shrink-0 ${geoState.status === 'requesting' ? 'animate-spin' : ''}`}>
                                     my_location
                                 </span>
-                                <span>Refresh GPS Saya</span>
+                                <span className="truncate">
+                                    <span className="sm:hidden">Refresh GPS</span>
+                                    <span className="hidden sm:inline">Refresh GPS Saya</span>
+                                </span>
                             </button>
                             <Link
                                 href="/member/emergency"
-                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 shadow-2xs transition-all active:scale-95 whitespace-nowrap"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-2xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 shadow-2xs transition-all active:scale-95"
+                                title="Buka Modul Darurat Member"
                             >
-                                <span className="material-symbols-outlined text-[18px]">emergency_share</span>
-                                <span>Buka Modul Darurat Member</span>
+                                <span className="material-symbols-outlined text-[17px] shrink-0">emergency_share</span>
+                                <span className="truncate">
+                                    <span className="sm:hidden">Modul Darurat</span>
+                                    <span className="hidden sm:inline">Buka Modul Darurat Member</span>
+                                </span>
                             </Link>
                         </div>
                     </div>
@@ -760,90 +965,75 @@ export default function EmergencyDemo() {
                 {/* ============================================================== */}
                 <div className="p-4 sm:p-5 rounded-3xl bg-white border border-[#d5e5db] shadow-xs space-y-3">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#e2eee6]">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
                             <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 shadow-2xs">
                                 <span className="material-symbols-outlined text-[22px]">gps_fixed</span>
                             </div>
-                            <div>
+                            <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                    <h3 className="font-heading font-bold text-sm text-[#10241f]">
+                                    <h3 className="font-heading font-bold text-sm text-[#10241f] truncate">
                                         Sensor Geolocation GPS Akurat (100% Presisi)
                                     </h3>
-                                    {geoState.accuracy && geoState.accuracy <= 15 ? (
-                                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-mono font-bold border border-emerald-300">
-                                            PRESISI SATELIT GPS (±{geoState.accuracy}m)
-                                        </span>
-                                    ) : (
-                                        <span className="px-2 py-0.5 rounded-full bg-teal-100 text-teal-900 text-[10px] font-mono font-bold border border-teal-300">
-                                            PRESISI JARINGAN (±{geoState.accuracy}m)
-                                        </span>
-                                    )}
-
-                                    {/* Real-time Hospital Source Badge */}
-                                    {loadingHospitals ? (
-                                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-mono font-bold border border-amber-300 flex items-center gap-1 animate-pulse">
-                                            <span className="material-symbols-outlined text-[12px] animate-spin">sync</span>
-                                            MEMINDAI FASKES TERDEKAT...
-                                        </span>
-                                    ) : hospitalSource === 'osm_live' ? (
-                                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-950 text-[10px] font-mono font-bold border border-emerald-300 flex items-center gap-1">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                                            FASKES REAL-TIME OPENSTREETMAP
-                                        </span>
-                                    ) : (
-                                        <span className="px-2 py-0.5 rounded-full bg-teal-100 text-teal-950 text-[10px] font-mono font-bold border border-teal-300 flex items-center gap-1">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
-                                            REGISTRI FASKES RUJUKAN RESMI
-                                        </span>
-                                    )}
                                 </div>
-                                <p className="text-[11px] text-[#3e564e] font-sans truncate max-w-xl">
+                                <p className="text-[11px] text-[#3e564e] font-sans truncate">
                                     {geoState.address}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="grid grid-cols-2 gap-2 w-full lg:w-auto lg:flex lg:items-center shrink-0">
                             <button
                                 type="button"
                                 onClick={copyCoordinates}
-                                className="px-3 py-1.5 rounded-xl bg-[#edf5f0] hover:bg-[#dfeee5] text-[#1b342c] text-xs font-mono font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer"
+                                className="w-full lg:w-auto px-2.5 sm:px-3 py-2 rounded-xl bg-[#edf5f0] hover:bg-[#dfeee5] text-[#1b342c] text-[11px] sm:text-xs font-mono font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                                title="Salin Koordinat GPS"
                             >
-                                <span className="material-symbols-outlined text-[15px]">
+                                <span className="material-symbols-outlined text-[15px] shrink-0">
                                     {copiedCoords ? 'done' : 'content_copy'}
                                 </span>
-                                <span>{copiedCoords ? 'Tersalin!' : `${geoState.lat.toFixed(5)}, ${geoState.lng.toFixed(5)}`}</span>
+                                <span className="truncate whitespace-nowrap">
+                                    {copiedCoords ? 'Tersalin!' : `${geoState.lat.toFixed(4)}, ${geoState.lng.toFixed(4)}`}
+                                </span>
                             </button>
                             <button
                                 type="button"
                                 onClick={toggleLiveTracking}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer ${
+                                className={`w-full lg:w-auto px-2.5 sm:px-3 py-2 rounded-xl text-[11px] sm:text-xs font-mono font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
                                     isLiveWatching
                                         ? 'bg-rose-100 text-rose-900 border border-rose-300 animate-pulse'
                                         : 'bg-[#edf5f0] text-[#1b342c] hover:bg-[#dfeee5]'
-                                  }`}
+                                }`}
+                                title="Toggle Live GPS Tracking"
                             >
-                                <span className="material-symbols-outlined text-[15px]">radar</span>
-                                <span>{isLiveWatching ? 'Live Tracking: ON' : 'Live Tracking: OFF'}</span>
+                                <span className="material-symbols-outlined text-[15px] shrink-0">radar</span>
+                                <span className="truncate whitespace-nowrap">
+                                    <span className="sm:hidden">Tracking: {isLiveWatching ? 'ON' : 'OFF'}</span>
+                                    <span className="hidden sm:inline">Live Tracking: {isLiveWatching ? 'ON' : 'OFF'}</span>
+                                </span>
                             </button>
                         </div>
                     </div>
 
                     {/* Quick City Presets Simulator */}
-                    <div className="flex items-center gap-1.5 overflow-x-auto text-xs no-scrollbar pt-1">
-                        <span className="text-[11px] font-mono font-bold text-[#3e564e] shrink-0 mr-1">
-                            Simulasi Wilayah:
-                        </span>
-                        {PRESET_CITIES.map((city) => (
-                            <button
-                                key={city.name}
-                                type="button"
-                                onClick={() => handleSelectPreset(city)}
-                                className="px-2.5 py-1 rounded-full bg-[#f4f9f6] border border-[#cfe2d7] text-[#10241f] text-[11px] font-mono hover:bg-[#e4f1ea] transition-all shrink-0 cursor-pointer"
-                            >
-                                {city.name}
-                            </button>
-                        ))}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 pt-1">
+                        <div className="flex items-center gap-1 shrink-0">
+                            <span className="material-symbols-outlined text-[14px] text-emerald-700">tune</span>
+                            <span className="text-[11px] font-mono font-bold text-[#3e564e]">
+                                Simulasi Wilayah:
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 -mx-1 px-1">
+                            {PRESET_CITIES.map((city) => (
+                                <button
+                                    key={city.name}
+                                    type="button"
+                                    onClick={() => handleSelectPreset(city)}
+                                    className="px-2.5 py-1 rounded-full bg-[#f4f9f6] border border-[#cfe2d7] text-[#10241f] text-[11px] font-mono hover:bg-[#e4f1ea] active:scale-95 transition-all shrink-0 cursor-pointer whitespace-nowrap"
+                                >
+                                    {city.name}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {geoState.errorMessage && (
@@ -857,9 +1047,9 @@ export default function EmergencyDemo() {
                 {/* ============================================================== */}
                 {/* 2. PRIMARY 2-COLUMN EMERGENCY WORKSPACE */}
                 {/* ============================================================== */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     {/* Left Column: Interactive SOS Button & Hypoglycemia Protocol (6 Cols) */}
-                    <div className="lg:col-span-6 bg-white rounded-3xl border border-[#d5e5db] shadow-xs p-5 sm:p-6 flex flex-col justify-between h-full space-y-6">
+                    <div className="lg:col-span-6 bg-white rounded-3xl border border-[#d5e5db] shadow-xs p-5 sm:p-6 flex flex-col space-y-5">
                         <div className="space-y-5 text-center">
                             <div className="flex items-center justify-between pb-3.5 border-b border-[#e2eee6]">
                                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-800 text-xs font-mono font-bold">
@@ -1005,145 +1195,270 @@ export default function EmergencyDemo() {
                             )}
                         </div>
 
-                        {/* First Aid: Rule of 15 for Hypoglycemia */}
-                        <div className="p-4 sm:p-5 rounded-2xl bg-[#f4f9f6] border border-[#cfe2d7] space-y-3">
-                            <div className="flex items-center gap-2 border-b border-[#cfe2d7] pb-2">
-                                <span className="material-symbols-outlined text-primary text-[20px]">medical_information</span>
-                                <h4 className="font-heading font-bold text-xs text-[#10241f]">
-                                    Pertolongan Pertama Hipoglikemia Akut (Rule of 15 PERKENI)
-                                </h4>
+                        {/* First Aid & Critical Emergency Protocols Multi-Tab */}
+                        <div className="p-4 sm:p-5 rounded-3xl bg-[#f4f9f6] border border-[#cfe2d7] space-y-4 shadow-2xs">
+                            {/* Header & Protocol Title */}
+                            <div className="flex items-center gap-2.5 border-b border-[#cfe2d7] pb-3">
+                                <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                    <span className="material-symbols-outlined text-[19px]">emergency_heat</span>
+                                </div>
+                                <div>
+                                    <h4 className="font-heading font-bold text-xs sm:text-sm text-[#10241f] leading-tight">
+                                        Pertolongan Pertama Gawat Darurat
+                                    </h4>
+                                    <p className="text-[11px] text-[#3e564e]">
+                                        Panduan klinis pra-rumah sakit resmi terverifikasi medis
+                                    </p>
+                                </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                                <div className="p-2.5 rounded-xl bg-white border border-[#cfe2d7] space-y-1">
-                                    <div className="flex items-center gap-1.5 text-primary font-bold">
-                                        <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px]">1</span>
-                                        <span>15g Gula Cepat</span>
-                                    </div>
-                                    <p className="text-[11px] text-[#2b443b] leading-tight">
-                                        Berikan 1/2 cangkir jus buah manis atau 3 sdt gula dilarutkan air.
-                                    </p>
-                                </div>
+                            {/* Protocol Tabs Selector */}
+                            <div className="flex items-center gap-1.5 overflow-x-auto md:overflow-visible md:flex-wrap no-scrollbar">
+                                {EMERGENCY_PROTOCOLS.map((protocol) => {
+                                    const isActive = selectedProtocolId === protocol.id;
+                                    return (
+                                        <button
+                                            key={protocol.id}
+                                            type="button"
+                                            onClick={() => setSelectedProtocolId(protocol.id)}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer shrink-0 active:scale-95 border ${
+                                                isActive
+                                                    ? 'bg-primary text-white border-primary shadow-xs font-bold'
+                                                    : 'bg-white text-[#2b443b] hover:bg-[#eaf3ed] border-[#cfe2d7]'
+                                            }`}
+                                        >
+                                            <span className="material-symbols-outlined text-[15px]">
+                                                {protocol.icon}
+                                            </span>
+                                            <span>{protocol.shortName}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
 
-                                <div className="p-2.5 rounded-xl bg-white border border-[#cfe2d7] space-y-1">
-                                    <div className="flex items-center gap-1.5 text-primary font-bold">
-                                        <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px]">2</span>
-                                        <span>Tunggu 15 Menit</span>
+                            {/* Active Protocol Details Banner */}
+                            <div className="p-3.5 rounded-2xl bg-white border border-[#cfe2d7] space-y-1.5">
+                                <div className="flex flex-wrap items-center justify-between gap-1.5">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-[18px]">
+                                            {currentProtocol.icon}
+                                        </span>
+                                        <h5 className="font-heading font-bold text-xs text-[#10241f]">
+                                            {currentProtocol.name}
+                                        </h5>
                                     </div>
-                                    <p className="text-[11px] text-[#2b443b] leading-tight">
-                                        Istirahatkan pasien total dan periksa kembali kadar glukosa kapiler.
-                                    </p>
+                                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#f0f6f2] text-[#244237] border border-[#d2e3d9]">
+                                        {currentProtocol.badge}
+                                    </span>
                                 </div>
+                                <p className="text-[11px] text-[#3e564e] leading-relaxed">
+                                    {currentProtocol.summary}
+                                </p>
+                            </div>
 
-                                <div className="p-2.5 rounded-xl bg-white border border-[#cfe2d7] space-y-1">
-                                    <div className="flex items-center gap-1.5 text-primary font-bold">
-                                        <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px]">3</span>
-                                        <span>Evaluasi &amp; Rujuk</span>
+                            {/* Protocol Step-by-Step Cards */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                {currentProtocol.steps.map((st, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="p-3 rounded-2xl bg-white border border-[#cfe2d7] flex flex-col justify-between space-y-2 hover:border-primary/40 transition-colors shadow-2xs"
+                                    >
+                                        <div className="space-y-1.5">
+                                            <div className="flex items-center gap-2 text-primary font-bold">
+                                                <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-mono font-black shrink-0">
+                                                    {st.step}
+                                                </span>
+                                                <span className="text-xs text-[#10241f] leading-snug">
+                                                    {st.title}
+                                                </span>
+                                            </div>
+                                            <p className="text-[11px] text-[#2b443b] leading-relaxed">
+                                                {st.desc}
+                                            </p>
+                                        </div>
+                                        {st.caution && (
+                                            <div className="p-2 rounded-xl bg-amber-50/80 border border-amber-200/80 text-[10px] text-amber-950 flex items-start gap-1.5 leading-snug">
+                                                <span className="material-symbols-outlined text-[13px] text-amber-700 shrink-0 mt-0.5">
+                                                    warning
+                                                </span>
+                                                <span>{st.caution}</span>
+                                            </div>
+                                        )}
                                     </div>
-                                    <p className="text-[11px] text-[#2b443b] leading-tight">
-                                        Jika gula &lt; 70 mg/dL atau pasien hilang kesadaran, rujuk ke IGD via 119.
-                                    </p>
-                                </div>
+                                ))}
+                            </div>
+
+                            {/* Disclaimer / Call 119 Reminder */}
+                            <div className="flex items-center justify-between gap-2 pt-1 text-[11px] text-[#4e685e]">
+                                <span className="flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[14px] text-emerald-700">verified</span>
+                                    <span>Tindakan awal tidak menggantikan evaluasi dokter spesialis IGD.</span>
+                                </span>
+                                <a
+                                    href="tel:119"
+                                    className="font-bold text-rose-700 hover:text-rose-800 text-[11px] inline-flex items-center gap-0.5 shrink-0"
+                                >
+                                    <span>Panggil 119</span>
+                                    <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     {/* Right Column: Real Interactive Leaflet Geolocation Map & Dynamic Hospital Roster (6 Cols) */}
-                    <div className="lg:col-span-6 bg-white rounded-3xl border border-[#d5e5db] shadow-xs p-5 sm:p-6 flex flex-col justify-between h-full space-y-4">
-                        <div className="space-y-4">
-                            {/* Header */}
-                            <div className="flex items-center justify-between pb-3.5 border-b border-[#e2eee6]">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-9 h-9 rounded-2xl bg-rose-500/10 text-rose-700 flex items-center justify-center shrink-0">
-                                        <span className="material-symbols-outlined text-[20px]">map</span>
-                                    </div>
-                                    <div>
-                                        <h3 className="font-heading font-bold text-base text-[#10241f]">
-                                            Peta Geolocation &amp; Faskes IGD Terdekat
-                                        </h3>
-                                        <p className="text-[11px] text-[#40564f] font-mono">
-                                            OpenStreetMap • Dihitung Real-time dari Posisi Anda
-                                        </p>
-                                    </div>
+                    <div className="lg:col-span-6 bg-white rounded-3xl border border-[#d5e5db] shadow-xs p-5 sm:p-6 flex flex-col space-y-4">
+                        {/* Header */}
+                        <div className="flex items-center justify-between gap-2.5 pb-3.5 border-b border-[#e2eee6] shrink-0">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                                <div className="w-9 h-9 rounded-2xl bg-rose-500/10 text-rose-700 flex items-center justify-center shrink-0">
+                                    <span className="material-symbols-outlined text-[20px]">map</span>
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={handleCenterMap}
-                                    className="px-2.5 py-1 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-950 text-[10px] font-mono font-bold border border-emerald-300 transition-colors cursor-pointer inline-flex items-center gap-1"
-                                >
-                                    <span className="material-symbols-outlined text-[13px]">my_location</span>
-                                    <span>Pusatkan Peta</span>
-                                </button>
-                            </div>
-
-                            {/* Real Leaflet Map Container */}
-                            <div className="relative isolate z-0 w-full h-64 sm:h-72 rounded-2xl overflow-hidden border border-[#cfe2d7] shadow-inner">
-                                <div ref={mapContainerRef} className="w-full h-full" />
-
-                                {/* Map Overlay Badge */}
-                                <div className="absolute top-2 left-2 z-500 pointer-events-none">
-                                    <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-mono font-bold flex items-center gap-1.5 shadow-md">
-                                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-                                        <span>Pin Merah: Anda • Pin Hijau: IGD Terpilih</span>
-                                    </span>
-                                </div>
-                                <div className="absolute bottom-2 right-2 z-500 pointer-events-none">
-                                    <span className="px-2 py-0.5 rounded bg-white/90 text-[10px] font-mono font-bold text-slate-700 shadow-xs">
-                                        Klik peta untuk ganti titik darurat
-                                    </span>
+                                <div className="min-w-0">
+                                    <h3 className="font-heading font-bold text-sm sm:text-base text-[#10241f] truncate">
+                                        Peta Geolocation &amp; Faskes IGD Terdekat
+                                    </h3>
+                                    <p className="text-[10px] sm:text-[11px] text-[#40564f] font-mono truncate">
+                                        <span className="sm:hidden">OpenStreetMap • Real-time</span>
+                                        <span className="hidden sm:inline">OpenStreetMap • Dihitung Real-time dari Posisi Anda</span>
+                                    </p>
                                 </div>
                             </div>
+                            <button
+                                type="button"
+                                onClick={handleCenterMap}
+                                className="px-2.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-950 text-[10px] font-mono font-bold border border-emerald-300 transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0 whitespace-nowrap active:scale-95"
+                                title="Pusatkan Peta"
+                            >
+                                <span className="material-symbols-outlined text-[13px] shrink-0">my_location</span>
+                                <span>Pusatkan Peta</span>
+                            </button>
+                        </div>
 
-                            {/* Hospital Selection List (Sorted by Haversine Distance) */}
+                        {/* Real Leaflet Map Container */}
+                        <div className="relative isolate z-0 w-full h-56 sm:h-60 rounded-2xl overflow-hidden border border-[#cfe2d7] shadow-inner shrink-0">
+                            <div ref={mapContainerRef} className="w-full h-full" />
+
+                            {/* Map Overlay Badge */}
+                            <div className="absolute top-2 left-2 z-500 pointer-events-none">
+                                <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-mono font-bold flex items-center gap-1.5 shadow-md">
+                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                                    <span>Pin Merah: Anda • Pin Hijau: IGD Terpilih</span>
+                                </span>
+                            </div>
+                            <div className="absolute bottom-2 right-2 z-500 pointer-events-none">
+                                <span className="px-2 py-0.5 rounded bg-white/90 text-[10px] font-mono font-bold text-slate-700 shadow-xs">
+                                    Klik peta untuk ganti titik darurat
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Hospital Selection List (Sorted by Haversine Distance with Pagination) */}
+                        <div className="flex flex-col space-y-2">
+                            <div className="flex items-center justify-between shrink-0">
+                                <label className="text-xs font-bold text-[#10241f] block">
+                                    Rumah Sakit &amp; IGD Terdekat (Urut Jarak Real-Time):
+                                </label>
+                                <span className="text-[11px] font-mono text-emerald-800 font-bold">
+                                    {loadingHospitals ? 'Memuat faskes...' : `${sortedHospitals.length} Faskes Terdata`}
+                                </span>
+                            </div>
+
                             <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <label className="text-xs font-bold text-[#10241f] block">
-                                        Rumah Sakit &amp; IGD Terdekat (Urut Jarak Real-Time):
-                                    </label>
-                                    <span className="text-[11px] font-mono text-emerald-800 font-bold">
-                                        {loadingHospitals ? 'Memuat faskes...' : `${sortedHospitals.length} Faskes Terdata`}
-                                    </span>
-                                </div>
-
-                                <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-                                    {loadingHospitals && sortedHospitals.length === 0 ? (
-                                        <div className="p-4 rounded-2xl bg-surface-container-low text-center text-xs text-on-surface-variant animate-pulse space-y-2">
-                                            <span className="material-symbols-outlined text-[24px] animate-spin text-primary">sync</span>
-                                            <p>Mengambil data rumah sakit terdekat dari OpenStreetMap...</p>
-                                        </div>
-                                    ) : (
-                                        sortedHospitals.slice(0, 6).map((f) => (
-                                            <button
-                                                key={f.id}
-                                                type="button"
-                                                onClick={() => setSelectedFaskesId(f.id)}
-                                                className={`w-full p-3 rounded-2xl border text-left transition-all cursor-pointer space-y-1 ${
-                                                    activeFaskes?.id === f.id
-                                                        ? 'bg-rose-50/80 border-rose-500 shadow-2xs ring-1 ring-rose-400'
-                                                        : 'bg-[#f6faf7] border-[#d8e8de] hover:bg-[#edf5f0]'
-                                                }`}
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <h4 className="font-bold text-xs text-[#10241f] truncate max-w-60 sm:max-w-xs">
-                                                        {f.name}
-                                                    </h4>
-                                                    <span className="text-[10px] font-mono font-bold bg-rose-100 text-rose-950 px-2 py-0.5 rounded-full border border-rose-300 shrink-0">
-                                                        {f.distanceFormatted} • ETA {f.etaFormatted}
-                                                    </span>
-                                                </div>
-                                                <p className="text-[11px] text-[#344d44] truncate">{f.address}</p>
-                                                <div className="flex items-center justify-between text-[10px] text-[#344d44] font-mono pt-0.5">
-                                                    <span>Hotline: {f.phone}</span>
-                                                    <span className="text-emerald-800 font-bold flex items-center gap-1">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                                                        Ambulans Standby
-                                                    </span>
-                                                </div>
-                                            </button>
-                                        ))
-                                    )}
-                                </div>
+                                {loadingHospitals && sortedHospitals.length === 0 ? (
+                                    <div className="p-4 rounded-2xl bg-surface-container-low text-center text-xs text-on-surface-variant animate-pulse space-y-2">
+                                        <span className="material-symbols-outlined text-[24px] animate-spin text-primary">sync</span>
+                                        <p>Mengambil data rumah sakit terdekat dari OpenStreetMap...</p>
+                                    </div>
+                                ) : (
+                                    paginatedHospitals.map((f) => (
+                                        <button
+                                            key={f.id}
+                                            type="button"
+                                            onClick={() => setSelectedFaskesId(f.id)}
+                                            className={`w-full p-3 rounded-2xl border text-left transition-all cursor-pointer space-y-1 ${
+                                                activeFaskes?.id === f.id
+                                                    ? 'bg-rose-50/80 border-rose-500 shadow-2xs ring-1 ring-rose-400'
+                                                    : 'bg-[#f6faf7] border-[#d8e8de] hover:bg-[#edf5f0]'
+                                            }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <h4 className="font-bold text-xs text-[#10241f] truncate max-w-60 sm:max-w-xs">
+                                                    {f.name}
+                                                </h4>
+                                                <span className="text-[10px] font-mono font-bold bg-rose-100 text-rose-950 px-2 py-0.5 rounded-full border border-rose-300 shrink-0">
+                                                    {f.distanceFormatted} • ETA {f.etaFormatted}
+                                                </span>
+                                            </div>
+                                            <p className="text-[11px] text-[#344d44] truncate">{f.address}</p>
+                                            <div className="flex items-center justify-between text-[10px] text-[#344d44] font-mono pt-0.5">
+                                                <span>Hotline: {f.phone}</span>
+                                                {f.facility && <span className="text-[#527165] truncate max-w-44 text-right">{f.facility}</span>}
+                                            </div>
+                                        </button>
+                                    ))
+                                )}
                             </div>
+
+                            {/* Hospital Pagination Controls */}
+                            {totalHospitalPages > 1 && (
+                                <div className="flex items-center justify-between pt-2.5 pb-1 border-t border-[#e2eee6]">
+                                    <span className="text-[11px] font-mono text-[#3e564e]">
+                                        Halaman <strong className="text-[#10241f]">{hospitalPage}</strong> dari <strong className="text-[#10241f]">{totalHospitalPages}</strong>
+                                        <span className="hidden sm:inline text-[#648074]"> ({sortedHospitals.length} faskes)</span>
+                                    </span>
+                                    <div className="flex items-center gap-1.5">
+                                        <button
+                                            type="button"
+                                            disabled={hospitalPage <= 1}
+                                            onClick={() => setHospitalPage((p) => Math.max(1, p - 1))}
+                                            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-0.5 transition-all ${
+                                                hospitalPage <= 1
+                                                    ? 'opacity-40 cursor-not-allowed bg-gray-100 text-gray-400 border border-gray-200'
+                                                    : 'bg-white hover:bg-[#edf5f0] text-[#10241f] border border-[#cfe2d7] shadow-2xs cursor-pointer active:scale-95'
+                                            }`}
+                                            title="Halaman Sebelumnya"
+                                        >
+                                            <span className="material-symbols-outlined text-[15px]">chevron_left</span>
+                                            <span>Prev</span>
+                                        </button>
+
+                                        <div className="flex items-center gap-1">
+                                            {Array.from({ length: totalHospitalPages }).map((_, idx) => {
+                                                const pNum = idx + 1;
+                                                return (
+                                                    <button
+                                                        key={pNum}
+                                                        type="button"
+                                                        onClick={() => setHospitalPage(pNum)}
+                                                        className={`w-7 h-7 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                                                            hospitalPage === pNum
+                                                                ? 'bg-primary text-white shadow-xs'
+                                                                : 'bg-white hover:bg-[#edf5f0] text-[#344d44] border border-[#cfe2d7]'
+                                                        }`}
+                                                    >
+                                                        {pNum}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            disabled={hospitalPage >= totalHospitalPages}
+                                            onClick={() => setHospitalPage((p) => Math.min(totalHospitalPages, p + 1))}
+                                            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-0.5 transition-all ${
+                                                hospitalPage >= totalHospitalPages
+                                                    ? 'opacity-40 cursor-not-allowed bg-gray-100 text-gray-400 border border-gray-200'
+                                                    : 'bg-white hover:bg-[#edf5f0] text-[#10241f] border border-[#cfe2d7] shadow-2xs cursor-pointer active:scale-95'
+                                            }`}
+                                            title="Halaman Selanjutnya"
+                                        >
+                                            <span>Next</span>
+                                            <span className="material-symbols-outlined text-[15px]">chevron_right</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Selected Hospital Direct Action Bar */}

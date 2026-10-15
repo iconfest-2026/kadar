@@ -808,9 +808,11 @@ export default function GenderVitalityDemo() {
                             {/* Pillar 1: Nutrition */}
                             {femaleActivePillar === 'nutrition' && (
                                 <div className="space-y-3 animate-in fade-in duration-150">
-                                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium">
-                                        <b className="font-bold text-sm text-emerald-950 block mb-1">Fokus Gizi Klinis Fase {activeFemalePhase.name}:</b>
-                                        <ul className="list-disc pl-5 mt-2 space-y-1.5 text-xs">
+                                    <div className="p-4 rounded-2xl bg-[#eef8f2] border border-[#bfe0cd] text-xs font-medium">
+                                        <b className="font-bold text-sm text-[#0a382c] block mb-1.5">
+                                            Fokus Gizi Klinis {activeFemalePhase.name.startsWith('Fase') ? activeFemalePhase.name : `Fase ${activeFemalePhase.name}`}:
+                                        </b>
+                                        <ul className="list-disc pl-5 mt-2 space-y-1.5 text-xs text-[#134e3d]">
                                             {activeFemalePhase.dietAdvice.map((item, idx) => (
                                                 <li key={idx} className="leading-relaxed">{item}</li>
                                             ))}

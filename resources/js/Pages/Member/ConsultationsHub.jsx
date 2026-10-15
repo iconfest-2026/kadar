@@ -465,47 +465,65 @@ export default function ConsultationsHub({
             {activeTab === 'live_chat' ? (
                 /* SINGLE-PAGE AI CHATBOT INTERFACE (NO OUTER SCROLLING) */
                 <div className="max-w-4xl mx-auto px-2 sm:px-4 py-1 sm:py-2">
-                    <div className="h-[calc(100vh-5.5rem)] min-h-[560px] max-h-[860px] flex flex-col bg-white dark:bg-surface border border-surface-container rounded-3xl overflow-hidden shadow-xs relative">
+                    <div className="h-[calc(100vh-5.5rem)] min-h-140 max-h-215 flex flex-col bg-white dark:bg-surface border border-surface-container rounded-3xl overflow-hidden shadow-xs relative">
                         {/* 1. Pinned Sticky Top Header Bar */}
                         <div className="p-2.5 sm:px-4 border-b border-surface-container flex items-center justify-between gap-2.5 bg-surface-container-lowest shrink-0 z-20 shadow-2xs">
                             <div className="flex items-center gap-2.5 min-w-0">
-                                <div className="w-10 h-10 rounded-2xl bg-primary/10 overflow-hidden ring-2 ring-primary/20 shrink-0 relative flex items-center justify-center font-bold text-primary text-sm shadow-2xs">
-                                    <img
-                                        src="/image/doctor-portrait.jpg"
-                                        alt="Dokter"
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => { e.target.style.display = 'none'; }}
-                                    />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0 animate-pulse" />
-                                </div>
-                                <div className="min-w-0">
-                                    <div className="flex items-center gap-1.5 sm:gap-2">
-                                        <h2 className="font-bold text-xs sm:text-sm text-on-surface truncate">
-                                            {selectedConsultation?.instructor_name || 'dr. Spesialis Pendamping'}
-                                        </h2>
-                                        {selectedConsultation && (
-                                            <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase border shrink-0 ${
-                                                selectedConsultation.status === 'CANCELLED'
-                                                    ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                                    : selectedConsultation.status === 'COMPLETED'
-                                                    ? 'bg-primary/10 text-primary border-primary/20'
-                                                    : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                            }`}>
-                                                {selectedConsultation.status === 'CANCELLED'
-                                                    ? 'Batal'
-                                                    : selectedConsultation.status === 'COMPLETED'
-                                                    ? 'Selesai'
-                                                    : 'Aktif'}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-[10px] sm:text-[11px] text-on-surface-variant truncate">
-                                        Spesialis Gizi Klinis &amp; Pre-Diabetes
-                                        {selectedConsultation?.scheduled_start && (
-                                            <span className="hidden sm:inline"> • {selectedConsultation.scheduled_start.slice(11, 16)} WIB</span>
-                                        )}
-                                    </p>
-                                </div>
+                                {selectedConsultation ? (
+                                    <>
+                                        <div className="w-10 h-10 rounded-2xl bg-primary/10 overflow-hidden ring-2 ring-primary/20 shrink-0 relative flex items-center justify-center font-bold text-primary text-sm shadow-2xs">
+                                            <img
+                                                src={selectedConsultation.instructor_avatar || '/image/doctor_bramantyo.jpg'}
+                                                alt={selectedConsultation.instructor_name}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => { e.target.style.display = 'none'; }}
+                                            />
+                                            {selectedConsultation.status !== 'CANCELLED' && (
+                                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0 animate-pulse" />
+                                            )}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                                <h2 className="font-bold text-xs sm:text-sm text-on-surface truncate">
+                                                    {selectedConsultation.instructor_name}
+                                                </h2>
+                                                <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase border shrink-0 ${
+                                                    selectedConsultation.status === 'CANCELLED'
+                                                        ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                                        : selectedConsultation.status === 'COMPLETED'
+                                                        ? 'bg-primary/10 text-primary border-primary/20'
+                                                        : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                                }`}>
+                                                    {selectedConsultation.status === 'CANCELLED'
+                                                        ? 'Batal'
+                                                        : selectedConsultation.status === 'COMPLETED'
+                                                        ? 'Selesai'
+                                                        : 'Aktif'}
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] sm:text-[11px] text-on-surface-variant truncate">
+                                                {selectedConsultation.instructor_specialization || 'Spesialis Gizi Klinis & Pre-Diabetes'}
+                                                {selectedConsultation.scheduled_start && (
+                                                    <span className="hidden sm:inline"> • {selectedConsultation.scheduled_start.slice(11, 16)} WIB</span>
+                                                )}
+                                            </p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 shadow-2xs">
+                                            <span className="material-symbols-outlined text-[22px]">support_agent</span>
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h2 className="font-bold text-xs sm:text-sm text-on-surface truncate">
+                                                Ruang Konsultasi Dokter
+                                            </h2>
+                                            <p className="text-[10px] sm:text-[11px] text-on-surface-variant truncate">
+                                                {canBook ? 'Belum Ada Sesi Konsultasi Aktif' : 'Memerlukan Paket Berlangganan Aktif'}
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
                             {/* Center: Switch room if > 1 consultation */}
@@ -517,7 +535,7 @@ export default function ConsultationsHub({
                                             const found = consultations.find((c) => String(c.id) === String(e.target.value));
                                             if (found) setSelectedConsultation(found);
                                         }}
-                                        className="px-2 py-1 bg-surface-container-low rounded-xl border border-surface-container text-[11px] text-on-surface font-semibold focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer max-w-[150px] truncate"
+                                        className="px-2 py-1 bg-surface-container-low rounded-xl border border-surface-container text-[11px] text-on-surface font-semibold focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer max-w-37.5 truncate"
                                     >
                                         {consultations.map((c) => (
                                             <option key={c.id} value={c.id}>
@@ -535,6 +553,18 @@ export default function ConsultationsHub({
                                     <span className="text-on-surface-variant">Kuota:</span>
                                     <span className="font-bold text-primary">{isUnlimited ? 'Bebas' : `${remainingQuota}/${totalQuota}`}</span>
                                 </div>
+
+                                {/* Upgrade Action if Quota is 0 / not eligible */}
+                                {!canBook && (
+                                    <Link
+                                        href="/paket"
+                                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-2xs transition-all active:scale-95"
+                                        title="Upgrade paket untuk mendapatkan kuota telekonsultasi dokter"
+                                    >
+                                        <span className="material-symbols-outlined text-[15px]">upgrade</span>
+                                        <span>Upgrade</span>
+                                    </Link>
+                                )}
 
                                 {/* Video Call Meeting button */}
                                 {selectedConsultation?.meeting_url && selectedConsultation?.status !== 'CANCELLED' && (
@@ -564,26 +594,30 @@ export default function ConsultationsHub({
                                 )}
 
                                 {/* Switch to Booking */}
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveTab('booking')}
-                                    className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
-                                    title="Jadwalkan Konsultasi Baru"
-                                >
-                                    <span className="material-symbols-outlined text-[17px] text-primary">calendar_add_on</span>
-                                    <span className="hidden lg:inline">Jadwal</span>
-                                </button>
+                                {canBook && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveTab('booking')}
+                                        className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
+                                        title="Jadwalkan Konsultasi Baru"
+                                    >
+                                        <span className="material-symbols-outlined text-[17px] text-primary">calendar_add_on</span>
+                                        <span className="hidden lg:inline">Jadwal</span>
+                                    </button>
+                                )}
 
-                                {/* Switch to History */}
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveTab('history')}
-                                    className="p-1.5 sm:px-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
-                                    title="Riwayat Sesi"
-                                >
-                                    <span className="material-symbols-outlined text-[17px] text-on-surface-variant">history</span>
-                                    <span className="hidden xl:inline">({pastConsultations.length})</span>
-                                </button>
+                                {/* Switch to History (only show if history exists) */}
+                                {consultations.length > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveTab('history')}
+                                        className="p-1.5 sm:px-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border border-surface-container text-xs font-medium flex items-center gap-1 cursor-pointer"
+                                        title="Riwayat Sesi"
+                                    >
+                                        <span className="material-symbols-outlined text-[17px] text-on-surface-variant">history</span>
+                                        <span className="hidden xl:inline">({pastConsultations.length})</span>
+                                    </button>
+                                )}
                             </div>
                         </div>
 
@@ -668,7 +702,7 @@ export default function ConsultationsHub({
                                                     <div
                                                         className={`p-3 sm:p-3.5 rounded-2xl max-w-[85%] sm:max-w-[78%] leading-relaxed shadow-2xs space-y-2 ${
                                                             isUser
-                                                                ? 'bg-[#00433e] text-white rounded-br-xs'
+                                                                ? 'bg-primary text-white rounded-br-xs'
                                                                 : 'bg-white dark:bg-surface-container border border-surface-container-high text-on-surface rounded-bl-xs'
                                                         }`}
                                                     >
@@ -713,7 +747,7 @@ export default function ConsultationsHub({
                         ) : (
                             /* State when no consultations exist */
                             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
-                                <div className="w-14 h-14 rounded-3xl bg-[#eef7f2] border border-[#d3e7dc] text-[#00433e] flex items-center justify-center mx-auto shadow-xs">
+                                <div className="w-14 h-14 rounded-3xl bg-[#eef7f2] border border-[#d3e7dc] text-primary flex items-center justify-center mx-auto shadow-xs">
                                     <span className="material-symbols-outlined text-3xl">chat_bubble_outline</span>
                                 </div>
                                 <div className="space-y-1 max-w-sm">
@@ -730,7 +764,7 @@ export default function ConsultationsHub({
                                     <button
                                         type="button"
                                         onClick={() => setActiveTab('booking')}
-                                        className="px-6 py-2.5 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer"
+                                        className="px-6 py-2.5 rounded-full bg-primary hover:bg-[#0c5348] text-white text-xs font-semibold shadow-xs transition-all active:scale-95 inline-flex items-center gap-1.5 cursor-pointer"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">calendar_add_on</span>
                                         <span>Jadwalkan Sesi Sekarang</span>
@@ -821,7 +855,7 @@ export default function ConsultationsHub({
                                     <button
                                         type="submit"
                                         disabled={!chatInput.trim() || chatSubmitting || selectedConsultation.status === 'CANCELLED'}
-                                        className="w-10 h-10 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
+                                        className="w-10 h-10 rounded-full bg-primary hover:bg-[#0c5348] text-white flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
                                         title="Kirim Pesan"
                                     >
                                         <span className="material-symbols-outlined text-[18px]">send</span>
@@ -834,13 +868,20 @@ export default function ConsultationsHub({
             ) : (
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-4 pb-2">
                     {/* 1. Header & Quota Overview Banner */}
-                    <div className="rounded-2xl bg-linear-to-r from-[#00433e] via-[#08544e] to-[#0f5c56] p-4 sm:p-5 text-white shadow-xs relative overflow-hidden">
+                    <div className="rounded-2xl bg-linear-to-r from-primary via-[#08544e] to-primary-container p-4 sm:p-5 text-white shadow-xs relative overflow-hidden">
                         <div 
                             aria-hidden="true" 
                             className="pointer-events-none absolute -right-12 -top-12 w-64 h-64 bg-white/10 rounded-full blur-2xl" 
                         />
-                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="space-y-1 max-w-2xl">
+                        <div 
+                            aria-hidden="true"
+                            className="pointer-events-none absolute -right-2 -bottom-3 text-white/8 select-none"
+                        >
+                            <span className="material-symbols-outlined text-[120px] leading-none">stethoscope</span>
+                        </div>
+
+                        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4">
+                            <div className="space-y-1 sm:max-w-md">
                                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
                                     <span className="material-symbols-outlined text-[14px]">clinical_notes</span>
                                     <span>Konsultasi Dokter</span>
@@ -848,36 +889,38 @@ export default function ConsultationsHub({
                                 <h1 className="text-lg sm:text-2xl font-serif font-normal text-white tracking-tight leading-snug">
                                     Ruang Konsultasi Dokter
                                 </h1>
-                                <p className="text-xs sm:text-sm text-white/85 leading-relaxed hidden sm:block">
-                                    Diskusikan data glukosa, pola makan, dan gaya hidup Anda secara personal bersama dokter spesialis berlisensi.
+                                <p className="text-xs text-white/85 leading-relaxed">
+                                    Konsultasikan data metabolik &amp; gaya hidup Anda bersama dokter spesialis.
                                 </p>
                             </div>
 
-                            {/* Quota & Quick Action */}
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-                                <div className="bg-black/25 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/15 text-center min-w-28 sm:min-w-36">
-                                    <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
-                                        Sisa Kuota
-                                    </span>
-                                    <div className="flex items-baseline justify-center gap-1 mt-0.5">
+                            {/* Quota & Quick Action: Balanced across width on mobile, right-aligned on desktop */}
+                            <div className="flex items-center justify-between sm:justify-end gap-2.5 w-full sm:w-auto pt-2.5 sm:pt-0 border-t border-white/10 sm:border-t-0 shrink-0">
+                                <div className="flex-1 sm:flex-initial bg-black/25 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/15 flex items-center justify-between sm:flex-col sm:justify-center gap-3 sm:gap-0.5 sm:min-w-36">
+                                    <div className="text-left sm:text-center">
+                                        <span className="text-[10px] font-mono font-bold uppercase text-white/80 block">
+                                            Sisa Kuota
+                                        </span>
+                                        <span className="text-[10px] font-mono text-white/70 block">
+                                            Paket: {membership?.tier || quota.tier_name || 'Gratis (Basic)'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-baseline justify-end sm:justify-center gap-1">
                                         {isUnlimited ? (
-                                            <span className="font-mono font-black text-lg sm:text-xl text-white">Bebas Batas</span>
+                                            <span className="font-mono font-black text-sm sm:text-lg text-emerald-300">Bebas Batas</span>
                                         ) : (
                                             <>
-                                                <span className="font-mono font-black text-xl sm:text-2xl text-white">{remainingQuota}</span>
+                                                <span className="font-mono font-black text-lg sm:text-2xl text-white">{remainingQuota}</span>
                                                 <span className="text-[11px] sm:text-xs font-mono text-white/70">/ {totalQuota} Sesi</span>
                                             </>
                                         )}
                                     </div>
-                                    <span className="text-[9px] font-mono text-white/70 block mt-0.5">
-                                        Paket: {membership?.tier || quota.tier_name || 'Silver'}
-                                    </span>
                                 </div>
 
                                 {!canBook && (
                                     <Link
                                         href="/paket"
-                                        className="inline-flex items-center gap-1 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs"
+                                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all shadow-xs active:scale-95 shrink-0"
                                         title="Tingkatkan paket untuk menambah sesi konsultasi"
                                     >
                                         <span className="material-symbols-outlined text-[16px]">upgrade</span>
@@ -972,7 +1015,7 @@ export default function ConsultationsHub({
                                 </div>
                                 <Link
                                     href="/paket"
-                                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#00433e] hover:bg-[#0c5348] text-white text-xs font-bold shrink-0 transition-all text-center flex items-center justify-center gap-1.5"
+                                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-primary hover:bg-[#0c5348] text-white text-xs font-bold shrink-0 transition-all text-center flex items-center justify-center gap-1.5"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">upgrade</span>
                                     <span>Upgrade Paket</span>
@@ -1005,16 +1048,17 @@ export default function ConsultationsHub({
                                                 onClick={() => setSelectedDoctor(doc)}
                                                 className={`p-3 sm:p-4 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                                                     isSelected
-                                                        ? 'border-[#00433e] bg-[#eef7f2]/50 shadow-xs ring-1 ring-[#00433e]/30'
+                                                        ? 'border-primary bg-[#eef7f2]/50 shadow-xs ring-1 ring-primary/30'
                                                         : 'border-surface-container bg-white dark:bg-surface hover:border-primary/40'
                                                 }`}
                                             >
                                                 <div className="flex items-center gap-3 min-w-0">
                                                     <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-surface-container border border-surface-container flex items-center justify-center overflow-hidden shrink-0">
                                                         <img
-                                                            src={doc.avatar || '/image/doctor-portrait.jpg'}
+                                                            src={doc.avatar || '/image/doctor_bramantyo.jpg'}
                                                             alt={doc.name}
                                                             className="w-full h-full object-cover"
+                                                            onError={(e) => { e.currentTarget.src = '/image/doctor_bramantyo.jpg'; }}
                                                         />
                                                     </div>
                                                     <div className="min-w-0 space-y-0.5">
@@ -1046,7 +1090,7 @@ export default function ConsultationsHub({
                                                     <div
                                                         className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all ${
                                                             isSelected
-                                                                ? 'bg-[#00433e] border-[#00433e] text-white'
+                                                                ? 'bg-primary border-primary text-white'
                                                                 : 'border-surface-container-high'
                                                         }`}
                                                     >
@@ -1099,7 +1143,7 @@ export default function ConsultationsHub({
                                                         onClick={() => setSelectedSlot(slot)}
                                                         className={`py-2 px-3 rounded-xl text-xs font-bold font-mono border transition-all cursor-pointer ${
                                                             selectedSlot === slot
-                                                                ? 'bg-[#00433e] text-white border-[#00433e] shadow-xs'
+                                                                ? 'bg-primary text-white border-primary shadow-xs'
                                                                 : 'bg-surface-container-low text-on-surface border-surface-container hover:border-primary/40'
                                                         }`}
                                                     >
@@ -1142,7 +1186,7 @@ export default function ConsultationsHub({
                                         <button
                                             type="submit"
                                             disabled={bookingSubmitting || !canBook}
-                                            className="w-full py-3 rounded-full bg-[#00433e] hover:bg-[#0c5348] text-white font-medium text-xs sm:text-sm shadow-xs transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="w-full py-3 rounded-full bg-primary hover:bg-[#0c5348] text-white font-medium text-xs sm:text-sm shadow-xs transition-all active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined text-[18px]">
                                                 {canBook ? 'verified' : 'lock'}
@@ -1308,7 +1352,7 @@ export default function ConsultationsHub({
                         <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container flex items-center gap-3">
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 overflow-hidden shrink-0 border border-primary/20 flex items-center justify-center font-bold text-primary">
                                 <img
-                                    src="/image/doctor-portrait.jpg"
+                                    src="/image/doctor_bramantyo.jpg"
                                     alt="Dokter"
                                     className="w-full h-full object-cover"
                                     onError={(e) => { e.target.style.display = 'none'; }}

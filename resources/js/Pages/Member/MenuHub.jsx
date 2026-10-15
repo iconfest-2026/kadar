@@ -153,6 +153,8 @@ export default function MenuHub({ user, profile, membership, streak, totalPoints
                                 <img
                                     src={user.avatar_url}
                                     alt={user.name}
+                                    referrerPolicy="no-referrer"
+                                    crossOrigin="anonymous"
                                     className="w-13 h-13 rounded-2xl object-cover border border-white/30 shadow-xs shrink-0"
                                 />
                             ) : (

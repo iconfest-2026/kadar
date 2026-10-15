@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="referrer" content="no-referrer-when-downgrade">
     <title inertia>AEVYRA - Personal Preventive Health &amp; Early Intervention Platform</title>
     <link rel="icon" type="image/png" href="/image/Logo_AEVYRA_Icon.png" />
     <link rel="apple-touch-icon" href="/image/Logo_AEVYRA_Icon.png" />
@@ -183,18 +184,12 @@
                 margin-top: 10px;
                 display: inline-flex;
                 align-items: center;
-                gap: 6px;
+                justify-content: center;
                 padding: 4px 14px;
                 border-radius: 9999px;
                 background: rgba(0, 67, 62, 0.05);
                 border: 1px solid rgba(0, 67, 62, 0.09);
             ">
-                <span style="
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 9999px;
-                    background: #10b981;
-                "></span>
                 <span style="
                     font-family: 'IBM Plex Mono', monospace;
                     font-size: 11px;

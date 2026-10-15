@@ -71,7 +71,7 @@ class BookingController extends Controller
                     'reviews_count' => $meta['reviews_count'],
                     'str_number' => $meta['str_number'],
                     'badge' => $meta['badge'],
-                    'avatar' => '/images/doctor-portrait.jpg',
+                    'avatar' => '/image/doctor_bramantyo.jpg',
                 ];
             });
 
