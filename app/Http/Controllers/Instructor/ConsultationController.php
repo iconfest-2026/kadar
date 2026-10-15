@@ -83,8 +83,8 @@ class ConsultationController extends Controller
                     'scheduled_start' => now(),
                     'scheduled_end' => now()->addMinutes(45),
                     'purpose' => 'Sesi Bimbingan & Tele-Konsultasi Terpadu',
-                    'meeting_url' => 'https://telemed.aevyra.health/' . $meetingId,
-                    'notes' => 'Sesi bimbingan klinis dibuka oleh instruktur pendamping.',
+                    'meeting_url' => 'https://meet.jit.si/' . $meetingId,
+                    'notes' => null,
                 ]);
 
                 ConsultationMessage::create([
@@ -252,7 +252,7 @@ class ConsultationController extends Controller
         }
 
         $meetingId = 'AEVYRA-ROOM-' . strtoupper(substr(md5(uniqid()), 0, 8));
-        $meetingUrl = 'https://telemed.aevyra.health/' . $meetingId;
+        $meetingUrl = 'https://meet.jit.si/' . $meetingId;
 
         $consultation = Consultation::create([
             'member_id' => $validated['member_id'],
@@ -262,7 +262,7 @@ class ConsultationController extends Controller
             'scheduled_end' => $end,
             'purpose' => $validated['purpose'],
             'meeting_url' => $meetingUrl,
-            'notes' => 'Sesi bimbingan dijadwalkan oleh instruktur.',
+            'notes' => null,
         ]);
 
         // Send in-app notification to member
@@ -409,7 +409,6 @@ class ConsultationController extends Controller
             'cancelled_at' => now(),
             'cancellation_reason' => $reason,
             'cancelled_by_id' => $instructor->id,
-            'notes' => ($consultation->notes ? $consultation->notes . "\n" : '') . "[Dibatalkan oleh instruktur pada {$formattedTime} WIB. Alasan: {$reason}]",
         ]);
 
         // Send in-app notification to member (Quota restored)

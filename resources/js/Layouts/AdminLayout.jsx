@@ -79,7 +79,7 @@ export default function AdminLayout({ children, title, activeNav }) {
             <Head title={title ? `${title} - Tata Kelola AEVYRA` : 'Admin Panel - AEVYRA'} />
 
             {/* Hardware-Accelerated Ambient Background Glow (Isolate Paint Layer) */}
-            <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden gpu-layer contain-paint">
+            <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden gpu-layer contain-paint">
                 <div className="absolute -top-24 left-1/4 w-162.5 h-87.5 bg-linear-to-tr from-primary-fixed-dim/30 via-primary-fixed/20 to-transparent blur-[80px] rounded-full gpu-layer" />
                 <div className="absolute top-[40%] -right-24 w-125 h-112.5 bg-linear-to-bl from-secondary-fixed/25 via-primary-container/15 to-transparent blur-[80px] rounded-full gpu-layer" />
                 <div className="absolute bottom-10 left-1/3 w-137.5 h-87.5 bg-linear-to-tr from-primary-fixed/25 to-transparent blur-[80px] rounded-full gpu-layer" />
@@ -89,14 +89,14 @@ export default function AdminLayout({ children, title, activeNav }) {
             {/* Mobile Overlay */}
             {mobileNavOpen && (
                 <div 
-                    className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+                    className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300"
                     onClick={() => setMobileNavOpen(false)}
                 />
             )}
 
             {/* Frosted Glass Sidebar (GPU Layer Promoted) */}
             <aside 
-                className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-3rem)] bg-white/90 backdrop-blur-md border-r border-primary/10 flex flex-col transition-transform duration-300 shadow-[0_4px_30px_rgba(0,67,62,0.04)] lg:translate-x-0 gpu-layer ${
+                className={`fixed inset-y-0 left-0 z-40 lg:z-20 w-72 max-w-[calc(100vw-3rem)] bg-white/90 backdrop-blur-md border-r border-primary/10 flex flex-col transition-transform duration-300 shadow-[0_4px_30px_rgba(0,67,62,0.04)] lg:translate-x-0 gpu-layer ${
                     mobileNavOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
@@ -207,9 +207,9 @@ export default function AdminLayout({ children, title, activeNav }) {
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 w-full max-w-full lg:ml-72 relative z-10">
+            <div className="flex-1 flex flex-col min-w-0 w-full max-w-full lg:ml-72 relative">
                 {/* Optimized Topbar */}
-                <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-primary/10 h-20 flex items-center justify-between px-3 sm:px-6 lg:px-8 transition-all gpu-layer min-w-0 w-full">
+                <header className="sticky top-0 z-20 bg-white/85 backdrop-blur-md border-b border-primary/10 h-20 flex items-center justify-between px-3 sm:px-6 lg:px-8 transition-all gpu-layer min-w-0 w-full">
                     <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 mr-2">
                         <button
                             type="button"

@@ -76,7 +76,7 @@ export default function AppLayout({ children, title, activeTab }) {
         <div className="min-h-screen w-full max-w-full bg-[#f7faf8] text-on-surface flex font-sans antialiased selection:bg-primary selection:text-on-primary relative overflow-x-clip">
             
             {/* Ambient Background Soft Blobs */}
-            <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden contain-paint">
+            <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden contain-paint">
                 <div className="absolute -top-32 left-1/4 w-150 h-80 bg-linear-to-b from-[#e3f0e9]/50 to-transparent blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute top-1/2 -right-20 w-120 h-100 bg-[#f4ebe1]/30 blur-3xl rounded-full pointer-events-none" />
                 <div className="absolute bottom-10 left-1/3 w-130 h-80 bg-linear-to-t from-[#e3f0e9]/40 to-transparent blur-3xl rounded-full pointer-events-none" />
@@ -85,7 +85,7 @@ export default function AppLayout({ children, title, activeTab }) {
             {/* Mobile Overlay */}
             {sidebarOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-xs z-30 lg:hidden transition-opacity duration-300"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
@@ -105,10 +105,10 @@ export default function AppLayout({ children, title, activeTab }) {
             />
 
             {/* Main Application Shell (Shifted for sidebar on desktop) */}
-            <div className="lg:pl-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative z-10">
+            <div className="lg:pl-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full relative">
                 
                 {/* Top Header Bar - HANYA untuk mobile (< lg). Di desktop (lg), navbar dihapus karena menggunakan sidebar permanen */}
-                <header className="lg:hidden fixed top-0 inset-x-0 z-30 h-14 bg-white/95 dark:bg-surface/95 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-4 min-w-0 w-full shadow-2xs">
+                <header className="lg:hidden sticky top-0 z-20 h-14 bg-white/90 dark:bg-surface/90 backdrop-blur-md border-b border-surface-container flex items-center justify-between px-3 sm:px-4 min-w-0 w-full">
                     {/* Left: Mobile Toggle & Page Title */}
                     <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
                         <button
@@ -181,7 +181,7 @@ export default function AppLayout({ children, title, activeTab }) {
 
             {/* Native Mobile Bottom Navigation Bar (Visible on mobile/tablet < lg) */}
             <nav 
-                className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-surface/95 backdrop-blur-xl border-t border-surface-container shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
+                className="lg:hidden fixed bottom-0 inset-x-0 z-20 bg-white/95 dark:bg-surface/95 backdrop-blur-xl border-t border-surface-container shadow-[0_-4px_25px_rgba(0,67,62,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
                 aria-label="Navigasi Bawah Mobile"
             >
                 <div className="flex items-center justify-around max-w-lg mx-auto">

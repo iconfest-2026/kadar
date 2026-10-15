@@ -17,4 +17,5 @@ export { default as DropdownAction, default as DropdownActions } from './Dropdow
 export { default as AdminDeleteConfirmModal, default as DeleteConfirmModal } from '../Admin/AdminDeleteConfirmModal';
 export { default as AdminBadge } from '../Admin/AdminBadge';
 export { default as LogoutConfirmModal } from '../LogoutConfirmModal';
+export { default as Toast } from './Toast';
 

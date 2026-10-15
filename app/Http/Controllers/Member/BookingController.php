@@ -219,7 +219,7 @@ class BookingController extends Controller
         }
 
         $meetingId = 'AEVYRA-ROOM-' . strtoupper(substr(md5(uniqid()), 0, 8));
-        $meetingUrl = 'https://telemed.aevyra.health/' . $meetingId;
+        $meetingUrl = 'https://meet.jit.si/' . $meetingId;
 
         $consultation = Consultation::create([
             'member_id' => $user->id,
@@ -229,7 +229,7 @@ class BookingController extends Controller
             'scheduled_end' => $end,
             'purpose' => $purpose,
             'meeting_url' => $meetingUrl,
-            'notes' => 'Sesi tele-konsultasi preventif terjadwal. Pasien dipersiapkan dengan data rekam medis 7 hari terakhir.',
+            'notes' => null,
         ]);
 
         // Auto-assign instructor to member if not already assigned
@@ -356,7 +356,6 @@ class BookingController extends Controller
             'cancelled_at' => now(),
             'cancellation_reason' => $reason,
             'cancelled_by_id' => $user->id,
-            'notes' => ($consultation->notes ? $consultation->notes . "\n" : '') . "[Dibatalkan oleh pasien pada {$formattedTime} WIB. Alasan: {$reason}]",
         ]);
 
         // Send Notification to Instructor
