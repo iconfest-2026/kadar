@@ -5,7 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title inertia>AEVYRA - Personal Preventive Health &amp; Early Intervention Platform</title>
+    <title inertia>AEVYRA — Personal Preventive Health Intelligence</title>
+
+    <!-- Primary SEO Meta Tags -->
+    <meta name="title" content="AEVYRA — Personal Preventive Health Intelligence" />
+    <meta name="description" content="Platform kesehatan preventif berbasis Personal Baseline, AI Health Scanner makanan & obat BPOM, bimbingan instruktur medis, dan tanggap darurat 119." />
+    <meta name="author" content="AEVYRA Protocol" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook / WhatsApp / Telegram -->
+    @php
+        $isSecure = request()->isSecure() || str_starts_with(config('app.url'), 'https://');
+        $ogImageUrl = $isSecure ? secure_asset('og-image.jpg') : asset('og-image.jpg');
+        $currentUrl = $isSecure ? secure_url(request()->path()) : url()->current();
+    @endphp
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AEVYRA" />
+    <meta property="og:url" content="{{ $currentUrl }}" />
+    <meta property="og:title" content="AEVYRA — Personal Preventive Health Intelligence" />
+    <meta property="og:description" content="Platform kesehatan preventif berbasis Personal Baseline, AI Health Scanner makanan & obat BPOM, bimbingan instruktur medis, dan tanggap darurat 119." />
+    <meta property="og:image" content="{{ $ogImageUrl }}" />
+    <meta property="og:image:secure_url" content="{{ $ogImageUrl }}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AEVYRA — Personal Preventive Health Intelligence" />
+    <link rel="image_src" href="{{ $ogImageUrl }}" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="{{ $currentUrl }}" />
+    <meta name="twitter:title" content="AEVYRA — Personal Preventive Health Intelligence" />
+    <meta name="twitter:description" content="Platform kesehatan preventif berbasis Personal Baseline, AI Health Scanner makanan & obat BPOM, bimbingan instruktur medis, dan tanggap darurat 119." />
+    <meta name="twitter:image" content="{{ $ogImageUrl }}" />
+    <meta name="twitter:image:alt" content="AEVYRA — Personal Preventive Health Intelligence" />
+
     <link rel="icon" type="image/png" href="/image/Logo_AEVYRA_Icon.png" />
     <link rel="apple-touch-icon" href="/image/Logo_AEVYRA_Icon.png" />
 
